@@ -14,7 +14,6 @@ void Attack_State::Enter(ActionFSM* fsm)
 
 void Attack_State::Update(ActionFSM* fsm)  
 {
-    
     timer += Time::GetDeltaTime();
 
     // 애니메이션 끝나면 Wait 상태로 전환

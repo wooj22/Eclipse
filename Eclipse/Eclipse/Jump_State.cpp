@@ -5,10 +5,10 @@
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
- 
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "Hanging_State.h"
 
 
 void Jump_State::Enter(MovementFSM* fsm)
@@ -18,8 +18,6 @@ void Jump_State::Enter(MovementFSM* fsm)
     // 초기화 
     canDoubleJump = true;
     timer = 0.0f;
-    // inputX = fsm->GetPlayerFSM()->GetInputX();
-    // curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
 
     // 첫번째 Jump 실행 
     fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
@@ -44,6 +42,21 @@ void Jump_State::Update(MovementFSM* fsm)
     {
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
         canDoubleJump = false;
+    }
+
+    // [ Hanging ]
+    if (!fsm->GetPlayerFSM()->GetIsGround())
+    {
+        if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
+        {
+            fsm->ChangeState(std::make_unique<Hanging_State>());
+            return;
+        }
+        else if (fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetInputX() > 0.5f)
+        {
+            fsm->ChangeState(std::make_unique<Hanging_State>());
+            return;
+        }
     }
 
     // [ Idle ] : 일정 시간 후에만 감지

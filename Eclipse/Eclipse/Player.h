@@ -47,7 +47,7 @@ public:
 		transform->SetScale(1, 1);
 
 		collider->offset = { 0.0f, -8.0f };
-		collider->size = { 40.0f, 90.0f };
+		collider->size = { 60.0f, 90.0f };
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;
