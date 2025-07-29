@@ -18,6 +18,10 @@ void BulletTime_State::Update(ActionFSM* fsm)
 
     timer += unscaledDelta;
 
+    // 공격 취소
+    if (fsm->GetPlayerFSM()->GetIsRButton()) fsm->ChangeState(std::make_unique<Wait_State>());
+
+    // 불릿 타임 끝 
     if (timer >= bulletTimeDuration)
     {
         Time::SetTimeScale(1.0f); // 시간 복구
