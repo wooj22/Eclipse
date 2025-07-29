@@ -1,5 +1,6 @@
 #include "PlayerMove.h"
-#include "NPCScript.h"
+#include "PlayUI.h"
+//#include "NPCScript.h"
 #include "../Direct2D_EngineLib/Time.h"
 
 void PlayerMove::OnEnable()
