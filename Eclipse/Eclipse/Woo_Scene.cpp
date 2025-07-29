@@ -17,6 +17,19 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
 	title_text->screenTextRenderer->SetText(L"Engine Test Scene");
+
+	// player sample
+	player = CreateObject<Player_Woo>();
+
+	// background
+	GameObject* map = CreateObject<GameObject>();
+	map->AddComponent<Transform>();
+	map->AddComponent<SpriteRenderer>();
+	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/MapBackground.jpg");
+	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "MapBackground");
+	map->GetComponent<SpriteRenderer>()->sprite = new_sprite;
+	map->GetComponent<SpriteRenderer>()->layer = -1; // background layer
+	map->transform->Scaleing(2, 2);
 }
 
 void Woo_Scene::Start()
@@ -30,6 +43,11 @@ void Woo_Scene::Update()
 {
 	// game object -> Update()
 	__super::Update();
+
+	// camera test
+	// 이런 느낌에다가 offset, offset limit 주기
+	//Vector2 dir = (player->transform->GetPosition() - cam->transform->GetPosition()).Normalized();
+	//cam->transform->Translate(dir * 100 * Time::GetDeltaTime());
 
 	// scene change
 	if (Input::GetKeyDown('1'))
