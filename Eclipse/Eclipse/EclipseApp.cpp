@@ -3,6 +3,10 @@
 #include "Moon_Scene.h"
 #include "Yunmo_Scene.h"
 #include "Aron_Scene.h"
+#include "Woo_Scene.h"
+#include "MenuScene.h"
+#include "PlayScene.h"
+#include "EndScene.h"
 
 void EclipseApp::Init()
 {
@@ -19,6 +23,10 @@ void EclipseApp::Init()
 	sceneManager.CreateScene<Moon_Scene>();
 	sceneManager.CreateScene<Yunmo_Scene>();
 	sceneManager.CreateScene<Aron_Scene>();
+	sceneManager.CreateScene<Woo_Scene>();
+	sceneManager.CreateScene<MenuScene>();
+	sceneManager.CreateScene<PlayScene>();
+	sceneManager.CreateScene<EndScene>();
 	sceneManager.SetCurrentScene(MOON);
 	sceneManager.Init();
 }
