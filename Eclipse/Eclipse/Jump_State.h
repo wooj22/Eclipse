@@ -1,12 +1,6 @@
 #pragma once
 #include "MovementStateBase.h"
 
-
-//namespace Math
-//{
-//    float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
-//}
-
 class MovementFSM;
 
 class Jump_State : public MovementStateBase
@@ -27,4 +21,6 @@ public:
     void Update(MovementFSM* fsm) override;
     void FixedUpdate(MovementFSM* fsm) override;
     void Exit(MovementFSM* fsm) override;
+
+    float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
 };
