@@ -1,3 +1,5 @@
+#include "Math.h" 
+
 #include "Jump_State.h"
 #include "Walk_State.h"
 #include "Idle_State.h"
@@ -5,6 +7,7 @@
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
+ 
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
@@ -14,8 +17,11 @@ void Jump_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Jump_State] Player의 Jump_State 진입 \n");
 
+    // 초기화 
     canDoubleJump = true;
     timer = 0.0f;
+    inputX = fsm->GetPlayerFSM()->GetInputX();
+    curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
 
     // 첫번째 Jump 실행 
     fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
@@ -52,7 +58,20 @@ void Jump_State::Update(MovementFSM* fsm)
 
 void Jump_State::FixedUpdate(MovementFSM* fsm)
 {
+    // Move 
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = fsm->GetPlayerFSM()->GetInputX() * fsm->GetPlayerFSM()->GetCurSpeed();
 
+    // 입력이 있는 경우: 부드럽게 목표 속도로 보정
+    if (inputX != 0.0f)
+    {
+        float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Math::Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
+    }
+    else
+    {
+        // 입력이 없으면 서서히 감속
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Math::Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
+    }
 }
 
 void Jump_State::Exit(MovementFSM* fsm)
