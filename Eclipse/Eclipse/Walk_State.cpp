@@ -1,4 +1,4 @@
-// #include "Jump_State.h"
+#include "Jump_State.h"
 #include "Walk_State.h"
 #include "Idle_State.h"
 #include "MovementFSM.h" 
@@ -16,7 +16,7 @@ void Walk_State::Update(MovementFSM* fsm)
     // [ Jump ]
     if (fsm->GetPlayerFSM()->GetIsSpace() && fsm->GetPlayerFSM()->GetIsGround())
     {
-        // fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Jump_State>());
+        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Jump_State>());
     }
 }
 
