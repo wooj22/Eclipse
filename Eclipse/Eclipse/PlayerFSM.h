@@ -30,6 +30,8 @@ private:
 	float runSpeed = 350.f;
 	float jumpForce = 400.0f;
 
+	//int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
+
 	// move
 	float inputX, inputY;
 	bool isGround;
@@ -65,6 +67,9 @@ public:
 	bool GetIsWallRight() const { return isWallRight; }
 
 	Rigidbody* GetRigidbody() const { return rigidbody; }
+
+	// void SetLastWallDir(int dir) { lastWallDir = dir; }
+
 
 public:
 	// script component cycle

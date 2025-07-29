@@ -5,6 +5,7 @@
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "Hanging_State.h"
 
 void Jump_Wall_State::Enter(MovementFSM* fsm)
 {
@@ -12,19 +13,25 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
 
     elapsedTime = 0.0f;  // 시간 초기화
     wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
-
-    Vector2 force;
     fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0); // 수직 속도 초기화
 
     if (fsm->GetPlayerFSM()->GetIsWallLeft())
     {
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(+jumpXPower, wallJumpForce));  // 오른쪽 방향으로 튕김
+        lastWallDir = -1;
     }
     else if (fsm->GetPlayerFSM()->GetIsWallRight())
     {
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-jumpXPower, wallJumpForce));  // 왼쪽 방향으로 튕김
+        lastWallDir = 1;
+    }
+    else
+    {
+        lastWallDir = 0;
     }
 
+    // 벽방향 기록
+    // fsm->GetPlayerFSM()->SetLastWallDir(lastWallDir);
 }
 
 void Jump_Wall_State::Update(MovementFSM* fsm)
@@ -32,6 +39,20 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
     if (fsm->GetPlayerFSM()->GetIsGround())
     {
         fsm->ChangeState(std::make_unique<Idle_State>());
+        return;
+    }
+
+    // [ Hanging ] 
+    if (elapsedTime < hangingBlockTime) return;
+
+    if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
+    {
+        fsm->ChangeState(std::make_unique<Hanging_State>());
+        return;
+    }
+    else if (fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetInputX() > 0.5f)
+    {
+        fsm->ChangeState(std::make_unique<Hanging_State>());
         return;
     }
 }

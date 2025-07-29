@@ -13,15 +13,17 @@ private:
     float wallJumpForce;
     float jumpXPower = 400.0f;
 
-    float elapsedTime = 0.0f;     // 경과 시간
-    float inputBlockTime = 0.05f;  // 입력 무시 시간 (초)
+    float elapsedTime = 0.0f;       // 경과 시간
+    float inputBlockTime = 0.05f;   // 입력 무시 시간
+    float hangingBlockTime = 0.3f;  // 매달리기 제한 시간
 
-    // 점프 중 공중 이동: 부드럽게 가속/감속
-    float inputX;
-    float airAcceleration = 20.0f;     // 공중 가속도
+    float airAcceleration = 20.0f;  // 공중 가속도
     float airFriction = 3.0f;       // 공중 감속도
 
+    float inputX;
     float curVelX;
+
+    int lastWallDir = 0; // -1: 왼쪽 벽, 1: 오른쪽 벽
 
     float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
 };
