@@ -30,6 +30,12 @@ void Woo_Scene::Awake()
 	map->GetComponent<SpriteRenderer>()->sprite = new_sprite;
 	map->GetComponent<SpriteRenderer>()->layer = -1; // background layer
 	map->transform->Scaleing(2, 2);
+
+	// camera tartget
+	Camera* camera = cam->GetComponent<Camera>();
+	camera->SetTarget(player->transform);
+	camera->SetTargetTraceSpeed(100.0f);
+	camera->SetTargetTraceLimit(5.0f);
 }
 
 void Woo_Scene::Start()

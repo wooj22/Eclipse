@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "GameObject.h"
-
+#include "Time.h"
 
 void Camera::OnEnable_Inner()
 {
@@ -24,6 +24,9 @@ void Camera::Update()
     worldMatrix = transform->GetWorldMatrix();
     inverseMatrix = worldMatrix;
     inverseMatrix.Invert();
+
+    // target trace
+    TargetTrace();
 }
 
 void Camera::OnDestroy_Inner()
@@ -66,4 +69,17 @@ bool Camera::IsInView(const Vector2& worldPos, const Vector2& boundSize) const
         viewPos.x - boundSize.x >  halfW ||
         viewPos.y + boundSize.y < -halfH ||
         viewPos.y - boundSize.y >  halfH);
+}
+
+void Camera::TargetTrace()
+{
+    if (target)
+    {
+        // limit 거리보다 멀어지면 해당 방향으로 speed 속도로 이동
+        Vector2 dist = target->GetWorldPosition() - transform->GetWorldPosition();
+        if (dist.Magnitude() >= targetTraceLimit)
+        {
+            transform->Translate(dist.Normalized() * targetTraceSpeed * Time::GetDeltaTime());
+        }
+    }
 }

@@ -13,6 +13,7 @@ class Transform;
 class Camera : public Component
 {
 private:
+	// transform
 	Transform* transform = nullptr;
 
 	// view
@@ -22,6 +23,12 @@ private:
 	// matrix
 	D2D1::Matrix3x2F worldMatrix = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F inverseMatrix = D2D1::Matrix3x2F::Identity();
+
+private:
+	// target 
+	Transform* target = nullptr;
+	float targetTraceSpeed = 100.0f;
+	float targetTraceLimit = 5.0f;
 
 public:
 	// main camera
@@ -47,5 +54,13 @@ public:
 	void SetViewSize(float width, float height) { viewWidth = width; viewHeight = height; }
 	float GetViewWidth() const { return viewWidth; }
 	float GetViewHeight() const { return viewHeight; }
+
+public:
+	// target trace
+	void SetTarget(Transform* target) { this->target = target; }
+	void SetTargetTraceSpeed(float speed) { targetTraceSpeed = speed; }
+	void SetTargetTraceLimit(float limit) { targetTraceLimit = limit; }
+private:
+	void TargetTrace();
 };
 
