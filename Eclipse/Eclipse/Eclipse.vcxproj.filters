@@ -52,6 +52,9 @@
     <Filter Include="04. Animation\Yunmo">
       <UniqueIdentifier>{1abfba4e-2660-4515-94b9-7df0491186f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Scene\dev">
+      <UniqueIdentifier>{f2d8fd57-9b12-47c2-9e4c-145808404e01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -60,13 +63,25 @@
     <ClCompile Include="EclipseApp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Aron_Scene.cpp">
+      <Filter>01. Scene\dev</Filter>
+    </ClCompile>
     <ClCompile Include="Moon_Scene.cpp">
-      <Filter>01. Scene</Filter>
+      <Filter>01. Scene\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="Woo_Scene.cpp">
+      <Filter>01. Scene\dev</Filter>
     </ClCompile>
     <ClCompile Include="Yunmo_Scene.cpp">
+      <Filter>01. Scene\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Aron_Scene.cpp">
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EndScene.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,13 +89,25 @@
     <ClInclude Include="EclipseApp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Aron_Scene.h">
+      <Filter>01. Scene\dev</Filter>
+    </ClInclude>
     <ClInclude Include="Moon_Scene.h">
-      <Filter>01. Scene</Filter>
+      <Filter>01. Scene\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="Woo_Scene.h">
+      <Filter>01. Scene\dev</Filter>
     </ClInclude>
     <ClInclude Include="Yunmo_Scene.h">
+      <Filter>01. Scene\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
       <Filter>01. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Aron_Scene.h">
+    <ClInclude Include="PlayScene.h">
+      <Filter>01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EndScene.h">
       <Filter>01. Scene</Filter>
     </ClInclude>
   </ItemGroup>
