@@ -1,9 +1,8 @@
 #pragma once
-#include "ActionStateBase.h"  
-
+#include "StateBase.h"
 class ActionFSM;
 
-class Wait_State : public ActionStateBase
+class BulletTime_State : public StateBase<ActionFSM>
 {
 public:
     void Enter(ActionFSM* fsm) override;
@@ -11,7 +10,6 @@ public:
     void Exit(ActionFSM* fsm) override;
 
 private:
-    float holdTime = 0.0f;
-    bool isHolding = false;
-    const float bulletTimeThreshold = 0.3f;
+    float timer = 0.0f;
+    const float bulletTimeDuration = 2.0f;
 };

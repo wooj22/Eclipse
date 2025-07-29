@@ -11,7 +11,7 @@
 
 void Hanging_State::Enter(MovementFSM * fsm)
 {
-    OutputDebugStringA("[Hanging_State] 벽에 매달림 상태 진입\n");
+    // OutputDebugStringA("[Hanging_State] 벽에 매달림 상태 진입\n");
 
     // 수직 속도를 0으로 (벽에 매달림 효과)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0.0f;
@@ -28,7 +28,7 @@ void Hanging_State::Update(MovementFSM* fsm)
         return;
     }
 
-    // 2. 벽이 사라지거나 방향키를 떼면 다시 점프 상태로
+    // 2. 벽이 사라지거나 방향키를 떼면 다시 점프 상태
     if (!player->GetIsWallLeft() && !player->GetIsWallRight())
     {
         fsm->ChangeState(std::make_unique<Jump_State>());

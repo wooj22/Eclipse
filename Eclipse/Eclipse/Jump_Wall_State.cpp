@@ -9,7 +9,7 @@
 
 void Jump_Wall_State::Enter(MovementFSM* fsm)
 {
-    OutputDebugStringA("[Jump_Wall_State] 벽 점프 상태 진입\n");
+    // OutputDebugStringA("[Jump_Wall_State] 벽 점프 상태 진입\n");
 
     elapsedTime = 0.0f;  // 시간 초기화
     wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
