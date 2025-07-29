@@ -10,6 +10,12 @@ void MenuScene::Awake()
 	cam->AddComponent<Camera>(1920, 1080);
 
 	// create gameobject
+	titleUI = CreateObject<TitleUI>();
+	titleUI->backgroundImage = CreateObject<UI_Image>();
+	titleUI->playButton = CreateObject<UI_Button>();
+	titleUI->optionsButton = CreateObject<UI_Button>();
+	titleUI->creditButton = CreateObject<UI_Button>();
+	titleUI->endButton = CreateObject<UI_Button>();
 	// title sample
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
@@ -17,6 +23,7 @@ void MenuScene::Awake()
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
 	title_text->screenTextRenderer->SetText(L"Menu Scene");
+
 }
 
 void MenuScene::Start()
@@ -24,6 +31,8 @@ void MenuScene::Start()
 	// game object -> SceneStart()
 	__super::Start();
 
+	titleUI->playButton->button->onClickListeners.AddListener(
+		this, std::bind(&MenuScene::ChagnePlayScene, this));
 }
 
 void MenuScene::Update()
@@ -37,4 +46,9 @@ void MenuScene::Exit()
 {
 	// game object -> destroy()
 	__super::Exit();
+}
+
+void MenuScene::ChagnePlayScene()
+{
+	SceneManager::Get().ChangeScene(EclipseApp::PLAY);
 }
