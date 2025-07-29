@@ -44,6 +44,22 @@ void Aron_Scene::Update()
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::ARON);
 	}
+	if (Input::GetKeyDown('4'))
+	{
+		SceneManager::Get().ChangeScene(EclipseApp::WOO);
+	}
+	if (Input::GetKeyDown('5'))
+	{
+		SceneManager::Get().ChangeScene(EclipseApp::MENU);
+	}
+	if (Input::GetKeyDown('6'))
+	{
+		SceneManager::Get().ChangeScene(EclipseApp::PLAY);
+	}
+	if (Input::GetKeyDown('7'))
+	{
+		SceneManager::Get().ChangeScene(EclipseApp::END);
+	}
 }
 
 void Aron_Scene::Exit()

@@ -55,6 +55,69 @@
     <Filter Include="01. Scene\dev">
       <UniqueIdentifier>{f2d8fd57-9b12-47c2-9e4c-145808404e01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Script\Moon\[ Player FSM ]">
+      <UniqueIdentifier>{2dd04ec2-8c4a-4241-b034-b7d525afe983}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Moon\[ Player FSM ]\[ Action FSM ]">
+      <UniqueIdentifier>{ef804ada-e0f0-4224-9024-1f729f003992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Moon\[ Player FSM ]\[ Movement FSM ]">
+      <UniqueIdentifier>{ee89547e-9094-4687-879e-a2f8f1b4e3cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Moon\[ Player ]">
+      <UniqueIdentifier>{cef8e2b4-21c4-4d99-9db3-ce519aef5fdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Moon\[ Map ]">
+      <UniqueIdentifier>{f5461a52-89aa-475a-aeb0-a9dacc23dfe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Yunmo\MenuScene">
+      <UniqueIdentifier>{982eba26-d115-45ce-be03-f9fa616cef1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Yunmo\PlayScene">
+      <UniqueIdentifier>{5327304b-041b-46d6-be13-ddadd1a0a286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Yunmo\EndScene">
+      <UniqueIdentifier>{2bc3a9ae-35f5-4a9f-bd63-56329810aebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Yunmo\PlayScene\SkillTree">
+      <UniqueIdentifier>{e138bda3-0887-4d92-8056-597fe60e114b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Yunmo\MenuScene">
+      <UniqueIdentifier>{b2a0f5f9-ea0c-4cdd-bd9a-633757aef09a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Yunmo\PlayScene">
+      <UniqueIdentifier>{cc7bd0ce-6003-4d64-9440-fcb7ab71c8b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Yunmo\EndScene">
+      <UniqueIdentifier>{45f2882f-cce4-4136-b081-d43f74bb9d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Woo">
+      <UniqueIdentifier>{f5c9fad5-e8a2-491c-ae87-f79859e548e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo">
+      <UniqueIdentifier>{27929c44-b71f-488d-a900-2069ba41d356}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Woo\Engine">
+      <UniqueIdentifier>{31deada1-972b-493e-b7d1-6a72473bbac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Woo\Boss">
+      <UniqueIdentifier>{4131514f-1122-4921-850d-ac5b29d9c3f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo\Engine">
+      <UniqueIdentifier>{827e73eb-1813-4679-b028-9e97dddd12ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo\Boss">
+      <UniqueIdentifier>{16f70a9d-504d-45eb-8494-44addd373845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Animation\Woo">
+      <UniqueIdentifier>{1d527d7f-754a-4c1b-87f3-e932cc02c663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Animation\Woo\Engine">
+      <UniqueIdentifier>{0037a777-9369-4d78-8bd3-5def44cf929f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Animation\Woo\Boss">
+      <UniqueIdentifier>{e064df0d-644b-42cb-b1d8-b512e26fc5e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -84,6 +147,36 @@
     <ClCompile Include="EndScene.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerMove.cpp">
+      <Filter>03. Script\Yunmo</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerFSM.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="Walk_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="Idle_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="Jump_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="Jump_Wall_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleUI.cpp">
+      <Filter>02. GameObject\Yunmo\MenuScene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayUI.cpp">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_Test.cpp">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EclipseApp.h">
@@ -109,6 +202,45 @@
     </ClInclude>
     <ClInclude Include="EndScene.h">
       <Filter>01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMove.h">
+      <Filter>03. Script\Yunmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Idle_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Jump_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Jump_Wall_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionFSM.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionStateBase.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMBase.h">
+      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerFSM.h">
+      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Walk_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleUI.h">
+      <Filter>02. GameObject\Yunmo\MenuScene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayUI.h">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_Test.h">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
