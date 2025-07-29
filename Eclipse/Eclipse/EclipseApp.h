@@ -4,7 +4,7 @@
 class EclipseApp : public GameApp
 {
 public:
-	enum SceneName { MOON, YUNMO, ARON };	// scene enum
+	enum SceneName { MOON, YUNMO, ARON, WOO, MENU, PLAY, END };	// scene enum
 
 	EclipseApp(int inputWidth, int inputHeight)
 		: GameApp(inputWidth, inputHeight) {

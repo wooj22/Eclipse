@@ -52,14 +52,8 @@
     <Filter Include="04. Animation\Yunmo">
       <UniqueIdentifier>{1abfba4e-2660-4515-94b9-7df0491186f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. Script\Moon\[ Player FSM ]">
-      <UniqueIdentifier>{3d97f8a6-f678-4e39-858d-0166c315418f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. Script\Moon\[ Player FSM ]\[ Action FSM ]">
-      <UniqueIdentifier>{e8287579-f5a3-4b76-a5b6-966e57e5adcc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. Script\Moon\[ Player FSM ]\[ Movement FSM ]">
-      <UniqueIdentifier>{a420d795-0bab-4a2f-96e9-fd9f205048be}</UniqueIdentifier>
+    <Filter Include="01. Scene\dev">
+      <UniqueIdentifier>{f2d8fd57-9b12-47c2-9e4c-145808404e01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,82 +63,52 @@
     <ClCompile Include="EclipseApp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Aron_Scene.cpp">
+      <Filter>01. Scene\dev</Filter>
+    </ClCompile>
     <ClCompile Include="Moon_Scene.cpp">
-      <Filter>01. Scene</Filter>
+      <Filter>01. Scene\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="Woo_Scene.cpp">
+      <Filter>01. Scene\dev</Filter>
     </ClCompile>
     <ClCompile Include="Yunmo_Scene.cpp">
+      <Filter>01. Scene\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Aron_Scene.cpp">
+    <ClCompile Include="PlayScene.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerFSM.cpp">
-      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
-    </ClCompile>
-    <ClCompile Include="Idle_State.cpp">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClCompile>
-    <ClCompile Include="Walk_State.cpp">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClCompile>
-    <ClCompile Include="Jump_State.cpp">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClCompile>
-    <ClCompile Include="Jump_Wall_State.cpp">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    <ClCompile Include="EndScene.cpp">
+      <Filter>01. Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EclipseApp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Aron_Scene.h">
+      <Filter>01. Scene\dev</Filter>
+    </ClInclude>
     <ClInclude Include="Moon_Scene.h">
-      <Filter>01. Scene</Filter>
+      <Filter>01. Scene\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="Woo_Scene.h">
+      <Filter>01. Scene\dev</Filter>
     </ClInclude>
     <ClInclude Include="Yunmo_Scene.h">
+      <Filter>01. Scene\dev</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
       <Filter>01. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Aron_Scene.h">
+    <ClInclude Include="PlayScene.h">
       <Filter>01. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>02. GameObject\Moon</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerFSM.h">
-      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="FSMBase.h">
-      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerStateBase.h">
-      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="StateBase.h">
-      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementStateBase.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementFSM.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionFSM.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionStateBase.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="Idle_State.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="Walk_State.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="Jump_State.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="Jump_Wall_State.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    <ClInclude Include="EndScene.h">
+      <Filter>01. Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
