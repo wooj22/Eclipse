@@ -1,34 +1,35 @@
 #include "PlayerMove.h"
-#include "NPC.h"
-
+#include "NPCScript.h"
+#include "../Direct2D_EngineLib/Time.h"
 
 void PlayerMove::OnEnable()
 {
-	transform = gameObject->GetComponent<Transform>();
+	transform = gameObject->transform;
+	rigid = gameObject->GetComponent<Rigidbody>();
 }
 
 void PlayerMove::Update()
 {
 	inputX = Input::GetAxisHorizontal();
 	inputY = Input::GetAxisVertical();
+	if (inputX == 0) rigid->velocity.x = 0; // 수평 이동이 없을 때 속도 초기화
+	if (inputY == 0) rigid->velocity.y = 0; // 수평 이동이 없을 때 속도 초기화
+	rigid->velocity.x += inputX * speed * Time::GetDeltaTime();
+	rigid->velocity.y += inputY * speed * Time::GetDeltaTime();
 
-	if (Input::GetKey('A') || Input::GetKey('D'))
+	if (Input::GetKeyDown('F') && PlayUI::Get().ChatActiveCheck())
 	{
-		transform->Translate(Vector2(inputX, inputY).Normalized() * speed);
+		PlayUI::Get().CloseChat();
 	}
 }
-
-void PlayerMove::OnCollisionStay(ICollider* other, const ContactInfo& contact)
+void PlayerMove::OnTriggerStay(ICollider* other)
 {
-	if (other->gameObject->name == "NPC")
+	if (other->gameObject->name == "NPC" && !PlayUI::Get().ChatActiveCheck())
 	{
-		if (Input::GetKeyDown('F'))
+		if (Input::GetKey('F'))
 		{
-			NPC* npc = dynamic_cast<NPC*>(other->gameObject);
-			if (npc)
-			{
-				npc->interationListeners.Invoke();
-			}
+			//other->gameObject->GetComponent<NPCScript>()->Interaction();
+			PlayUI::Get().OpenChat();
 		}
 	}
 }
