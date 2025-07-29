@@ -30,6 +30,18 @@ void Woo_Scene::Awake()
 	map->GetComponent<SpriteRenderer>()->sprite = new_sprite;
 	map->GetComponent<SpriteRenderer>()->layer = -1; // background layer
 	map->transform->Scaleing(2, 2);
+
+	// camera tartget
+	Camera* camera = cam->GetComponent<Camera>();
+	camera->SetTarget(player->transform);
+	camera->SetTargetTraceSpeed(300.0f);
+	camera->SetTargetTraceLimitX(30.0f);
+	camera->SetTargetTraceLimitY(100.0f);
+
+	// camera map condition
+	Rect mapRect;
+	mapRect.size = { 2560, 1920 }; // map position
+	camera->SetMapCondition(mapRect);
 }
 
 void Woo_Scene::Start()

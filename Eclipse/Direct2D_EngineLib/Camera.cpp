@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "GameObject.h"
-
+#include "Time.h"
 
 void Camera::OnEnable_Inner()
 {
@@ -24,6 +24,9 @@ void Camera::Update()
     worldMatrix = transform->GetWorldMatrix();
     inverseMatrix = worldMatrix;
     inverseMatrix.Invert();
+
+    TargetTrace();              // target trace
+	MapBoundaryCondition();     // map boundary condition
 }
 
 void Camera::OnDestroy_Inner()
@@ -59,11 +62,57 @@ bool Camera::IsInView(const Vector2& worldPos, const Vector2& boundSize) const
     Vector2 cameraPos = transform->GetWorldPosition();
     Vector2 viewPos = worldPos - cameraPos;
 
-    float halfW = viewWidth * 0.5f;
-    float halfH = viewHeight * 0.5f;
+    float halfW = viewSize.x * 0.5f;
+    float halfH = viewSize.y * 0.5f;
 
     return !(viewPos.x + boundSize.x < -halfW ||
         viewPos.x - boundSize.x >  halfW ||
         viewPos.y + boundSize.y < -halfH ||
         viewPos.y - boundSize.y >  halfH);
+}
+
+// Target Trace
+void Camera::TargetTrace()
+{
+    if (target)
+    {
+        // dist
+        Vector2 dist = target->GetWorldPosition() - transform->GetWorldPosition();
+
+        // direction
+        Vector2 moveDir;
+        if (std::abs(dist.x) > targetTraceLimitX) moveDir.x = (dist.x > 0 ? 1 : -1);
+        if (std::abs(dist.y) > targetTraceLimitY) moveDir.y = (dist.y > 0 ? 1 : -1);
+
+        // trace
+        if (moveDir.x != 0.0f || moveDir.y != 0.0f)
+        {
+            transform->Translate(moveDir.Normalized() * targetTraceSpeed * Time::GetDeltaTime());
+        }
+    }
+}
+
+// Map Boundary Condition
+void Camera::MapBoundaryCondition()
+{
+    if (useMapCondition)
+    {
+        Vector2 cameraPos = transform->GetWorldPosition();
+        Vector2 halfSize = viewSize * 0.5f;
+
+		// mab boundary
+        float minX = mapRect.Left() + halfSize.x;
+        float maxX = mapRect.Right() - halfSize.x;
+        float minY = mapRect.Bottom() + halfSize.y;
+        float maxY = mapRect.Top() - halfSize.y;
+
+        // Clamp
+        if (cameraPos.x < minX) cameraPos.x = minX;
+        if (cameraPos.x > maxX) cameraPos.x = maxX;
+        if (cameraPos.y < minY) cameraPos.y = minY;
+        if (cameraPos.y > maxY) cameraPos.y = maxY;
+
+        // condition
+        transform->SetPosition(cameraPos);
+    }
 }
