@@ -134,15 +134,26 @@
   <ItemGroup>
     <ClCompile Include="Aron_Scene.cpp" />
     <ClCompile Include="EclipseApp.cpp" />
+    <ClCompile Include="Idle_State.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Moon_Scene.cpp" />
+    <ClCompile Include="PlayerFSM.cpp" />
     <ClCompile Include="Yunmo_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionFSM.h" />
+    <ClInclude Include="ActionStateBase.h" />
     <ClInclude Include="Aron_Scene.h" />
     <ClInclude Include="EclipseApp.h" />
+    <ClInclude Include="FSMBase.h" />
+    <ClInclude Include="Idle_State.h" />
     <ClInclude Include="Moon_Scene.h" />
+    <ClInclude Include="MovementFSM.h" />
+    <ClInclude Include="MovementStateBase.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerFSM.h" />
+    <ClInclude Include="PlayerStateBase.h" />
+    <ClInclude Include="StateBase.h" />
     <ClInclude Include="Yunmo_Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
