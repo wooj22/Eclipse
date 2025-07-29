@@ -2,10 +2,10 @@
 #include "MovementStateBase.h"
 
 
-namespace Math
-{
-    float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
-}
+//namespace Math
+//{
+//    float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
+//}
 
 class MovementFSM;
 
