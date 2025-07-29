@@ -39,7 +39,7 @@ private:
 	bool isWallRight = false;
 
 	// key
-	bool isA, isD, isShift, isSpace, isLButton, isRButton;
+	bool isA, isD, isShift, isSpace;
 
 	// ref component
 	Transform* transform = nullptr;
@@ -54,8 +54,6 @@ public:
 	bool GetisShift() const { return isShift; }   // 임시 대쉬
 	bool GetIsA() const { return isA; }
 	bool GetIsD() const { return isD; }
-	bool GetIsLButton() const { return isLButton; }
-	bool GetIsRButton() const { return isRButton; }
 
 	float GetJumpForce() const { return jumpForce; }
 	float GetInputX() const { return inputX; }

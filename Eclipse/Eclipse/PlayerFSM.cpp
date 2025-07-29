@@ -81,7 +81,4 @@ void PlayerFSM::InputCheak()
 	isD = Input::GetKey('D');
 	isShift = Input::GetKey(VK_SHIFT);
 	isSpace = Input::GetKeyDown(VK_SPACE);
-
-	isLButton = Input::GetKeyDown(VK_LBUTTON);
-	isRButton = Input::GetKeyDown(VK_RBUTTON);
 }

@@ -177,12 +177,6 @@
     <ClCompile Include="Player_Test.cpp">
       <Filter>02. GameObject\Yunmo\PlayScene</Filter>
     </ClCompile>
-    <ClCompile Include="Attack_State.cpp">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
-    </ClCompile>
-    <ClCompile Include="Wait_State.cpp">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EclipseApp.h">
@@ -247,18 +241,6 @@
     </ClInclude>
     <ClInclude Include="Player_Test.h">
       <Filter>02. GameObject\Yunmo\PlayScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Attack_State.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementFSM.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementStateBase.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClInclude>
-    <ClInclude Include="Wait_State.h">
-      <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
