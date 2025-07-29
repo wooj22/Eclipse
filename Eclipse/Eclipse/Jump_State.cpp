@@ -1,5 +1,3 @@
-#include "Math.h" 
-
 #include "Jump_State.h"
 #include "Walk_State.h"
 #include "Idle_State.h"
@@ -66,30 +64,13 @@ void Jump_State::FixedUpdate(MovementFSM* fsm)
     if (inputX != 0.0f)
     {
         float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
-        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x =
-            Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
     }
     else
     {
         // 입력이 없으면 감속
-        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x =
-            Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
     }
-
-    //// Move 
-    //fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = fsm->GetPlayerFSM()->GetInputX() * fsm->GetPlayerFSM()->GetCurSpeed();
-
-    //// 입력이 있는 경우: 부드럽게 목표 속도로 보정
-    //if (inputX != 0.0f)
-    //{
-    //    float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
-    //    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
-    //}
-    //else
-    //{
-    //    // 입력이 없으면 서서히 감속
-    //    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
-    //}
 }
 
 void Jump_State::Exit(MovementFSM* fsm)
