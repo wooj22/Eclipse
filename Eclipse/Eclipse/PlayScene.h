@@ -6,6 +6,7 @@
 
 #include "EclipseApp.h"
 #include "NPC.h"
+//#include "NPCScript.h"
 #include "Player_Test.h"
 #include "PlayUI.h"
 
@@ -15,8 +16,9 @@ private:
 	GameObject* cam;
 	UI_Text* title_text;
 	GameObject* backGround;
-	GameObject* player;
+	Player_Test* player;
 	NPC* npc;
+	//NPCScript* npcScript;
 	PlayUI* playUI;
 
 public:
