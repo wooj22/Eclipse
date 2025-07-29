@@ -127,6 +127,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Direct2D_EngineLib\Direct2D_EngineLib.vcxproj">
+      <Project>{d8d78356-8dd0-4271-bbe6-b0208a9359fe}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Aron_Scene.cpp" />
+    <ClCompile Include="EclipseApp.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Moon_Scene.cpp" />
+    <ClCompile Include="Yunmo_Scene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Aron_Scene.h" />
+    <ClInclude Include="EclipseApp.h" />
+    <ClInclude Include="Moon_Scene.h" />
+    <ClInclude Include="Yunmo_Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
