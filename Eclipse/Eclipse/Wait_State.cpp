@@ -5,7 +5,7 @@
 
 void Wait_State::Enter(ActionFSM* fsm)
 {
-    OutputDebugStringA("[Wait_State] Player의 Wait_State 진입 \n");
+    // OutputDebugStringA("[Wait_State] Player의 Wait_State 진입 \n");
 
     // fsm->GetPlayerFSM()->GetGameObject()->PlayAnimation("Attack1");
 }

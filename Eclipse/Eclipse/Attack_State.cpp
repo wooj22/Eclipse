@@ -6,7 +6,7 @@
 
 void Attack_State::Enter(ActionFSM* fsm)
 {
-    OutputDebugStringA("[Attack_State] Player의 Attack_State 진입 \n");
+    // OutputDebugStringA("[Attack_State] Player의 Attack_State 진입 \n");
 
     // 애니메이션 재생 
     // fsm->GetPlayerFSM()->GetGameObject()->PlayAnimation("Attack1");
@@ -14,7 +14,6 @@ void Attack_State::Enter(ActionFSM* fsm)
 
 void Attack_State::Update(ActionFSM* fsm)  
 {
-    
     timer += Time::GetDeltaTime();
 
     // 애니메이션 끝나면 Wait 상태로 전환
