@@ -11,7 +11,8 @@ void NPC::Awake()
 {
 	auto npc = ResourceManager::Get().CreateTexture2D("../Resource/mo/NPC.png");
 	spriteRenderer->sprite = ResourceManager::Get().CreateSprite(npc, "NPC");
-	rigidbody->useGravity = false;
+	rigidbody->isKinematic = true;
+	collider->isTrigger = true;
 	collider->size = {100, 100};
 }
 
