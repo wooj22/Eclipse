@@ -10,6 +10,21 @@ void PlayScene::Awake()
 	cam->AddComponent<Camera>(1920, 1080);
 
 	// create gameobject
+	backGround = CreateObject<GameObject>();
+	backGround->AddComponent<Transform>();
+	backGround->AddComponent<SpriteRenderer>();
+	auto playbg = ResourceManager::Get().CreateTexture2D("../Resource/mo/PlayBackGround.png");
+	backGround->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(playbg, "PlayBackGround");
+	backGround->GetComponent<Transform>()->SetScale(3, 3);
+
+	playUI = CreateObject<PlayUI>();
+	playUI->stopButton = CreateObject<UI_Button>();
+	playUI->chatImage = CreateObject<UI_Image>();
+
+	npc = CreateObject<NPC>();
+
+	player = CreateObject<Player>();
+
 	// title sample
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
@@ -37,4 +52,14 @@ void PlayScene::Exit()
 {
 	// game object -> destroy()
 	__super::Exit();
+}
+
+void PlayScene::ChagneEndScene()
+{
+	SceneManager::Get().ChangeScene(EclipseApp::END);
+}
+
+void PlayScene::ChatOpen()
+{
+
 }
