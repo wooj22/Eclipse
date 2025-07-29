@@ -11,5 +11,5 @@ public:
 
 private:
     float timer = 0.0f;
-    const float bulletTimeDuration = 2.0f;
+    const float bulletTimeDuration = 1.0f;
 };

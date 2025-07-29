@@ -11,10 +11,16 @@ void Wait_State::Enter(ActionFSM* fsm)
     OutputDebugStringA("[Wait_State] Player¿« Wait_State ¡¯¿‘ \n");
     holdTime = 0.0f;
     isHolding = false;
+    timer = 0.0f;
 }
 
 void Wait_State::Update(ActionFSM* fsm)
 {
+    timer += Time::GetDeltaTime();
+
+    if (timer < ignoreInputDuration) return;
+
+
     if (Input::GetKey(VK_LBUTTON))
     {
         if (!isHolding)

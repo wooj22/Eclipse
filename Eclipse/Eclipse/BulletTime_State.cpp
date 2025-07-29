@@ -3,6 +3,8 @@
 #include "PlayerFSM.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "Wait_State.h"
+#include "../Direct2D_EngineLib/Input.h"
+#include "Attack_State.h"
 
 void BulletTime_State::Enter(ActionFSM* fsm)
 {
@@ -18,8 +20,16 @@ void BulletTime_State::Update(ActionFSM* fsm)
 
     timer += unscaledDelta;
 
-    // 공격 취소
+    // [ wait ] 공격 취소 
     if (fsm->GetPlayerFSM()->GetIsRButton()) fsm->ChangeState(std::make_unique<Wait_State>());
+
+    // [ Attack ] 마우스 왼쪽 버튼에서 손을 뗐을 때 → 공격
+    if (Input::GetKeyUp(VK_LBUTTON))
+    {
+        Time::SetTimeScale(1.0f); 
+        fsm->ChangeState(std::make_unique<Attack_State>());
+        return;
+    }
 
     // 불릿 타임 끝 
     if (timer >= bulletTimeDuration)
@@ -27,6 +37,8 @@ void BulletTime_State::Update(ActionFSM* fsm)
         Time::SetTimeScale(1.0f); // 시간 복구
         fsm->ChangeState(std::make_unique<Wait_State>());
     }
+
+    // 마우스 위치 따라서 플레이어가 바라보도록 하기 
 }
 
 void BulletTime_State::Exit(ActionFSM* fsm)
