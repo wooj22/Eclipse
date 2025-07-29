@@ -10,7 +10,7 @@ Player::Player() : GameObject("Player") {
 
 void Player::Awake()
 {
-	auto player = ResourceManager::Get().CreateTexture2D("../Resource/Player.png");
+	auto player = ResourceManager::Get().CreateTexture2D("../Resource/mo/Player.png");
 	spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
 	rigidbody->useGravity = false;
 }

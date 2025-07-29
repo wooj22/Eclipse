@@ -9,7 +9,7 @@ NPC::NPC() : GameObject("NPC") {
 
 void NPC::Awake()
 {
-	auto npc = ResourceManager::Get().CreateTexture2D("../Resource/NPC.png");
+	auto npc = ResourceManager::Get().CreateTexture2D("../Resource/mo/NPC.png");
 	spriteRenderer->sprite = ResourceManager::Get().CreateSprite(npc, "NPC");
 	rigidbody->useGravity = false;
 	collider->size = {100, 100};
