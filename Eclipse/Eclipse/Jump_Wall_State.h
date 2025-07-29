@@ -11,7 +11,10 @@ public:
 
 private:
     float wallJumpForce;
-    float jumpXPower = 450.0f;
+    float jumpXPower = 400.0f;
+
+    float elapsedTime = 0.0f;     // 경과 시간
+    float inputBlockTime = 0.05f;  // 입력 무시 시간 (초)
 
     // 점프 중 공중 이동: 부드럽게 가속/감속
     float inputX;

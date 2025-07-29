@@ -10,9 +10,11 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Jump_Wall_State] 벽 점프 상태 진입\n");
 
+    elapsedTime = 0.0f;  // 시간 초기화
     wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
 
     Vector2 force;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0); // 수직 속도 초기화
 
     if (fsm->GetPlayerFSM()->GetIsWallLeft())
     {
@@ -23,7 +25,6 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-jumpXPower, wallJumpForce));  // 왼쪽 방향으로 튕김
     }
 
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0); // 수직 속도 초기화
 }
 
 void Jump_Wall_State::Update(MovementFSM* fsm)
@@ -37,6 +38,10 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
 
 void Jump_Wall_State::FixedUpdate(MovementFSM* fsm)
 {
+    elapsedTime += Time::GetDeltaTime();
+
+    if (elapsedTime < inputBlockTime) return;
+
     inputX = fsm->GetPlayerFSM()->GetInputX();
     curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
 
