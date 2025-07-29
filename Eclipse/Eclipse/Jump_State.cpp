@@ -65,12 +65,12 @@ void Jump_State::FixedUpdate(MovementFSM* fsm)
     if (inputX != 0.0f)
     {
         float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
-        // fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Math::Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Math::Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
     }
     else
     {
         // 입력이 없으면 서서히 감속
-        // fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Math::Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Math::Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
     }
 }
 

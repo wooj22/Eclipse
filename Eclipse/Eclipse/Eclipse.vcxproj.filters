@@ -84,21 +84,6 @@
     <ClCompile Include="EndScene.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Idle_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Jump_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Jump_Wall_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerFSM.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Walk_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EclipseApp.h">
@@ -124,45 +109,6 @@
     </ClInclude>
     <ClInclude Include="EndScene.h">
       <Filter>01. Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionFSM.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionStateBase.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="FSMBase.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Idle_State.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Jump_State.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Jump_Wall_State.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementFSM.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementStateBase.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerFSM.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerStateBase.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="StateBase.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Walk_State.h">
-      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
