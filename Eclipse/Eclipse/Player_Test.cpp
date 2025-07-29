@@ -13,6 +13,7 @@ void Player_Test::Awake()
 	auto player = ResourceManager::Get().CreateTexture2D("../Resource/mo/Player.png");
 	spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
 	rigidbody->useGravity = false;
+	collider->size = { 100,100 };
 }
 
 void Player_Test::SceneStart()
