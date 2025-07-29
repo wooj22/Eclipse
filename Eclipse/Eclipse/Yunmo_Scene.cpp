@@ -34,7 +34,7 @@ void Yunmo_Scene::Update()
 	// scene change
 	if (Input::GetKeyDown('1'))
 	{
-		SceneManager::Get().ChangeScene(EclipseApp::MOON);
+		SceneManager::Get().ChangeScene(EclipseApp::MENU);
 	}
 	if (Input::GetKeyDown('2'))
 	{
