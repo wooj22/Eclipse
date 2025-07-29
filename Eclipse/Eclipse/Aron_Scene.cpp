@@ -28,8 +28,8 @@ void Aron_Scene::Awake()
 	honmun_a_sr = honmun_a->AddComponent<SpriteRenderer>();
 	honmun_a_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_a.png"), "Honmun_A");
 	//honmun_a_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_a_col = honmun_a->AddComponent<BoxCollider>();
-	honmun_a_col->size = { 100.0f, 100.0f }; // 조금 더 크게 해서 밖으로 보이게
+	honmun_a_col = honmun_a->AddComponent<CircleCollider>();
+	honmun_a_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
 	auto honmun_a_rb = honmun_a->AddComponent<Rigidbody>();
 	honmun_a_rb->useGravity = true;
 	honmun_a_rb->isKinematic = false;
@@ -42,8 +42,8 @@ void Aron_Scene::Awake()
 	honmun_b_sr = honmun_b->AddComponent<SpriteRenderer>();
 	honmun_b_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_b.png"), "Honmun_B");
 	//honmun_b_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_b_col = honmun_b->AddComponent<BoxCollider>();
-	honmun_b_col->size = { 100.0f, 100.0f }; // 조금 더 크게 해서 밖으로 보이게
+	honmun_b_col = honmun_b->AddComponent<CircleCollider>();
+	honmun_b_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
 	auto honmun_b_rb = honmun_b->AddComponent<Rigidbody>();
 	honmun_b_rb->useGravity = true;
 	honmun_b_rb->isKinematic = false;
@@ -56,8 +56,8 @@ void Aron_Scene::Awake()
 	honmun_c_sr = honmun_c->AddComponent<SpriteRenderer>();
 	honmun_c_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_c.png"), "Honmun_C");
 	//honmun_c_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_c_col = honmun_c->AddComponent<BoxCollider>();
-	honmun_c_col->size = { 100.0f, 100.0f }; // 조금 더 크게 해서 밖으로 보이게
+	honmun_c_col = honmun_c->AddComponent<CircleCollider>();
+	honmun_c_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
 	auto honmun_c_rb = honmun_c->AddComponent<Rigidbody>();
 	honmun_c_rb->useGravity = true;
 	honmun_c_rb->isKinematic = false;
@@ -70,8 +70,8 @@ void Aron_Scene::Awake()
 	honmun_d_sr = honmun_d->AddComponent<SpriteRenderer>();
 	honmun_d_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_d.png"), "Honmun_D");
 	//honmun_d_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_d_col = honmun_d->AddComponent<BoxCollider>();
-	honmun_d_col->size = { 100.0f, 100.0f }; // 조금 더 크게 해서 밖으로 보이게
+	honmun_d_col = honmun_d->AddComponent<CircleCollider>();
+	honmun_d_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
 	auto honmun_d_rb = honmun_d->AddComponent<Rigidbody>();
 	honmun_d_rb->useGravity = true;
 	honmun_d_rb->isKinematic = false;
@@ -135,11 +135,11 @@ void Aron_Scene::Update()
 	}
 
 	// AABB 그리기 - 디버깅용
-	/*if (ground_col) ground_col->DebugColliderDraw();
+	if (ground_col) ground_col->DebugColliderDraw();
 	if (honmun_a_col) honmun_a_col->DebugColliderDraw();
 	if (honmun_b_col) honmun_b_col->DebugColliderDraw();
 	if (honmun_c_col) honmun_c_col->DebugColliderDraw();
-	if (honmun_d_col) honmun_d_col->DebugColliderDraw();*/
+	if (honmun_d_col) honmun_d_col->DebugColliderDraw();
 
 	OutputDebugStringA("씬 업데이트중");
 }

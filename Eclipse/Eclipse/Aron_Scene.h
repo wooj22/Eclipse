@@ -6,6 +6,7 @@
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/BoxCollider.h"
+#include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
 class Aron_Scene : public Scene
@@ -37,10 +38,10 @@ private:
 	SpriteRenderer* honmun_d_sr = nullptr;
 
 	// colliders for enemies
-	BoxCollider* honmun_a_col = nullptr;
-	BoxCollider* honmun_b_col = nullptr;
-	BoxCollider* honmun_c_col = nullptr;
-	BoxCollider* honmun_d_col = nullptr;
+	CircleCollider* honmun_a_col = nullptr;
+	CircleCollider* honmun_b_col = nullptr;
+	CircleCollider* honmun_c_col = nullptr;
+	CircleCollider* honmun_d_col = nullptr;
 
 	// ground for enemies to stand on
 	GameObject* ground;
