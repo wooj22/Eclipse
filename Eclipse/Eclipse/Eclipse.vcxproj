@@ -142,6 +142,7 @@
     <ClInclude Include="Aron_Scene.h" />
     <ClInclude Include="EclipseApp.h" />
     <ClInclude Include="Moon_Scene.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Yunmo_Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

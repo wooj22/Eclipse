@@ -83,5 +83,8 @@
     <ClInclude Include="Aron_Scene.h">
       <Filter>01. Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>02. GameObject\Moon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
