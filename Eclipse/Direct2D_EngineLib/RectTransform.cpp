@@ -106,6 +106,22 @@ void RectTransform::SetPivot(const float& x, const float& y)
     MarkWorldDirty();
 }
 
+// Screen Local Matrix_None Pivot
+inline const D2D1::Matrix3x2F RectTransform::GetScreenLocalMatrix_NonePivot()
+{
+    return D2D1::Matrix3x2F::Translation(position.x, position.y);
+}
+
+// Screen World Matrix_None Pivot
+inline const D2D1::Matrix3x2F RectTransform::GetScreenWolrdMatrix_NonePivot()
+{
+    if (parent)
+    {
+        GetScreenLocalMatrix_NonePivot() * parent->GetScreenWolrdMatrix_NonePivot();
+    }
+    else return GetScreenLocalMatrix_NonePivot();
+}
+
 // Screen Local Matrix
 inline void RectTransform::MakeScreenLocalMatrix()
 {
@@ -127,7 +143,7 @@ inline void RectTransform::MakeScreenLocalMatrix()
 inline void RectTransform::MakeScreenWorldMatrix()
 {
 	if (isWorldDirty) {
-        screenWolrdMatrix = parent ? screenLocalMatrix * parent->GetScreenWorldMatrix() : screenLocalMatrix;
+        screenWolrdMatrix = parent ? screenLocalMatrix * parent->GetScreenWolrdMatrix_NonePivot() : screenLocalMatrix;
 		screenMatrix = renderMatrix * screenWolrdMatrix * unityMatrix;
         isWorldDirty = false;
 	}
