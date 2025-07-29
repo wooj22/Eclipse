@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "CameraSystem.h"
 #include "Vector2.h"
+#include "Rect.h"
 
 /* [Camera Conponent]
 * 
@@ -13,12 +14,8 @@ class Transform;
 class Camera : public Component
 {
 private:
-	// transform
 	Transform* transform = nullptr;
-
-	// view
-	float viewWidth = 1920.0f;
-	float viewHeight = 1080.0f;
+	Vector2 viewSize = { 1920.0f, 1080.0f };
 
 	// matrix
 	D2D1::Matrix3x2F worldMatrix = D2D1::Matrix3x2F::Identity();
@@ -30,6 +27,10 @@ private:
 	float targetTraceSpeed = 100.0f;
 	float targetTraceLimit = 5.0f;
 
+	// map condition
+	bool useMapCondition = false;
+	Rect mapRect;
+
 public:
 	// main camera
 	static Camera* mainCamera;
@@ -39,7 +40,7 @@ public:
 
 public:
 	// component cycle
-	Camera(float width, float height) : viewWidth(width), viewHeight(height) {  }
+	Camera(float width, float height) { viewSize = { width, height }; }
 	~Camera() override = default;
 	void OnEnable_Inner() override final;
 	void OnDisable_Inner() override final;
@@ -51,9 +52,8 @@ public:
 	bool IsInView(const Vector2& worldPos, const Vector2& boundSize = Vector2(0, 0)) const;
 
 	// get / set
-	void SetViewSize(float width, float height) { viewWidth = width; viewHeight = height; }
-	float GetViewWidth() const { return viewWidth; }
-	float GetViewHeight() const { return viewHeight; }
+	void SetViewSize(float width, float height) { viewSize.x = width; viewSize.y = height; }
+	Vector2 GetViewSize() const { return viewSize; }
 
 public:
 	// target trace
@@ -62,5 +62,10 @@ public:
 	void SetTargetTraceLimit(float limit) { targetTraceLimit = limit; }
 private:
 	void TargetTrace();
+
+public:
+	// map condition
+	void SetUseMapCondition(bool use) { useMapCondition = use; }
+	void SetMapCondition(const Rect rect) { mapRect = rect; useMapCondition = true; }
 };
 

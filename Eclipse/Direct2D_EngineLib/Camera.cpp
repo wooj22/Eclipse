@@ -62,8 +62,8 @@ bool Camera::IsInView(const Vector2& worldPos, const Vector2& boundSize) const
     Vector2 cameraPos = transform->GetWorldPosition();
     Vector2 viewPos = worldPos - cameraPos;
 
-    float halfW = viewWidth * 0.5f;
-    float halfH = viewHeight * 0.5f;
+    float halfW = viewSize.x * 0.5f;
+    float halfH = viewSize.y * 0.5f;
 
     return !(viewPos.x + boundSize.x < -halfW ||
         viewPos.x - boundSize.x >  halfW ||
