@@ -177,6 +177,12 @@
     <ClCompile Include="Player_Test.cpp">
       <Filter>02. GameObject\Yunmo\PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="Player_Woo.cpp">
+      <Filter>02. GameObject\Woo\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController_Woo.cpp">
+      <Filter>03. Script\Woo\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EclipseApp.h">
@@ -241,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="Player_Test.h">
       <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_Woo.h">
+      <Filter>02. GameObject\Woo\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController_Woo.h">
+      <Filter>03. Script\Woo\Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

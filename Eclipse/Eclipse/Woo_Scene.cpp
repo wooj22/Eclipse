@@ -17,6 +17,9 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
 	title_text->screenTextRenderer->SetText(L"Engine Test Scene");
+
+	// player sample
+	player = CreateObject<Player_Woo>();
 }
 
 void Woo_Scene::Start()
