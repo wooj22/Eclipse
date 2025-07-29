@@ -135,20 +135,38 @@
     <ClCompile Include="Aron_Scene.cpp" />
     <ClCompile Include="EclipseApp.cpp" />
     <ClCompile Include="EndScene.cpp" />
+    <ClCompile Include="Idle_State.cpp" />
+    <ClCompile Include="Jump_State.cpp" />
+    <ClCompile Include="Jump_Wall_State.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Moon_Scene.cpp" />
+    <ClCompile Include="PlayerFSM.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="Walk_State.cpp" />
     <ClCompile Include="Woo_Scene.cpp" />
     <ClCompile Include="Yunmo_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionFSM.h" />
+    <ClInclude Include="ActionStateBase.h" />
     <ClInclude Include="Aron_Scene.h" />
     <ClInclude Include="EclipseApp.h" />
     <ClInclude Include="EndScene.h" />
+    <ClInclude Include="FSMBase.h" />
+    <ClInclude Include="Idle_State.h" />
+    <ClInclude Include="Jump_State.h" />
+    <ClInclude Include="Jump_Wall_State.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="Moon_Scene.h" />
+    <ClInclude Include="MovementFSM.h" />
+    <ClInclude Include="MovementStateBase.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerFSM.h" />
+    <ClInclude Include="PlayerStateBase.h" />
     <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="StateBase.h" />
+    <ClInclude Include="Walk_State.h" />
     <ClInclude Include="Woo_Scene.h" />
     <ClInclude Include="Yunmo_Scene.h" />
   </ItemGroup>
