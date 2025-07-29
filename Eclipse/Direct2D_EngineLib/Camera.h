@@ -69,5 +69,7 @@ public:
 	// map condition
 	void SetUseMapCondition(bool use) { useMapCondition = use; }
 	void SetMapCondition(const Rect rect) { mapRect = rect; useMapCondition = true; }
+private:
+	void MapBoundaryCondition();
 };
 

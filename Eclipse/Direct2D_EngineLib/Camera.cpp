@@ -25,8 +25,8 @@ void Camera::Update()
     inverseMatrix = worldMatrix;
     inverseMatrix.Invert();
 
-    // target trace
-    TargetTrace();
+    TargetTrace();              // target trace
+	MapBoundaryCondition();     // map boundary condition
 }
 
 void Camera::OnDestroy_Inner()
@@ -71,6 +71,7 @@ bool Camera::IsInView(const Vector2& worldPos, const Vector2& boundSize) const
         viewPos.y - boundSize.y >  halfH);
 }
 
+// Target Trace
 void Camera::TargetTrace()
 {
     if (target)
@@ -88,5 +89,30 @@ void Camera::TargetTrace()
         {
             transform->Translate(moveDir.Normalized() * targetTraceSpeed * Time::GetDeltaTime());
         }
+    }
+}
+
+// Map Boundary Condition
+void Camera::MapBoundaryCondition()
+{
+    if (useMapCondition)
+    {
+        Vector2 cameraPos = transform->GetWorldPosition();
+        Vector2 halfSize = viewSize * 0.5f;
+
+		// mab boundary
+        float minX = mapRect.Left() + halfSize.x;
+        float maxX = mapRect.Right() - halfSize.x;
+        float minY = mapRect.Bottom() + halfSize.y;
+        float maxY = mapRect.Top() - halfSize.y;
+
+        // Clamp
+        if (cameraPos.x < minX) cameraPos.x = minX;
+        if (cameraPos.x > maxX) cameraPos.x = maxX;
+        if (cameraPos.y < minY) cameraPos.y = minY;
+        if (cameraPos.y > maxY) cameraPos.y = maxY;
+
+        // condition
+        transform->SetPosition(cameraPos);
     }
 }

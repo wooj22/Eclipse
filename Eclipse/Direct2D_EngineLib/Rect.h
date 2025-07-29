@@ -4,7 +4,7 @@
 class Rect
 {
 public:
-    Vector2 position;
+    Vector2 position = Vector2::zero;
     Vector2 size;
 
     float Left() const { return position.x - size.x / 2; }
