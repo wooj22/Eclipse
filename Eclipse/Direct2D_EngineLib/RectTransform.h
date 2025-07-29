@@ -81,6 +81,10 @@ private:
 	void MakeScreenWorldMatrix();
 
 public:
+    // parent none pivot matrix get
+    const D2D1::Matrix3x2F GetScreenLocalMatrix_NonePivot();
+    const D2D1::Matrix3x2F GetScreenWolrdMatrix_NonePivot();
+
     //  matrix get
 	const D2D1::Matrix3x2F& GetScreenLocalMatrix() { return screenLocalMatrix; }
 	const D2D1::Matrix3x2F& GetScreenWorldMatrix() { return screenWolrdMatrix; }

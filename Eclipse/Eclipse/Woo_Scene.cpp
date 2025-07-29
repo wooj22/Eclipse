@@ -22,14 +22,33 @@ void Woo_Scene::Awake()
 	player = CreateObject<Player_Woo>();
 
 	// background
-	GameObject* map = CreateObject<GameObject>();
+	map = CreateObject<GameObject>();
 	map->AddComponent<Transform>();
-	map->AddComponent<SpriteRenderer>();
+	auto sr = map->AddComponent<SpriteRenderer>();
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/MapBackground.jpg");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "MapBackground");
-	map->GetComponent<SpriteRenderer>()->sprite = new_sprite;
-	map->GetComponent<SpriteRenderer>()->layer = -1; // background layer
+	sr->sprite = new_sprite;
+	sr->layer = -1; // background layer
 	map->transform->Scaleing(2, 2);
+
+	// ui
+	parent = CreateObject<UI_Image>();
+	child = CreateObject<UI_Image>();
+	parent->rectTransform->SetPosition(100, 0);
+	child->rectTransform->SetParent(parent->rectTransform);
+	child->rectTransform->SetPosition(100, 0);
+
+	// camera tartget
+	Camera* camera = cam->GetComponent<Camera>();
+	camera->SetTarget(player->transform);
+	camera->SetTargetTraceSpeed(140.0f);
+	camera->SetTargetTraceLimitX(30.0f);
+	camera->SetTargetTraceLimitY(100.0f);
+
+	// camera map condition
+	Rect mapRect;
+	mapRect.size = { 2560, 1920 }; // map position
+	camera->SetMapCondition(mapRect);
 }
 
 void Woo_Scene::Start()
