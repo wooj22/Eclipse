@@ -95,6 +95,11 @@ void Moon_Scene::Update()
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::ARON);
 	}
+
+	// AABB ±×¸®±â 
+	ground_col->DebugColliderDraw();
+	wall_r_col->DebugColliderDraw();
+	wall_l_col->DebugColliderDraw();
 }
 
 void Moon_Scene::Exit()

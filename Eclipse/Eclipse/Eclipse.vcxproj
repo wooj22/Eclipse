@@ -136,6 +136,7 @@
     <ClCompile Include="EclipseApp.cpp" />
     <ClCompile Include="Idle_State.cpp" />
     <ClCompile Include="Jump_State.cpp" />
+    <ClCompile Include="Jump_Wall_State.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Moon_Scene.cpp" />
     <ClCompile Include="PlayerFSM.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="FSMBase.h" />
     <ClInclude Include="Idle_State.h" />
     <ClInclude Include="Jump_State.h" />
+    <ClInclude Include="Jump_Wall_State.h" />
     <ClInclude Include="Moon_Scene.h" />
     <ClInclude Include="MovementFSM.h" />
     <ClInclude Include="MovementStateBase.h" />

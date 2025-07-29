@@ -1,7 +1,7 @@
 #include "Jump_State.h"
 #include "Walk_State.h"
 #include "Idle_State.h"
-// #include "Jump_Wall_State.h"
+#include "Jump_Wall_State.h"
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
@@ -30,7 +30,7 @@ void Jump_State::Update(MovementFSM* fsm)
     {
         if (fsm->GetPlayerFSM()->GetIsWallLeft() || fsm->GetPlayerFSM()->GetIsWallRight())
         {
-            // fsm->ChangeState(std::make_unique<Jump_Wall_State>());
+            fsm->ChangeState(std::make_unique<Jump_Wall_State>());
             return;
         }
     }
