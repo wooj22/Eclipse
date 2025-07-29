@@ -84,6 +84,9 @@
     <ClCompile Include="Idle_State.cpp">
       <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
     </ClCompile>
+    <ClCompile Include="Walk_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EclipseApp.h">
@@ -126,6 +129,9 @@
       <Filter>03. Script\Moon\[ Player FSM ]\[ Action FSM ]</Filter>
     </ClInclude>
     <ClInclude Include="Idle_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Walk_State.h">
       <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
     </ClInclude>
   </ItemGroup>

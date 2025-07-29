@@ -8,7 +8,7 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
-// #include "PlayerFSM.h"
+#include "PlayerFSM.h"
 
 class Player : public GameObject
 {
@@ -20,7 +20,7 @@ public:
 	BoxCollider* collider;
 
 	// [ script ]
-	// PlayerFSM* playerFSM;
+	PlayerFSM* playerFSM;
 
 public:
 	Player() : GameObject("Player", "Player")
@@ -34,7 +34,7 @@ public:
 		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
 		spriteRenderer->layer = 1;
 
-		// playerFSM = AddComponent<PlayerFSM>();
+		playerFSM = AddComponent<PlayerFSM>();
 	}
 	~Player() override
 	{

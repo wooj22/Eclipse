@@ -1,5 +1,5 @@
 #include "Idle_State.h"
-// #include "Walk_State.h"
+#include "Walk_State.h"
 // #include "Jump_State.h"
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
@@ -24,10 +24,10 @@ void Idle_State::Update(MovementFSM* fsm)
         // fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Jump_State>());
     }
 
-    // [ Move ]
+    // [ Walk ]
     if (fsm->GetPlayerFSM()->GetIsA() || fsm->GetPlayerFSM()->GetIsD())
     {
-        // fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Walk_State>());
+        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Walk_State>());
     }
 }
 
