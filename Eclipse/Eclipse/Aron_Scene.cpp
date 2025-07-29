@@ -24,7 +24,7 @@ void Aron_Scene::Awake()
 	honmun_a->name = "Honmun_A";
 	honmun_a->AddComponent<Transform>()->SetPosition(-300.0f, 200.0f); // 더 높은 위치에서 떨어지게
 	//honmun_a->transform->SetScale(0.15f, 0.15f);
-	honmun_a->transform->SetScale(1,1);
+	honmun_a->transform->SetScale(1, 1);
 	honmun_a_sr = honmun_a->AddComponent<SpriteRenderer>();
 	honmun_a_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_a.png"), "Honmun_A");
 	//honmun_a_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
@@ -102,7 +102,7 @@ void Aron_Scene::Update()
 	__super::Update();
 
 	// 충돌 감지 및 색상 변경
-	CheckCollisionAndChangeColor();
+	//CheckCollisionAndChangeColor();
 
 	// scene change
 	if (Input::GetKeyDown('1'))
@@ -135,17 +135,22 @@ void Aron_Scene::Update()
 	}
 
 	// AABB 그리기 - 디버깅용
-	if (ground_col) ground_col->DebugColliderDraw();
+	/*if (ground_col) ground_col->DebugColliderDraw();
 	if (honmun_a_col) honmun_a_col->DebugColliderDraw();
 	if (honmun_b_col) honmun_b_col->DebugColliderDraw();
 	if (honmun_c_col) honmun_c_col->DebugColliderDraw();
-	if (honmun_d_col) honmun_d_col->DebugColliderDraw();
+	if (honmun_d_col) honmun_d_col->DebugColliderDraw();*/
+
+	OutputDebugStringA("씬 업데이트중");
 }
 
 void Aron_Scene::Exit()
 {
+	OutputDebugStringA("씬 종료까지는 옴");
 	// game object -> destroy()
 	__super::Exit();
+
+	
 }
 
 void Aron_Scene::CheckCollisionAndChangeColor()

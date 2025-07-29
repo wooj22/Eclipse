@@ -25,22 +25,22 @@ private:
 	UI_Text* title_text;
 
 	// È¥¹® enemies
-	GameObject* honmun_a;
-	GameObject* honmun_b;
-	GameObject* honmun_c;
-	GameObject* honmun_d;
+	GameObject* honmun_a = nullptr;
+	GameObject* honmun_b = nullptr;
+	GameObject* honmun_c = nullptr;
+	GameObject* honmun_d = nullptr;
 
 	// sprite renderers for color change
-	SpriteRenderer* honmun_a_sr;
-	SpriteRenderer* honmun_b_sr;
-	SpriteRenderer* honmun_c_sr;
-	SpriteRenderer* honmun_d_sr;
+	SpriteRenderer* honmun_a_sr = nullptr;
+	SpriteRenderer* honmun_b_sr = nullptr;
+	SpriteRenderer* honmun_c_sr = nullptr;
+	SpriteRenderer* honmun_d_sr = nullptr;
 
 	// colliders for enemies
-	BoxCollider* honmun_a_col;
-	BoxCollider* honmun_b_col;
-	BoxCollider* honmun_c_col;
-	BoxCollider* honmun_d_col;
+	BoxCollider* honmun_a_col = nullptr;
+	BoxCollider* honmun_b_col = nullptr;
+	BoxCollider* honmun_c_col = nullptr;
+	BoxCollider* honmun_d_col = nullptr;
 
 	// ground for enemies to stand on
 	GameObject* ground;
