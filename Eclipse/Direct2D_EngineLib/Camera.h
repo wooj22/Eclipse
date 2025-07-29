@@ -25,7 +25,8 @@ private:
 	// target 
 	Transform* target = nullptr;
 	float targetTraceSpeed = 100.0f;
-	float targetTraceLimit = 5.0f;
+	float targetTraceLimitX = 10.0f;
+	float targetTraceLimitY = 20.0f;
 
 	// map condition
 	bool useMapCondition = false;
@@ -59,7 +60,8 @@ public:
 	// target trace
 	void SetTarget(Transform* target) { this->target = target; }
 	void SetTargetTraceSpeed(float speed) { targetTraceSpeed = speed; }
-	void SetTargetTraceLimit(float limit) { targetTraceLimit = limit; }
+	void SetTargetTraceLimitX(float limit) { targetTraceLimitX = limit; }
+	void SetTargetTraceLimitY(float limit) { targetTraceLimitY = limit; }
 private:
 	void TargetTrace();
 

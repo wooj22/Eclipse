@@ -75,11 +75,18 @@ void Camera::TargetTrace()
 {
     if (target)
     {
-        // limit 거리보다 멀어지면 해당 방향으로 speed 속도로 이동
+        // dist
         Vector2 dist = target->GetWorldPosition() - transform->GetWorldPosition();
-        if (dist.Magnitude() >= targetTraceLimit)
+
+        // direction
+        Vector2 moveDir;
+        if (std::abs(dist.x) > targetTraceLimitX) moveDir.x = (dist.x > 0 ? 1 : -1);
+        if (std::abs(dist.y) > targetTraceLimitY) moveDir.y = (dist.y > 0 ? 1 : -1);
+
+        // trace
+        if (moveDir.x != 0.0f || moveDir.y != 0.0f)
         {
-            transform->Translate(dist.Normalized() * targetTraceSpeed * Time::GetDeltaTime());
+            transform->Translate(moveDir.Normalized() * targetTraceSpeed * Time::GetDeltaTime());
         }
     }
 }

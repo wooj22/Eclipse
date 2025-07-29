@@ -35,7 +35,8 @@ void Woo_Scene::Awake()
 	Camera* camera = cam->GetComponent<Camera>();
 	camera->SetTarget(player->transform);
 	camera->SetTargetTraceSpeed(100.0f);
-	camera->SetTargetTraceLimit(5.0f);
+	camera->SetTargetTraceLimitX(30.0f);
+	camera->SetTargetTraceLimitY(100.0f);
 }
 
 void Woo_Scene::Start()
