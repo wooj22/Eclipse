@@ -26,10 +26,7 @@ public:
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<BoxCollider>();
 		controller = AddComponent<PlayerController_Woo>();
-	}
 
-	void Awake() override
-	{
 		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/Player_woo.png");
 		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "PlayerWoo");
 		spriteRenderer->sprite = new_sprite;
