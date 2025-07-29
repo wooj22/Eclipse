@@ -9,7 +9,7 @@
 #include "PlayerMove.h"
 
 
-class Player : public GameObject
+class Player_Test : public GameObject
 {
 public:
 	Transform* transform;
@@ -19,8 +19,8 @@ public:
 	Script* scirpt;
 public:
 	// game object cycle
-	Player();
-	~Player() override {}
+	Player_Test();
+	~Player_Test() override {}
 
 	// 오브젝트가 생성될 때
 	void Awake() override;

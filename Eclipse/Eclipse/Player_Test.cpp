@@ -1,6 +1,6 @@
-#include "Player.h"
+#include "Player_Test.h"
 
-Player::Player() : GameObject("Player") {
+Player_Test::Player_Test() : GameObject("Player") {
 	transform = AddComponent<Transform>();
 	spriteRenderer = AddComponent<SpriteRenderer>();
 	rigidbody = AddComponent<Rigidbody>();
@@ -8,24 +8,24 @@ Player::Player() : GameObject("Player") {
 	scirpt = AddComponent<PlayerMove>();
 }
 
-void Player::Awake()
+void Player_Test::Awake()
 {
 	auto player = ResourceManager::Get().CreateTexture2D("../Resource/mo/Player.png");
 	spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
 	rigidbody->useGravity = false;
 }
 
-void Player::SceneStart()
+void Player_Test::SceneStart()
 {
 	
 }
 
-void Player::Update()
+void Player_Test::Update()
 {
 	collider->DebugColliderDraw();
 }
 
-void Player::Destroyed()
+void Player_Test::Destroyed()
 {
 
 }

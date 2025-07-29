@@ -87,7 +87,7 @@
     <ClCompile Include="NPC.cpp">
       <Filter>02. GameObject\Yunmo</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Player_Test.cpp">
       <Filter>02. GameObject\Yunmo</Filter>
     </ClCompile>
     <ClCompile Include="PlayUI.cpp">
@@ -128,7 +128,7 @@
     <ClInclude Include="NPC.h">
       <Filter>02. GameObject\Yunmo</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Player_Test.h">
       <Filter>02. GameObject\Yunmo</Filter>
     </ClInclude>
     <ClInclude Include="PlayUI.h">

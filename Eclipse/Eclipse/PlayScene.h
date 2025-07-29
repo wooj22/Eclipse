@@ -6,7 +6,7 @@
 
 #include "EclipseApp.h"
 #include "NPC.h"
-#include "Player.h"
+#include "Player_Test.h"
 #include "PlayUI.h"
 
 class PlayScene : public Scene

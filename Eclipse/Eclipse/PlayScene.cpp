@@ -23,7 +23,7 @@ void PlayScene::Awake()
 
 	npc = CreateObject<NPC>();
 
-	player = CreateObject<Player>();
+	player = CreateObject<Player_Test>();
 
 	// title sample
 	title_text = CreateObject<UI_Text>();
