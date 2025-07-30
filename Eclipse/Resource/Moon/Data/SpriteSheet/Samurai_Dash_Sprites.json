@@ -1,0 +1,16 @@
+{
+    "texture": "Samurai_Dash.png",
+    "textureWidth": 100,
+    "textureHeight": 85,
+    "sprites": [
+        {
+            "name": "Samurai_Dash_0",
+            "x": 2.0,
+            "y": 36.0,
+            "width": 88.0,
+            "height": 49.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}

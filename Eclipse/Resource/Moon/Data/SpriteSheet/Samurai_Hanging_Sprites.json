@@ -1,0 +1,25 @@
+{
+    "texture": "Samurai_Hanging.png",
+    "textureWidth": 200,
+    "textureHeight": 85,
+    "sprites": [
+        {
+            "name": "Samurai_Hanging_0",
+            "x": 15.0,
+            "y": 11.0,
+            "width": 72.0,
+            "height": 74.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Samurai_Hanging_2",
+            "x": 115.0,
+            "y": 11.0,
+            "width": 72.0,
+            "height": 74.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}

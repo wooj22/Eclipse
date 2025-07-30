@@ -31,9 +31,58 @@ public:
     ~PlayerWalkClip() override {}
 };
 
+class PlayerJumpClip : public AnimationClip
+{
+public:
+    PlayerJumpClip()
+    {
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Jump.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Jump_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Jump_AniClip.json");
+    }
+    ~PlayerJumpClip() override {}
+};
+
+class PlayerHangingClip : public AnimationClip
+{
+public:
+    PlayerHangingClip()
+    {
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Hanging.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Hanging_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Hanging_AniClip.json");
+    }
+    ~PlayerHangingClip() override {}
+};
+
+class PlayerAttackClip : public AnimationClip
+{
+public:
+    PlayerAttackClip()
+    {
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Attack.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Attack_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Attack_AniClip.json");
+    }
+    ~PlayerAttackClip() override {}
+};
+
+class PlayerDashClip : public AnimationClip
+{
+public:
+    PlayerDashClip()
+    {
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Dash.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Dash_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Dash_AniClip.json");
+    }
+    ~PlayerDashClip() override {}
+};
 
 
 /*------------ Animation State ------------*/
+// ---- Movement FSM ---- 
+
 class PlayerIdleState : public AnimationBaseState
 {
 public:
@@ -59,7 +108,65 @@ public:
     {
         // [ tansition ]
         if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-        // else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Cat_Walk");
+    }
+    void Exit() override {}
+};
+
+class PlayerJumpState : public AnimationBaseState
+{
+public:
+    PlayerJumpState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
+
+    void Enter() override {}
+    void Update(float dt) override
+    {
+        // [ tansition ]
+        if (controller->GetBool("Samurai_Jump") == true)         controller->PlayAnimation("Samurai_Jump");
+    }
+    void Exit() override {}
+};
+
+class PlayerHangingState : public AnimationBaseState
+{
+public:
+    PlayerHangingState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
+
+    void Enter() override {}
+    void Update(float dt) override
+    {
+        // [ tansition ]
+        if (controller->GetBool("Samurai_Hanging") == true)         controller->PlayAnimation("Samurai_Hanging");
+    }
+    void Exit() override {}
+};
+
+
+// ---- Action FSM ---- 
+
+class PlayerAttackState : public AnimationBaseState
+{
+public:
+    PlayerAttackState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
+
+    void Enter() override {}
+    void Update(float dt) override
+    {
+        // [ tansition ]
+        if (controller->GetBool("Samurai_Attack") == true)         controller->PlayAnimation("Samurai_Attack");
+    }
+    void Exit() override {}
+};
+
+class PlayerDashState : public AnimationBaseState
+{
+public:
+    PlayerDashState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
+
+    void Enter() override {}
+    void Update(float dt) override
+    {
+        // [ tansition ]
+        if (controller->GetBool("Samurai_Dash") == true)         controller->PlayAnimation("Samurai_Dash");
     }
     void Exit() override {}
 };
@@ -72,10 +179,18 @@ public:
     // Clips
     PlayerIdleClip* idleClip = nullptr;
     PlayerWalkClip* walkClip = nullptr;
+    PlayerJumpClip* jumpClip = nullptr;
+    PlayerHangingClip* hangingClip = nullptr;
+    PlayerAttackClip* attackClip = nullptr;
+    PlayerDashClip* dashClip = nullptr;
 
     // States
     PlayerIdleState* idleState = nullptr;
     PlayerWalkState* walkState = nullptr;
+    PlayerJumpState* jumpState = nullptr;
+    PlayerHangingState* hangingState = nullptr;
+    PlayerAttackState* attackState = nullptr;
+    PlayerDashState* dashState = nullptr;
 
 public: 
     PlayerAnimatorController()
@@ -83,10 +198,20 @@ public:
         // clip 积己
         idleClip = new PlayerIdleClip();
         walkClip = new PlayerWalkClip();
+        jumpClip = new PlayerJumpClip();
+        hangingClip = new PlayerHangingClip();
+        attackClip = new PlayerAttackClip();
+        dashClip = new PlayerDashClip();
+
 
         // state 积己
         idleState = new PlayerIdleState(idleClip, this);
         walkState = new PlayerWalkState(walkClip, this);
+        jumpState = new PlayerJumpState(jumpClip, this);
+        hangingState = new PlayerHangingState(hangingClip, this);
+        attackState = new PlayerAttackState(attackClip, this);
+        dashState = new PlayerDashState(dashClip, this);
+
 
         // state 殿废
         AddState(idleState);
