@@ -9,6 +9,7 @@ private:
 	float inputX, inputY, speed = 500.0f;
 	Transform* transform;
 	Rigidbody* rigid;
+	bool isWave = false;
 
 public: 
 	void OnEnable() override;				// 컴포넌트 활성화 시점)

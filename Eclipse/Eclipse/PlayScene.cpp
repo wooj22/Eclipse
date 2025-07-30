@@ -24,6 +24,7 @@ void PlayScene::Awake()
 	playUI->quest_Text = CreateObject<UI_Text>();
 	playUI->chat_Image = CreateObject<UI_Image>();
 	playUI->chat_Text = CreateObject<UI_Text>();
+	playUI->chat_Button= CreateObject<UI_Button>();
 	playUI->hon_Image = CreateObject<UI_Image>();
 	playUI->hon_Text = CreateObject<UI_Text>();
 	playUI->skill1_Image = CreateObject<UI_Image>();
@@ -32,8 +33,6 @@ void PlayScene::Awake()
 	playUI->skill2_Text = CreateObject<UI_Text>();
 
 	npc = CreateObject<NPC>();
-	//npcScript = npc->AddComponent<NPCScript>();
-	//npcScript->SetPlayUI(playUI);
 
 	player = CreateObject<Player_Test>();
 }
@@ -90,9 +89,4 @@ void PlayScene::Exit()
 void PlayScene::ChagneEndScene()
 {
 	SceneManager::Get().ChangeScene(EclipseApp::END);
-}
-
-void PlayScene::ChatOpen()
-{
-
 }

@@ -1,7 +1,10 @@
 #include "PlayUI.h"
+#include "Chat.h"
+#include "Quest.h"
 
-void PlayUI::Awake()  
+void PlayUI::Awake()
 {  
+
 }
 
 void PlayUI::SceneStart()
@@ -27,23 +30,33 @@ void PlayUI::SceneStart()
 	//chat_Text->rectTransform->SetPosition(0, -100);
 	quest_Text->rectTransform->SetSize(100, 180);
 	quest_Text->screenTextRenderer->SetText(L"퀘스트창 텍스트 예시.");
+	quest_Text->AddComponent<Quest>();
 
 	// 대화창 UI
 	chat_Text->rectTransform->SetParent(chat_Image->rectTransform);
+	//chat_Button->rectTransform->SetParent(chat_Image->rectTransform);
+	chat_Button->button->onClickListeners.AddListener(
+		this, std::bind(&PlayUI::ClickChatButton, this));
 	chat_Image->SetActive(false);
 	chat_Image->rectTransform->SetPosition(0, -400);
 	chat_Image->rectTransform->SetSize(1500, 200);
 	auto chatImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Chat.png");
 	chat_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatImageTexture, "Chat");
-	//chat_Text->rectTransform->SetPosition(0, -100);
-	chat_Text->rectTransform->SetSize(100, 180);
+	chat_Text->rectTransform->SetSize(1200, 180);
 	chat_Text->screenTextRenderer->SetText(L"대화창 텍스트 예시");
+	chat = chat_Text->AddComponent<Chat>();
+	chat_Button->rectTransform->SetPosition(600, -480);
+	//chat_Button->rectTransform->SetPosition(600, -80);
+	chat_Button->rectTransform->SetSize(100, 50);
+	auto chatButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton.png");
+	chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonTexture, "ChatButton");
 
 	// 혼 & 스킬 UI
 	hon_Text->rectTransform->SetParent(hon_Image->rectTransform);
 	skill1_Image->rectTransform->SetParent(hon_Image->rectTransform);
 	skill1_Text->rectTransform->SetParent(hon_Image->rectTransform);
 	skill2_Image->rectTransform->SetParent(hon_Image->rectTransform);
+
 	skill2_Text->rectTransform->SetParent(hon_Image->rectTransform);
 
 	// 혼
@@ -78,8 +91,6 @@ void PlayUI::SceneStart()
 	skill2_Text->rectTransform->SetSize(100, 50);
 	skill2_Text->screenTextRenderer->SetText(L"x 1");
 	skill2_Text->screenTextRenderer->SetFontSize(50);*/
-
-
 }
 
 void PlayUI::Update()

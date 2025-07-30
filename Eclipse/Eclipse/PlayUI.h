@@ -5,6 +5,10 @@
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/Singleton.h"
 
+class Chat;
+class Quest;
+
+
 class PlayUI : public GameObject , public Singleton<PlayUI>
 {
 public:
@@ -16,9 +20,12 @@ public:
 
 	UI_Image* quest_Image;			// 퀘스트창 이미지
 	UI_Text* quest_Text;			// 퀘스트창 텍스트
+	//Quest* quest;
 
 	UI_Image* chat_Image;			// 대화창 이미지
 	UI_Text* chat_Text;				// 대화창 텍스트
+	UI_Button* chat_Button;			// 퀘스트 수락 버튼
+	Chat* chat;
 
 	UI_Image* hon_Image;			// 혼 이미지
 	UI_Text* hon_Text;				// 혼 개수 텍스트
@@ -29,9 +36,11 @@ public:
 	UI_Image* skill2_Image;			// 스킬2 이미지
 	UI_Text* skill2_Text;			// 스킬2 텍스트
 
+	int waveCount = 0;				// 임시 웨이브 카운트 
+	bool isWave = false;			// 임시 웨이브 상태
 public:
 	// game object cycle
-	PlayUI() {}
+	PlayUI() : GameObject("PlayUI","PlayUI") {}
 	~PlayUI() override {}
 
 	// 오브젝트가 생성될 때
@@ -46,9 +55,18 @@ public:
 	// Scene의 Exit, GameObject Delete
 	void Destroyed() override;
 
-	void OpenChat() { chat_Image->SetActive(true);}
 
-	void CloseChat() { chat_Image->SetActive(false); }
+	void ChatSetActive(bool check) {
+		chat_Image->SetActive(check);
+		chat_Button->SetActive(false);
+	}
 
 	bool ChatActiveCheck() { return chat_Image->IsActive(); }
+
+	void ClickChatButton() {
+		chat_Image->SetActive(false);
+		chat_Button->SetActive(false);
+		isWave = true;
+		waveCount++;
+	}
 };
