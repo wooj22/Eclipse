@@ -10,7 +10,7 @@
 void BulletTime_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[BulletTime_State] (( 진입 - 불릿 타임 시작 )) \n");
-    Time::SetTimeScale(0.1f); // 시간 느리게
+    Time::SetTimeScale(0.3f); // 시간 느리게
 
     fsm->GetPlayerFSM()->timer = 0.0f;
 }

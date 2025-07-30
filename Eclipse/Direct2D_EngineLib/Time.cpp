@@ -6,8 +6,10 @@ LARGE_INTEGER Time::prevCounter = {};
 LARGE_INTEGER Time::currentCounter = {};
 float Time::deltaTime = 0.0f;
 float Time::unscaledDelta = 0.0f;
-float Time::fixedDeltaTime = 0.02f;
+float Time::unscaledFixedDeltaTime = 0.02f;
 float Time::timeScale = 1.0f;
+
+float Time::fixedDeltatime = 0.02f;
 
 void Time::Init()
 {
@@ -23,6 +25,7 @@ void Time::Update()
     prevCounter = currentCounter;
 
     deltaTime = unscaledDelta * timeScale;
+    fixedDeltatime = unscaledFixedDeltaTime * timeScale;
 }
 
 float Time::GetDeltaTime()
@@ -37,7 +40,12 @@ float Time::GetUnscaledDeltaTime()
 
 float Time::GetFixedDeltaTime()
 {
-    return fixedDeltaTime;
+    return fixedDeltatime;
+}
+
+float Time::GetUnscaledFixedDeltatime()
+{
+    return unscaledFixedDeltaTime;
 }
 
 float Time::GetTotalTime()
