@@ -1,12 +1,12 @@
 #include "Attack_State.h"
-
-#include "ActionFSM.h" 
+#include "Idle_State.h"
+#include "MovementFSM.h" 
 #include "PlayerFSM.h" 
 #include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Time.h"
 
-void Attack_State::Enter(ActionFSM* fsm)
+void Attack_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Attack_State] Player의 Attack_State 진입 \n");
 
@@ -14,20 +14,29 @@ void Attack_State::Enter(ActionFSM* fsm)
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", true);
 }
 
-void Attack_State::Update(ActionFSM* fsm)  
+void Attack_State::Update(MovementFSM* fsm)
 {
     timer += Time::GetDeltaTime();
 
-    // 애니메이션 끝나면 Wait 상태로 전환
-    // [ Idle ] : 임시로 일정 시간 후 Wait 상태로 전환
-    if (timer > 1.0f)
+
+    // [ Idle ] : 임시로 일정 시간 후 Idle 상태로 전환
+    if (timer > 0.5f)
     {
-        fsm->GetPlayerFSM()->GetActionFSM()->ChangeState(std::make_unique<Wait_State>());
+        fsm->GetPlayerFSM()->GetAnimatorController()->PlayAnimation("Samurai_Idle"); // 임시 전환 
+        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
     }
+
+    // [ Idle ] 
+
 }
 
-void Attack_State::Exit(ActionFSM* fsm) 
+void Attack_State::FixedUpdate(MovementFSM* fsm)
+{
+
+}
+
+void Attack_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", false);
 }

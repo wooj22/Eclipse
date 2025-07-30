@@ -34,7 +34,7 @@ void Wait_State::Update(ActionFSM* fsm)
         // [ BulletTime ]
         if (holdTime >= bulletTimeThreshold)
         {
-            fsm->GetPlayerFSM()->GetActionFSM()->ChangeState(std::make_unique<BulletTime_State>());
+            // fsm->GetPlayerFSM()->GetActionFSM()->ChangeState(std::make_unique<BulletTime_State>());
         }
     }
     else
@@ -42,7 +42,7 @@ void Wait_State::Update(ActionFSM* fsm)
         // [ Attack ]
         if (isHolding && holdTime < bulletTimeThreshold)
         {
-            fsm->GetPlayerFSM()->GetActionFSM()->ChangeState(std::make_unique<Attack_State>());
+            // fsm->GetPlayerFSM()->GetActionFSM()->ChangeState(std::make_unique<Attack_State>());
         }
 
         // √ ±‚»≠

@@ -67,17 +67,17 @@ public:
     ~PlayerAttackClip() override {}
 };
 
-class PlayerDashClip : public AnimationClip
-{
-public:
-    PlayerDashClip()
-    {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Dash.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Dash_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Dash_AniClip.json");
-    }
-    ~PlayerDashClip() override {}
-};
+//class PlayerDashClip : public AnimationClip
+//{
+//public:
+//    PlayerDashClip()
+//    {
+//        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Dash.png");
+//        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Dash_Sprites.json");
+//        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Dash_AniClip.json");
+//    }
+//    ~PlayerDashClip() override {}
+//};
 
 
 /*------------ Animation State ------------*/
@@ -92,11 +92,11 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        if (controller->GetBool("Samurai_Walk") == true)            controller->PlayAnimation("Samurai_Walk");
+        if (controller->GetBool("Samurai_Walk") == true)         controller->PlayAnimation("Samurai_Walk");
         else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
         else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Hanging") == true)    controller->PlayAnimation("Samurai_Hanging");
-        else if (controller->GetBool("Samurai_Attack") == true)    controller->PlayAnimation("Samurai_Attack");
+        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
+        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
     }
     void Exit() override {}
 };
@@ -111,11 +111,10 @@ public:
     {
         // [ tansition ]
         if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-        // else if (controller->GetBool("Samurai_Walk") == true)            controller->PlayAnimation("Samurai_Walk");
         else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
         else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Hanging") == true)    controller->PlayAnimation("Samurai_Hanging");
-        else if (controller->GetBool("Samurai_Attack") == true)    controller->PlayAnimation("Samurai_Attack");
+        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
+        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
     }
     void Exit() override {}
 };
@@ -129,12 +128,11 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        // if (controller->GetBool("Samurai_Jump") == true)         controller->PlayAnimation("Samurai_Jump");
         if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
         else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
         else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Hanging") == true)    controller->PlayAnimation("Samurai_Hanging");
-        else if (controller->GetBool("Samurai_Attack") == true)    controller->PlayAnimation("Samurai_Attack");
+        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
+        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
     }
     void Exit() override {}
 };
@@ -148,33 +146,11 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        // if (controller->GetBool("Samurai_Hanging") == true)         controller->PlayAnimation("Samurai_Hanging");
         if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
         else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
         else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
         else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
-        else if (controller->GetBool("Samurai_Attack") == true)    controller->PlayAnimation("Samurai_Attack");
-    }
-    void Exit() override {}
-};
-
-
-// ---- Action FSM ---- 
-
-class PlayerAttackState : public AnimationBaseState
-{
-public:
-    PlayerAttackState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
-
-    void Enter() override {}
-    void Update(float dt) override
-    {
-        // [ tansition ]
-        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
-        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
-        else if (controller->GetBool("Samurai_Hanging") == true)         controller->PlayAnimation("Samurai_Hanging");
+        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
     }
     void Exit() override {}
 };
@@ -198,6 +174,25 @@ public:
     void Exit() override {}
 };
 
+class PlayerAttackState : public AnimationBaseState
+{
+public:
+    PlayerAttackState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
+
+    void Enter() override {}
+    void Update(float dt) override
+    {
+        // [ tansition ]
+        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
+        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
+        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
+        else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
+        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
+    }
+    void Exit() override {}
+};
+
+
 
 /*------------ Animation Controller ------------*/
 class PlayerAnimatorController : public AnimatorController
@@ -209,7 +204,7 @@ public:
     PlayerJumpClip* jumpClip = nullptr;
     PlayerHangingClip* hangingClip = nullptr;
     PlayerAttackClip* attackClip = nullptr;
-    PlayerDashClip* dashClip = nullptr;
+    // PlayerDashClip* dashClip = nullptr;
 
     // States
     PlayerIdleState* idleState = nullptr;
@@ -228,7 +223,7 @@ public:
         jumpClip = new PlayerJumpClip();
         hangingClip = new PlayerHangingClip();
         attackClip = new PlayerAttackClip();
-        dashClip = new PlayerDashClip();
+        // dashClip = new PlayerDashClip();
 
 
         // state 생성
@@ -237,7 +232,7 @@ public:
         jumpState = new PlayerJumpState(jumpClip, this);
         hangingState = new PlayerHangingState(hangingClip, this);
         attackState = new PlayerAttackState(attackClip, this);
-        dashState = new PlayerDashState(dashClip, this);
+        // dashState = new PlayerDashState(dashClip, this);
 
         // state 등록
         AddState(idleState);
@@ -245,7 +240,7 @@ public:
         AddState(jumpState);
         AddState(hangingState);
         AddState(attackState);
-        AddState(dashState);
+        // AddState(dashState);
 
         // 초기 상태
         ChangeAnimation(idleState);
@@ -254,5 +249,9 @@ public:
     {
         delete idleClip;
         delete walkClip;
+        delete jumpState;
+        delete hangingState;
+        delete attackState;
+        // delete dashState;
     }
 };

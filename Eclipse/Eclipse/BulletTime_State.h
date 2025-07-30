@@ -1,13 +1,16 @@
 #pragma once
-#include "StateBase.h"
-class ActionFSM;
+#include "MovementStateBase.h"
 
-class BulletTime_State : public StateBase<ActionFSM>
+class MovementFSM;
+
+class BulletTime_State : public MovementStateBase
 {
 public:
-    void Enter(ActionFSM* fsm) override;
-    void Update(ActionFSM* fsm) override;
-    void Exit(ActionFSM* fsm) override;
+    void Enter(MovementFSM* fsm) override;
+    void Update(MovementFSM* fsm) override;
+    void Exit(MovementFSM* fsm) override;
+
+    void FixedUpdate(MovementFSM* fsm) override;
 
 private:
     float timer = 0.0f;
