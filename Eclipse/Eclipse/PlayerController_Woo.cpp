@@ -5,6 +5,8 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/ResourceManager.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
+#include "../Direct2D_EngineLib/Camera.h"
+#include "string.h"
 
 
 void PlayerController_Woo::OnEnable()
@@ -32,8 +34,31 @@ void PlayerController_Woo::Start()
 void PlayerController_Woo::Update()
 {
 	InputCheak();
-	Jump();
+	//Jump();
 	sr->flipX = Input::GetAxisHorizontal() >= 0 ? false : true;
+	
+	// mouse button click test debug
+	if (Input::GetMouseButtonDown(0))
+	{
+		// screen
+		Vector2 screenPos = Input::GetMouseScreenPosition_Unity();
+		std::wstring debugStr2 = L"screen : x = " + std::to_wstring(screenPos.x) +
+			L", y = " + std::to_wstring(screenPos.y) + L"\n";
+		OutputDebugString(debugStr2.c_str());
+
+		// screen -> world 변환 결과
+		Vector2 d2d_screenPos = Input::GetMouseScreenPosition();
+		Vector2 pos = Camera::GetScreenToWorldPosition(d2d_screenPos);
+		std::wstring debugStr = L"! world : x = " + std::to_wstring(pos.x) +
+			L", y = " + std::to_wstring(pos.y) + L"\n";
+		OutputDebugString(debugStr.c_str());
+
+		// player pos
+		std::wstring debugStr3 = 
+			L"player wolrd : x = " + std::to_wstring(tr->GetPosition().x) +
+			L", y = " + std::to_wstring(tr->GetPosition().y) + L"\n";
+		OutputDebugString(debugStr3.c_str());
+	}
 }
 
 void PlayerController_Woo::FixedUpdate()
@@ -93,7 +118,8 @@ void PlayerController_Woo::InputCheak()
 void PlayerController_Woo::Movement()
 {
 	Vector2 direction = Vector2(inputX, inputY).Normalized();
-	rb->velocity.x = direction.x  *  speed;
+	rb->velocity = direction * speed;
+	//rb->velocity.x = direction.x  *  speed;
 }
 
 void PlayerController_Woo::Jump()

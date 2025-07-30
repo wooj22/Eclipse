@@ -116,3 +116,22 @@ void Camera::MapBoundaryCondition()
         transform->SetPosition(cameraPos);
     }
 }
+
+/*   Screen->World 변환   */
+// Screen (픽셀 기준) → NDC → View → World
+// but, 2D에서는 NDC는 건너 뛰어도 됨 : Screen → Camera(View) → World
+Vector2 Camera::GetScreenToWorldPosition(Vector2 d2d_screenPos)
+{
+    // d2d좌표를 역행렬연산하고 유니티좌표로 바꾸자 
+    // -> world x 만 이상함
+    D2D1_POINT_2F screenPos = { d2d_screenPos.x, d2d_screenPos.y };
+    D2D1_POINT_2F worldPos = GetMainInverseMatrix().TransformPoint(screenPos);
+
+    D2D1::Matrix3x2F unityMatrix =
+        D2D1::Matrix3x2F::Scale(1.0f, -1.0f) *
+        D2D1::Matrix3x2F::Translation(1920 / 2.0f, 1080 / 2.0f);
+
+    worldPos = unityMatrix.TransformPoint(worldPos);
+
+    return { worldPos.x, worldPos.y };
+}

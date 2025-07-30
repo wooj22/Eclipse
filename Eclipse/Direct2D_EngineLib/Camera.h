@@ -71,5 +71,9 @@ public:
 	void SetMapCondition(const Rect rect) { mapRect = rect; useMapCondition = true; }
 private:
 	void MapBoundaryCondition();
+
+public:
+	// screen -> world
+	static Vector2 GetScreenToWorldPosition(Vector2 screenPos);
 };
 
