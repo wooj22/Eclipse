@@ -61,6 +61,21 @@ bool Input::GetKeyUp(int vKey)
     return (prevState[vKey] & 0x8000) && !(currState[vKey] & 0x8000);
 }
 
+bool Input::GetMouseButton(int button)
+{
+	return GetKey(VK_LBUTTON + button);
+}
+
+bool Input::GetMouseButtonDown(int button)
+{
+	return !(prevState[VK_LBUTTON + button] & 0x8000) && (currState[VK_LBUTTON + button] & 0x8000);
+}
+
+bool Input::GetMouseButtonUp(int button)
+{
+	return (prevState[VK_LBUTTON + button] & 0x8000) && !(currState[VK_LBUTTON + button] & 0x8000);
+}
+
 POINT Input::GetMouseScreenPosition()
 {
     POINT mouse = mouseClient;

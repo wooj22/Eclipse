@@ -34,6 +34,11 @@ void PlayerController_Woo::Update()
 	InputCheak();
 	Jump();
 	sr->flipX = Input::GetAxisHorizontal() >= 0 ? false : true;
+
+	// mouse button click test
+	if (Input::GetMouseButtonDown(0)) OutputDebugString(L"Mouse Button Down\n");
+	if (Input::GetMouseButtonUp(0)) OutputDebugString(L"Mouse Button Up\n");
+
 }
 
 void PlayerController_Woo::FixedUpdate()

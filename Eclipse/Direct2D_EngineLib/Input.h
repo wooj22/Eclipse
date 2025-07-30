@@ -20,6 +20,10 @@ public:
     static bool GetKeyDown(int vKey);
     static bool GetKeyUp(int vKey);
 
+	static bool GetMouseButton(int button);
+    static bool GetMouseButtonDown(int button);
+	static bool GetMouseButtonUp(int button);
+
     static POINT GetMouseScreenPosition();
     static POINT GetMouseWorldPosition();
 
