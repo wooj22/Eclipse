@@ -33,6 +33,9 @@ void Woo_Scene::Awake()
 	player = CreateObject<Player_Woo>({ 0, -500 });
 	cam->transform->SetPosition(player->transform->GetPosition());
 
+	// boss
+	boss = CreateObject<Boss>();
+
 	// map sample
 	map_woo = CreateObject<Map_Woo>({ 0, -900 });
 	ground1 = CreateObject<Map_Woo>({ 100, -700 });
@@ -43,16 +46,16 @@ void Woo_Scene::Awake()
 	ground3->collider->size = { 100,20 };
 
 	// ui test
-	parent = CreateObject<UI_Image>();
+	/*parent = CreateObject<UI_Image>();
 	child = CreateObject<UI_Image>();
 	parent->rectTransform->SetPosition(100, 0);
 	child->rectTransform->SetParent(parent->rectTransform);
-	child->rectTransform->SetPosition(100, 0);
+	child->rectTransform->SetPosition(100, 0);*/
 
 	// camera tartget
 	Camera* camera = cam->GetComponent<Camera>();
 	camera->SetTarget(player->transform);
-	camera->SetTargetTraceSpeed(140.0f);
+	camera->SetTargetTraceSpeed(200.0f);
 	camera->SetTargetTraceLimitX(30.0f);
 	camera->SetTargetTraceLimitY(100.0f);
 
