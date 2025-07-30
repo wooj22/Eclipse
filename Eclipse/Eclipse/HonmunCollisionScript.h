@@ -19,57 +19,53 @@ private:
 	Rigidbody* rigidbody = nullptr;
 	SpriteRenderer* spriteRenderer = nullptr;
 
-	// í˜¼ë¬¸ ì†ì„±
+	// È¥¹® ¼Ó¼º
 	HonmunType honmunType;
 	int health = 3;
 	float currentSize = 10.0f;
 	float fallingSpeed = 1.0f;
 	float pushDistance = 10.0f;
-	float chainEffectRadius = 50.0f; // ì—°ì‡„ë°˜ì‘ ë°˜ê²½
 
-	// ì—°ì‡„ë°˜ì‘ ì²˜ë¦¬ìš©
+	// ¿¬¼â¹İÀÀ Ã³¸®¿ë
 	bool isProcessingReaction = false;
 	float reactionCooldown = 0.0f;
-	bool isChainable = true; // ì—°ì‡„ë°˜ì‘ ê°€ëŠ¥ ì—¬ë¶€
 
 public:
 	void Awake() override;
 	void Start() override;
 	void Update() override;
 
-	// ì¶©ëŒ ì´ë²¤íŠ¸
+	// Ãæµ¹ ÀÌº¥Æ®
 	void OnCollisionEnter(ICollider* other, const ContactInfo& contact) override;
 
-	// í˜¼ë¬¸ íƒ€ì… ì„¤ì •
+	// È¥¹® Å¸ÀÔ ¼³Á¤
 	void SetHonmunType(HonmunType type);
 	void SetHealth(int hp) { health = hp; }
 
 private:
-	// ê°™ì€ íƒ€ì…ë³„ ì¶©ëŒ ì²˜ë¦¬
-	void HandleIgnisReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // A - í•©ì²´
-	void HandleUmbraReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // B - ë¶„ì—´
-	void HandleDarknessReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // C - í¡ì¸
-	void HandleLunaReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);      // D - ì¦ë°œ
+	// °¢ Å¸ÀÔº° Ãæµ¹ ¹İÀÀ
+	void HandleIgnisReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // A - ÇÕÃ¼
+	void HandleUmbraReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // B - ºĞ¿­
+	void HandleDarknessReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // C - ÈíÀÎ
+	void HandleLunaReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);      // D - Áõ¹ß
 
-	// í˜¼í•© íƒ€ì… ì¶©ëŒ ì²˜ë¦¬
+	// È¥ÇÕ Å¸ÀÔ Ãæµ¹ ¹İÀÀ
 	void HandleMixedReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);
 
-	// ì•¡ì…˜ìœ í‹¸ë¦¬í‹° í•¨ìˆ˜ë“¤
-	void MergeWithOther(HonmunCollisionScript* otherScript);                    // í•©ì²´
-	void SplitIntoTwo();                                                        // ë¶„ì—´ (ê¸°ë³¸)
-	void CreateSplitHonmuns(const Vector2& position);                           // B íƒ€ì… ë¶„ì—´ì‹œ 2ê°œ ìƒì„±
-	void AbsorbNearbyEnemies(const Vector2& collisionPoint);                    // í¡ì¸
-	void DestroyThis();                                                         // íŒŒê´´
-	void BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // íŠ•ê¹€
-	void PushSideways(HonmunCollisionScript* otherScript);                      // ë°€ë¦¼
-	void PassThrough(HonmunCollisionScript* otherScript);                       // ê´€í†µ
+	// À¯Æ¿¸®Æ¼ ÇÔ¼öµé
+	void MergeWithOther(HonmunCollisionScript* otherScript);                    // ÇÕÃ¼
+	void SplitIntoTwo();                                                        // ºĞ¿­
+	void AbsorbNearbyEnemies(const Vector2& collisionPoint);                    // ÈíÀÎ
+	void DestroyThis();                                                         // Áõ¹ß
+	void BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // Æ¨±è
+	void PushSideways(HonmunCollisionScript* otherScript);                      // ¹Ğ¸²
+	void PassThrough(HonmunCollisionScript* otherScript);                       // °üÅë
 
-	// ë„ì›€ í•¨ìˆ˜ë“¤
+	// ÇïÆÛ ÇÔ¼öµé
 	std::vector<HonmunCollisionScript*> GetNearbyHonmuns(float radius);
 	Vector2 GetRandomDirection();
 	void UpdateSize(float newSize);
 	void UpdateFallingSpeed(float speedMultiplier);
 	bool IsInCameraView();
 	HonmunCollisionScript* GetHonmunScript(ICollider* collider);
-	void TriggerChainReaction(); // ì—°ì‡„ë°˜ì‘ ìœ ë°œ
 };
