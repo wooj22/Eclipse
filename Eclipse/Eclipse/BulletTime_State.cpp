@@ -1,7 +1,8 @@
 #include "BulletTime_State.h"
+#include "Attack_State.h"
 #include "MovementFSM.h"
 #include "PlayerFSM.h"
-#include "Attack_State.h"
+#include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
@@ -10,7 +11,10 @@ void BulletTime_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[BulletTime_State] (( 진입 - 불릿 타임 시작 )) \n");
     Time::SetTimeScale(0.1f); // 시간 느리게
-    timer = 0.0f;
+    fsm->GetPlayerFSM()->timer = 0.0f;
+
+    // 애니메이션 재생 
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", true);
 }
 
 void BulletTime_State::Update(MovementFSM* fsm)
@@ -18,7 +22,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
     float delta = Time::GetDeltaTime();
     float unscaledDelta = delta / Time::GetTimeScale();  // timeScale 나눠서 실제 시간 계산
 
-    timer += unscaledDelta;
+    fsm->GetPlayerFSM()->timer += unscaledDelta;
 
     // [ wait ] 공격 취소 
     if (fsm->GetPlayerFSM()->GetIsRButton()) fsm->ChangeState(std::make_unique<Idle_State>());
@@ -31,8 +35,8 @@ void BulletTime_State::Update(MovementFSM* fsm)
         return;
     }
 
-    // 불릿 타임 끝 
-    if (timer >= bulletTimeDuration)
+    // [ Idle ] 불릿 타임 끝 
+    if (fsm->GetPlayerFSM()->timer >= fsm->GetPlayerFSM()->bulletTimeDuration)
     {
         Time::SetTimeScale(1.0f); // 시간 복구
         fsm->ChangeState(std::make_unique<Idle_State>());
@@ -48,6 +52,7 @@ void BulletTime_State::FixedUpdate(MovementFSM* fsm)
 
 void BulletTime_State::Exit(MovementFSM* fsm)
 {
-    Time::SetTimeScale(1.0f); // 혹시 모르니 다시 복구
     OutputDebugStringA("[BulletTime_State] (( 종료 - 불릿 타임 끝 )) \n");
+    Time::SetTimeScale(1.0f); // 혹시 모르니 다시 복구
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", false);
 }

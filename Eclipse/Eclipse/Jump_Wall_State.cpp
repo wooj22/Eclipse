@@ -7,6 +7,9 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "Hanging_State.h"
+#include "../Direct2D_EngineLib/Input.h"
+#include "BulletTime_State.h"
+#include "Attack_State.h"
 
 void Jump_Wall_State::Enter(MovementFSM* fsm)
 {
@@ -14,9 +17,14 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
  
     // 초기화 
     canDoubleJump = true;
+    fsm->GetPlayerFSM()->holdTime = 0.0f;
+    fsm->GetPlayerFSM()->isHolding = false;
+    fsm->GetPlayerFSM()->timer = 0.0f;
+
     elapsedTime = 0.0f;  // 시간
     wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
     fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0); // 수직 속도
+
 
     // 첫번째 Wall Jump 실행 
     if (fsm->GetPlayerFSM()->GetIsWallLeft())
@@ -70,6 +78,28 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
         fsm->ChangeState(std::make_unique<Hanging_State>());
         return;
     }
+
+
+    // [ Attack / Bullet ]
+    if (Input::GetKey(VK_LBUTTON))
+    {
+        if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
+
+        fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
+
+        // [ BulletTime ]
+        if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+
+    }
+    else
+    {
+        // [ Attack ]
+        if (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+
+        // 초기화
+        fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
+    }
+
 
     // [ Idle ]
     if (fsm->GetPlayerFSM()->GetIsGround())

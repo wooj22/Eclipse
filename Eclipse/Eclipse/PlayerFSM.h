@@ -31,7 +31,7 @@ private:
 	float dashSpeed = 350.f;
 	float jumpForce = 400.0f;
 
-	//int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
+	// int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
 
 	// move
 	float inputX, inputY;
@@ -49,6 +49,15 @@ private:
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
 	AnimatorController* animatorController = nullptr;
+
+public:
+	// FSM 변수
+	float holdTime = 0.0f;
+	float timer = 0.0f;
+	bool isHolding = false;
+	const float bulletTimeThreshold = 0.4f;
+	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
+	const float ignoreInputDuration = 1.5f; // 입력 무시
 
 public:
 	// getter

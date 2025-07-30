@@ -7,7 +7,6 @@ class Jump_State : public MovementStateBase
 {
     bool canDoubleJump = false;
     float coyoteTime = 0.15f;   // 점프 직후 잠깐은 착지 판정 무시
-    float timer = 0.0f;
 
     // 점프 중 공중 이동: 부드럽게 가속/감속
     float inputX;
