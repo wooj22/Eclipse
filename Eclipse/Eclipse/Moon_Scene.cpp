@@ -10,6 +10,12 @@ void Moon_Scene::Awake()
 	cam->AddComponent<Transform>();
 	cam->AddComponent<Camera>(1920, 1080);
 
+	// [ BackGround ]
+	auto backGround = CreateObject<GameObject>();
+	backGround->AddComponent<Transform>()->SetPosition(0.0f, 0.0f);;
+	auto background_sr = backGround->AddComponent<SpriteRenderer>();
+	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background.png"), "Background_Moon");
+
 	// [ title ]
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
@@ -24,7 +30,7 @@ void Moon_Scene::Awake()
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
-	ground->AddComponent<Transform>()->SetPosition(0.0f, -300.0f);;
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -350.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
 	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
@@ -41,7 +47,7 @@ void Moon_Scene::Awake()
 	// [ wall_r ]
 	wall_r = CreateObject<GameObject>();
 	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(500.0f, 0.0f);;
+	wall_r->AddComponent<Transform>()->SetPosition(550.0f, 0.0f);;
 
 	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
 	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
@@ -57,7 +63,7 @@ void Moon_Scene::Awake()
 	// [ wall_l ]
 	wall_l = CreateObject<GameObject>();
 	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-500.0f, 0.0f);;
+	wall_l->AddComponent<Transform>()->SetPosition(-550.0f, 0.0f);;
 
 	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
 	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
