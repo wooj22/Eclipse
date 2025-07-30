@@ -134,8 +134,12 @@
   <ItemGroup>
     <ClCompile Include="Aron_Scene.cpp" />
     <ClCompile Include="Attack_State.cpp" />
+    <ClCompile Include="BulletTime_State.cpp" />
     <ClCompile Include="EclipseApp.cpp" />
     <ClCompile Include="EndScene.cpp" />
+    <ClCompile Include="Hanging_State.cpp" />
+    <ClCompile Include="Honmun.cpp" />
+    <ClCompile Include="HonmunCollisionScript.cpp" />
     <ClCompile Include="Idle_State.cpp" />
     <ClCompile Include="Jump_State.cpp" />
     <ClCompile Include="Jump_Wall_State.cpp" />
@@ -161,9 +165,13 @@
     <ClInclude Include="ActionStateBase.h" />
     <ClInclude Include="Aron_Scene.h" />
     <ClInclude Include="Attack_State.h" />
+    <ClInclude Include="BulletTime_State.h" />
     <ClInclude Include="EclipseApp.h" />
     <ClInclude Include="EndScene.h" />
     <ClInclude Include="FSMBase.h" />
+    <ClInclude Include="Hanging_State.h" />
+    <ClInclude Include="Honmun.h" />
+    <ClInclude Include="HonmunCollisionScript.h" />
     <ClInclude Include="Idle_State.h" />
     <ClInclude Include="Jump_State.h" />
     <ClInclude Include="Jump_Wall_State.h" />
@@ -172,13 +180,16 @@
     <ClInclude Include="MovementFSM.h" />
     <ClInclude Include="MovementStateBase.h" />
     <ClInclude Include="NPC.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController_Woo.h" />
     <ClInclude Include="PlayerFSM.h" />
+    <ClInclude Include="PlayerStateBase.h" />
     <ClInclude Include="Player_Test.h" />
     <ClInclude Include="PlayerMove.h" />
     <ClInclude Include="Player_Woo.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayUI.h" />
+    <ClInclude Include="StateBase.h" />
     <ClInclude Include="TitleUI.h" />
     <ClInclude Include="Wait_State.h" />
     <ClInclude Include="Walk_State.h" />

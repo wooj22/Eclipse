@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\00. Object">
+      <UniqueIdentifier>{2328593b-469f-46a1-bc65-188b5139614e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01. Scene">
+      <UniqueIdentifier>{ce3e3b91-e60c-49ce-9acb-c9fd7a86b998}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02. GameObject">
+      <UniqueIdentifier>{513dacbd-2dd5-476b-b8e2-b6ed5bbde255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02. GameObject\Content">
+      <UniqueIdentifier>{73a6812e-c1c0-4a9e-a3b7-e785a85fa5cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02. GameObject\Camera">
+      <UniqueIdentifier>{456bb3fe-d3cc-4047-8558-625cb43db472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component">
+      <UniqueIdentifier>{06b23e6f-c4e1-4b73-924c-1727c7330f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Base">
+      <UniqueIdentifier>{8ab9f053-9c02-4bd1-a4f1-4407fbcaffa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Renderer">
+      <UniqueIdentifier>{14fe28f6-7ec7-466e-9644-118fbe5e05f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Transform">
+      <UniqueIdentifier>{c2a45653-dff4-46c3-a193-b50a5748baf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\UI">
+      <UniqueIdentifier>{e4a95ae1-ad08-4134-8e32-cab35d20ecf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Animation">
+      <UniqueIdentifier>{ba41f8ce-3d11-4934-a294-2252e957bea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04. ComponentSystem">
+      <UniqueIdentifier>{55b90ed8-d538-46ce-b064-d9e5db49e7f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05. StaticSystem">
+      <UniqueIdentifier>{b3ca52cb-692b-4fc1-81e7-47a6f5ef9577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06. Manager">
+      <UniqueIdentifier>{6fc29779-f922-4737-883e-2359d27b9600}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\07. Graphics">
+      <UniqueIdentifier>{a37cca4b-2cee-4c2f-a40c-e7e8bbbb49c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\08. Animation">
+      <UniqueIdentifier>{4d7d1f6f-4a53-4ac4-af98-9382f1e83c36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\99. Module">
+      <UniqueIdentifier>{a27eab71-2f35-4ca0-b512-3049cb1c5448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\00. Object">
+      <UniqueIdentifier>{683bccbb-d9d1-4939-ab61-89174820379c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\01. Scene">
+      <UniqueIdentifier>{d192ac17-954d-49a3-bf78-4dab9bccc1f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\02. GameObject">
+      <UniqueIdentifier>{35dcbbfb-f810-44e5-a71b-53c9a7ee31bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\02. GameObject\Content">
+      <UniqueIdentifier>{5e7ec924-3b81-495d-a729-edb94dd4b475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\02. GameObject\Camera">
+      <UniqueIdentifier>{2e6b9283-b87c-4bda-ae74-206c3c0a5ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component">
+      <UniqueIdentifier>{3d2c990e-7876-460f-bff3-c46956d12128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Renderer">
+      <UniqueIdentifier>{65077f85-ed87-4eec-84ae-599748ac9d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Transform">
+      <UniqueIdentifier>{1aca0409-52ac-4bae-95f1-48cda25dbf91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\UI">
+      <UniqueIdentifier>{69ae2b3f-39a1-46fc-b080-45077d320519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Animation">
+      <UniqueIdentifier>{d21bc791-9eac-446c-88a3-2963f3dad649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\04. ComponentSystem">
+      <UniqueIdentifier>{fb9e8c7d-609a-42db-9298-e0a96ffc2250}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\05. StaticSystem">
+      <UniqueIdentifier>{5f869c07-4bf5-4858-9010-4cee6d424cfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\06. Manager">
+      <UniqueIdentifier>{2ea9d40c-19d7-45f1-8b54-466e3bb652e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\07. Graphics">
+      <UniqueIdentifier>{e7a54647-da74-45b8-a0ad-eae862e571bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\08. Animation">
+      <UniqueIdentifier>{56844813-c86d-4459-a9d6-5f4005db3875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\99. Module">
+      <UniqueIdentifier>{06fd47b0-4a6c-4d08-a0d1-25bdded1526d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Physics">
+      <UniqueIdentifier>{d03fce7e-b50a-4e6e-9fa5-35211f254ead}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Collider">
+      <UniqueIdentifier>{6f3cffc4-1059-42ac-898d-6e3592c25920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Collider">
+      <UniqueIdentifier>{d6572bea-53bd-4fa9-8dcc-e14ee3842b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Physics">
+      <UniqueIdentifier>{bb8635bb-3b42-4d67-a3af-04ffe10608e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Script">
+      <UniqueIdentifier>{89d218b9-cd3b-42cb-9f67-2f7adac50d31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Script">
+      <UniqueIdentifier>{471c213b-0ae5-40f9-afe0-bb09cb8d44e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Base\Interface">
+      <UniqueIdentifier>{22716079-ba44-4d47-a50b-ffc96aabf2ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\98. Utils">
+      <UniqueIdentifier>{3516b520-6400-4bec-8012-40259d7799ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\98. Utils">
+      <UniqueIdentifier>{6f05c64d-473a-42b4-9cbd-3424cf9c8fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\09. Physics">
+      <UniqueIdentifier>{3ddbce61-6c7b-411f-890f-4136c46179b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\09. Physics">
+      <UniqueIdentifier>{535720f3-34c0-4754-a77c-239f7169cc0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03. Component\Camera">
+      <UniqueIdentifier>{868e3cc9-3da9-425e-b9c4-63fc24ef188e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Camera">
+      <UniqueIdentifier>{91620ce1-effb-4a48-825c-0695ddc00421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Base">
+      <UniqueIdentifier>{6d35e9ce-ca52-4160-92b8-f55907eb0883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Base\Interface">
+      <UniqueIdentifier>{dd2f0dfb-cdb5-4146-9f6b-5a057e0a29ca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameApp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>헤더 파일\02. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일\01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>헤더 파일\01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>헤더 파일\05. StaticSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>헤더 파일\05. StaticSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Button.h">
+      <Filter>헤더 파일\02. GameObject\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>헤더 파일\03. Component\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageRenderer.h">
+      <Filter>헤더 파일\03. Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>헤더 파일\03. Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldTextRenderer.h">
+      <Filter>헤더 파일\03. Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="RectTransform.h">
+      <Filter>헤더 파일\03. Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>헤더 파일\03. Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>헤더 파일\03. Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenTextRenderer.h">
+      <Filter>헤더 파일\03. Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>헤더 파일\02. GameObject\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Text.h">
+      <Filter>헤더 파일\02. GameObject\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>헤더 파일\06. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>헤더 파일\07. Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>헤더 파일\00. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTable.h">
+      <Filter>헤더 파일\00. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>헤더 파일\07. Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClip.h">
+      <Filter>헤더 파일\08. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatorController.h">
+      <Filter>헤더 파일\08. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>헤더 파일\03. Component\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationBaseState.h">
+      <Filter>헤더 파일\08. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatorSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>헤더 파일\03. Component\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>헤더 파일\03. Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>헤더 파일\03. Component\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderer.h">
+      <Filter>헤더 파일\03. Component\Base\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ITransform.h">
+      <Filter>헤더 파일\03. Component\Base\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollider.h">
+      <Filter>헤더 파일\03. Component\Base\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleCollider.h">
+      <Filter>헤더 파일\03. Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>헤더 파일\03. Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastHit.h">
+      <Filter>헤더 파일\09. Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>헤더 파일\99. Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>헤더 파일\98. Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>헤더 파일\98. Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiDelegate.h">
+      <Filter>헤더 파일\98. Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugDrawCommand.h">
+      <Filter>헤더 파일\98. Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>헤더 파일\98. Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameApp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일\02. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>소스 파일\05. StaticSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>소스 파일\05. StaticSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Button.cpp">
+      <Filter>소스 파일\02. GameObject\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>소스 파일\03. Component\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageRenderer.cpp">
+      <Filter>소스 파일\03. Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldTextRenderer.cpp">
+      <Filter>소스 파일\03. Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>소스 파일\03. Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="RectTransform.cpp">
+      <Filter>소스 파일\03. Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>소스 파일\03. Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>소스 파일\03. Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenTextRenderer.cpp">
+      <Filter>소스 파일\03. Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Text.cpp">
+      <Filter>소스 파일\02. GameObject\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>소스 파일\02. GameObject\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>소스 파일\06. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>소스 파일\07. Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\00. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectTable.cpp">
+      <Filter>소스 파일\00. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>소스 파일\07. Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationClip.cpp">
+      <Filter>소스 파일\08. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatorController.cpp">
+      <Filter>소스 파일\08. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>소스 파일\03. Component\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationBaseState.cpp">
+      <Filter>소스 파일\08. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatorSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody.cpp">
+      <Filter>소스 파일\03. Component\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>소스 파일\03. Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>소스 파일\03. Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadMe.cpp" />
+    <ClCompile Include="IRenderer.cpp">
+      <Filter>소스 파일\03. Component\Base\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="ITransform.cpp">
+      <Filter>소스 파일\03. Component\Base\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="ICollider.cpp">
+      <Filter>소스 파일\03. Component\Base\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleCollider.cpp">
+      <Filter>소스 파일\03. Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\03. Component\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RaycastHit.cpp">
+      <Filter>소스 파일\09. Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiDelegate.cpp">
+      <Filter>소스 파일\98. Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>소스 파일\98. Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugDrawCommand.cpp">
+      <Filter>소스 파일\98. Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Rect.cpp">
+      <Filter>소스 파일\98. Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D2D_EngineLib.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
