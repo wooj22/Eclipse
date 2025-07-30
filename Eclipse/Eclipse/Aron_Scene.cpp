@@ -1,7 +1,9 @@
 #include "Aron_Scene.h"
 #include "EclipseApp.h"
+#include "Honmun.h"  // 새로 만든 Honmun 클래스 포함
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
+#include "../Direct2D_EngineLib/Input.h"
 
 void Aron_Scene::Awake()
 {
@@ -19,62 +21,26 @@ void Aron_Scene::Awake()
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::LightBlue));
 	title_text->screenTextRenderer->SetText(L"Aron Scene");
 
-	// [ 혼문 enemy a ]
-	honmun_a = CreateObject<GameObject>();
+	// [ 혼문 enemies ] - 새로운 Honmun 클래스 사용
+	honmun_a = CreateObject<Honmun>();
 	honmun_a->name = "Honmun_A";
-	honmun_a->AddComponent<Transform>()->SetPosition(-300.0f, 200.0f); // 더 높은 위치에서 떨어지게
-	//honmun_a->transform->SetScale(0.15f, 0.15f);
-	honmun_a->transform->SetScale(1, 1);
-	honmun_a_sr = honmun_a->AddComponent<SpriteRenderer>();
-	honmun_a_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_a.png"), "Honmun_A");
-	//honmun_a_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_a_col = honmun_a->AddComponent<CircleCollider>();
-	honmun_a_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
-	auto honmun_a_rb = honmun_a->AddComponent<Rigidbody>();
-	honmun_a_rb->useGravity = true;
-	honmun_a_rb->isKinematic = false;
+	honmun_a->SetHonmunType(HonmunType::A);
+	honmun_a->SetPosition(-300.0f, 200.0f);
 
-	// [ 혼문 enemy b ]
-	honmun_b = CreateObject<GameObject>();
+	honmun_b = CreateObject<Honmun>();
 	honmun_b->name = "Honmun_B";
-	honmun_b->AddComponent<Transform>()->SetPosition(-100.0f, 200.0f); // 더 높은 위치에서 떨어지게
-	honmun_b->transform->SetScale(1, 1);
-	honmun_b_sr = honmun_b->AddComponent<SpriteRenderer>();
-	honmun_b_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_b.png"), "Honmun_B");
-	//honmun_b_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_b_col = honmun_b->AddComponent<CircleCollider>();
-	honmun_b_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
-	auto honmun_b_rb = honmun_b->AddComponent<Rigidbody>();
-	honmun_b_rb->useGravity = true;
-	honmun_b_rb->isKinematic = false;
+	honmun_b->SetHonmunType(HonmunType::B);
+	honmun_b->SetPosition(-100.0f, 200.0f);
 
-	// [ 혼문 enemy c ]
-	honmun_c = CreateObject<GameObject>();
+	honmun_c = CreateObject<Honmun>();
 	honmun_c->name = "Honmun_C";
-	honmun_c->AddComponent<Transform>()->SetPosition(100.0f, 200.0f); // 더 높은 위치에서 떨어지게
-	honmun_c->transform->SetScale(1, 1);
-	honmun_c_sr = honmun_c->AddComponent<SpriteRenderer>();
-	honmun_c_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_c.png"), "Honmun_C");
-	//honmun_c_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_c_col = honmun_c->AddComponent<CircleCollider>();
-	honmun_c_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
-	auto honmun_c_rb = honmun_c->AddComponent<Rigidbody>();
-	honmun_c_rb->useGravity = true;
-	honmun_c_rb->isKinematic = false;
+	honmun_c->SetHonmunType(HonmunType::C);
+	honmun_c->SetPosition(100.0f, 200.0f);
 
-	// [ 혼문 enemy d ]
-	honmun_d = CreateObject<GameObject>();
+	honmun_d = CreateObject<Honmun>();
 	honmun_d->name = "Honmun_D";
-	honmun_d->AddComponent<Transform>()->SetPosition(300.0f, 200.0f); // 더 높은 위치에서 떨어지게
-	honmun_d->transform->SetScale(1, 1);
-	honmun_d_sr = honmun_d->AddComponent<SpriteRenderer>();
-	honmun_d_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Honmun_d.png"), "Honmun_D");
-	//honmun_d_sr->layer = 1; // 레이어를 앞으로 가져와서 콜라이더가 보이게
-	honmun_d_col = honmun_d->AddComponent<CircleCollider>();
-	honmun_d_col->radius = {50}; // 조금 더 크게 해서 밖으로 보이게
-	auto honmun_d_rb = honmun_d->AddComponent<Rigidbody>();
-	honmun_d_rb->useGravity = true;
-	honmun_d_rb->isKinematic = false;
+	honmun_d->SetHonmunType(HonmunType::D);
+	honmun_d->SetPosition(300.0f, 200.0f);
 
 	// [ ground ] - 혼문들이 떨어지지 않도록
 	ground = CreateObject<GameObject>();
@@ -102,7 +68,7 @@ void Aron_Scene::Update()
 	__super::Update();
 
 	// 충돌 감지 및 색상 변경
-	//CheckCollisionAndChangeColor();
+	CheckCollisionAndChangeColor();
 
 	// scene change
 	if (Input::GetKeyDown('1'))
@@ -134,12 +100,8 @@ void Aron_Scene::Update()
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
 
-	// AABB 그리기 - 디버깅용
+	// AABB 그리기 - 디버깅용 (이제 각 Honmun 오브젝트에서 자체적으로 처리)
 	if (ground_col) ground_col->DebugColliderDraw();
-	if (honmun_a_col) honmun_a_col->DebugColliderDraw();
-	if (honmun_b_col) honmun_b_col->DebugColliderDraw();
-	if (honmun_c_col) honmun_c_col->DebugColliderDraw();
-	if (honmun_d_col) honmun_d_col->DebugColliderDraw();
 
 	OutputDebugStringA("씬 업데이트중");
 }
@@ -149,27 +111,25 @@ void Aron_Scene::Exit()
 	OutputDebugStringA("씬 종료까지는 옴");
 	// game object -> destroy()
 	__super::Exit();
-
-	
 }
 
 void Aron_Scene::CheckCollisionAndChangeColor()
 {
-	// 간단한 예시: 스페이스바를 누르면 모든 혼문을 반투명하게 만들기 (충돌 효과)
+	// 스페이스바를 누르면 모든 혼문을 반투명하게 만들기
 	if (Input::GetKeyDown(VK_SPACE))
 	{
-		if (honmun_a_sr) honmun_a_sr->alpha = 0.5f; // 반투명
-		if (honmun_b_sr) honmun_b_sr->alpha = 0.5f;
-		if (honmun_c_sr) honmun_c_sr->alpha = 0.5f;
-		if (honmun_d_sr) honmun_d_sr->alpha = 0.5f;
+		if (honmun_a) honmun_a->SetAlpha(0.5f);
+		if (honmun_b) honmun_b->SetAlpha(0.5f);
+		if (honmun_c) honmun_c->SetAlpha(0.5f);
+		if (honmun_d) honmun_d->SetAlpha(0.5f);
 	}
 
-	// R키를 누르면 원래 투명도로 복원
+	// 스페이스바를 떼면 원래 투명도로 복원
 	if (Input::GetKeyUp(VK_SPACE))
 	{
-		if (honmun_a_sr) honmun_a_sr->alpha = 1.0f; // 완전 불투명
-		if (honmun_b_sr) honmun_b_sr->alpha = 1.0f;
-		if (honmun_c_sr) honmun_c_sr->alpha = 1.0f;
-		if (honmun_d_sr) honmun_d_sr->alpha = 1.0f;
+		if (honmun_a) honmun_a->ResetAlpha();
+		if (honmun_b) honmun_b->ResetAlpha();
+		if (honmun_c) honmun_c->ResetAlpha();
+		if (honmun_d) honmun_d->ResetAlpha();
 	}
 }

@@ -9,6 +9,9 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
+// Forward declaration for Honmun class
+class Honmun;
+
 class Aron_Scene : public Scene
 {
 public:
@@ -20,32 +23,20 @@ public:
 
 private:
 	// camera
-	GameObject* cam;
+	GameObject* cam = nullptr;
 
 	// UI
-	UI_Text* title_text;
+	UI_Text* title_text = nullptr;
 
-	// È¥¹® enemies
-	GameObject* honmun_a = nullptr;
-	GameObject* honmun_b = nullptr;
-	GameObject* honmun_c = nullptr;
-	GameObject* honmun_d = nullptr;
-
-	// sprite renderers for color change
-	SpriteRenderer* honmun_a_sr = nullptr;
-	SpriteRenderer* honmun_b_sr = nullptr;
-	SpriteRenderer* honmun_c_sr = nullptr;
-	SpriteRenderer* honmun_d_sr = nullptr;
-
-	// colliders for enemies
-	CircleCollider* honmun_a_col = nullptr;
-	CircleCollider* honmun_b_col = nullptr;
-	CircleCollider* honmun_c_col = nullptr;
-	CircleCollider* honmun_d_col = nullptr;
+	// È¥¹® enemies (Honmun Å¬·¡½º »ç¿ë)
+	Honmun* honmun_a = nullptr;
+	Honmun* honmun_b = nullptr;
+	Honmun* honmun_c = nullptr;
+	Honmun* honmun_d = nullptr;
 
 	// ground for enemies to stand on
-	GameObject* ground;
-	BoxCollider* ground_col;
+	GameObject* ground = nullptr;
+	BoxCollider* ground_col = nullptr;
 
 	// collision detection function
 	void CheckCollisionAndChangeColor();
