@@ -4,11 +4,11 @@
 #include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
 
+#include "PlayUI.h"
 #include "EclipseApp.h"
 #include "NPC.h"
-//#include "NPCScript.h"
 #include "Player_Test.h"
-#include "PlayUI.h"
+//#include "NPCScript.h"
 
 class PlayScene : public Scene
 {
@@ -18,7 +18,6 @@ private:
 	GameObject* backGround;
 	Player_Test* player;
 	NPC* npc;
-	//NPCScript* npcScript;
 	PlayUI* playUI;
 
 public:
@@ -32,6 +31,5 @@ public:
 
 private:
 	void ChagneEndScene();
-	void ChatOpen();
 };
 
