@@ -155,6 +155,24 @@ public:
     void Exit() override {}
 };
 
+class PlayerFallState : public AnimationBaseState
+{
+public:
+    PlayerFallState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
+
+    void Enter() override {}
+    void Update(float dt) override
+    {
+        // [ tansition ]
+        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
+        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
+        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
+        else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
+        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
+    }
+    void Exit() override {}
+};
+
 //class PlayerDashState : public AnimationBaseState
 //{
 //public:
