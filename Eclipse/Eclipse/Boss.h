@@ -4,8 +4,7 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
-#include "../Direct2D_EngineLib/Time.h"
-#include "../Direct2D_EngineLib/Input.h"
+#include "BossController.h"
 
 class Boss : public GameObject
 {
@@ -15,6 +14,7 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
+	BossController* bossController;
 	
 	Boss()
 	{
@@ -22,6 +22,7 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
+		bossController = AddComponent<BossController>();
 
 		name = "Boss";
 		tag = "Boss";

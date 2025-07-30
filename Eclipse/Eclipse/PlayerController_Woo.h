@@ -7,8 +7,6 @@
 
 class Transform;
 class SpriteRenderer;
-class AnimatorController;
-class WorldTextRenderer;
 class Rigidbody;
 
 class PlayerController_Woo : public Script
