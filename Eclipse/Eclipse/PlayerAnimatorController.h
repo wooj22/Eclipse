@@ -42,8 +42,8 @@ public:
     void Enter() override {}
     void Update(float dt) override
     {
-        // tansition
-        if (controller->GetBool("Samurai_Walk") == true)         controller->PlayAnimation("Samurai_Walk");
+        // [ tansition ]
+        if (controller->GetBool("Samurai_Walk") == true)            controller->PlayAnimation("Samurai_Walk");
         // else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Cat_Walk");
     }
     void Exit() override {}
@@ -57,7 +57,7 @@ public:
     void Enter() override {}
     void Update(float dt) override
     {
-        // tansition
+        // [ tansition ]
         if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
         // else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Cat_Walk");
     }

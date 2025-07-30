@@ -37,5 +37,5 @@ void Walk_State::FixedUpdate(MovementFSM* fsm)
 
 void Walk_State::Exit(MovementFSM* fsm)
 {
-
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Walk", false);
 }

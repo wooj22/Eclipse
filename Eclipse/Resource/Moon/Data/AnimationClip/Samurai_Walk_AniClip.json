@@ -1,6 +1,6 @@
 {
     "clipName": "Samurai_Walk",
-    "loop": false,
+    "loop": true,
     "texturePath": "Assets/02. Sprite/Samurai/Walk.png",
     "duration": 0.5,
     "frames": [

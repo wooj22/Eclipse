@@ -36,8 +36,8 @@ public:
 		collider = AddComponent<BoxCollider>();
 		animator = AddComponent<Animator>();
 
-		auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
-		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
+		// auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
+		// spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
 		spriteRenderer->layer = 1;
 
 		playerFSM = AddComponent<PlayerFSM>();
@@ -54,10 +54,10 @@ public:
 		animator->SetController(playerAnimatorController);
 
 		transform->SetPosition(0, 0);
-		transform->SetScale(1, 1);
+		transform->SetScale(1.2, 1.2);
 
-		collider->offset = { 0.0f, -8.0f };
-		collider->size = { 60.0f, 90.0f };
+		collider->offset = { 0.0f, -5.0f };
+		collider->size = { 50.0f, 70.0f };
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;

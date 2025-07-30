@@ -1,6 +1,6 @@
 {
     "clipName": "Samurai_Idle",
-    "loop": false,
+    "loop": true,
     "texturePath": "Assets/02. Sprite/Samurai/Idle.png",
     "duration": 0.75,
     "frames": [
