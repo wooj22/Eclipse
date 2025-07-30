@@ -117,17 +117,25 @@ void Camera::MapBoundaryCondition()
     }
 }
 
-
 /*   Screen->World 변환   */
-// Screen (픽셀 기준) → NDC → View → World
-// but, 2D에서는 NDC는 건너 뛰어도 됨 : Screen → Camera(View) → World
-// 행렬 연산에 뭔가 꼬인거같음. 역행렬 계산 안하고 수동으로 좌표 계산중
-Vector2 Camera::GetScreenToWorldPosition(Vector2 unity_screen_Pos)
+// screenPos(unity style) -> worldPos(unity style)
+Vector2 Camera::GetScreenToWorldPosition(Vector2 screenPos_unity)
 {
     Vector2 camPos = mainCamera->transform->GetWorldPosition();
 
-    float worldX = unity_screen_Pos.x + camPos.x;
-    float worldY = unity_screen_Pos.y + camPos.y;
+    float worldX = screenPos_unity.x + camPos.x;
+    float worldY = screenPos_unity.y + camPos.y;
+
+    return { worldX, worldY };
+}
+
+// screenPos(d2d style) -> worldPos(unity style)
+Vector2 Camera::GetScreenToWorldPosition_D2D(Vector2 screenPos_d2d, Vector2 viewSize)
+{
+    Vector2 camPos = mainCamera->transform->GetWorldPosition();
+
+    float worldX = screenPos_d2d.x + viewSize.x - 1920 / 2.0f;
+    float worldY = (viewSize.y / 2.0f - screenPos_d2d.y) + camPos.y;
 
     return { worldX, worldY };
 }

@@ -74,6 +74,7 @@ private:
 
 public:
 	// screen -> world
-	static Vector2 GetScreenToWorldPosition(Vector2 screenPos);
+	static Vector2 GetScreenToWorldPosition(Vector2 screenPos_unity);
+	static Vector2 GetScreenToWorldPosition_D2D(Vector2 screenPos_d2d, Vector2 viewSize);
 };
 
