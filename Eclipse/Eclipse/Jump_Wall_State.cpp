@@ -43,14 +43,14 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
     }
 
     // [ Hanging ] 
-    if (elapsedTime < hangingBlockTime) return;
+    // if (elapsedTime < hangingBlockTime) return;
 
-    if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
+    if (lastWallDir == 1 && fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
     {
         fsm->ChangeState(std::make_unique<Hanging_State>());
         return;
     }
-    else if (fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetInputX() > 0.5f)
+    else if (lastWallDir == -1 && fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetInputX() > 0.5f)
     {
         fsm->ChangeState(std::make_unique<Hanging_State>());
         return;

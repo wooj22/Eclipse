@@ -8,6 +8,7 @@
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "Walk_State.h"
 
 void Hanging_State::Enter(MovementFSM * fsm)
 {
@@ -31,14 +32,14 @@ void Hanging_State::Update(MovementFSM* fsm)
     // 2. 벽이 사라지거나 방향키를 떼면 다시 점프 상태
     if (!player->GetIsWallLeft() && !player->GetIsWallRight())
     {
-        fsm->ChangeState(std::make_unique<Jump_State>());
+        fsm->ChangeState(std::make_unique<Walk_State>());
         return;
     }
 
     float inputX = player->GetInputX();
     if ((player->GetIsWallLeft() && inputX > -0.5f) ||(player->GetIsWallRight() && inputX < 0.5f))
     {
-        fsm->ChangeState(std::make_unique<Jump_State>());
+        fsm->ChangeState(std::make_unique<Walk_State>());
         return;
     }
 
