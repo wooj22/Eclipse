@@ -33,6 +33,9 @@ void Woo_Scene::Awake()
 	player = CreateObject<Player_Woo>({ 0, -500 });
 	cam->transform->SetPosition(player->transform->GetPosition());
 
+	// boss
+	boss = CreateObject<Boss>();
+
 	// map sample
 	map_woo = CreateObject<Map_Woo>({ 0, -900 });
 	ground1 = CreateObject<Map_Woo>({ 100, -700 });
