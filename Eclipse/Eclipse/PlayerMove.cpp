@@ -1,6 +1,7 @@
 #include "PlayerMove.h"
 #include "PlayUI.h"
-//#include "NPCScript.h"
+#include "Chat.h"
+#include "Quest.h"
 #include "../Direct2D_EngineLib/Time.h"
 
 void PlayerMove::OnEnable()
@@ -18,19 +19,35 @@ void PlayerMove::Update()
 	rigid->velocity.x += inputX * speed * Time::GetDeltaTime();
 	rigid->velocity.y += inputY * speed * Time::GetDeltaTime();
 
-	if (Input::GetKeyDown('F') && PlayUI::Get().ChatActiveCheck())
+	if (Input::GetKeyDown('F'))
 	{
-		PlayUI::Get().CloseChat();
+		if (PlayUI::Get().ChatActiveCheck())
+		{
+			if (!PlayUI::Get().chat_Text->GetComponent<Chat>()->GetFinished())
+				PlayUI::Get().chat_Text->GetComponent<Chat>()->AddChatCount();
+		}
+	}
+
+	if (Input::GetKeyDown(VK_RETURN))
+	{
+		PlayUI::Get().isWave = false;
+	}
+
+	if (Input::GetKeyDown(VK_F1))
+	{
+		PlayUI::Get().chat->SetCondition(ChatCondition::Success);
+	}
+
+	if (Input::GetKeyDown(VK_F2))
+	{
+		PlayUI::Get().chat->SetCondition(ChatCondition::Fail);
 	}
 }
 void PlayerMove::OnTriggerStay(ICollider* other)
 {
-	if (other->gameObject->name == "NPC" && !PlayUI::Get().ChatActiveCheck())
+	if (other->gameObject->name == "NPC" && !PlayUI::Get().ChatActiveCheck() 
+		&& !PlayUI::Get().isWave && Input::GetKey('F'))
 	{
-		if (Input::GetKey('F'))
-		{
-			//other->gameObject->GetComponent<NPCScript>()->Interaction();
-			PlayUI::Get().OpenChat();
-		}
+			PlayUI::Get().ChatSetActive(true);
 	}
 }
