@@ -20,13 +20,16 @@ void Attack_State::Update(MovementFSM* fsm)
 
     // 마우스 커서 위치로 살짝 이동 
 
-
     // [ Idle ] : 임시로 일정 시간 후 Idle 상태로 전환
     if (timer > 0.5f)
     {
-        fsm->GetPlayerFSM()->GetAnimatorController()->PlayAnimation("Samurai_Idle"); // 임시 전환 
-        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
-        return;
+        fsm->GetPlayerFSM()->GetAnimatorController()->PlayAnimation("Samurai_Jump"); // 임시 전환 
+
+        if (fsm->GetPlayerFSM()->GetIsGround())
+        {
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
+            return;
+        }
     }
 }
 
