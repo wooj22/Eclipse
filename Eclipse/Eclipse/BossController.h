@@ -49,6 +49,6 @@ public:
 
 private:
 	// boss contoll func
-	// TODO
+	void Move();
 };
 

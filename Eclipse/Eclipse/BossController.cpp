@@ -6,7 +6,9 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include "Bullet.h"
 
+/*-----------------  component life cycle  ----------------*/
 void BossController::Awake()
 {
 	tr = gameObject->transform;
@@ -22,7 +24,10 @@ void BossController::Start()
 
 void BossController::Update()
 {
-	
+	if (Input::GetKeyDown(VK_SPACE))
+	{
+		Instantiate<Bullet>({0,-500});
+	}
 }
 
 void BossController::FixedUpdate()
@@ -34,6 +39,11 @@ void BossController::OnDestroy()
 {
 
 }
+
+
+/*--------------------  boss function  ---------------------*/
+
+
 
 /*-------------  trigger event  -------------*/ 
 void BossController::OnTriggerEnter(ICollider* other)
