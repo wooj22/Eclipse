@@ -1,0 +1,17 @@
+{
+    "clipName": "Samurai_Hanging",
+    "loop": true,
+    "texturePath": "Assets/02. Sprite/Samurai/Samurai_Hanging.png",
+    "duration": 0.1666666716337204,
+    "frames": [
+        {
+            "sprite": "Samurai_Hanging_0",
+            "time": 0.0
+        },
+        {
+            "sprite": "Samurai_Hanging_2",
+            "time": 0.0833333358168602
+        }
+    ],
+    "events": []
+}

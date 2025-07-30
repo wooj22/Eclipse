@@ -1,14 +1,18 @@
 #include "Jump_State.h"
 #include "Walk_State.h"
 #include "Idle_State.h"
+#include "Hanging_State.h"
 #include "Jump_Wall_State.h"
+#include "BulletTime_State.h"
+#include "Attack_State.h"
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "Hanging_State.h"
+#include "../Direct2D_EngineLib/Input.h"
 
 
 void Jump_State::Enter(MovementFSM* fsm)
@@ -17,15 +21,20 @@ void Jump_State::Enter(MovementFSM* fsm)
 
     // 초기화 
     canDoubleJump = true;
-    timer = 0.0f;
+    fsm->GetPlayerFSM()->holdTime = 0.0f;
+    fsm->GetPlayerFSM()->isHolding = false;
+    fsm->GetPlayerFSM()->timer = 0.0f;
 
     // 첫번째 Jump 실행 
     fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
+
+    // 애니메이션 재생
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
 }
 
 void Jump_State::Update(MovementFSM* fsm)
 {
-    timer += Time::GetDeltaTime();
+    fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
     // [ Jump_Wall ]
     if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace())
@@ -59,8 +68,28 @@ void Jump_State::Update(MovementFSM* fsm)
         }
     }
 
+    // [ Attack / Bullet ]
+    if (Input::GetKey(VK_LBUTTON))
+    {
+        if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
+
+        fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
+
+        // [ BulletTime ]
+        if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+
+    }
+    else
+    {
+        // [ Attack ]
+        if (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+
+        // 초기화
+        fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
+    }
+
     // [ Idle ] : 일정 시간 후에만 감지
-    if (fsm->GetPlayerFSM()->GetIsGround() && timer > coyoteTime)
+    if (fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->timer > coyoteTime)
     {
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
@@ -92,4 +121,6 @@ void Jump_State::Exit(MovementFSM* fsm)
     {
         canDoubleJump = true;  // 착지 시 더블 점프를 할 수 있도록 설정
     }
+
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
 }

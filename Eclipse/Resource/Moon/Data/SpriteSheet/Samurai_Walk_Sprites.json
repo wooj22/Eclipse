@@ -1,0 +1,61 @@
+{
+  "texture": "Samurai_Walk.png",
+  "textureWidth": 600,
+  "textureHeight": 85,
+  "sprites": [
+    {
+      "name": "Samurai_Walk_0",
+      "x": 0.0,
+      "y": 16.0,
+      "width": 85.0,
+      "height": 69.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Walk_2",
+      "x": 100.0,
+      "y": 15.0,
+      "width": 81.0,
+      "height": 70.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Walk_4",
+      "x": 200.0,
+      "y": 13.0,
+      "width": 82.0,
+      "height": 72.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Walk_6",
+      "x": 300.0,
+      "y": 13.0,
+      "width": 84.0,
+      "height": 72.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Walk_8",
+      "x": 400.0,
+      "y": 15.0,
+      "width": 86.0,
+      "height": 70.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Walk_11",
+      "x": 502.0,
+      "y": 21.0,
+      "width": 81.0,
+      "height": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    }
+  ]
+}

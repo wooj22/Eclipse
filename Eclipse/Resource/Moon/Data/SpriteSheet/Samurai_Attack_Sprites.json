@@ -1,0 +1,52 @@
+{
+    "texture": "Samurai_Attack.png",
+    "textureWidth": 1000,
+    "textureHeight": 85,
+    "sprites": [
+        {
+            "name": "Samurai_Attack_0",
+            "x": 24.0,
+            "y": 16.0,
+            "width": 93.0,
+            "height": 69.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Samurai_Attack_1",
+            "x": 233.0,
+            "y": 12.0,
+            "width": 78.0,
+            "height": 73.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Samurai_Attack_3",
+            "x": 449.0,
+            "y": 13.0,
+            "width": 106.0,
+            "height": 72.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Samurai_Attack_5",
+            "x": 686.0,
+            "y": 13.0,
+            "width": 53.0,
+            "height": 72.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Samurai_Attack_7",
+            "x": 886.0,
+            "y": 13.0,
+            "width": 42.0,
+            "height": 72.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}

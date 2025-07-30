@@ -1,27 +1,26 @@
 #include "BulletTime_State.h"
-#include "ActionFSM.h"
-#include "PlayerFSM.h"
-#include "../Direct2D_EngineLib/Time.h"
-#include "Wait_State.h"
-#include "../Direct2D_EngineLib/Input.h"
 #include "Attack_State.h"
+#include "MovementFSM.h"
+#include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
-void BulletTime_State::Enter(ActionFSM* fsm)
+#include "../Direct2D_EngineLib/Time.h"
+#include "../Direct2D_EngineLib/Input.h"
+
+void BulletTime_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[BulletTime_State] (( 진입 - 불릿 타임 시작 )) \n");
-    Time::SetTimeScale(0.1f); // 시간 느리게
-    timer = 0.0f;
+    Time::SetTimeScale(0.3f); // 시간 느리게
+
+    fsm->GetPlayerFSM()->timer = 0.0f;
 }
 
-void BulletTime_State::Update(ActionFSM* fsm)
+void BulletTime_State::Update(MovementFSM* fsm)
 {
     float delta = Time::GetDeltaTime();
     float unscaledDelta = delta / Time::GetTimeScale();  // timeScale 나눠서 실제 시간 계산
 
-    timer += unscaledDelta;
-
-    // [ wait ] 공격 취소 
-    if (fsm->GetPlayerFSM()->GetIsRButton()) fsm->ChangeState(std::make_unique<Wait_State>());
+    fsm->GetPlayerFSM()->timer += unscaledDelta;
 
     // [ Attack ] 마우스 왼쪽 버튼에서 손을 뗐을 때 → 공격
     if (Input::GetKeyUp(VK_LBUTTON))
@@ -31,18 +30,41 @@ void BulletTime_State::Update(ActionFSM* fsm)
         return;
     }
 
-    // 불릿 타임 끝 
-    if (timer >= bulletTimeDuration)
+    // [ Idle ] 공격 취소 
+    if (fsm->GetPlayerFSM()->GetIsRButton()) 
+    { 
+        if (fsm->GetPlayerFSM()->GetIsGround()) fsm->ChangeState(std::make_unique<Idle_State>());
+        else
+        {
+            // Fall 상태
+        }
+    }
+
+
+    // [ Idle ] 불릿 타임 끝 
+    if (fsm->GetPlayerFSM()->timer >= fsm->GetPlayerFSM()->bulletTimeDuration)
     {
         Time::SetTimeScale(1.0f); // 시간 복구
-        fsm->ChangeState(std::make_unique<Wait_State>());
+
+        if (fsm->GetPlayerFSM()->GetIsGround()) fsm->ChangeState(std::make_unique<Idle_State>());
+        else
+        {
+            // Fall 상태
+        }
     }
 
     // 마우스 위치 따라서 플레이어가 바라보도록 하기 
+
+
 }
 
-void BulletTime_State::Exit(ActionFSM* fsm)
+void BulletTime_State::FixedUpdate(MovementFSM* fsm)
 {
-    Time::SetTimeScale(1.0f); // 혹시 모르니 다시 복구
+
+}
+
+void BulletTime_State::Exit(MovementFSM* fsm)
+{
     OutputDebugStringA("[BulletTime_State] (( 종료 - 불릿 타임 끝 )) \n");
+    Time::SetTimeScale(1.0f); // 혹시 모르니 다시 복구
 }

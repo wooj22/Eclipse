@@ -16,6 +16,7 @@ class Rigidbody;
 class PlayerFSM : public Script
 {
 private:
+	// FSM 
 	std::unique_ptr<MovementFSM> movementFSM;
 	std::unique_ptr<ActionFSM> actionFSM;
 
@@ -27,10 +28,10 @@ private:
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 280.f;
-	float runSpeed = 350.f;
+	float dashSpeed = 350.f;
 	float jumpForce = 400.0f;
 
-	//int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
+	// int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
 
 	// move
 	float inputX, inputY;
@@ -50,6 +51,15 @@ private:
 	AnimatorController* animatorController = nullptr;
 
 public:
+	// FSM 변수
+	float holdTime = 0.0f;
+	float timer = 0.0f;
+	bool isHolding = false;
+	const float bulletTimeThreshold = 0.4f;
+	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
+	const float ignoreInputDuration = 1.5f; // 입력 무시
+
+public:
 	// getter
 	bool GetIsGround() const { return isGround; }
 	bool GetIsSpace() const { return isSpace; }
@@ -66,7 +76,10 @@ public:
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }
 
+	bool GetLastFlipX() const { return lastFlipX; } // true 왼쪽? 
+
 	Rigidbody* GetRigidbody() const { return rigidbody; }
+	AnimatorController* GetAnimatorController() const { return animatorController; }
 
 	// void SetLastWallDir(int dir) { lastWallDir = dir; }
 

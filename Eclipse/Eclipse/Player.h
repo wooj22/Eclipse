@@ -9,6 +9,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
 #include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
 class Player : public GameObject
 {
@@ -18,6 +19,10 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
+	Animator* animator;
+
+	// [ animation asset ]
+	PlayerAnimatorController* playerAnimatorController;
 
 	// [ script ]
 	PlayerFSM* playerFSM;
@@ -29,25 +34,30 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<BoxCollider>();
+		animator = AddComponent<Animator>();
 
-		auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
-		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
+		// auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
+		// spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
 		spriteRenderer->layer = 1;
 
 		playerFSM = AddComponent<PlayerFSM>();
 	}
 	~Player() override
 	{
-
+		delete playerAnimatorController;
 	};
 
 	void Awake() override // Setting 
 	{
-		transform->SetPosition(0, 0);
-		transform->SetScale(1, 1);
+		// animator controller
+		playerAnimatorController = new PlayerAnimatorController();
+		animator->SetController(playerAnimatorController);
 
-		collider->offset = { 0.0f, -8.0f };
-		collider->size = { 60.0f, 90.0f };
+		transform->SetPosition(0, 0);
+		transform->SetScale(1.2, 1.2);
+
+		collider->offset = { 0.0f, -5.0f };
+		collider->size = { 50.0f, 70.0f };
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;

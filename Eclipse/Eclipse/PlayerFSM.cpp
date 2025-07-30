@@ -20,6 +20,7 @@ void PlayerFSM::Awake()
 	transform = gameObject->GetComponent<Transform>();
 	spriteRenderer = gameObject->GetComponent<SpriteRenderer>();
 	rigidbody = gameObject->GetComponent<Rigidbody>();
+	animatorController = gameObject->GetComponent<Animator>()->controller;
 
 
 	// [ FSM 초기화 ]
@@ -46,14 +47,12 @@ void PlayerFSM::Update()
 	if (isA || isD)
 	{
 		if (!isShift) curSpeed = walkSpeed;
-		else curSpeed = runSpeed;
+		else curSpeed = dashSpeed;
 	}
 	else curSpeed = 0;
 
 
 	// [ FlipX Setting - 실제 이동 방향 기준 ]
-	float velX = rigidbody->velocity.x;
-
 	if (abs(rigidbody->velocity.x) > 0.01f)  // 정지 상태가 아닐 때만 방향 반영
 	{
 		spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
@@ -63,6 +62,9 @@ void PlayerFSM::Update()
 	{
 		spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
 	}
+
+	// [ animation ]
+	// animatorController->SetFloat("Dash", dashSpeed);
 }
 
 void PlayerFSM::FixedUpdate()
