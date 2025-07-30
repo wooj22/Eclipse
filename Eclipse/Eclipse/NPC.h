@@ -10,13 +10,9 @@
 class NPC : public GameObject
 {
 public:
-	Transform* transform;
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
-
-
-	MultiDelegate<> interationListeners;
 
 public:
 	// game object cycle

@@ -9,6 +9,7 @@ private:
     static LARGE_INTEGER prevCounter;
     static LARGE_INTEGER currentCounter;
     static float deltaTime;
+    static float unscaledDelta;
     static float fixedDeltaTime;
     static float timeScale;
 
@@ -17,6 +18,7 @@ public:
     static void Update();
 
     static float GetDeltaTime(); 
+    static float GetUnscaledDeltaTime();
     static float GetFixedDeltaTime();   
     static float GetTotalTime();
 

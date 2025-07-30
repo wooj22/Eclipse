@@ -234,12 +234,25 @@ void BoxCollider::OnCollisionEnter(ICollider* other, ContactInfo& contact)
     Rigidbody* rb = gameObject->GetComponent<Rigidbody>();
     if (rb)
     {
-        // ground
-        rb->CorrectPosition(contact);
-        if (contact.normal.y > 0)
+        if (isFlatformerCharacter)
         {
-            rb->groundContactCount++;
-            rb->isGrounded = true;
+            // up collision º¸Á¤ x, ground
+            if (contact.normal.y > 0)
+            {
+                rb->CorrectPosition(contact);
+                rb->groundContactCount++;
+                rb->isGrounded = true;
+            }
+        }
+        else
+        {
+            // ground
+            rb->CorrectPosition(contact);
+            if (contact.normal.y > 0)
+            {
+                rb->groundContactCount++;
+                rb->isGrounded = true;
+            }
         }
 
         // script

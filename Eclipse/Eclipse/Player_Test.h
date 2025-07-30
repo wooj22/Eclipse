@@ -16,7 +16,7 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
-	Script* scirpt;
+	PlayerMove* scirpt;
 public:
 	// game object cycle
 	Player_Test();

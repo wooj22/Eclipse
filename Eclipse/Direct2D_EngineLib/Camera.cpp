@@ -116,3 +116,26 @@ void Camera::MapBoundaryCondition()
         transform->SetPosition(cameraPos);
     }
 }
+
+/*   Screen->World º¯È¯   */
+// screenPos(unity style) -> worldPos(unity style)
+Vector2 Camera::GetScreenToWorldPosition(Vector2 screenPos_unity)
+{
+    Vector2 camPos = mainCamera->transform->GetWorldPosition();
+
+    float worldX = screenPos_unity.x + camPos.x;
+    float worldY = screenPos_unity.y + camPos.y;
+
+    return { worldX, worldY };
+}
+
+// screenPos(d2d style) -> worldPos(unity style)
+Vector2 Camera::GetScreenToWorldPosition_D2D(Vector2 screenPos_d2d, Vector2 viewSize)
+{
+    Vector2 camPos = mainCamera->transform->GetWorldPosition();
+
+    float worldX = screenPos_d2d.x + viewSize.x - 1920 / 2.0f;
+    float worldY = (viewSize.y / 2.0f - screenPos_d2d.y) + camPos.y;
+
+    return { worldX, worldY };
+}

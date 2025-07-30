@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <Windows.h>
+#include "Vector2.h"
 
 class Input
 {
@@ -20,9 +21,13 @@ public:
     static bool GetKeyDown(int vKey);
     static bool GetKeyUp(int vKey);
 
-    static POINT GetMouseScreenPosition();
-    static POINT GetMouseWorldPosition();
+	static bool GetMouseButton(int button);
+    static bool GetMouseButtonDown(int button);
+	static bool GetMouseButtonUp(int button);
 
     static float GetAxisHorizontal();
     static float GetAxisVertical();
+
+	static Vector2 GetMouseScreenPosition_D2D();        // screen position (UI - d2d style)
+    static Vector2 GetMouseScreenPosition();            // screen position (UI - unity style)
 };
