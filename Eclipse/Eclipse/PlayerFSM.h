@@ -66,6 +66,8 @@ public:
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }
 
+	bool GetLastFlipX() const { return lastFlipX; } // true ¿ÞÂÊ? 
+
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 
 	// void SetLastWallDir(int dir) { lastWallDir = dir; }

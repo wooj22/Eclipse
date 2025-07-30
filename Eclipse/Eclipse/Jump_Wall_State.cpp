@@ -10,11 +10,14 @@
 void Jump_Wall_State::Enter(MovementFSM* fsm)
 {
     // OutputDebugStringA("[Jump_Wall_State] 벽 점프 상태 진입\n");
-
-    elapsedTime = 0.0f;  // 시간 초기화
+ 
+    // 초기화 
+    canDoubleJump = true;
+    elapsedTime = 0.0f;  // 시간
     wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0); // 수직 속도 초기화
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0); // 수직 속도
 
+    // 첫번째 Wall Jump 실행 
     if (fsm->GetPlayerFSM()->GetIsWallLeft())
     {
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(+jumpXPower, wallJumpForce));  // 오른쪽 방향으로 튕김
@@ -36,15 +39,23 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
 
 void Jump_Wall_State::Update(MovementFSM* fsm)
 {
-    if (fsm->GetPlayerFSM()->GetIsGround())
+    // 두번째 Wall Jump 실행 
+    if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace() && canDoubleJump && !fsm->GetPlayerFSM()->GetLastFlipX())
     {
-        fsm->ChangeState(std::make_unique<Idle_State>());
-        return;
+        fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(+doubleJumpXPower, wallJumpForce));
+        canDoubleJump = false;
     }
+    else if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace() && canDoubleJump && fsm->GetPlayerFSM()->GetLastFlipX())
+    {
+        fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-doubleJumpXPower, wallJumpForce));
+        canDoubleJump = false;
+    }
+
 
     // [ Hanging ] 
     // if (elapsedTime < hangingBlockTime) return;
 
+    // 왼쪽으로 튕긴 후, 왼쪽 이동 중이면, 왼쪽벽에 매달리기 
     if (lastWallDir == 1 && fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
     {
         fsm->ChangeState(std::make_unique<Hanging_State>());
@@ -53,6 +64,13 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
     else if (lastWallDir == -1 && fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetInputX() > 0.5f)
     {
         fsm->ChangeState(std::make_unique<Hanging_State>());
+        return;
+    }
+
+    // [ Idle ]
+    if (fsm->GetPlayerFSM()->GetIsGround())
+    {
+        fsm->ChangeState(std::make_unique<Idle_State>());
         return;
     }
 }

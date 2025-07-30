@@ -11,11 +11,14 @@ public:
 
 private:
     float wallJumpForce;
-    float jumpXPower = 400.0f;
+    float jumpXPower = 500.0f;
+    float doubleJumpXPower = 200.0f;
 
     float elapsedTime = 0.0f;       // 경과 시간
     float inputBlockTime = 0.05f;   // 입력 무시 시간
     // float hangingBlockTime = 0.3f;  // 매달리기 제한 시간
+
+    bool canDoubleJump = false;
 
     float airAcceleration = 20.0f;  // 공중 가속도
     float airFriction = 3.0f;       // 공중 감속도
