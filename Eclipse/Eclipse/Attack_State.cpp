@@ -25,7 +25,6 @@ void Attack_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
     }
-
 }
 
 void Attack_State::FixedUpdate(MovementFSM* fsm)

@@ -43,7 +43,7 @@ void Idle_State::Update(MovementFSM* fsm)
 
 
     // [ Attack / Bullet ]
-    if (Input::GetKey(VK_LBUTTON))
+    if (fsm->GetPlayerFSM()->GetIsGround() && Input::GetKey(VK_LBUTTON))
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f;  }
 

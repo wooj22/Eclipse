@@ -3,6 +3,8 @@
 #include "Idle_State.h"
 #include "Hanging_State.h"
 #include "Jump_Wall_State.h"
+#include "BulletTime_State.h"
+#include "Attack_State.h"
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
@@ -11,8 +13,6 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "BulletTime_State.h"
-#include "Attack_State.h"
 
 
 void Jump_State::Enter(MovementFSM* fsm)
