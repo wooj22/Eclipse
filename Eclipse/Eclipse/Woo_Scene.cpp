@@ -30,11 +30,17 @@ void Woo_Scene::Awake()
 	map->transform->SetPosition(0, -500);
 
 	// player sample
-	player = CreateObject<Player_Woo>({ 0, 0 });
+	player = CreateObject<Player_Woo>({ 0, -500 });
 	cam->transform->SetPosition(player->transform->GetPosition());
 
 	// map sample
 	map_woo = CreateObject<Map_Woo>({ 0, -900 });
+	ground1 = CreateObject<Map_Woo>({ 100, -700 });
+	ground2 = CreateObject<Map_Woo>({ -300, -700 });
+	ground3 = CreateObject<Map_Woo>({ 300, -500 });
+	ground1->collider->size = {100,20};
+	ground2->collider->size = { 100,20 };
+	ground3->collider->size = { 100,20 };
 
 	// ui test
 	parent = CreateObject<UI_Image>();

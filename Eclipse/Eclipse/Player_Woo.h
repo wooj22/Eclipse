@@ -30,8 +30,10 @@ public:
 		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->layer = 10;
 
-		//rigidbody->useGravity = true;
-		//rigidbody->gravityScale = 80;
+		rigidbody->useGravity = false;
+		//rigidbody->gravityScale = 40;
+
+		collider->isFlatformerCharacter = true;
 		collider->size = { 50.0f, 80.0f };
 	}
 

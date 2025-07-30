@@ -26,6 +26,9 @@ public:
     // collider
     Vector2 offset = Vector2::zero;
     Vector2 size = { 10,10 };
+
+    // Flatformer일 경우 위로 충돌 보정 무시
+    bool isFlatformerCharacter = false;
     
 public:
     // component cycle

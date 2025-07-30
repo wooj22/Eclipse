@@ -15,6 +15,9 @@ private:
 	Player_Woo* player;
 	GameObject* map;
 	Map_Woo* map_woo;
+	Map_Woo* ground1;
+	Map_Woo* ground2;
+	Map_Woo* ground3;
 
 	// rect parent pivot test
 	UI_Image* parent;
