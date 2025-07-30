@@ -6,10 +6,10 @@ LARGE_INTEGER Time::prevCounter = {};
 LARGE_INTEGER Time::currentCounter = {};
 float Time::deltaTime = 0.0f;
 float Time::unscaledDelta = 0.0f;
+float Time::fixedDeltatime = 0.02f;
 float Time::unscaledFixedDeltaTime = 0.02f;
 float Time::timeScale = 1.0f;
 
-float Time::fixedDeltatime = 0.02f;
 
 void Time::Init()
 {
