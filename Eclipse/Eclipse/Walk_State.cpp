@@ -3,12 +3,15 @@
 #include "Idle_State.h"
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
 void Walk_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Walk_State] PlayerÀÇ Walk_State ÁøÀÔ \n");
+
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Walk", true);
 }
 
 void Walk_State::Update(MovementFSM* fsm)

@@ -16,6 +16,7 @@ class Rigidbody;
 class PlayerFSM : public Script
 {
 private:
+	// FSM 
 	std::unique_ptr<MovementFSM> movementFSM;
 	std::unique_ptr<ActionFSM> actionFSM;
 
@@ -27,7 +28,7 @@ private:
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 280.f;
-	float runSpeed = 350.f;
+	float dashSpeed = 350.f;
 	float jumpForce = 400.0f;
 
 	//int lastWallDir = 0;  // -1: ¿ÞÂÊ, 1: ¿À¸¥ÂÊ, 0: ¾øÀ½
@@ -69,6 +70,7 @@ public:
 	bool GetLastFlipX() const { return lastFlipX; } // true ¿ÞÂÊ? 
 
 	Rigidbody* GetRigidbody() const { return rigidbody; }
+	AnimatorController* GetAnimatorController() const { return animatorController; }
 
 	// void SetLastWallDir(int dir) { lastWallDir = dir; }
 

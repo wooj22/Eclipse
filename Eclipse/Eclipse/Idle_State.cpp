@@ -3,6 +3,7 @@
 #include "Jump_State.h"
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
@@ -13,7 +14,8 @@ void Idle_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // 움직임이 있었다면 정지 
 
     // 애니메이션 재생
-    //fsm->GetPlayerFSM()->GetGameObject()->PlayAnimation("Idle");
+    // fsm->GetPlayerFSM()->GetAnimatorController()->PlayAnimation("Samurai_Idle");
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Idle", true);
 }
 
 void Idle_State::Update(MovementFSM* fsm)

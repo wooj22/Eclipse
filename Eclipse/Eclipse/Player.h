@@ -9,6 +9,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
 #include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
 class Player : public GameObject
 {
@@ -18,6 +19,10 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
+	Animator* animator;
+
+	// [ animation asset ]
+	PlayerAnimatorController* playerAnimatorController;
 
 	// [ script ]
 	PlayerFSM* playerFSM;
@@ -29,6 +34,7 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<BoxCollider>();
+		animator = AddComponent<Animator>();
 
 		auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
 		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
@@ -38,11 +44,15 @@ public:
 	}
 	~Player() override
 	{
-
+		delete playerAnimatorController;
 	};
 
 	void Awake() override // Setting 
 	{
+		// animator controller
+		playerAnimatorController = new PlayerAnimatorController();
+		animator->SetController(playerAnimatorController);
+
 		transform->SetPosition(0, 0);
 		transform->SetScale(1, 1);
 

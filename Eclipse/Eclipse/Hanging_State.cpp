@@ -35,12 +35,12 @@ void Hanging_State::Update(MovementFSM* fsm)
         return;
     }
 
-    float inputX = player->GetInputX();
-    if ((player->GetIsWallLeft() && inputX > -0.5f) ||(player->GetIsWallRight() && inputX < 0.5f))
-    {
-        fsm->ChangeState(std::make_unique<Jump_State>());
-        return;
-    }
+    //float inputX = player->GetInputX();
+    //if ((player->GetIsWallLeft() && inputX > -0.5f) ||(player->GetIsWallRight() && inputX < 0.5f))
+    //{
+    //    fsm->ChangeState(std::make_unique<Jump_State>());
+    //    return;
+    //}
 
     // [ Idle ] 
     if (fsm->GetPlayerFSM()->GetIsGround())

@@ -1,0 +1,33 @@
+{
+    "clipName": "Samurai_Walk",
+    "loop": false,
+    "texturePath": "Assets/02. Sprite/Samurai/Walk.png",
+    "duration": 0.5,
+    "frames": [
+        {
+            "sprite": "Samurai_Walk_0",
+            "time": 0.0
+        },
+        {
+            "sprite": "Samurai_Walk_2",
+            "time": 0.0833333358168602
+        },
+        {
+            "sprite": "Samurai_Walk_4",
+            "time": 0.1666666716337204
+        },
+        {
+            "sprite": "Samurai_Walk_6",
+            "time": 0.25
+        },
+        {
+            "sprite": "Samurai_Walk_8",
+            "time": 0.3333333432674408
+        },
+        {
+            "sprite": "Samurai_Walk_11",
+            "time": 0.4166666865348816
+        }
+    ],
+    "events": []
+}

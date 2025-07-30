@@ -1,0 +1,88 @@
+{
+  "texture": "Samurai_Idle.png",
+  "textureWidth": 900,
+  "textureHeight": 85,
+  "sprites": [
+    {
+      "name": "Samurai_Idle_0",
+      "x": 16.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_1",
+      "x": 116.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_2",
+      "x": 216.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_3",
+      "x": 316.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_4",
+      "x": 416.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_5",
+      "x": 516.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_6",
+      "x": 617.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_7",
+      "x": 716.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "name": "Samurai_Idle_8",
+      "x": 816.0,
+      "y": 10.0,
+      "width": 70.0,
+      "height": 75.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    }
+  ]
+}
