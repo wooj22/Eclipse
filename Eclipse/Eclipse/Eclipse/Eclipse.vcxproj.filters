@@ -183,24 +183,6 @@
     <ClCompile Include="PlayerController_Woo.cpp">
       <Filter>03. Script\Woo\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Attack_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Wait_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Honmun.cpp">
-      <Filter>02. GameObject\Aron</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletTime_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Hanging_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="HonmunCollisionScript.cpp">
-      <Filter>03. Script\Aron</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EclipseApp.h">
@@ -271,39 +253,6 @@
     </ClInclude>
     <ClInclude Include="PlayerController_Woo.h">
       <Filter>03. Script\Woo\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Attack_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementFSM.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementStateBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Wait_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Honmun.h">
-      <Filter>02. GameObject\Aron</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletTime_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Hanging_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerStateBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="StateBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunCollisionScript.h">
-      <Filter>03. Script\Aron</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

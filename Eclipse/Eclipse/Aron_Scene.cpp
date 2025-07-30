@@ -101,14 +101,12 @@ void Aron_Scene::Update()
 	}
 
 	// AABB 그리기 - 디버깅용 (이제 각 Honmun 오브젝트에서 자체적으로 처리)
-	if (ground_col) ground_col->DebugColliderDraw();
-
-	OutputDebugStringA("씬 업데이트중");
+	if (ground_col) ground_col->DebugColliderDraw();	
+		
 }
 
 void Aron_Scene::Exit()
-{
-	OutputDebugStringA("씬 종료까지는 옴");
+{	
 	// game object -> destroy()
 	__super::Exit();
 }
