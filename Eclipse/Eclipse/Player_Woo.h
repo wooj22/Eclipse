@@ -2,10 +2,8 @@
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
-#include "../Direct2D_EngineLib/Animator.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/BoxCollider.h"
-#include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "PlayerController_Woo.h"
 
@@ -32,7 +30,8 @@ public:
 		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->layer = 10;
 
-		rigidbody->useGravity = false;
+		rigidbody->useGravity = true;
+		rigidbody->gravityScale = 80;
 		collider->size = { 50.0f, 80.0f };
 	}
 

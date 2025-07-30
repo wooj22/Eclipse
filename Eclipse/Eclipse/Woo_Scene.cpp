@@ -18,20 +18,25 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
 	title_text->screenTextRenderer->SetText(L"Engine Test Scene");
 
-	// player sample
-	player = CreateObject<Player_Woo>();
-
-	// background
+	// background sample
 	map = CreateObject<GameObject>();
 	map->AddComponent<Transform>();
 	auto sr = map->AddComponent<SpriteRenderer>();
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/MapBackground.jpg");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "MapBackground");
 	sr->sprite = new_sprite;
-	sr->layer = -1; // background layer
+	sr->layer = -1;
 	map->transform->Scaleing(2, 2);
+	map->transform->SetPosition(0, -500);
 
-	// ui
+	// player sample
+	player = CreateObject<Player_Woo>({ 0, -500 });
+	cam->transform->SetPosition(player->transform->GetPosition());
+
+	// map sample
+	map_woo = CreateObject<Map_Woo>({ 0, -900 });
+
+	// ui test
 	parent = CreateObject<UI_Image>();
 	child = CreateObject<UI_Image>();
 	parent->rectTransform->SetPosition(100, 0);
