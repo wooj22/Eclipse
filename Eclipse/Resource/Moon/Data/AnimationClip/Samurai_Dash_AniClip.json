@@ -1,6 +1,6 @@
 {
     "clipName": "Samurai_Dash",
-    "loop": false,
+    "loop": true,
     "texturePath": "Assets/02. Sprite/Samurai/Samurai_Dash.png",
     "duration": 0.0833333358168602,
     "frames": [

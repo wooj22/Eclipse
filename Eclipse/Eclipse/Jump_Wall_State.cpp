@@ -2,6 +2,7 @@
 #include "Idle_State.h"
 #include "MovementFSM.h"
 #include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
@@ -35,6 +36,9 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
 
     // 벽방향 기록
     // fsm->GetPlayerFSM()->SetLastWallDir(lastWallDir);
+
+    // 애니메이션 재생
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
 }
 
 void Jump_Wall_State::Update(MovementFSM* fsm)
@@ -99,4 +103,5 @@ void Jump_Wall_State::FixedUpdate(MovementFSM* fsm)
 
 void Jump_Wall_State::Exit(MovementFSM* fsm)
 {
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
 }

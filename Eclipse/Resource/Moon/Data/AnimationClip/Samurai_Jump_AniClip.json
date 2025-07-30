@@ -1,6 +1,6 @@
 {
     "clipName": "Samurai_Jump",
-    "loop": false,
+    "loop": true,
     "texturePath": "Assets/02. Sprite/Samurai/Samurai_Jump.png",
     "duration": 0.0833333358168602,
     "frames": [

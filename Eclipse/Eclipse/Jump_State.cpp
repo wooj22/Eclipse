@@ -5,6 +5,7 @@
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
+#include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
@@ -21,6 +22,9 @@ void Jump_State::Enter(MovementFSM* fsm)
 
     // 첫번째 Jump 실행 
     fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
+
+    // 애니메이션 재생
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
 }
 
 void Jump_State::Update(MovementFSM* fsm)
@@ -92,4 +96,6 @@ void Jump_State::Exit(MovementFSM* fsm)
     {
         canDoubleJump = true;  // 착지 시 더블 점프를 할 수 있도록 설정
     }
+
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
 }
