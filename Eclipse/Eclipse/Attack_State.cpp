@@ -18,6 +18,9 @@ void Attack_State::Update(MovementFSM* fsm)
 {
     timer += Time::GetDeltaTime();
 
+    // 마우스 커서 위치로 살짝 이동 
+
+
     // [ Idle ] : 임시로 일정 시간 후 Idle 상태로 전환
     if (timer > 0.5f)
     {
