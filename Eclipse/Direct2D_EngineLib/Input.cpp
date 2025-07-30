@@ -86,15 +86,15 @@ float Input::GetAxisVertical()
     return verticalAxis;
 }
 
-Vector2 Input::GetMouseScreenPosition()
+Vector2 Input::GetMouseScreenPosition_D2D()
 {
     Vector2 mousePos = { static_cast<float>(mouseClient.x), static_cast<float>(mouseClient.y) };
     return mousePos;
 }
 
-Vector2 Input::GetMouseScreenPosition_Unity()
+Vector2 Input::GetMouseScreenPosition()
 {
-    Vector2 mouse = GetMouseScreenPosition();
+    Vector2 mouse = GetMouseScreenPosition_D2D();
     D2D1_POINT_2F pt = { static_cast<float>(mouse.x), static_cast<float>(mouse.y) };
 
     // unity style

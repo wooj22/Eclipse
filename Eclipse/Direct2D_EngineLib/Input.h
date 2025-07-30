@@ -28,6 +28,6 @@ public:
     static float GetAxisHorizontal();
     static float GetAxisVertical();
 
-	static Vector2 GetMouseScreenPosition();        // screen position (UI - unity style)
-    static Vector2 GetMouseScreenPosition_Unity();
+	static Vector2 GetMouseScreenPosition_D2D();        // screen position (UI - d2d style)
+    static Vector2 GetMouseScreenPosition();            // screen position (UI - unity style)
 };

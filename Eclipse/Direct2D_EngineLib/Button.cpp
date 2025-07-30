@@ -31,7 +31,7 @@ void Button::Update()
     if (!Input::GetKeyDown(VK_LBUTTON)) return;
 
     // 2. 마우스 위치 가져오기 (클라이언트 좌표계)
-    Vector2 mouse = Input::GetMouseScreenPosition();
+    Vector2 mouse = Input::GetMouseScreenPosition_D2D();
     float mouseX = mouse.x;
     float mouseY = mouse.y;
 

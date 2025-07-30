@@ -42,23 +42,22 @@ void PlayerController_Woo::Update()
 	// mouse button click test debug
 	if (Input::GetMouseButtonDown(0))
 	{
-		// screen
-		Vector2 screenPos = Input::GetMouseScreenPosition_Unity();
-		std::wstring debugStr2 = L"screen : x = " + std::to_wstring(screenPos.x) +
+		// screen -> world
+		Vector2 screenPos = Input::GetMouseScreenPosition();
+		Vector2 worldPos = Camera::GetScreenToWorldPosition(screenPos);
+
+		// debug
+		std::wstring debugStr1 =
+			L"player wolrd : x = " + std::to_wstring(tr->GetPosition().x) +
+			L", y = " + std::to_wstring(tr->GetPosition().y) + L"\n";
+		OutputDebugString(debugStr1.c_str());
+
+		std::wstring debugStr2 = L"click screen pos : x = " + std::to_wstring(screenPos.x) +
 			L", y = " + std::to_wstring(screenPos.y) + L"\n";
 		OutputDebugString(debugStr2.c_str());
 
-		// screen -> world 변환 결과
-		Vector2 d2d_screenPos = Input::GetMouseScreenPosition();
-		Vector2 pos = Camera::GetScreenToWorldPosition(d2d_screenPos);
-		std::wstring debugStr = L"! world : x = " + std::to_wstring(pos.x) +
-			L", y = " + std::to_wstring(pos.y) + L"\n";
-		OutputDebugString(debugStr.c_str());
-
-		// player pos
-		std::wstring debugStr3 = 
-			L"player wolrd : x = " + std::to_wstring(tr->GetPosition().x) +
-			L", y = " + std::to_wstring(tr->GetPosition().y) + L"\n";
+		std::wstring debugStr3 = L"click world pos : x = " + std::to_wstring(worldPos.x) +
+			L", y = " + std::to_wstring(worldPos.y) + L"\n";
 		OutputDebugString(debugStr3.c_str());
 	}
 }
