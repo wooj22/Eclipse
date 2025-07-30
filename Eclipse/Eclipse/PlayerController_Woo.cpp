@@ -32,6 +32,7 @@ void PlayerController_Woo::Start()
 void PlayerController_Woo::Update()
 {
 	InputCheak();
+	Jump();
 	sr->flipX = Input::GetAxisHorizontal() >= 0 ? false : true;
 }
 
@@ -62,7 +63,9 @@ void PlayerController_Woo::OnTriggerExit(ICollider* other)
 
 void PlayerController_Woo::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 {
-
+	if (other->gameObject->name == "Ground_Woo") {
+		isGround = true;
+	}
 }
 
 void PlayerController_Woo::OnCollisionStay(ICollider* other, const ContactInfo& contact)
@@ -72,7 +75,9 @@ void PlayerController_Woo::OnCollisionStay(ICollider* other, const ContactInfo& 
 
 void PlayerController_Woo::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 {
-
+	if (other->gameObject->name == "Ground_Woo") {
+		isGround = false;
+	}
 }
 
 void PlayerController_Woo::InputCheak()
@@ -88,13 +93,12 @@ void PlayerController_Woo::InputCheak()
 void PlayerController_Woo::Movement()
 {
 	Vector2 direction = Vector2(inputX, inputY).Normalized();
-	rb->velocity = direction  *  speed;
+	rb->velocity.x = direction.x  *  speed;
 }
 
 void PlayerController_Woo::Jump()
 {
-	if (isGround && Input::GetKeyDown(' ')) {
+	if (isGround && isW) {
 		rb->AddForce(Vector2(0, jumpForce));
-		isGround = false;
 	}
 }

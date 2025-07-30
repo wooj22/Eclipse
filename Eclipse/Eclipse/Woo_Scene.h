@@ -5,6 +5,7 @@
 #include "../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/UI_Image.h"
 #include "Player_Woo.h"
+#include "Map_Woo.h"
 
 class Woo_Scene : public Scene
 {
@@ -13,6 +14,7 @@ private:
 	UI_Text* title_text;
 	Player_Woo* player;
 	GameObject* map;
+	Map_Woo* map_woo;
 
 	// rect parent pivot test
 	UI_Image* parent;
