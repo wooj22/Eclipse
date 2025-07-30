@@ -1,4 +1,6 @@
 #include "Honmun.h"
+#include "HonmunCollisionScript.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 
 Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A)
 {
@@ -6,6 +8,9 @@ Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A)
 	spriteRenderer = AddComponent<SpriteRenderer>();
 	rigidbody = AddComponent<Rigidbody>();
 	collider = AddComponent<CircleCollider>();
+
+	// 충돌 스크립트 추가
+	auto* collisionScript = AddComponent<HonmunCollisionScript>();
 }
 
 void Honmun::Awake()
@@ -20,6 +25,7 @@ void Honmun::Awake()
 
 	// 콜라이더 설정
 	collider->radius = 50.0f;
+	collider->isTrigger = false; // 물리적 충돌을 위해 false
 
 	// 스케일 설정
 	transform->SetScale(1.0f, 1.0f);
@@ -27,7 +33,12 @@ void Honmun::Awake()
 
 void Honmun::SceneStart()
 {
-	// 씬 시작 시 필요한 초기화
+	// 씬 시작 시 충돌 스크립트에 타입 설정
+	auto* collisionScript = GetComponent<HonmunCollisionScript>();
+	if (collisionScript)
+	{
+		collisionScript->SetHonmunType(honmunType);
+	}
 }
 
 void Honmun::Update()
@@ -53,6 +64,13 @@ void Honmun::SetHonmunType(HonmunType type)
 	{
 		auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
 		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName());
+	}
+
+	// 충돌 스크립트에도 타입 설정
+	auto* collisionScript = GetComponent<HonmunCollisionScript>();
+	if (collisionScript)
+	{
+		collisionScript->SetHonmunType(type);
 	}
 }
 
