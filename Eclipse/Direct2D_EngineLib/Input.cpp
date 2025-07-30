@@ -76,38 +76,6 @@ bool Input::GetMouseButtonUp(int button)
 	return (prevState[VK_LBUTTON + button] & 0x8000) && !(currState[VK_LBUTTON + button] & 0x8000);
 }
 
-POINT Input::GetMouseScreenPosition()
-{
-    POINT mouse = mouseClient;
-    D2D1_POINT_2F pt = { static_cast<float>(mouse.x), static_cast<float>(mouse.y) };
-
-    // Unity 스타일 좌표계 변환 행렬 (renderMatrix 제외)
-    D2D1::Matrix3x2F unityMatrix = RectTransform::unityMatrix;
-
-    // 역행렬 계산
-    D2D1::Matrix3x2F inverse = unityMatrix;
-    if (inverse.Invert())
-    {
-        D2D1_POINT_2F converted = inverse.TransformPoint(pt);
-
-        POINT result = {
-            static_cast<LONG>(converted.x),
-            static_cast<LONG>(converted.y)
-        };
-        return result;
-    }
-
-    // 역행 실패 시 원래 좌표 반환
-    return mouse;
-}
-
-POINT Input::GetMouseWorldPosition()
-{
-    // TODO ::  직교행렬 연산
-    // screen -> view -> world
-    return { 0,0 };
-}
-
 float Input::GetAxisHorizontal()
 {
     return horizontalAxis;
@@ -116,4 +84,29 @@ float Input::GetAxisHorizontal()
 float Input::GetAxisVertical()
 {
     return verticalAxis;
+}
+
+Vector2 Input::GetMouseScreenPosition()
+{
+    Vector2 mousePos = { static_cast<float>(mouseClient.x), static_cast<float>(mouseClient.y) };
+    return mousePos;
+}
+
+Vector2 Input::GetMouseScreenPosition_Unity()
+{
+    Vector2 mouse = GetMouseScreenPosition();
+    D2D1_POINT_2F pt = { static_cast<float>(mouse.x), static_cast<float>(mouse.y) };
+
+    // unity style
+    D2D1::Matrix3x2F unityMatrix = RectTransform::unityMatrix;
+    D2D1::Matrix3x2F inverse = unityMatrix;
+    if (inverse.Invert())
+    {
+        D2D1_POINT_2F converted = inverse.TransformPoint(pt);
+        Vector2 result = { converted.x, converted.y };
+        return result;
+    }
+
+    // 역행렬에 실패할경우 그냥 d2d 좌표 반환
+    return mouse;
 }

@@ -30,8 +30,8 @@ public:
 		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->layer = 10;
 
-		rigidbody->useGravity = true;
-		rigidbody->gravityScale = 80;
+		//rigidbody->useGravity = true;
+		//rigidbody->gravityScale = 80;
 		collider->size = { 50.0f, 80.0f };
 	}
 

@@ -30,7 +30,7 @@ void Woo_Scene::Awake()
 	map->transform->SetPosition(0, -500);
 
 	// player sample
-	player = CreateObject<Player_Woo>({ 0, -500 });
+	player = CreateObject<Player_Woo>({ 0, 0 });
 	cam->transform->SetPosition(player->transform->GetPosition());
 
 	// map sample
