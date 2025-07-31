@@ -17,6 +17,7 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
 	title_text->screenTextRenderer->SetText(L"Engine Test Scene");
+	//title_text->screenTextRenderer->SetAlpha(0.5);
 
 	// background sample
 	map = CreateObject<GameObject>();
