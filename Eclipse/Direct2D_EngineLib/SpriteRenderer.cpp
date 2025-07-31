@@ -12,7 +12,8 @@ void SpriteRenderer::OnEnable_Inner()
 	transform = this->gameObject->transform;
 
 	// effect 생성
-	RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1ColorMatrix, &colorMatrixEffect);
+	HRESULT hr = RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1ColorMatrix, &colorMatrixEffect);
+	SUCCEEDED(hr);
 }
 
 void SpriteRenderer::OnDisable_Inner()
@@ -73,18 +74,20 @@ void SpriteRenderer::Render()
 	
 	// render
 	// 1. draw bitmap
-	RenderSystem::Get().renderTarget->DrawBitmap(
-		sprite->texture->texture2D.Get(),
-		destRect,           // 출력 위치 및 크기
-		alpha,				// 불투명도
-		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-		srcRect             // source rect
-	);
+	//RenderSystem::Get().renderTarget->DrawBitmap(
+	//	sprite->texture->texture2D.Get(),
+	//	destRect,           // 출력 위치 및 크기
+	//	alpha,				// 불투명도
+	//	D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+	//	srcRect             // source rect
+	//);
 	
-	// 2. draw image :: effect는 이걸로 그려야하는데 destRect 적용이 안돼서 센터 보정이 안됨
-	/*colorMatrixEffect->SetValue(D2D1_COLOR_MATRIX_PROP_COLOR_MATRIX, colorMatrix);
+	// 2. draw image
+	// effect는 이걸로 그려야하는데 destRect 적용이 안돼서 센터 보정이 안됨
+	// 그리고 일단 눈에 안보임
+	colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
 	colorMatrixEffect->SetInput(0, sprite->texture->texture2D.Get());
-	RenderSystem::Get().renderTarget->DrawImage(colorMatrixEffect.Get());*/
+	RenderSystem::Get().renderTarget->DrawImage(colorMatrixEffect.Get());
 }
 
 // Set Color
@@ -98,13 +101,13 @@ void SpriteRenderer::SetColor(float r, float g, float b, float a)
 
 	// color maritx
 	colorMatrix = {
-			colorMultiplier.r, 0.0f,           0.0f,           0.0f, 0.0f,
-			0.0f,           colorMultiplier.g, 0.0f,           0.0f, 0.0f,
-			0.0f,           0.0f,           colorMultiplier.b, 0.0f, 0.0f,
-			0.0f,           0.0f,           0.0f,           colorMultiplier.a, 0.0f
+	colorMultiplier.r, 0.0f,           0.0f,           0.0f,
+	0.0f,           colorMultiplier.g, 0.0f,           0.0f,
+	0.0f,           0.0f,           colorMultiplier.b, 0.0f,
+	0.0f,           0.0f,           0.0f,           colorMultiplier.a
 	};
 
 	// multiply
-	colorMatrixEffect->SetValue(D2D1_COLOR_MATRIX_PROP_COLOR_MATRIX, colorMatrix);
+	colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
 	colorMatrixEffect->SetInput(0, sprite->texture->texture2D.Get());
 }

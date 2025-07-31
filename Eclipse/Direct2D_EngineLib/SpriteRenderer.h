@@ -24,14 +24,13 @@ private:
 
 private:
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
-	ColorRGBA colorMultiplier = { 1,1,1,1 };	// R, G, B, A
-	D2D1::Matrix5x4F colorMatrix = 				// colorMatrix °ö¼À Çà·Ä
-		{
-			colorMultiplier.r, 0.0f,           0.0f,           0.0f,			0.0f,
-			0.0f,           colorMultiplier.g, 0.0f,           0.0f,			0.0f,
-			0.0f,           0.0f,           colorMultiplier.b, 0.0f,			0.0f,
-			0.0f,           0.0f,           0.0f,           colorMultiplier.a,  0.0f
-		};
+	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
+	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix Çà·Ä
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1	
+	};
 
 public:
 	shared_ptr<Sprite> sprite;		// °øÀ¯ ÀÚ¿ø	
