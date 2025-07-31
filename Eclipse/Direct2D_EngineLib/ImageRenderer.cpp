@@ -85,6 +85,7 @@ void ImageRenderer::Render()
     }
 }
 
+// Set Image Color
 void ImageRenderer::SetBaseColor(const D2D1_COLOR_F& newColor) 
 {
     baseColor = newColor;
@@ -96,14 +97,7 @@ void ImageRenderer::SetBaseColor(const D2D1_COLOR_F& newColor)
     }
 }
 
-// 이미지의 경우 Brush를 다시 생성해야하기 때문에 alpha는 아래 함수를 통해 지정해야한다.
-void ImageRenderer::SetAlpha(float a)
-{
-    alpha = a;
-    if (brush) brush->SetOpacity(alpha);
-}
-
-// Set Color
+// Set Sprite Color
 void ImageRenderer::SetColor(float r, float g, float b)
 {
     // set RGBA
@@ -117,5 +111,26 @@ void ImageRenderer::SetColor(float r, float g, float b)
     0.0f,           colorMultiplier.g, 0.0f,           0.0f,
     0.0f,           0.0f,           colorMultiplier.b, 0.0f,
     0.0f,           0.0f,           0.0f,           alpha
+    };
+}
+
+// Set Aplha (sprite & image)
+void ImageRenderer::SetAlpha(float a)
+{
+    // set alpha
+    alpha = a;
+
+    // brush
+    if (brush) brush->SetOpacity(alpha);
+
+    // set RGBA
+    colorMultiplier.a = alpha;
+
+    // color maritx
+    colorMatrix = {
+    colorMultiplier.r, 0.0f,           0.0f,           0.0f,
+    0.0f,           colorMultiplier.g, 0.0f,           0.0f,
+    0.0f,           0.0f,           colorMultiplier.b, 0.0f,
+    0.0f,           0.0f,           0.0f,           colorMultiplier.a
     };
 }

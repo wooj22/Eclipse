@@ -29,7 +29,7 @@ private:
 
 public:
 	shared_ptr<Sprite> sprite;		// 공유 자원  
-	float alpha = 1.0f;				// 투명도
+	float alpha = 1.0f;				// 투명도			// TODO :: private!
 
 private:
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
@@ -61,12 +61,12 @@ public:
 	void OnDestroy_Inner() override final;
 
 public:
-	void SetBaseColor(const D2D1_COLOR_F& newColor);
-	void SetAlpha(float a);
-
-public:
 	// Color
-	void SetColor(float r, float g, float b);		// Image에서 SetAplha를 쓰고있기때문에 그걸로 통일한다.
-	ColorRGBA GetColor() { return colorMultiplier; };
+	void SetBaseColor(const D2D1_COLOR_F& newColor);		// Image
+	D2D1_COLOR_F GetBaseColor() { return baseColor; }		// Image
+	void SetColor(float r, float g, float b);				// Sprite
+	ColorRGBA GetColor() { return colorMultiplier; };		// Sprite
+	void SetAlpha(float a);									// Sprite, Image
+	float GetAlpha() { return alpha; }						// Sprite, Image
 };
 

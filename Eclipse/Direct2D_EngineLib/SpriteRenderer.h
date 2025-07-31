@@ -39,7 +39,7 @@ private:
 
 public:
 	shared_ptr<Sprite> sprite;		// 공유 자원	
-	float alpha = 1.0f;				// 투명도
+	float alpha = 1.0f;				// 투명도		// TODO :: private!
 	bool flipX = false;				// x축 반전
 	bool flipY = false;				// y축 반전
 
@@ -56,7 +56,9 @@ public:
 
 public:
 	// Color
-	void SetColor(float r, float g, float b, float a = 1.0f);
+	void SetColor(float r, float g, float b);
 	ColorRGBA GetColor()  { return colorMultiplier; };
+	void SetAlpha(float a);
+	float GetAlpha() { return alpha; }
 };
 

@@ -89,13 +89,30 @@ void SpriteRenderer::Render()
 }
 
 // Set Color
-void SpriteRenderer::SetColor(float r, float g, float b, float a)
+void SpriteRenderer::SetColor(float r, float g, float b)
 {
 	// set RGBA
 	colorMultiplier.r = r;
 	colorMultiplier.g = g;
 	colorMultiplier.b = b;
-	colorMultiplier.a = a;
+
+	// color maritx
+	colorMatrix = {
+	colorMultiplier.r, 0.0f,           0.0f,           0.0f,
+	0.0f,           colorMultiplier.g, 0.0f,           0.0f,
+	0.0f,           0.0f,           colorMultiplier.b, 0.0f,
+	0.0f,           0.0f,           0.0f,           colorMultiplier.a
+	};
+}
+
+// Set Alpha
+void SpriteRenderer::SetAlpha(float a)
+{
+	// set alpha
+	alpha = a;
+
+	// set RGBA
+	colorMultiplier.a = alpha;
 
 	// color maritx
 	colorMatrix = {
