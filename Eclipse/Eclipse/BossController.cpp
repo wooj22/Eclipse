@@ -24,19 +24,17 @@ void BossController::Start()
 
 void BossController::Update()
 {
-	Move();
-	AttackHandler();
-
-
-	if (Input::GetKeyDown(VK_SPACE))
+	if (!isDie)
 	{
-		Instantiate<Bullet>({0,-500});
+		Move();
+		AttackHandler();
 	}
-}
 
-void BossController::FixedUpdate()
-{
-	
+	// test :: player -> take damage
+	if (Input::GetKeyDown('X'))
+	{
+		TakeDamage(10);
+	}
 }
 
 void BossController::OnDestroy()
@@ -48,7 +46,6 @@ void BossController::OnDestroy()
 /*--------------------  boss function  ---------------------*/
 void BossController::Move()
 {
-	// 공격중이 아니고, 아직 목표에 도달 안했을 경우 하강
 	if (!isAttackIng && !isGoal)
 	{
 		tr->Translate(Vector2::down * speed * Time::GetDeltaTime());
@@ -63,12 +60,8 @@ void BossController::AttackHandler()
 	attackDeltaTime += Time::GetDeltaTime();
 	if (attackDeltaTime >= attackCoolTime)
 	{
-		// cur attack index set
-		// RoundShell, DiffusedShell, DropShell
-		currentAttack = RoundShell;
-
 		// attack
-		switch (currentAttack)
+		switch (currentAttackIndex)
 		{
 		case BossController::RoundShell:
 			Attack_RoundShell();
@@ -83,6 +76,9 @@ void BossController::AttackHandler()
 			break;
 		}
 
+		// attack index, coolTime set
+		currentAttackIndex = 
+			currentAttackIndex + 1 > DropShell ? RoundShell : currentAttackIndex += 1;
 		attackDeltaTime = 0;
 	}
 }
@@ -90,23 +86,45 @@ void BossController::AttackHandler()
 // 1. Attack - 원형탄
 void BossController::Attack_RoundShell()
 {
+	Instantiate<Bullet>({ -100,-500 });
 	OutputDebugStringA("Boss : Attack_RoundShell !\n");
 }
 
 // 2. Attack - 확산탄
 void BossController::Attack_DiffusedShell()
 {
+	Instantiate<Bullet>({ 0,-500 });
 	OutputDebugStringA("Boss : Attack_DiffusedShell !\n");
 }
 
 // 3. Attack - 낙하탄
 void BossController::Attack_DropShell()
 {
+	Instantiate<Bullet>({ 100,-500 });
 	OutputDebugStringA("Boss : Attack_DropShell !\n");
 }
 
 
-/*-------------  trigger event  -------------*/ 
+/*--------------------  boss hit  ---------------------*/
+void BossController::TakeDamage(int damage)
+{
+	hp -= damage;
+	if (hp < 0)
+	{
+		hp = 0;
+		Die();
+	}
+}
+
+void BossController::Die()
+{
+	isDie = true;
+	this->gameObject->Destroy();
+	// TODO :: GameManager 게임 성공 전달
+	// TODO :: die animation? or 연출 or Destroy
+}
+
+/*-----------------  trigger event  -----------------*/ 
 void BossController::OnTriggerEnter(ICollider* other)
 {
 	if (other->gameObject->tag == "Goal")

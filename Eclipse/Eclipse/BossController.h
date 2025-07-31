@@ -20,14 +20,21 @@ private:
 	float hp = MAX_HP;
 	float speed = 20;
 	float palyer_deceleration = 0.5;
+
+	// flag
+	bool isDie;
 	bool isGoal;
+	bool isAttackIng = false;
 
 	// attack
 	enum AttackPattern {RoundShell, DiffusedShell, DropShell};
-	AttackPattern currentAttack = DiffusedShell;
-	float attackCoolTime = 7.0f;
+	int currentAttackIndex = RoundShell;
+	float attackCoolTime = 3.0f;
 	float attackDeltaTime;
-	bool isAttackIng = false;
+	
+	// start dealy
+	float bossStartTime = 5.0f;
+	float bossStartDeltaTime;
 
 	// ref component
 	Transform* tr;
@@ -40,7 +47,6 @@ public:
 	void Awake() override;
 	void Start() override;
 	void Update() override;
-	void FixedUpdate() override;
 	void OnDestroy() override;
 
 	// trigger event
@@ -58,5 +64,11 @@ private:
 	void Attack_RoundShell();
 	void Attack_DiffusedShell();
 	void Attack_DropShell();
+
+
+	// boss hit
+public: void TakeDamage(int damage);
+private: void Die();
+
 };
 
