@@ -38,18 +38,11 @@ void Honmun::Awake()
 	rigidbody->useGravity = false;  // \uc911\ub825 \ube44\ud65c\uc131\ud654
 	rigidbody->isKinematic = true;  // \ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc\ub85c \uc124\uc815
 
-	// 콜라이더 설정 (스프라이트 크기에 맞게 조정)
-	collider->radius = 35.0f; // 70% 크기에 맞게 조정 (50 * 0.7 = 35)
-	collider->isTrigger = false;
+	// 스프라이트 크기를 원본 크기로 설정
+	transform->SetScale(1.0f, 1.0f);
 	
-	// 콜라이더를 스프라이트보다 살짝 아래로 이동
-	collider->offset.y = -10.0f; // 아래로 10픽셀 이동
-
-	// 스프라이트 크기 조정 (아래쪽 잘림 방지)
-	transform->SetScale(0.7f, 0.7f); // 크기를 70%로 줄임
-	
-	// 아래쪽만 살짝 조정하기 위해 위치 미세 조정
-	AdjustSpritePosition();
+	// 타입별 콜라이더 설정
+	SetupColliderForType();
 }
 
 void Honmun::SceneStart()
@@ -154,6 +147,9 @@ void Honmun::SetHonmunType(HonmunType type)
 		}
 	}
 
+	// 타입 변경 시 콜라이더 재설정
+	SetupColliderForType();
+	
 	// �浹 ��ũ��Ʈ���� Ÿ�� ����
 	auto* collisionScript = GetComponent<HonmunCollisionScript>();
 	if (collisionScript)
@@ -215,11 +211,47 @@ void Honmun::SetSize(float newSize)
 	size = newSize;
 	if (transform)
 	{
+<<<<<<< HEAD
 		transform->SetScale(size * 0.7f, size * 0.7f); // 기본 크기 0.7에 새로운 크기 적용
 	}
 	if (collider)
 	{
 		collider->radius = 35.0f * size; // 기본 반지름 35에 크기 적용
+=======
+		transform->SetScale(size, size); // 원본 크기에 새로운 크기 적용
+	}
+	SetupColliderForType(); // 크기 변경 시 콜라이더도 재설정
+}
+
+void Honmun::SetupColliderForType()
+{
+	if (!collider) return;
+	
+	collider->isTrigger = false;
+	
+	switch (honmunType)
+	{
+	case HonmunType::A:
+		collider->radius = 35.0f * size;
+		collider->offset.y = -11.0f; // A타입은 살짝 아래로
+		break;
+	case HonmunType::B:
+		collider->radius = 34.0f * size;
+		collider->offset.y = -23.0f; // B타입은 더 아래로
+		break;
+	case HonmunType::C:
+		collider->radius = 50.0f * size;
+		collider->offset.y = -10.0f; // C타입은 A와 비슷
+		break;
+	case HonmunType::D:
+		collider->radius = 50.0f * size;
+		collider->offset.y = -10.0f; // D타입은 A와 비슷
+		break;
+	default:
+		collider->radius = 50.0f * size;
+		collider->offset.y = -10.0f;
+		break;
+>>>>>>> origin/ron_dev
 	}
 }
 
