@@ -17,7 +17,7 @@ enum class HonmunType
 class Honmun : public GameObject
 {
 public:
-	// ±âº» »ý¼ºÀÚ (CreateObject°¡ ¸Å°³º¯¼ö ¾øÀÌ È£ÃâµÊ)
+	// ï¿½âº» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (CreateObjectï¿½ï¿½ ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½)
 	Honmun();
 
 	virtual void Awake() override;
@@ -25,11 +25,11 @@ public:
 	virtual void Update() override;
 	virtual void Destroyed() override;
 
-	// È¥¹® Å¸ÀÔ ¼³Á¤ ¹× À§Ä¡ ¼³Á¤ ÇÔ¼öµé
+	// È¥ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½
 	void SetHonmunType(HonmunType type);
 	void SetPosition(float x, float y);
 
-	// Ãæµ¹ È¿°ú¸¦ À§ÇÑ ÇÔ¼öµé
+	// ï¿½æµ¹ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½
 	void SetAlpha(float alpha);
 	void ResetAlpha();
 
@@ -40,7 +40,7 @@ private:
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
 
-	// °¢ Å¸ÀÔº° ¸®¼Ò½º °æ·Î
+	// ï¿½ï¿½ Å¸ï¿½Ôºï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ï¿½
 	std::string GetTexturePath();
 	std::string GetSpriteName();
 };

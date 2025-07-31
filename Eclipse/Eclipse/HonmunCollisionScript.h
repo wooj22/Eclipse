@@ -19,49 +19,59 @@ private:
 	Rigidbody* rigidbody = nullptr;
 	SpriteRenderer* spriteRenderer = nullptr;
 
-	// È¥¹® ¼Ó¼º
+	// È¥ï¿½ï¿½ ï¿½Ó¼ï¿½
 	HonmunType honmunType;
 	int health = 3;
 	float currentSize = 10.0f;
+	float targetSize = -1.0f;  // ëª©í‘œ í¬ê¸° (-1ì´ë©´ ì„¤ì • ì•ˆë¨)
 	float fallingSpeed = 1.0f;
-	float pushDistance = 10.0f;
+	float pushDistance = 150.0f;  // \ucda9\ub3bc \ud798 \uc54c\uae4c\uae30 \ucef4\uc149\uc5d0 \ub9de\uac8c \uc99d\uac00
+	bool isSplitFragment = false;  // \ubd84\ud574\ub41c \uc870\uac01\uc778\uc9c0 \ud45c\uc2dc
 
-	// ¿¬¼â¹İÀÀ Ã³¸®¿ë
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½
 	bool isProcessingReaction = false;
 	float reactionCooldown = 0.0f;
+	
+	// \ucda9\ub3cc \ud6c4 \uad00\uc131 \ud6a8\uacfc\ub97c \uc704\ud55c \ubcc0\uc218
+	Vector2 currentVelocity;  // \uae30\ubcf8 \uc0dd\uc131\uc790 \uc0ac\uc6a9
+	float friction = 0.95f;  // \ub9c8\ucc30\ub825 (\uac10\uc18d \uc815\ub3c4)
+	float minVelocity = 0.1f;  // \ucd5c\uc18c \uc18d\ub3c4 (\uc774\ud558\uc5d0\uc11c \uc815\uc9c0)
 
 public:
 	void Awake() override;
 	void Start() override;
 	void Update() override;
 
-	// Ãæµ¹ ÀÌº¥Æ®
+	// ï¿½æµ¹ ï¿½Ìºï¿½Æ®
 	void OnCollisionEnter(ICollider* other, const ContactInfo& contact) override;
 
-	// È¥¹® Å¸ÀÔ ¼³Á¤
+	// È¥ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	void SetHonmunType(HonmunType type);
 	void SetHealth(int hp) { health = hp; }
 
 private:
-	// °¢ Å¸ÀÔº° Ãæµ¹ ¹İÀÀ
-	void HandleIgnisReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // A - ÇÕÃ¼
-	void HandleUmbraReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // B - ºĞ¿­
-	void HandleDarknessReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // C - ÈíÀÎ
-	void HandleLunaReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);      // D - Áõ¹ß
+	// \uac01 \ud0c0\uc785\ubcc4 \ucda9\ub3cc \ucc98\ub9ac - \ubaa8\ub4e0 \ud0c0\uc785 \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c
+	void HandleIgnisReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // A - \uccb4\ub825 \uac10\uc18c
+	void HandleUmbraReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // B - \uccb4\ub825 \uac10\uc18c
+	void HandleDarknessReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // C - \uccb4\ub825 \uac10\uc18c
+	void HandleLunaReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);      // D - \uccb4\ub825 \uac10\uc18c
 
-	// È¥ÇÕ Å¸ÀÔ Ãæµ¹ ¹İÀÀ
+	// È¥ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½
 	void HandleMixedReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);
 
-	// À¯Æ¿¸®Æ¼ ÇÔ¼öµé
-	void MergeWithOther(HonmunCollisionScript* otherScript);                    // ÇÕÃ¼
-	void SplitIntoTwo();                                                        // ºĞ¿­
-	void AbsorbNearbyEnemies(const Vector2& collisionPoint);                    // ÈíÀÎ
-	void DestroyThis();                                                         // Áõ¹ß
-	void BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // Æ¨±è
-	void PushSideways(HonmunCollisionScript* otherScript);                      // ¹Ğ¸²
-	void PassThrough(HonmunCollisionScript* otherScript);                       // °üÅë
+	// ï¿½ï¿½Æ¿ï¿½ï¿½Æ¼ ï¿½Ô¼ï¿½ï¿½ï¿½
+	void MergeWithOther(HonmunCollisionScript* otherScript);                    // ï¿½ï¿½Ã¼
+	void SplitIntoTwo();                                                        // ë¶„ì—´
+	void CreateSplitObjects(int count);                                         // ë‹¤ì¤‘ ë¶„ì—´
+	void CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript, const ContactInfo& contact); // ì¶©ëŒ ê¸°ë°˜ ë¶„ì—´
+	void AbsorbNearbyEnemies(const Vector2& collisionPoint);                    // ï¿½ï¿½ï¿½ï¿½
+	void DestroyThis();                                                         // ï¿½ï¿½ï¿½ï¿½
+	void BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // Æ¨ï¿½ï¿½
+	void BounceAwayKinematic(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // \ud0a4\ub124\ub9c8\ud2f1 \ud295\uae40
+	void PushSideways(HonmunCollisionScript* otherScript);                      // ï¿½Ğ¸ï¿½
+	void PassThrough(HonmunCollisionScript* otherScript);                       // ï¿½ï¿½ï¿½ï¿½
 
-	// ÇïÆÛ ÇÔ¼öµé
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½
 	std::vector<HonmunCollisionScript*> GetNearbyHonmuns(float radius);
 	Vector2 GetRandomDirection();
 	void UpdateSize(float newSize);
