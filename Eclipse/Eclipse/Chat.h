@@ -1,6 +1,7 @@
 #pragma once
 #include "../Direct2D_EngineLib/Script.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
+#include "GameManager.h"
 #include "PlayUI.h"
 
 enum class ChatCondition { None, Success, Fail };

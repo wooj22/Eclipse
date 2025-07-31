@@ -1,8 +1,9 @@
 #include "PlayerMove.h"
 #include "PlayUI.h"
 #include "Chat.h"
-//#include "Quest.h"
+#include "Quest.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "GameManager.h"
 
 void PlayerMove::OnEnable()
 {
@@ -21,33 +22,33 @@ void PlayerMove::Update()
 
 	if (Input::GetKeyDown('F'))
 	{
-		if (PlayUI::Get().ChatActiveCheck())
+		if (GameManager::Get().g_playUI->ChatActiveCheck())
 		{
-			if (!PlayUI::Get().chat_Text->GetComponent<Chat>()->GetFinished())
-				PlayUI::Get().chat_Text->GetComponent<Chat>()->AddChatCount();
+			if (!GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->GetFinished())
+				GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->AddChatCount();
 		}
 	}
 
 	if (Input::GetKeyDown(VK_RETURN))
 	{
-		PlayUI::Get().isWave = false;
+		GameManager::Get().isWave = false;
 	}
 
 	if (Input::GetKeyDown(VK_F1))
 	{
-		PlayUI::Get().chat->SetCondition(ChatCondition::Success);
+		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);
 	}
 
 	if (Input::GetKeyDown(VK_F2))
 	{
-		PlayUI::Get().chat->SetCondition(ChatCondition::Fail);
+		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Fail);
 	}
 }
 void PlayerMove::OnTriggerStay(ICollider* other)
 {
-	if (other->gameObject->name == "NPC" && !PlayUI::Get().ChatActiveCheck() 
-		&& !PlayUI::Get().isWave && Input::GetKey('F'))
+	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck() 
+		&& !GameManager::Get().isWave && Input::GetKey('F'))
 	{
-			PlayUI::Get().ChatSetActive(true);
+			GameManager::Get().g_playUI->ChatSetActive(true);
 	}
 }
