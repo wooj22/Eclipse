@@ -8,7 +8,6 @@
 void BulletController::Awake()
 {
 	tr = this->gameObject->transform;
-	playerTr = GameObject::FindWithTag("Player_Woo")->GetComponent<Transform>();
 }
 
 void BulletController::Start()
@@ -18,8 +17,6 @@ void BulletController::Start()
 
 void BulletController::Update()
 {
-	// player dir
-	direction = (playerTr->GetWorldPosition() - tr->GetWorldPosition()).Normalized();
 	tr->Translate(direction * speed * Time::GetDeltaTime());
 }
 

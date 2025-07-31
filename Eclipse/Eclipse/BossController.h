@@ -31,10 +31,26 @@ private:
 	int currentAttackIndex = RoundShell;
 	float attackCoolTime = 3.0f;
 	float attackDeltaTime;
+
+	// attack 1 data
+	const int bulletCount = 16;
+
+	// attack 2 data
+	const int attack2_bulletCount = 10;
+	const float spreadAngle = 60.0f; // ¡¾30µµ
+
+	// attack 3 data
+	const int attack3_bulletCount = 10;
+	const float map_maxY = 960;
+	const float map_minX = -1000.0f;
+	const float map_maxX = 1000;
 	
 	// start dealy
 	float bossStartTime = 5.0f;
 	float bossStartDeltaTime;
+
+	// player 
+	Transform* playerTr;
 
 	// ref component
 	Transform* tr;

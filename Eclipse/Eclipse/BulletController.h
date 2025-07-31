@@ -23,7 +23,6 @@ private:
 
 	// ref component
 	Transform* tr;
-	Transform* playerTr;
 
 public:
 	// script componet cycle
@@ -35,7 +34,8 @@ public:
 	// trigger event
 	void OnTriggerEnter(ICollider* other) override;
 
-private:
+public:
 	// bullet functions
 	void SetDirection(Vector2 dir) { direction = dir; }
+	void SetSpeed(float s) { speed = s; }
 };

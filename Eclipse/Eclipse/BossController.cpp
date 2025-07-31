@@ -15,6 +15,8 @@ void BossController::Awake()
 	sr = gameObject->GetComponent<SpriteRenderer>();
 	rb = gameObject->GetComponent<Rigidbody>();
 	collider = gameObject->GetComponent<CircleCollider>();
+
+	playerTr = GameObject::FindWithTag("Player_Woo")->GetComponent<Transform>();
 }
 
 void BossController::Start()
@@ -84,24 +86,81 @@ void BossController::AttackHandler()
 }
 
 // 1. Attack - 원형탄
+// 보스 중심에서 360도 전방향으로 16발의 탄막이 동일 각도로 퍼짐 * 2회
 void BossController::Attack_RoundShell()
 {
-	Instantiate<Bullet>({ -100,-500 });
-	OutputDebugStringA("Boss : Attack_RoundShell !\n");
+	Vector2 center = tr->GetWorldPosition();
+	const float angleStep = 360.0f / bulletCount;
+
+	for (int repeat = 0; repeat < 2; ++repeat)
+	{
+		for (int i = 0; i < bulletCount; ++i)
+		{
+			float angleDeg = i * angleStep;
+			float angleRad = angleDeg * 3.14159265f / 180.0f;
+
+			Vector2 dir = { cosf(angleRad), sinf(angleRad) };
+
+			GameObject* bullet = Instantiate<Bullet>(center);
+			BulletController* bc = bullet->GetComponent<BulletController>();
+
+			bc->SetDirection(dir);
+			bc->SetSpeed(250);
+		}
+	}
 }
 
 // 2. Attack - 확산탄
+// 플레이어가 있는 방향으로 10발의 탄을 퍼트림 * 2회
 void BossController::Attack_DiffusedShell()
 {
-	Instantiate<Bullet>({ 0,-500 });
-	OutputDebugStringA("Boss : Attack_DiffusedShell !\n");
+	Vector2 bossPos = tr->GetWorldPosition();
+	Vector2 playerPos = playerTr->GetWorldPosition();
+	Vector2 baseDir = (playerPos - bossPos).Normalized();
+	const float angleStep = spreadAngle / (attack2_bulletCount - 1);
+
+	for (int repeat = 0; repeat < 2; ++repeat)
+	{
+		for (int i = 0; i < attack2_bulletCount; ++i)
+		{
+			float angleOffset = -spreadAngle / 2 + i * angleStep;
+			float angleRad = angleOffset * 3.14159265f / 180.0f;
+
+			// 회전 행렬 방식으로 baseDir 회전
+			float cosA = cosf(angleRad);
+			float sinA = sinf(angleRad);
+			Vector2 rotated = {
+				baseDir.x * cosA - baseDir.y * sinA,
+				baseDir.x * sinA + baseDir.y * cosA
+			};
+
+			GameObject* bullet = Instantiate<Bullet>(bossPos);
+			BulletController* bc = bullet->GetComponent<BulletController>();
+
+			bc->SetDirection(rotated.Normalized());
+			bc->SetSpeed(350);
+		}
+	}
 }
 
 // 3. Attack - 낙하탄
+// 상단에서 가로 일렬로 무작위 탄 10발이 떨어짐 * 2회
 void BossController::Attack_DropShell()
 {
-	Instantiate<Bullet>({ 100,-500 });
-	OutputDebugStringA("Boss : Attack_DropShell !\n");
+	for (int repeat = 0; repeat < 2; ++repeat)
+	{
+		for (int i = 0; i < attack3_bulletCount; ++i)
+		{
+			float randX = map_minX + static_cast<float>(rand()) / RAND_MAX * (map_maxX - map_minX);
+			Vector2 spawnPos = { randX, map_maxY };
+
+			GameObject* bullet = Instantiate<Bullet>(spawnPos);
+			BulletController* bc = bullet->GetComponent<BulletController>();
+
+			bc->SetDirection(Vector2::down);
+			bc->SetSpeed(500);
+		}
+	}
 }
 
 
