@@ -1,12 +1,17 @@
 #pragma once
-#include <wrl/client.h> 
-#include <d2d1_1.h>
+#include <wrl.h>
+#include <assert.h>
 #include "IRenderer.h"
 #include "RenderSystem.h"
 #include "Texture2D.h"
 #include "Sprite.h"
 #include "ResourceManager.h"
 #include "iostream"
+
+#include <d2d1_1.h>
+#include <d2d1effects_2.h>
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dxguid.lib")
 
 /* [Image Renderer Conponent]
 * <UI>의 이미지 한 장(sprite)의 render를 담당하는 component로
@@ -21,9 +26,22 @@ class ImageRenderer : public IRenderer
 private:
 	RectTransform* rectTransform;
 	D2D1_RECT_F destRect;
+
 public:
 	shared_ptr<Sprite> sprite;		// 공유 자원  
-	float alpha = 1.0f;				// 투명도
+	float alpha = 1.0f;				// 투명도			// TODO :: private!
+
+private:
+	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
+	ComPtr<ID2D1Effect> cropEffect = nullptr;
+	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
+	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix 행렬
+	colorMultiplier.a, 0, 0, 0,
+	0, colorMultiplier.g, 0, 0,
+	0, 0, colorMultiplier.b, 0,
+	0, 0, 0, colorMultiplier.a
+	};
+
 private:
 	// sprite가 없을 경우 box draw
 	ComPtr<ID2D1SolidColorBrush> brush;
@@ -43,7 +61,12 @@ public:
 	void OnDestroy_Inner() override final;
 
 public:
-	void SetBaseColor(const D2D1_COLOR_F& newColor);
-	void SetAlpha(float a);
+	// Color
+	void SetBaseColor(const D2D1_COLOR_F& newColor);		// Image
+	D2D1_COLOR_F GetBaseColor() { return baseColor; }		// Image
+	void SetColor(float r, float g, float b);				// Sprite
+	ColorRGBA GetColor() { return colorMultiplier; };		// Sprite
+	void SetAlpha(float a);									// Sprite, Image
+	float GetAlpha() { return alpha; }						// Sprite, Image
 };
 
