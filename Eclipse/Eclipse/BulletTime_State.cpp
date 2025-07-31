@@ -6,6 +6,9 @@
 
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include "../Direct2D_EngineLib/RenderSystem.h"
+#include "../Direct2D_EngineLib/Vector2.h"
+#include "../Direct2D_EngineLib/Camera.h"
 
 void BulletTime_State::Enter(MovementFSM* fsm)
 {
@@ -40,7 +43,6 @@ void BulletTime_State::Update(MovementFSM* fsm)
         }
     }
 
-
     // [ Idle ] 불릿 타임 끝 
     if (fsm->GetPlayerFSM()->timer >= fsm->GetPlayerFSM()->bulletTimeDuration)
     {
@@ -53,9 +55,29 @@ void BulletTime_State::Update(MovementFSM* fsm)
         }
     }
 
-    // 마우스 위치 따라서 플레이어가 바라보도록 하기 
+
+    // [ 마우스 방향 따라 FlipX ]
+    fsm->GetPlayerFSM()->SetisBulletFliping(true);
+
+    Vector2 playerPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
+    Vector2 mousePos = fsm->GetPlayerFSM()->MouseWorldPos;
+
+    if (mousePos.x < playerPos.x) fsm->GetPlayerFSM()->SetisBulletFlipX(true);  // 왼쪽
+    else fsm->GetPlayerFSM()->SetisBulletFlipX(false);
 
 
+
+    // [ 플레이어-마우스 위치 디버그 선 그리기 ]
+
+    D2D1_POINT_2F start = { playerPos.x, playerPos.y };     // 플레이어 월드 위치 
+    D2D1_POINT_2F end = { mousePos.x,  mousePos.y };        // 마우스 월드 위치 
+
+    // 월드 -> 스크린 변환용 
+    const auto& screenMatrix 
+        = Transform::renderMatrix * Camera::GetMainInverseMatrix() * Transform::unityMatrix;
+
+    // 디버그 선 그리기
+    RenderSystem::Get().DebugDrawLine(start, end, screenMatrix, 2.0f);
 }
 
 void BulletTime_State::FixedUpdate(MovementFSM* fsm)
@@ -66,5 +88,8 @@ void BulletTime_State::FixedUpdate(MovementFSM* fsm)
 void BulletTime_State::Exit(MovementFSM* fsm)
 {
     OutputDebugStringA("[BulletTime_State] (( 종료 - 불릿 타임 끝 )) \n");
-    Time::SetTimeScale(1.0f); // 혹시 모르니 다시 복구
+
+    // 복구 
+    fsm->GetPlayerFSM()->SetisBulletFliping(false);
+    Time::SetTimeScale(1.0f); 
 }

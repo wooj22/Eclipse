@@ -149,7 +149,7 @@ void Aron_Scene::Update()
 	// AABB �׸��� - ������ (���� �� Honmun ������Ʈ���� ��ü������ ó��)
 	if (ground_col) ground_col->DebugColliderDraw();
 
-	OutputDebugStringA("�� ������Ʈ��");
+	
 }
 
 void Aron_Scene::Exit()

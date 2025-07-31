@@ -18,6 +18,7 @@ void PlayScene::Awake()
 	backGround->GetComponent<Transform>()->SetScale(3, 3);
 
 	playUI = CreateObject<PlayUI>();
+	GameManager::Get().g_playUI = playUI;
 	playUI->timer_Text = CreateObject<UI_Text>();
 	playUI->stop_Button = CreateObject<UI_Button>();
 	playUI->quest_Image = CreateObject<UI_Image>();
@@ -31,6 +32,8 @@ void PlayScene::Awake()
 	playUI->skill1_Text = CreateObject<UI_Text>();
 	playUI->skill2_Image = CreateObject<UI_Image>();
 	playUI->skill2_Text = CreateObject<UI_Text>();
+	playUI->waveInfo_Text = CreateObject<UI_Text>();
+	playUI->tooltip_Image = CreateObject<UI_Image>();
 
 	npc = CreateObject<NPC>();
 

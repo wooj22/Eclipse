@@ -58,10 +58,12 @@ public:
 
 		collider->offset = { 0.0f, -5.0f };
 		collider->size = { 50.0f, 70.0f };
+		collider->isFlatformerCharacter = true; 
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;
-		rigidbody->gravityScale = 80;
+		rigidbody->gravityScale = 100;
+		rigidbody->mass = 1.3f;
 	}
 
 	void Update() override
@@ -69,6 +71,5 @@ public:
 		// AABB ¿µ¿ª 
 		collider->DebugColliderDraw();
 	}
-
 };
 

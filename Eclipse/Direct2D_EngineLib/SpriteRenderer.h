@@ -1,11 +1,17 @@
 #pragma once
-#include <wrl/client.h> 
-#include <d2d1_1.h>
+#include <wrl.h>
+#include <assert.h>
 #include "IRenderer.h"
 #include "RenderSystem.h"
 #include "Sprite.h"
 #include "ResourceManager.h"
 #include "iostream"
+
+#include <d2d1_1.h>
+#include <d2d1effects_2.h>
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dxguid.lib")
+
 
 /* [Sprite Renderer Conponent]
 * <World>의 이미지 한 장(sprite)의 render를 담당하는 component로
@@ -19,9 +25,21 @@ class SpriteRenderer : public IRenderer
 private:
 	Transform* transform;
 	D2D1_RECT_F destRect;
+
+private:
+	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
+	ComPtr<ID2D1Effect> cropEffect = nullptr;
+	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
+	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix 행렬
+	colorMultiplier.a, 0, 0, 0,
+	0, colorMultiplier.g, 0, 0,
+	0, 0, colorMultiplier.b, 0,
+	0, 0, 0, colorMultiplier.a
+	};
+
 public:
 	shared_ptr<Sprite> sprite;		// 공유 자원	
-	float alpha = 1.0f;				// 투명도
+	float alpha = 1.0f;				// 투명도		// TODO :: private!
 	bool flipX = false;				// x축 반전
 	bool flipY = false;				// y축 반전
 
@@ -35,5 +53,12 @@ public:
 	void Update() override final;
 	void Render() override final;
 	void OnDestroy_Inner() override final;
+
+public:
+	// Color
+	void SetColor(float r, float g, float b);
+	ColorRGBA GetColor()  { return colorMultiplier; };
+	void SetAlpha(float a);
+	float GetAlpha() { return alpha; }
 };
 

@@ -4,13 +4,22 @@
 #include"../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/Singleton.h"
+#include "../Direct2D_EngineLib/Time.h"
+#include "GameManager.h"
 
 class Chat;
 class Quest;
 
 
-class PlayUI : public GameObject , public Singleton<PlayUI>
+class PlayUI : public GameObject
 {
+private:
+	float waveInfoTimer = 0;
+	float waveIntoTime = 5;
+
+	float tolltipInfoTimer = 0;
+	float tolltipInfoTime = 10;
+
 public:
 	UI_Text* timer_Text;			// 웨이브 타이머
 
@@ -36,8 +45,14 @@ public:
 	UI_Image* skill2_Image;			// 스킬2 이미지
 	UI_Text* skill2_Text;			// 스킬2 텍스트
 
-	int waveCount = 0;				// 임시 웨이브 카운트 
-	bool isWave = false;			// 임시 웨이브 상태
+	UI_Text* waveInfo_Text;			// 웨이브 정보 텍스트
+
+	UI_Image* tooltip_Image;		// 툴팁 이미지 부모
+	UI_Image* tooltipHon_Image;		// 툴팁 혼 이미지
+	UI_Text* tooltipName_Text;		// 툴팁 이름 텍스트
+	UI_Text* tooltipEx_Text;		// 툴팁 설명 텍스트
+
+	UI_Image* tooltip2_Image;		// 툴팁 이미지
 public:
 	// game object cycle
 	PlayUI() : GameObject("PlayUI","PlayUI") {}
@@ -64,9 +79,13 @@ public:
 	bool ChatActiveCheck() { return chat_Image->IsActive(); }
 
 	void ClickChatButton() {
-		chat_Image->SetActive(false);
+		GameManager::Get().isWave = true;
+		GameManager::Get().waveCount++;
 		chat_Button->SetActive(false);
-		isWave = true;
-		waveCount++;
+		chat_Image->SetActive(false);
+		waveInfo_Text->SetActive(true);
+
+		//wave 별 이름 변화는 툴팁에서
+		//tooltip_Image->SetActive(true);
 	}
 };

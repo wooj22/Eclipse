@@ -12,6 +12,7 @@ class SpriteRenderer;
 class AnimatorController;
 class WorldTextRenderer;
 class Rigidbody;
+// class BoxCollider;
 
 class PlayerFSM : public Script
 {
@@ -28,8 +29,8 @@ private:
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 280.f;
-	float dashSpeed = 350.f;
-	float jumpForce = 400.0f;
+	float dashSpeed = 450.f;
+	float jumpForce = 700.0f;
 
 	// int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
 
@@ -37,6 +38,8 @@ private:
 	float inputX, inputY;
 	bool isGround;
 	bool lastFlipX = false;
+	bool isBulletFliping = false;
+	bool isBulletFlipX = false;
 
 	bool isWallLeft = false;
 	bool isWallRight = false;
@@ -49,6 +52,7 @@ private:
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
 	AnimatorController* animatorController = nullptr;
+	// BoxCollider* boxCollider = nullptr;
 
 public:
 	// FSM 변수
@@ -58,6 +62,8 @@ public:
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
+
+	Vector2 MouseWorldPos;
 
 public:
 	// getter
@@ -76,10 +82,17 @@ public:
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }
 
-	bool GetLastFlipX() const { return lastFlipX; } // true 왼쪽? 
+	bool GetLastFlipX() const { return lastFlipX; } // true 왼쪽 
+	void SetLastFlipX(bool isFlipX) { lastFlipX = isFlipX; } // true 왼쪽 
+	bool GetisBulletFliping() const { return isBulletFliping; }
+	void SetisBulletFliping(bool isBulletTime) { isBulletFliping = isBulletTime; }
+	bool GetisBulletFlipX() const { return isBulletFlipX; } // true 왼쪽 
+	void SetisBulletFlipX(bool isBulletX) { isBulletFlipX = isBulletX; }
 
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 	AnimatorController* GetAnimatorController() const { return animatorController; }
+    Transform* GetTransform() const { return transform; }
+	// BoxCollider* GetBoxCollider() const { return boxCollider; }
 
 	// void SetLastWallDir(int dir) { lastWallDir = dir; }
 
@@ -104,6 +117,7 @@ public:
 		if (other->gameObject->name == "Ground") { isGround = true; }
 		else if (other->gameObject->name == "Wall")
 		{
+			OutputDebugStringA("Wall과 충돌 했습니다.\n");
 			if (contact.normal.x == 1) { isWallLeft = true; }
 			if (contact.normal.x == -1) { isWallRight = true; }
 		}
@@ -126,8 +140,5 @@ public:
 
 private:
 	void InputCheak();
-	//void Move_Transform();		// kinematic move
-	//void Move_Physics();		    // physics move
-	//void Jump_Physics();
 };
 

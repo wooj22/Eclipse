@@ -33,4 +33,9 @@ public:
         if (currentState)
             currentState->Enter(static_cast<OwnerType*>(this));
     }
+
+    StateType* GetCurrentState() const
+    {
+        return currentState.get();
+    }
 };

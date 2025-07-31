@@ -25,6 +25,9 @@ public:
 		collider = AddComponent<BoxCollider>();
 		controller = AddComponent<PlayerController_Woo>();
 
+		name = "Player_Woo";
+		tag = "Player_Woo";
+
 		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/Player_woo.png");
 		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "PlayerWoo");
 		spriteRenderer->sprite = new_sprite;
@@ -35,6 +38,8 @@ public:
 
 		collider->isFlatformerCharacter = true;
 		collider->size = { 50.0f, 80.0f };
+
+		spriteRenderer->SetColor(1, 0.5, 1);
 	}
 
 	void Update() override

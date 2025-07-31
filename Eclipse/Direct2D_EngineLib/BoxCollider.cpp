@@ -236,12 +236,17 @@ void BoxCollider::OnCollisionEnter(ICollider* other, ContactInfo& contact)
     {
         if (isFlatformerCharacter)
         {
-            // up collision 보정 x, ground
+            // ground
             if (contact.normal.y > 0)
             {
-                rb->CorrectPosition(contact);
                 rb->groundContactCount++;
                 rb->isGrounded = true;
+            }
+
+            // up collision 보정 x
+            if (contact.normal.y != -1)
+            {
+                rb->CorrectPosition(contact);
             }
         }
         else
