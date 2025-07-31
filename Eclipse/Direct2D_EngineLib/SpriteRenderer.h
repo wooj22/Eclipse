@@ -31,12 +31,12 @@ private:
 private:
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
-	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
+	ColorRGBA colorMultiplier = { 1,0,1,1 };	// User Set : R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix За·Д
-	1, 0, 0, 0,
-	0, 1, 0, 0,
-	0, 0, 1, 0,
-	0, 0, 0, 1	
+	colorMultiplier.a, 0, 0, 0,
+	0, colorMultiplier.g, 0, 0,
+	0, 0, colorMultiplier.b, 0,
+	0, 0, 0, colorMultiplier.a
 	};
 
 public:
