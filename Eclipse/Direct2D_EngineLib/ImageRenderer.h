@@ -22,7 +22,8 @@ private:
 	RectTransform* rectTransform;
 	D2D1_RECT_F destRect;
 public:
-	shared_ptr<Sprite> sprite;	// 공유 자원  
+	shared_ptr<Sprite> sprite;		// 공유 자원  
+	float alpha = 1.0f;				// 투명도
 private:
 	// sprite가 없을 경우 box draw
 	ComPtr<ID2D1SolidColorBrush> brush;
@@ -43,5 +44,6 @@ public:
 
 public:
 	void SetBaseColor(const D2D1_COLOR_F& newColor);
+	void SetAlpha(float a);
 };
 

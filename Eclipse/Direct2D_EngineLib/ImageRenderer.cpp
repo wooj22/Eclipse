@@ -32,16 +32,24 @@ void ImageRenderer::Render()
 {
     if (!rectTransform) return;
 
-    // tansform
-    RenderSystem::Get().renderTarget->SetTransform(rectTransform->GetScreenMatrix());
-
     // rect
     auto size = rectTransform->GetSize();
     destRect = { 0.0f, 0.0f, size.width, size.height };
 
+    // tansform
+    RenderSystem::Get().renderTarget->SetTransform(rectTransform->GetScreenMatrix());
+
     // render
     if (sprite)
-        RenderSystem::Get().renderTarget->DrawBitmap(sprite->texture->texture2D.Get(), destRect);
+    {
+        RenderSystem::Get().renderTarget->DrawBitmap(
+            sprite->texture->texture2D.Get(), 
+            destRect, 
+            alpha,
+            D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+        );
+  
+    }
     else
         RenderSystem::Get().renderTarget->FillRectangle(destRect, brush.Get());
 }
@@ -55,4 +63,11 @@ void ImageRenderer::SetBaseColor(const D2D1_COLOR_F& newColor)
     else {
         RenderSystem::Get().renderTarget->CreateSolidColorBrush(baseColor, brush.GetAddressOf());
     }
+}
+
+// 이미지의 경우 Brush를 다시 생성해야하기 때문에 alpha는 아래 함수를 통해 지정해야한다.
+void ImageRenderer::SetAlpha(float a)
+{
+    alpha = a;
+    if (brush) brush->SetOpacity(alpha);
 }

@@ -100,6 +100,12 @@ void ScreenTextRenderer::SetColor(const D2D1_COLOR_F& newColor)
 	}
 }
 
+void ScreenTextRenderer::SetAlpha(float a)
+{
+	alpha = a;
+	if (brush) brush->SetOpacity(alpha);
+}
+
 void ScreenTextRenderer::SetHorizontalAlign(TextHorizontalAlign align)
 {
 	horizontalAlign = align;

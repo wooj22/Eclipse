@@ -17,6 +17,7 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
 	title_text->screenTextRenderer->SetText(L"Engine Test Scene");
+	//title_text->screenTextRenderer->SetAlpha(0.5);
 
 	// background sample
 	map = CreateObject<GameObject>();
@@ -46,18 +47,20 @@ void Woo_Scene::Awake()
 	ground3->collider->size = { 100,20 };
 
 	// ui test
-	/*parent = CreateObject<UI_Image>();
+	parent = CreateObject<UI_Image>();
 	child = CreateObject<UI_Image>();
 	parent->rectTransform->SetPosition(100, 0);
 	child->rectTransform->SetParent(parent->rectTransform);
-	child->rectTransform->SetPosition(100, 0);*/
+	child->rectTransform->SetPosition(100, 0);
+
+	child->imageRenderer->SetAlpha(0.1);
 
 	// camera tartget
 	Camera* camera = cam->GetComponent<Camera>();
 	camera->SetTarget(player->transform);
-	camera->SetTargetTraceSpeed(200.0f);
+	camera->SetTargetTraceSpeed(250.0f);
 	camera->SetTargetTraceLimitX(30.0f);
-	camera->SetTargetTraceLimitY(100.0f);
+	camera->SetTargetTraceLimitY(50.0f);
 
 	// camera map condition
 	Rect mapRect;

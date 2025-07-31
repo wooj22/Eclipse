@@ -22,8 +22,8 @@ private:
 	Map_Woo* ground3;
 
 	// rect parent pivot test
-	//UI_Image* parent;
-	//UI_Image* child;
+	UI_Image* parent;
+	UI_Image* child;
 
 public:
 	Woo_Scene() = default;

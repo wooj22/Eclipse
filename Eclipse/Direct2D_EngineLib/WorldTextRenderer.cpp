@@ -111,6 +111,12 @@ void WorldTextRenderer::SetColor(const D2D1_COLOR_F& newColor)
 	}
 }
 
+void WorldTextRenderer::SetAlpha(float a)
+{
+	alpha = a;
+	if (brush) brush->SetOpacity(alpha);
+}
+
 void WorldTextRenderer::SetLayout(int width, int height) 
 {
 	this->width = width; this->height = height;
