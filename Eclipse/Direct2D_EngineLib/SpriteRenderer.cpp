@@ -13,6 +13,7 @@ void SpriteRenderer::OnEnable_Inner()
 
 	// effect 생성
 	HRESULT hr = RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1ColorMatrix, &colorMatrixEffect);
+	hr = RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1Crop, &cropEffect);
 	SUCCEEDED(hr);
 }
 
@@ -27,6 +28,7 @@ void SpriteRenderer::OnDestroy_Inner()
 	RenderSystem::Get().Unregist(this);
 	sprite = nullptr;
 	colorMatrixEffect = nullptr;
+	cropEffect = nullptr;
 }
 
 void SpriteRenderer::Update() 
@@ -72,6 +74,10 @@ void SpriteRenderer::Render()
 	// transform
 	RenderSystem::Get().renderTarget->SetTransform(finalMat);
 	
+	// crop
+	cropEffect->SetInput(0, sprite->texture->texture2D.Get());
+	cropEffect->SetValue(D2D1_CROP_PROP_RECT, srcRect);
+
 	// render
 	// 1. draw bitmap
 	//RenderSystem::Get().renderTarget->DrawBitmap(
@@ -83,10 +89,11 @@ void SpriteRenderer::Render()
 	//);
 	
 	// 2. draw image
-	// effect는 이걸로 그려야하는데 destRect 적용이 안돼서 센터 보정이 안됨
-	// 그리고 일단 눈에 안보임
+	ComPtr<ID2D1Image> cropImage;
+	cropEffect.As(&cropImage);
+
+	colorMatrixEffect->SetInput(0, cropImage.Get());
 	colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
-	colorMatrixEffect->SetInput(0, sprite->texture->texture2D.Get());
 	RenderSystem::Get().renderTarget->DrawImage(colorMatrixEffect.Get());
 }
 
