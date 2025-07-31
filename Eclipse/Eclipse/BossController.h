@@ -19,7 +19,7 @@ private:
 	// stat
 	float hp = MAX_HP;
 	float speed = 20;
-	//float palyer_deceleration = 0.5;
+	float palyer_deceleration = 0.5;
 
 	// flag
 	bool isDie;
@@ -36,9 +36,6 @@ private:
 	float bossStartTime = 5.0f;
 	float bossStartDeltaTime;
 
-	// player
-	Transform* playerTr;
-
 	// ref component
 	Transform* tr;
 	SpriteRenderer* sr;
@@ -54,6 +51,8 @@ public:
 
 	// trigger event
 	void OnTriggerEnter(ICollider* other) override;
+	void OnTriggerStay(ICollider* other)  override;
+	void OnTriggerExit(ICollider* other)  override;
 
 private:
 	// boss contoll func

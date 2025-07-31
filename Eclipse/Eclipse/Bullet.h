@@ -4,7 +4,6 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
-#include "BulletController.h"
 
 class Bullet : public GameObject
 {
@@ -14,7 +13,6 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
-	BulletController* controller;
 
 	Bullet()
 	{
@@ -22,7 +20,6 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
-		controller = AddComponent<BulletController>();
 
 		name = "Bullet";
 		tag = "Bullet";

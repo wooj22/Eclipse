@@ -25,9 +25,6 @@ public:
 		collider = AddComponent<BoxCollider>();
 		controller = AddComponent<PlayerController_Woo>();
 
-		name = "Player_Woo";
-		tag = "Player_Woo";
-
 		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/Player_woo.png");
 		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "PlayerWoo");
 		spriteRenderer->sprite = new_sprite;

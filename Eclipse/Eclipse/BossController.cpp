@@ -15,8 +15,6 @@ void BossController::Awake()
 	sr = gameObject->GetComponent<SpriteRenderer>();
 	rb = gameObject->GetComponent<Rigidbody>();
 	collider = gameObject->GetComponent<CircleCollider>();
-
-	playerTr = GameObject::FindWithTag("Player_Woo")->GetComponent<Transform>();
 }
 
 void BossController::Start()
@@ -134,4 +132,14 @@ void BossController::OnTriggerEnter(ICollider* other)
 		isGoal = true;
 		// TODO :: GameManager 게임 오버 전달
 	}
+}
+
+void BossController::OnTriggerStay(ICollider* other)
+{
+
+}
+
+void BossController::OnTriggerExit(ICollider* other)
+{
+
 }
