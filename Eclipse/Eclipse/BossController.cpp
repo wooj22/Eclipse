@@ -48,8 +48,8 @@ void BossController::OnDestroy()
 /*--------------------  boss function  ---------------------*/
 void BossController::Move()
 {
-	// 공격중이 아닐때만 아래로 하강
-	if (!isAttackIng)
+	// 공격중이 아니고, 아직 목표에 도달 안했을 경우 하강
+	if (!isAttackIng && !isGoal)
 	{
 		tr->Translate(Vector2::down * speed * Time::GetDeltaTime());
 	}
@@ -109,7 +109,11 @@ void BossController::Attack_DropShell()
 /*-------------  trigger event  -------------*/ 
 void BossController::OnTriggerEnter(ICollider* other)
 {
-
+	if (other->gameObject->tag == "Goal")
+	{
+		isGoal = true;
+		// TODO :: GameManager 게임 오버 전달
+	}
 }
 
 void BossController::OnTriggerStay(ICollider* other)
