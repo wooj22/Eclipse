@@ -2,10 +2,17 @@
 #include "Transform.h"
 #include "GameObject.h"
 
+#ifndef D2D1_COLOR_MATRIX_PROP_COLOR_MATRIX
+#define D2D1_COLOR_MATRIX_PROP_COLOR_MATRIX 0
+#endif
+
 void SpriteRenderer::OnEnable_Inner()
 {
 	RenderSystem::Get().Regist(this);
 	transform = this->gameObject->transform;
+
+	// effect 생성
+	RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1ColorMatrix, &colorMatrixEffect);
 }
 
 void SpriteRenderer::OnDisable_Inner()
@@ -18,6 +25,7 @@ void SpriteRenderer::OnDestroy_Inner()
 {
 	RenderSystem::Get().Unregist(this);
 	sprite = nullptr;
+	colorMatrixEffect = nullptr;
 }
 
 void SpriteRenderer::Update() 
@@ -64,7 +72,7 @@ void SpriteRenderer::Render()
 	RenderSystem::Get().renderTarget->SetTransform(finalMat);
 	
 	// render
-	RenderSystem::Get().renderTarget->SetTransform(finalMat);
+	// 1. draw bitmap
 	RenderSystem::Get().renderTarget->DrawBitmap(
 		sprite->texture->texture2D.Get(),
 		destRect,           // 출력 위치 및 크기
@@ -72,4 +80,31 @@ void SpriteRenderer::Render()
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		srcRect             // source rect
 	);
+	
+	// 2. draw image :: effect는 이걸로 그려야하는데 destRect 적용이 안돼서 센터 보정이 안됨
+	/*colorMatrixEffect->SetValue(D2D1_COLOR_MATRIX_PROP_COLOR_MATRIX, colorMatrix);
+	colorMatrixEffect->SetInput(0, sprite->texture->texture2D.Get());
+	RenderSystem::Get().renderTarget->DrawImage(colorMatrixEffect.Get());*/
+}
+
+// Set Color
+void SpriteRenderer::SetColor(float r, float g, float b, float a)
+{
+	// set RGBA
+	colorMultiplier.r = r;
+	colorMultiplier.g = g;
+	colorMultiplier.b = b;
+	colorMultiplier.a = a;
+
+	// color maritx
+	colorMatrix = {
+			colorMultiplier.r, 0.0f,           0.0f,           0.0f, 0.0f,
+			0.0f,           colorMultiplier.g, 0.0f,           0.0f, 0.0f,
+			0.0f,           0.0f,           colorMultiplier.b, 0.0f, 0.0f,
+			0.0f,           0.0f,           0.0f,           colorMultiplier.a, 0.0f
+	};
+
+	// multiply
+	colorMatrixEffect->SetValue(D2D1_COLOR_MATRIX_PROP_COLOR_MATRIX, colorMatrix);
+	colorMatrixEffect->SetInput(0, sprite->texture->texture2D.Get());
 }

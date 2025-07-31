@@ -6,6 +6,8 @@
 #include "Sprite.h"
 #include "ResourceManager.h"
 #include "iostream"
+#include <d2d1effects_2.h>
+#pragma comment(lib, "dxguid.lib")
 
 /* [Sprite Renderer Conponent]
 * <World>의 이미지 한 장(sprite)의 render를 담당하는 component로
@@ -19,6 +21,18 @@ class SpriteRenderer : public IRenderer
 private:
 	Transform* transform;
 	D2D1_RECT_F destRect;
+
+private:
+	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
+	ColorRGBA colorMultiplier = { 1,1,1,1 };	// R, G, B, A
+	D2D1::Matrix5x4F colorMatrix = 				// colorMatrix 곱셈 행렬
+		{
+			colorMultiplier.r, 0.0f,           0.0f,           0.0f,			0.0f,
+			0.0f,           colorMultiplier.g, 0.0f,           0.0f,			0.0f,
+			0.0f,           0.0f,           colorMultiplier.b, 0.0f,			0.0f,
+			0.0f,           0.0f,           0.0f,           colorMultiplier.a,  0.0f
+		};
+
 public:
 	shared_ptr<Sprite> sprite;		// 공유 자원	
 	float alpha = 1.0f;				// 투명도
@@ -35,5 +49,9 @@ public:
 	void Update() override final;
 	void Render() override final;
 	void OnDestroy_Inner() override final;
+
+public:
+	// set
+	void SetColor(float r, float g, float b, float a = 1.0f);
 };
 
