@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
+#include "../Direct2D_EngineLib/Animator.h"
 #include "../Direct2D_EngineLib/ResourceManager.h"
 
 enum class HonmunType
@@ -14,11 +15,15 @@ enum class HonmunType
 	D
 };
 
+class HonmunAFSM;
+class HonmunAAnimatorController;
+
 class Honmun : public GameObject
 {
 public:
 	// �⺻ ������ (CreateObject�� �Ű����� ���� ȣ���)
 	Honmun();
+	virtual ~Honmun();
 
 	virtual void Awake() override;
 	virtual void SceneStart() override;
@@ -28,6 +33,7 @@ public:
 	// ȥ�� Ÿ�� ���� �� ��ġ ���� �Լ���
 	void SetHonmunType(HonmunType type);
 	void SetPosition(float x, float y);
+	void AdjustSpritePosition(); // 스프라이트 위치 조정 함수
 
 	// �浹 ȿ���� ���� �Լ���
 	void SetAlpha(float alpha);
@@ -39,6 +45,11 @@ private:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
+	Animator* animator;
+
+	// FSM and AnimatorController for Honmun A
+	HonmunAFSM* honmunAFSM;
+	HonmunAAnimatorController* honmunAAnimatorController;
 
 	// �� Ÿ�Ժ� ���ҽ� ���
 	std::string GetTexturePath();
