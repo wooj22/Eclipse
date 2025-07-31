@@ -31,12 +31,12 @@ void Button::Update()
     if (!Input::GetKeyDown(VK_LBUTTON)) return;
 
     // 2. 마우스 위치 가져오기 (클라이언트 좌표계)
-    Vector2 mouse = Input::GetMouseScreenPosition_D2D();
+    Vector2 mouse = Input::GetMouseScreenPosition();
     float mouseX = mouse.x;
     float mouseY = mouse.y;
 
     // 3. 버튼 영역 계산 (pivot 보정된 screen 영역)
-    Vector2 pos = rectTransform->GetPosition();
+    Vector2 pos = rectTransform->GetWorldPosition();
     D2D1_SIZE_F size = rectTransform->GetSize();
     D2D1_POINT_2F pivot = rectTransform->GetPivot();
 
