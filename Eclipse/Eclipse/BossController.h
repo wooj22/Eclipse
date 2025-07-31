@@ -24,13 +24,17 @@ private:
 	// flag
 	bool isDie;
 	bool isGoal;
-	bool isAttackIng = false;
+	bool isAttacking = false;
 
 	// attack
 	enum AttackPattern {RoundShell, DiffusedShell, DropShell};
 	int currentAttackIndex = RoundShell;
-	float attackCoolTime = 3.0f;
+	float attackCoolTime = 5.0f;
 	float attackDeltaTime;
+
+	// attack repeat
+	float attackRepeatCoolTime = 1.5f;
+	float attackRepeatDeltaTime;
 
 	// attack 1 data
 	const int bulletCount = 16;
@@ -77,6 +81,7 @@ private:
 
 	// boss attack func
 	void AttackHandler();
+	void Attack(int attackIndex);
 	void Attack_RoundShell();
 	void Attack_DiffusedShell();
 	void Attack_DropShell();

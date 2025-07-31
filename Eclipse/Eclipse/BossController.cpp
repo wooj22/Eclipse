@@ -48,7 +48,7 @@ void BossController::OnDestroy()
 /*--------------------  boss function  ---------------------*/
 void BossController::Move()
 {
-	if (!isAttackIng && !isGoal)
+	if (!isAttacking && !isGoal)
 	{
 		tr->Translate(Vector2::down * speed * Time::GetDeltaTime());
 	}
@@ -58,60 +58,86 @@ void BossController::Move()
 // Boss Attack Handler
 void BossController::AttackHandler()
 {
-	// cooltime
-	attackDeltaTime += Time::GetDeltaTime();
-	if (attackDeltaTime >= attackCoolTime)
+	if (!isAttacking)
 	{
-		// attack
-		switch (currentAttackIndex)
-		{
-		case BossController::RoundShell:
-			Attack_RoundShell();
-			break;
-		case BossController::DiffusedShell:
-			Attack_DiffusedShell();
-			break;
-		case BossController::DropShell:
-			Attack_DropShell();
-			break;
-		default:
-			break;
-		}
+		// cooltime
+		attackDeltaTime += Time::GetDeltaTime();
 
-		// attack index, coolTime set
-		currentAttackIndex = 
-			currentAttackIndex + 1 > DropShell ? RoundShell : currentAttackIndex += 1;
-		attackDeltaTime = 0;
+		// first attack
+		if (attackDeltaTime >= attackCoolTime)
+		{
+			Attack(currentAttackIndex);
+			isAttacking = true;
+
+			// attack coolTime reset
+			attackDeltaTime = 0;
+		}
+	}
+	else
+	{
+		// cooltime
+		attackDeltaTime += Time::GetDeltaTime();
+		attackRepeatDeltaTime += Time::GetDeltaTime();
+
+		// second attack
+		if (attackRepeatDeltaTime >= attackRepeatCoolTime)
+		{
+			Attack(currentAttackIndex);
+
+			// attack index set
+			currentAttackIndex =
+				currentAttackIndex + 1 > DropShell ? RoundShell : currentAttackIndex += 1;
+
+			// attack repeat coolTime reset
+			attackRepeatDeltaTime = 0;
+			isAttacking = false;
+		}
 	}
 }
 
+void BossController::Attack(int attackIndex)
+{
+	switch (attackIndex)
+	{
+	case BossController::RoundShell:
+		Attack_RoundShell();
+		break;
+	case BossController::DiffusedShell:
+		Attack_DiffusedShell();
+		break;
+	case BossController::DropShell:
+		Attack_DropShell();
+		break;
+	default:
+		break;
+	}
+}
+
+
 // 1. Attack - 원형탄
-// 보스 중심에서 360도 전방향으로 16발의 탄막이 동일 각도로 퍼짐 * 2회
+// 보스 중심에서 360도 전방향으로 16발의 탄막이 동일 각도로 퍼짐
 void BossController::Attack_RoundShell()
 {
 	Vector2 center = tr->GetWorldPosition();
 	const float angleStep = 360.0f / bulletCount;
 
-	for (int repeat = 0; repeat < 2; ++repeat)
+	for (int i = 0; i < bulletCount; ++i)
 	{
-		for (int i = 0; i < bulletCount; ++i)
-		{
-			float angleDeg = i * angleStep;
-			float angleRad = angleDeg * 3.14159265f / 180.0f;
+		float angleDeg = i * angleStep;
+		float angleRad = angleDeg * 3.14159265f / 180.0f;
 
-			Vector2 dir = { cosf(angleRad), sinf(angleRad) };
+		Vector2 dir = { cosf(angleRad), sinf(angleRad) };
 
-			GameObject* bullet = Instantiate<Bullet>(center);
-			BulletController* bc = bullet->GetComponent<BulletController>();
+		GameObject* bullet = Instantiate<Bullet>(center);
+		BulletController* bc = bullet->GetComponent<BulletController>();
 
-			bc->SetDirection(dir);
-			bc->SetSpeed(250);
-		}
+		bc->SetDirection(dir);
+		bc->SetSpeed(250);
 	}
 }
 
 // 2. Attack - 확산탄
-// 플레이어가 있는 방향으로 10발의 탄을 퍼트림 * 2회
+// 플레이어가 있는 방향으로 10발의 탄을 퍼트림
 void BossController::Attack_DiffusedShell()
 {
 	Vector2 bossPos = tr->GetWorldPosition();
@@ -119,47 +145,41 @@ void BossController::Attack_DiffusedShell()
 	Vector2 baseDir = (playerPos - bossPos).Normalized();
 	const float angleStep = spreadAngle / (attack2_bulletCount - 1);
 
-	for (int repeat = 0; repeat < 2; ++repeat)
+	for (int i = 0; i < attack2_bulletCount; ++i)
 	{
-		for (int i = 0; i < attack2_bulletCount; ++i)
-		{
-			float angleOffset = -spreadAngle / 2 + i * angleStep;
-			float angleRad = angleOffset * 3.14159265f / 180.0f;
+		float angleOffset = -spreadAngle / 2 + i * angleStep;
+		float angleRad = angleOffset * 3.14159265f / 180.0f;
 
-			// 회전 행렬 방식으로 baseDir 회전
-			float cosA = cosf(angleRad);
-			float sinA = sinf(angleRad);
-			Vector2 rotated = {
-				baseDir.x * cosA - baseDir.y * sinA,
-				baseDir.x * sinA + baseDir.y * cosA
-			};
+		// 회전 행렬 방식으로 baseDir 회전
+		float cosA = cosf(angleRad);
+		float sinA = sinf(angleRad);
+		Vector2 rotated = {
+			baseDir.x * cosA - baseDir.y * sinA,
+			baseDir.x * sinA + baseDir.y * cosA
+		};
 
-			GameObject* bullet = Instantiate<Bullet>(bossPos);
-			BulletController* bc = bullet->GetComponent<BulletController>();
+		GameObject* bullet = Instantiate<Bullet>(bossPos);
+		BulletController* bc = bullet->GetComponent<BulletController>();
 
-			bc->SetDirection(rotated.Normalized());
-			bc->SetSpeed(350);
-		}
+		bc->SetDirection(rotated.Normalized());
+		bc->SetSpeed(350);
 	}
 }
 
 // 3. Attack - 낙하탄
-// 상단에서 가로 일렬로 무작위 탄 10발이 떨어짐 * 2회
+// 상단에서 가로 일렬로 무작위 탄 10발이 떨어짐
 void BossController::Attack_DropShell()
 {
-	for (int repeat = 0; repeat < 2; ++repeat)
+	for (int i = 0; i < attack3_bulletCount; ++i)
 	{
-		for (int i = 0; i < attack3_bulletCount; ++i)
-		{
-			float randX = map_minX + static_cast<float>(rand()) / RAND_MAX * (map_maxX - map_minX);
-			Vector2 spawnPos = { randX, map_maxY };
+		float randX = map_minX + static_cast<float>(rand()) / RAND_MAX * (map_maxX - map_minX);
+		Vector2 spawnPos = { randX, map_maxY };
 
-			GameObject* bullet = Instantiate<Bullet>(spawnPos);
-			BulletController* bc = bullet->GetComponent<BulletController>();
+		GameObject* bullet = Instantiate<Bullet>(spawnPos);
+		BulletController* bc = bullet->GetComponent<BulletController>();
 
-			bc->SetDirection(Vector2::down);
-			bc->SetSpeed(500);
-		}
+		bc->SetDirection(Vector2::down);
+		bc->SetSpeed(500);
 	}
 }
 
