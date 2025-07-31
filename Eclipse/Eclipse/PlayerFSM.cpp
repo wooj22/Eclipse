@@ -28,8 +28,8 @@ void PlayerFSM::Awake()
 	movementFSM = std::make_unique<MovementFSM>();
 	movementFSM->Init(this);
 
-	actionFSM = std::make_unique<ActionFSM>();
-	actionFSM->Init(this);
+	// actionFSM = std::make_unique<ActionFSM>();
+	// actionFSM->Init(this);
 }
 
 void PlayerFSM::Start()
@@ -42,7 +42,7 @@ void PlayerFSM::Update()
 	InputCheak(); // input 키값 확인
 
 	movementFSM->Update();
-	actionFSM->Update();
+	// actionFSM->Update();
 
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
 
@@ -56,15 +56,32 @@ void PlayerFSM::Update()
 
 
 	// [ FlipX Setting - 실제 이동 방향 기준 ]
-	if (abs(rigidbody->velocity.x) > 0.01f)  // 정지 상태가 아닐 때만 방향 반영
+	if (!isBulletFliping)
 	{
-		spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
-		lastFlipX = spriteRenderer->flipX;
+		if (abs(rigidbody->velocity.x) > 0.01f)   // 정지 상태가 아닐 때만 방향 반영
+		{
+			spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
+			lastFlipX = spriteRenderer->flipX;
+		}
+		else
+		{
+			spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
+		}
 	}
 	else
 	{
-		spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
+		spriteRenderer->flipX = isBulletFlipX;
 	}
+
+
+	// [ FSM 상태 ] 
+	//MovementStateBase* currentState = playerFSM->GetMovementFSM()->GetCurrentState();
+	//if (currentState)
+	//{
+	//	std::string name = typeid(*currentState).name();  // 상태 이름 확인
+	//	OutputDebugStringA(("현재 상태: " + name + "\n").c_str());
+	//}
+
 
 	// [ animation ]
 	// animatorController->SetFloat("Dash", dashSpeed);

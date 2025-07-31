@@ -62,7 +62,8 @@ public:
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;
-		rigidbody->gravityScale = 80;
+		rigidbody->gravityScale = 100;
+		rigidbody->mass = 1.3f;
 	}
 
 	void Update() override
