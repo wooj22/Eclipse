@@ -55,9 +55,9 @@ void Woo_Scene::Awake()
 	// camera tartget
 	Camera* camera = cam->GetComponent<Camera>();
 	camera->SetTarget(player->transform);
-	camera->SetTargetTraceSpeed(200.0f);
+	camera->SetTargetTraceSpeed(250.0f);
 	camera->SetTargetTraceLimitX(30.0f);
-	camera->SetTargetTraceLimitY(100.0f);
+	camera->SetTargetTraceLimitY(50.0f);
 
 	// camera map condition
 	Rect mapRect;

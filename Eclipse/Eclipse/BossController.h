@@ -50,7 +50,7 @@ private:
 	const float map_maxX = 1000;
 	
 	// start dealy
-	float bossStartTime = 5.0f;
+	float bossStartTime = 7.0f;
 	float bossStartDeltaTime;
 
 	// player 

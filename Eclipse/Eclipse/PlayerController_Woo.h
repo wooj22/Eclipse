@@ -13,7 +13,7 @@ class PlayerController_Woo : public Script
 {
 private:
 	// stat
-	float speed = 300;
+	float speed = 400;
 	float jumpForce = 3000.0f;
 
 	// control
