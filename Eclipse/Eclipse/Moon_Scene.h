@@ -16,13 +16,20 @@ private:
 	GameObject* ground;
 	GameObject* wall_r;
 	GameObject* wall_l;
+	GameObject* platform1;
+	GameObject* platform2;
 
 	Player* player;
+	GameObject* playerAttack;
 
 	// component 
 	BoxCollider* ground_col;
 	BoxCollider* wall_r_col;
 	BoxCollider* wall_l_col;
+	BoxCollider* platform1_col;
+	BoxCollider* platform2_col;
+	BoxCollider* playerAttack_col;
+
 
 public:
 	Moon_Scene() = default;

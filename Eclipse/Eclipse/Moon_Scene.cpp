@@ -8,7 +8,7 @@ void Moon_Scene::Awake()
 	// [ camera ]
 	cam = CreateObject<GameObject>();
 	cam->AddComponent<Transform>();
-	cam->AddComponent<Camera>(1920, 1080);
+	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
 
 	// [ BackGround ]
 	auto backGround = CreateObject<GameObject>();
@@ -27,6 +27,22 @@ void Moon_Scene::Awake()
 	// [ player ]
 	player = CreateObject<Player>();
 
+	// [ playerAttack ] Attack 콜라이더 영역 
+	playerAttack = CreateObject<GameObject>();
+	playerAttack->name = "playerAttack";
+
+	auto playerAttack_tr = playerAttack->AddComponent<Transform>();
+	playerAttack_tr->SetPosition(0.0f, 10.0f);
+	playerAttack_tr->SetParent(player->transform);
+	
+	auto playerAttack_sr = playerAttack->AddComponent<SpriteRenderer>();
+	playerAttack_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Attack.png"), "Attack");
+	
+	playerAttack_col = playerAttack->AddComponent<BoxCollider>();
+	playerAttack_col->size = { 10.0f, 10.0f };
+	playerAttack_col->isTrigger = true;
+
+
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
@@ -39,9 +55,9 @@ void Moon_Scene::Awake()
 	ground_col = ground->AddComponent<BoxCollider>();
 	ground_col->size = { 1110.0f, 30.0f };
 
-	auto ground_rb = ground->AddComponent<Rigidbody>();
-	ground_rb->useGravity = false;
-	ground_rb->isKinematic = true;
+	//auto ground_rb = ground->AddComponent<Rigidbody>();
+	//ground_rb->useGravity = false;
+	//ground_rb->isKinematic = true;
 
 
 	// [ wall_r ]
@@ -55,9 +71,9 @@ void Moon_Scene::Awake()
 	wall_r_col = wall_r->AddComponent<BoxCollider>();
 	wall_r_col->size = { 30.0f, 750.0f };
 
-	auto wall_r_rb = wall_r->AddComponent<Rigidbody>();
-	wall_r_rb->useGravity = false;
-	wall_r_rb->isKinematic = true;
+	//auto wall_r_rb = wall_r->AddComponent<Rigidbody>();
+	//wall_r_rb->useGravity = false;
+	//wall_r_rb->isKinematic = true;
 
 
 	// [ wall_l ]
@@ -71,9 +87,44 @@ void Moon_Scene::Awake()
 	wall_l_col = wall_l->AddComponent<BoxCollider>();
 	wall_l_col->size = { 30.0f, 750.0f };
 
-	auto wall_l_rb = wall_l->AddComponent<Rigidbody>();
-	wall_l_rb->useGravity = false;
-	wall_l_rb->isKinematic = true;
+	//auto wall_l_rb = wall_l->AddComponent<Rigidbody>();
+	//wall_l_rb->useGravity = false;
+	//wall_l_rb->isKinematic = true;
+
+
+	// [ Platform1 ]
+	platform1 = CreateObject<GameObject>();
+	platform1->name = "Ground";
+	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -200.0f);
+
+	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
+	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+
+	platform1_col = platform1->AddComponent<BoxCollider>();
+	platform1_col->size = { 200.0f, 30.0f };
+	
+
+	// [ Platform2 ]
+	platform2 = CreateObject<GameObject>();
+	platform2->name = "Ground";
+	platform2->AddComponent<Transform>()->SetPosition(200.0f, 0.0f);
+
+	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
+	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+
+	platform2_col = platform2->AddComponent<BoxCollider>();
+	platform2_col->size = { 200.0f, 30.0f };
+	
+	// boundary condition
+	Rect mapRect;
+	mapRect.size = { 2560, 1920 };
+
+	// camera target
+	camCompo->SetTarget(player->transform);
+	camCompo->SetTargetTraceSpeed(200.0f);
+	camCompo->SetTargetTraceLimitX(30.0f);
+	camCompo->SetTargetTraceLimitY(100.0f);
+	camCompo->SetMapCondition(mapRect);
 }
 
 void Moon_Scene::Start()
@@ -122,6 +173,9 @@ void Moon_Scene::Update()
 	ground_col->DebugColliderDraw();
 	wall_r_col->DebugColliderDraw();
 	wall_l_col->DebugColliderDraw();
+	platform1_col->DebugColliderDraw();
+	platform2_col->DebugColliderDraw();
+	playerAttack_col->DebugColliderDraw();
 }
 
 void Moon_Scene::Exit()
