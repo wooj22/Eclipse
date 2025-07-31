@@ -89,8 +89,7 @@ void BulletTime_State::Exit(MovementFSM* fsm)
 {
     OutputDebugStringA("[BulletTime_State] (( 종료 - 불릿 타임 끝 )) \n");
 
+    // 복구 
     fsm->GetPlayerFSM()->SetisBulletFliping(false);
-    // fsm->GetPlayerFSM()->SetLastFlipX(false);
-
-    Time::SetTimeScale(1.0f); // 혹시 모르니 다시 복구
+    Time::SetTimeScale(1.0f); 
 }

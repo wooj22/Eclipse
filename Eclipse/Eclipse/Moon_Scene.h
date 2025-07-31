@@ -20,6 +20,7 @@ private:
 	GameObject* platform2;
 
 	Player* player;
+	GameObject* playerAttack;
 
 	// component 
 	BoxCollider* ground_col;
@@ -27,6 +28,7 @@ private:
 	BoxCollider* wall_l_col;
 	BoxCollider* platform1_col;
 	BoxCollider* platform2_col;
+	BoxCollider* playerAttack_col;
 
 
 public:
