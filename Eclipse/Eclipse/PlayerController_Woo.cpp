@@ -38,7 +38,7 @@ void PlayerController_Woo::Update()
 
 	// filp
 	sr->flipX = Input::GetAxisHorizontal() >= 0 ? false : true;
-	sr->flipY = Input::GetAxisVertical() >= 0 ? false : true;
+	//sr->flipY = Input::GetAxisVertical() >= 0 ? false : true;
 	
 	// mouse button click test debug
 	if (Input::GetMouseButtonDown(0))

@@ -39,7 +39,7 @@ public:
 		collider->isFlatformerCharacter = true;
 		collider->size = { 50.0f, 80.0f };
 
-		spriteRenderer->SetColor(0.5,1,0.5);
+		spriteRenderer->SetColor(1, 0.5, 1);
 	}
 
 	void Update() override
