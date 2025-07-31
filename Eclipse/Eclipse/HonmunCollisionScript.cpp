@@ -4,33 +4,64 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include <random>
 #include <algorithm>
+#include <cmath>
 
 void HonmunCollisionScript::Awake()
 {
-	// HonmunÀº GameObjectÀÌ¹Ç·Î Á÷Á¢ Ä³½ºÆÃ
+	// Honmun\uc774 GameObject\uc774\ubbc0\ub85c \uc548\uc804 \uce90\uc2a4\ud305
 	honmun = dynamic_cast<Honmun*>(gameObject);
 
-	// ³ª¸ÓÁö´Â ÄÄÆ÷³ÍÆ®·Î °¡Á®¿À±â
+	// \ud544\uc694\ud55c \ucef4\ud3ec\ub10c\ud2b8\ub4e4 \ucc38\uc870 \uac00\uc838\uc624\uae30
 	transform = gameObject->GetComponent<Transform>();
 	rigidbody = gameObject->GetComponent<Rigidbody>();
 	spriteRenderer = gameObject->GetComponent<SpriteRenderer>();
+	
+	// \uc18d\ub3c4 \ucd08\uae30\ud654
+	currentVelocity.x = 0.0f;
+	currentVelocity.y = 0.0f;
 }
 
 void HonmunCollisionScript::Start()
 {
-	// ÃÊ±â ¼³Á¤
+	// ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½
 	started = true;
+	
+	// ëª©í‘œ í¬ê¸°ê°€ ì„¤ì •ë˜ì–´ ìˆìœ¼ë©´ ì ìš©
+	if (targetSize > 0.0f)
+	{
+		OutputDebugStringA("Applying target size in Start()\n");
+		UpdateSize(targetSize);
+		targetSize = -1.0f; // ì ìš© ì™„ë£Œ í‘œì‹œ
+	}
 }
 
 void HonmunCollisionScript::Update()
 {
-	// Äğ´Ù¿î Ã³¸®
+	// \ucfe8\ub2e4\uc6b4 \ucc98\ub9ac
 	if (reactionCooldown > 0)
 	{
 		reactionCooldown -= Time::GetDeltaTime();
 	}
 
-	// ³«ÇÏ ¼Óµµ Àû¿ë (Áß·Â ¿ÜÀÇ Ãß°¡ ¼Óµµ)
+	// \ucda9\ub3cc \ud6c4 \uad00\uc131 \ud6a8\uacfc \uc801\uc6a9
+	if (currentVelocity.Magnitude() > minVelocity)
+	{
+		// \ud604\uc7ac \uc704\uce58\uc5d0 \uc18d\ub3c4 \uc801\uc6a9
+		Vector2 currentPos = transform->GetPosition();
+		Vector2 newPos = currentPos + currentVelocity * Time::GetDeltaTime();
+		transform->SetPosition(newPos.x, newPos.y);
+		
+		// \ub9c8\ucc30\ub825\uc73c\ub85c \uc18d\ub3c4 \uac10\uc18c
+		currentVelocity = currentVelocity * friction;
+	}
+	else
+	{
+		// \ucd5c\uc18c \uc18d\ub3c4 \uc774\ud558\uc5d0\uc11c \uc815\uc9c0
+		currentVelocity.x = 0.0f;
+		currentVelocity.y = 0.0f;
+	}
+
+	// \uae30\uc874 \ub099\ud558 \uc18d\ub3c4 \ucc98\ub9ac (\ube44\ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc\uc5d0\uc11c\ub9cc)
 	if (rigidbody && !rigidbody->isKinematic)
 	{
 		rigidbody->velocity.y -= fallingSpeed * 0.1f;
@@ -39,53 +70,88 @@ void HonmunCollisionScript::Update()
 
 void HonmunCollisionScript::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 {
-	// Äğ´Ù¿î ÁßÀÌ¸é ¹«½Ã
-	if (reactionCooldown > 0 || isProcessingReaction) return;
+	OutputDebugStringA("OnCollisionEnter called!\n");
+	
+	// \ucfe8\ub2e4\uc6b4 \uc911\uc774\uac70\ub098 \uc774\ubbf8 \ube44\ud65c\uc131\ud654\ub41c \uac1d\uccb4\ub294 \ucc98\ub9ac \uc548\ud568
+	if (reactionCooldown > 0 || isProcessingReaction || !gameObject->IsActive()) 
+	{
+		OutputDebugStringA("Collision blocked by cooldown, processing, or inactive object!\n");
+		return;
+	}
 
 	HonmunCollisionScript* otherScript = GetHonmunScript(other);
-	if (!otherScript) return;
+	if (!otherScript) 
+	{
+		OutputDebugStringA("No HonmunCollisionScript found on other object!\n");
+		return;
+	}
 
-	// ¿¬¼â¹İÀÀ ÇÃ·¡±× ¼³Á¤
+	// \ucda9\ub3cc \uac1d\uccb4 \ud0c0\uc785 \ucd9c\ub825
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Collision: My type = %d, Other type = %d\n", (int)honmunType, (int)otherScript->honmunType);
+	OutputDebugStringA(debugMsg);
+
+	// \ubc18\uc751 \ucc98\ub9ac \ud50c\ub798\uadf8 \uc124\uc815
 	isProcessingReaction = true;
 	otherScript->isProcessingReaction = true;
 
-	// Å¸ÀÔº° ¹İÀÀ Ã³¸®
+	// ì²´ë ¥ 0ì¸ ê°ì²´ëŠ” ì–´ë–¤ ì¶©ëŒì´ë“  ì¦‰ì‹œ íŒŒê´´
+	if (health <= 0 || otherScript->health <= 0)
+	{
+		OutputDebugStringA("Health <= 0 object detected, destroying!\n");
+		if (health <= 0) DestroyThis();
+		if (otherScript->health <= 0) otherScript->DestroyThis();
+		return;
+	}
+
+	// \ud0c0\uc785\ubcc4 \ucda9\ub3bc \ucc98\ub9ac
 	if (honmunType == otherScript->honmunType)
 	{
-		// °°Àº Å¸ÀÔ³¢¸® Ãæµ¹
+		// \uac19\uc740 \ud0c0\uc785\ub07c\ub9ac \ucda9\ub3cc
+		OutputDebugStringA("Same type collision detected!\n");
 		switch (honmunType)
 		{
-		case HonmunType::A: // Ignis - ÇÕÃ¼
+		case HonmunType::A: // Ignis - \ud569\uccb4
+			OutputDebugStringA("A + A collision!\n");
 			HandleIgnisReaction(otherScript, contact);
 			break;
-		case HonmunType::B: // Umbra - ºĞ¿­
+		case HonmunType::B: // Umbra - \uccb4\ub825 \uac10\uc18c
+			OutputDebugStringA("B + B collision calling HandleUmbraReaction!\n");
 			HandleUmbraReaction(otherScript, contact);
 			break;
-		case HonmunType::C: // Darkness - ÈíÀÎ
+		case HonmunType::C: // Darkness - \uccb4\ub825 \uac10\uc18c
+			OutputDebugStringA("C + C collision!\n");
 			HandleDarknessReaction(otherScript, contact);
 			break;
-		case HonmunType::D: // Luna - Áõ¹ß
+		case HonmunType::D: // Luna - \uccb4\ub825 \uac10\uc18c
+			OutputDebugStringA("D + D collision!\n");
 			HandleLunaReaction(otherScript, contact);
 			break;
 		}
 	}
 	else
 	{
-		// ´Ù¸¥ Å¸ÀÔ³¢¸® Ãæµ¹
+		// ï¿½Ù¸ï¿½ Å¸ï¿½Ô³ï¿½ï¿½ï¿½ ï¿½æµ¹
 		HandleMixedReaction(otherScript, contact);
 	}
 
-	// Äğ´Ù¿î ¼³Á¤
-	reactionCooldown = 0.5f;
+	// \ucfe8\ub2e4\uc6b4 \uc124\uc815 - B \ud0c0\uc785\uc740 \ub354 \uc9e7\uc740 \ucfe8\ub2e4\uc6b4
+	float cooldownTime = (honmunType == HonmunType::B) ? 0.3f : 1.0f;
+	reactionCooldown = cooldownTime;
 	isProcessingReaction = false;
-	if (otherScript) otherScript->isProcessingReaction = false;
+	if (otherScript && otherScript->gameObject && otherScript->gameObject->IsActive()) 
+	{
+		float otherCooldown = (otherScript->honmunType == HonmunType::B) ? 0.3f : 1.0f;
+		otherScript->reactionCooldown = otherCooldown;
+		otherScript->isProcessingReaction = false;
+	}
 }
 
 void HonmunCollisionScript::SetHonmunType(HonmunType type)
 {
 	honmunType = type;
 
-	// Å¸ÀÔº° ±âº» ¼Ó¼º ¼³Á¤
+	// \ud0c0\uc785\ubcc4 \uae30\ubcf8 \uc18d\uc131 \uc124\uc815 - \ubaa8\ub4e0 \ud0c0\uc785 \uccb4\ub825 3\uc73c\ub85c \ud1b5\uc77c
 	switch (type)
 	{
 	case HonmunType::A: // Ignis
@@ -99,13 +165,13 @@ void HonmunCollisionScript::SetHonmunType(HonmunType type)
 		fallingSpeed = 1.0f;
 		break;
 	case HonmunType::C: // Darkness
-		health = 1;
+		health = 3;
 		currentSize = 10.0f;
-		fallingSpeed = 2.0f;
+		fallingSpeed = 1.0f;
 		break;
 	case HonmunType::D: // Luna
-		health = 1;
-		currentSize = 5.0f;
+		health = 3;
+		currentSize = 10.0f;
 		fallingSpeed = 1.0f;
 		break;
 	}
@@ -113,93 +179,209 @@ void HonmunCollisionScript::SetHonmunType(HonmunType type)
 
 void HonmunCollisionScript::HandleIgnisReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
 {
-	// A + A = ÇÕÃ¼ (Å©±â 10% Áõ°¡, ³«ÇÏ¼Óµµ 20% °¨¼Ò)
-	MergeWithOther(otherScript);
+	// A + A = \uccb4\ub825 \uac10\uc18c + \ud569\uccb4 \uc2dc\uc2a4\ud15c (3 â†’ 2 â†’ 1 â†’ 0 \uc644\uc804 \ud30c\uad34)
+	
+	// \uccb4\ub825 \uac10\uc18c
+	health--;
+	otherScript->health--;
+	
+	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34
+	if (health <= 0 || otherScript->health <= 0)
+	{
+		OutputDebugStringA("A type health reached 0, destroying objects!\n");
+		if (health <= 0) DestroyThis();
+		if (otherScript->health <= 0) otherScript->DestroyThis();
+	}
+	else
+	{
+		// \uccb4\ub825\uc774 \ub0a8\uc544\uc788\uc73c\uba74 \ud569\uccb4 \uc2dc\uc2a4\ud15c \uc791\ub3d9
+		OutputDebugStringA("Both A objects still have health, merging with bounce!\n");
+		
+		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
+		BounceAwayKinematic(otherScript, contact);
+		
+		// \ud569\uccb4: \ud55c \uac1c\ub294 \uc0ac\ub77c\uc9c0\uace0 \ub2e4\ub978 \ud55c \uac1c\ub294 \ucee4\uc9c4\ub2e4
+		MergeWithOther(otherScript);
+	}
 }
 
 void HonmunCollisionScript::HandleUmbraReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
 {
-	// B + B = ºĞ¿­ (°¢°¢ 2°³·Î ºĞ¸®, Å©±â 30% °¨¼Ò, ³«ÇÏ¼Óµµ 20% Áõ°¡)
-	SplitIntoTwo();
-	otherScript->SplitIntoTwo();
+	// B + B = \uccb4\ub825 \uac10\uc18c + \ubd84\ud574 \uc2dc\uc2a4\ud15c (3 â†’ 2 â†’ 1 â†’ 0 \uc644\uc804 \ud30c\uad34)
+	
+	// \ub514\ubc84\uadf8 \ucd9c\ub825
+	OutputDebugStringA("B + B collision detected!\n");
+	
+	// \ubd84\ud574\ub41c \uc870\uac01\ub4e4 \ucc98\ub9ac: \ucda9\ub3cc \uc2dc \uc989\uc2dc \ud30c\uad34
+	if (isSplitFragment || otherScript->isSplitFragment)
+	{
+		OutputDebugStringA("Split fragment collision, destroying immediately!\n");
+		if (isSplitFragment) DestroyThis();
+		if (otherScript->isSplitFragment) otherScript->DestroyThis();
+		return;
+	}
+	
+	// \uc6d0\ub798 B \uac1d\uccb4\ub4e4\ub9cc \ubd84\ud574 \uc2dc\uc2a4\ud15c \uc218\ud589
+	// \uccb4\ub825 \uac10\uc18c
+	health--;
+	otherScript->health--;
+	
+	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34
+	if (health <= 0 || otherScript->health <= 0)
+	{
+		OutputDebugStringA("B type health reached 0, destroying objects!\n");
+		if (health <= 0) DestroyThis();
+		if (otherScript->health <= 0) otherScript->DestroyThis();
+	}
+	else
+	{
+		// \uccb4\ub825\uc774 \ub0a8\uc544\uc788\uc73c\uba74 \ubd84\ud574 \uc2dc\uc2a4\ud15c \uc791\ub3d9
+		OutputDebugStringA("Both original B objects still have health, splitting with bounce!\n");
+		
+		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
+		BounceAwayKinematic(otherScript, contact);
+		
+		// \ubd84\ud574: \ucd1d 4\uac1c \uc0dd\uc131 (\uae30\uc874 2\uac1c\ub294 \ud30c\uad34\ub418\uace0 \uc0c8\ub85c 4\uac1c \uc0dd\uc131)
+		CreateSplitObjectsWithCollision(4, otherScript, contact);
+		
+		otherScript->DestroyThis();
+		DestroyThis();
+	}
 }
 
 void HonmunCollisionScript::HandleDarknessReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
 {
-	// C + C = ÈíÀÎ (Ä«¸Ş¶ó ¹üÀ§ ³» ÀûµéÀ» Ãæµ¹ÁöÁ¡À¸·Î ²ø¾î´ç±â°í ÆÄ±«)
-	Vector2 collisionPoint = contact.point;
-	AbsorbNearbyEnemies(collisionPoint);
-
-	// ÀÚ½Åµéµµ ÆÄ±«
-	DestroyThis();
-	otherScript->DestroyThis();
+	// C + C = \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c (3 â†’ 2 â†’ 1 â†’ 0 \uc644\uc804 \ud30c\uad34)
+	
+	// \ub514\ubc84\uadf8 \ucd9c\ub825
+	OutputDebugStringA("C + C collision detected!\n");
+	
+	// \uccb4\ub825 \uac10\uc18c
+	health--;
+	otherScript->health--;
+	
+	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34
+	if (health <= 0 || otherScript->health <= 0)
+	{
+		OutputDebugStringA("C type health reached 0, destroying objects!\n");
+		if (health <= 0) DestroyThis();
+		if (otherScript->health <= 0) otherScript->DestroyThis();
+	}
+	else
+	{
+		// \uccb4\ub825\uc774 \ub0a8\uc544\uc788\uc73c\uba74 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
+		OutputDebugStringA("Both C objects still have health, strong bounce!\n");
+		
+		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc
+		BounceAwayKinematic(otherScript, contact);
+	}
 }
 
 void HonmunCollisionScript::HandleLunaReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
 {
-	// D + any = Áõ¹ß (¸ğµç Ãæµ¹¿¡¼­ ÆÄ±«)
-	DestroyThis();
-	if (otherScript->honmunType == HonmunType::D)
+	// D + D = \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c (3 â†’ 2 â†’ 1 â†’ 0 \uc644\uc804 \ud30c\uad34)
+	
+	// \ub514\ubc84\uadf8 \ucd9c\ub825
+	OutputDebugStringA("D + D collision detected!\n");
+	
+	// \uccb4\ub825 \uac10\uc18c
+	health--;
+	otherScript->health--;
+	
+	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34
+	if (health <= 0 || otherScript->health <= 0)
 	{
-		otherScript->DestroyThis();
+		OutputDebugStringA("D type health reached 0, destroying objects!\n");
+		if (health <= 0) DestroyThis();
+		if (otherScript->health <= 0) otherScript->DestroyThis();
+	}
+	else
+	{
+		// \uccb4\ub825\uc774 \ub0a8\uc544\uc788\uc73c\uba74 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
+		OutputDebugStringA("Both D objects still have health, strong bounce!\n");
+		
+		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc
+		BounceAwayKinematic(otherScript, contact);
 	}
 }
 
 void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
 {
-	// D°¡ Æ÷ÇÔµÈ Ãæµ¹Àº Ç×»ó D°¡ ÆÄ±«µÊ
-	if (honmunType == HonmunType::D)
-	{
-		DestroyThis();
-		return;
-	}
-	if (otherScript->honmunType == HonmunType::D)
-	{
-		otherScript->DestroyThis();
-		return;
-	}
-
-	// A&B ¶Ç´Â B&A - Æ¨±è
+	// \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: A\uc640 B\ub9cc \uc0ac\uc6a9
+	// A&B \ub610\ub294 B&A - \ud295\uae40 (\ud0a4\ub124\ub9c8\ud2f1\uc73c\ub85c \ubcc0\uacbd) + A ì²´ë ¥ ê°ì†Œ
 	if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::B) ||
 		(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::A))
 	{
-		BounceAway(otherScript, contact);
+		// Aíƒ€ì… ì²´ë ¥ ê°ì†Œ
+		if (honmunType == HonmunType::A) 
+		{
+			health--;
+			if (health <= 0) 
+			{
+				DestroyThis();
+				return;
+			}
+		}
+		if (otherScript->honmunType == HonmunType::A) 
+		{
+			otherScript->health--;
+			if (otherScript->health <= 0) 
+			{
+				otherScript->DestroyThis();
+				return;
+			}
+		}
+		
+		BounceAwayKinematic(otherScript, contact);
 	}
-	// A&C ¶Ç´Â C&A - ¹Ğ¸²
-	else if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::C) ||
-		(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::A))
-	{
-		PushSideways(otherScript);
-	}
-	// B&C ¶Ç´Â C&B - °üÅë
-	else if ((honmunType == HonmunType::B && otherScript->honmunType == HonmunType::C) ||
-		(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::B))
-	{
-		PassThrough(otherScript);
-	}
+
+	// \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: C, D \uad00\ub828 \ucda9\ub3cc \ucf54\ub4dc \uc8fc\uc11d\ucc98\ub9ac
+	// // Dï¿½ï¿½ ï¿½ï¿½ï¿½Ôµï¿½ ï¿½æµ¹ï¿½ï¿½ ï¿½×»ï¿½ Dï¿½ï¿½ ï¿½Ä±ï¿½ï¿½ï¿½
+	// if (honmunType == HonmunType::D)
+	// {
+	// 	DestroyThis();
+	// 	return;
+	// }
+	// if (otherScript->honmunType == HonmunType::D)
+	// {
+	// 	otherScript->DestroyThis();
+	// 	return;
+	// }
+	// // A&C ï¿½Ç´ï¿½ C&A - ï¿½Ğ¸ï¿½
+	// else if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::C) ||
+	// 	(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::A))
+	// {
+	// 	PushSideways(otherScript);
+	// }
+	// // B&C ï¿½Ç´ï¿½ C&B - ï¿½ï¿½ï¿½ï¿½
+	// else if ((honmunType == HonmunType::B && otherScript->honmunType == HonmunType::C) ||
+	// 	(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::B))
+	// {
+	// 	PassThrough(otherScript);
+	// }
 }
 
 void HonmunCollisionScript::MergeWithOther(HonmunCollisionScript* otherScript)
 {
-	// Å©±â 10% Áõ°¡
+	// Å©ï¿½ï¿½ 10% ï¿½ï¿½ï¿½ï¿½
 	UpdateSize(currentSize * 1.1f);
 
-	// ³«ÇÏ¼Óµµ 20% °¨¼Ò
+	// ï¿½ï¿½ï¿½Ï¼Óµï¿½ 20% ï¿½ï¿½ï¿½ï¿½
 	UpdateFallingSpeed(0.8f);
 
-	// »ó´ë¹æ Á¦°Å
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	otherScript->DestroyThis();
 }
 
 void HonmunCollisionScript::SplitIntoTwo()
 {
-	// Å©±â 30% °¨¼Ò
+	// Å©ï¿½ï¿½ 30% ï¿½ï¿½ï¿½ï¿½
 	UpdateSize(currentSize * 0.7f);
 
-	// ³«ÇÏ¼Óµµ 20% Áõ°¡
+	// ï¿½ï¿½ï¿½Ï¼Óµï¿½ 20% ï¿½ï¿½ï¿½ï¿½
 	UpdateFallingSpeed(1.2f);
 
-	// »õ·Î¿î È¥¹® »ı¼º
+	// ï¿½ï¿½ï¿½Î¿ï¿½ È¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	Vector2 currentPos = transform->GetPosition();
 	Vector2 offset = GetRandomDirection() * 2.0f;
 
@@ -208,29 +390,230 @@ void HonmunCollisionScript::SplitIntoTwo()
 	newScript->SetHonmunType(honmunType);
 	newScript->UpdateSize(currentSize);
 	newScript->UpdateFallingSpeed(fallingSpeed);
+	newScript->SetHealth(1); // ì—ë„ˆì§€ 1ë¡œ ì„¤ì •
+}
+
+void HonmunCollisionScript::CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript, const ContactInfo& contact)
+{
+	Vector2 myPos = transform->GetPosition();
+	Vector2 otherPos = otherScript->transform->GetPosition();
+	
+	// ì¶©ëŒ ë°©í–¥ ê³„ì‚°
+	Vector2 collisionDirection = (myPos - otherPos).Normalized();
+	
+	OutputDebugStringA("CreateSplitObjectsWithCollision started!\n");
+
+	// ê°ê° 2ê°œì”© ìª¼ê°œì§€ëŠ” íš¨ê³¼
+	for (int i = 0; i < count; i++)
+	{
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		static std::uniform_real_distribution<float> distanceDis(200.0f, 300.0f); // \uac70\ub9ac \ub300\ud3ed \uc99d\uac00
+		static std::uniform_real_distribution<float> spreadDis(60.0f, 120.0f); // \ud37c\uc9d0 \uac01\ub3c4 \ub300\ud3ed \uc99d\uac00
+		
+		Vector2 baseDirection;
+		float spreadAngle = spreadDis(gen) * (3.14159f / 180.0f); // 30-60ë„ ëœë¤
+		
+		if (i < 2) 
+		{
+			// ì²« ë²ˆì§¸ ê°ì²´ì˜ ì¡°ê°ë“¤ - ë‚´ ë°©í–¥ìœ¼ë¡œ
+			float side = (i == 0) ? 1.0f : -1.0f; // ì¢Œìš°ë¡œ ë¶„ì‚°
+			baseDirection.x = collisionDirection.x * cos(spreadAngle * side) - collisionDirection.y * sin(spreadAngle * side);
+			baseDirection.y = collisionDirection.x * sin(spreadAngle * side) + collisionDirection.y * cos(spreadAngle * side);
+		}
+		else 
+		{
+			// ë‘ ë²ˆì§¸ ê°ì²´ì˜ ì¡°ê°ë“¤ - ìƒëŒ€ë°© ë°©í–¥ìœ¼ë¡œ
+			Vector2 oppositeDirection = -collisionDirection;
+			float side = (i == 2) ? 1.0f : -1.0f; // ì¢Œìš°ë¡œ ë¶„ì‚°
+			baseDirection.x = oppositeDirection.x * cos(spreadAngle * side) - oppositeDirection.y * sin(spreadAngle * side);
+			baseDirection.y = oppositeDirection.x * sin(spreadAngle * side) + oppositeDirection.y * cos(spreadAngle * side);
+		}
+		
+		float distance = distanceDis(gen);
+		Vector2 direction = baseDirection.Normalized();
+		
+		// ë°©í–¥ë²¡í„°ë§Œ ê³„ì‚° (ê±°ë¦¬ëŠ” ì†ë„ë¡œ ì‚¬ìš©)
+		auto* scene = SceneManager::Get().GetCurrentScene();
+		if (!scene) 
+		{
+			OutputDebugStringA("Scene is null!\n");
+			continue;
+		}
+
+		OutputDebugStringA("Creating new Honmun object...\n");
+		auto* newHonmun = scene->CreateObject<Honmun>();
+		if (!newHonmun)
+		{
+			OutputDebugStringA("Failed to create Honmun!\n");
+			continue;
+		}
+		
+		newHonmun->SetHonmunType(honmunType);
+		// \uc801\uc808\ud55c \uc704\uce58\uc5d0\uc11c \uc2dc\uc791 - \ub354 \uba40\ub9ac \ub5a8\uc5b4\uc9c4 \uc704\uce58
+		Vector2 startPos = (i < 2) ? myPos : otherPos;
+		float largeOffset = 80.0f;  // \uc624\ud504\uc14b \ub300\ud3ed \uc99d\uac00
+		newHonmun->SetPosition(startPos.x + direction.x * largeOffset, startPos.y + direction.y * largeOffset);
+		
+		// \uc0c8\ub85c\uc6b4 \uac1d\uccb4\uc5d0 \uc18d\ub3c0 \ubd80\uc5ec \ubc0f \uc124\uc815
+		auto* newScript = newHonmun->GetComponent<HonmunCollisionScript>();
+		auto* newRigidbody = newHonmun->GetComponent<Rigidbody>();
+		if (newScript && newRigidbody)
+		{
+			// SetHonmunType ì´í›„ì— í¬ê¸°ë¥¼ ë‹¤ì‹œ ì„¤ì •í•´ì•¼ í•¨
+			float smallSize = currentSize * 0.7f; // ì›ë˜ í¬ê¸°ì˜ 70%
+			char debugMsg[200];
+			sprintf_s(debugMsg, "Creating split object %d: originalSize=%.2f, smallSize=%.2f\n", i, currentSize, smallSize);
+			OutputDebugStringA(debugMsg);
+			
+			// í¬ê¸°ë¥¼ ì €ì¥í•˜ê³  ë‚˜ì¤‘ì— ì ìš©í•˜ë„ë¡ ì„¤ì •
+			newScript->currentSize = smallSize;
+			newScript->targetSize = smallSize; // ëª©í‘œ í¬ê¸° ì„¤ì •
+			newScript->UpdateFallingSpeed(fallingSpeed * 1.2f);
+			// \ubd84\ud574\ub41c \uc870\uac01\ub4e4\uc740 \uccb4\ub825 1\ub85c \uc124\uc815 (\ucda9\ub3cc \uc2dc \uc989\uc2dc \ud30c\uad34)
+			newScript->SetHealth(1);
+			newScript->isSplitFragment = true;  // \ubd84\ud574\ub41c \uc870\uac01\uc784\uc744 \ud45c\uc2dc
+			
+			// í‚¤ë„¤ë§ˆí‹± ëª¨ë“œë¡œ ë¶€ë“œëŸ¬ìš´ ì›€ì§ì„
+			newRigidbody->isKinematic = true;
+			newRigidbody->useGravity = false;
+			
+			// \ubd84\ud574 \uc2dc \ub9e4\uc6b0 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
+			Vector2 splitVelocity;
+			splitVelocity.x = direction.x * distance * 7.0f;  // \ubc00\ub824\ub0a8 \uac70\ub9ac \ub300\ud3ed \uc99d\uac00
+			splitVelocity.y = direction.y * distance * 7.0f;
+			newScript->currentVelocity = splitVelocity;
+			
+			// \ub354 \uba00\ub9ac \ub098\uac00\ub3c4\ub85d \ub9c8\ucc30\ub825 \ub300\ud3ed \uac10\uc18c
+			newScript->friction = 0.97f;  // \ub9c8\ucc30\ub825 \ub354 \uac10\uc18c
+			
+			sprintf_s(debugMsg, "Applied kinematic velocity %d: x=%.2f, y=%.2f\n", i, splitVelocity.x, splitVelocity.y);
+			OutputDebugStringA(debugMsg);
+			
+			// \ubd84\ud574 \uc9c1\ud6c4 \ucda9\ub3cc \ubc29\uc9c0\ub97c \uc704\ud55c \uc9e7\uc740 \ucfe8\ub2e4\uc6b4 (\ubd84\ud574\ub41c \uc870\uac01\ub4e4\ub9cc)
+			newScript->reactionCooldown = 0.5f;  // \ubd84\ud574\ub41c \uc870\uac01\ub4e4\uc740 0.5\ucd08 \uc9e7\uc740 \uba74\uc5ed
+			
+			OutputDebugStringA("Split object created successfully!\n");
+		}
+		else
+		{
+			OutputDebugStringA("Failed to get HonmunCollisionScript from new object!\n");
+		}
+	}
+	
+	OutputDebugStringA("CreateSplitObjectsWithCollision completed!\n");
+}
+
+void HonmunCollisionScript::CreateSplitObjects(int count)
+{
+	Vector2 currentPos = transform->GetPosition();
+	OutputDebugStringA("CreateSplitObjects started!\n");
+
+	for (int i = 0; i < count; i++)
+	{
+		// 4ë°©í–¥ìœ¼ë¡œ ê³ ì • ë¶„ì‚° (ìƒí•˜ì¢Œìš° + ëŒ€ê°ì„ )
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		static std::uniform_real_distribution<float> distanceDis(200.0f, 300.0f); // \uac70\ub9ac \ub300\ud3ed \uc99d\uac00
+		
+		// 4\uac1c \uc870\uac01\uc744 4\ubc29\ud5a5\uc73c\ub85c \ud655\uc2e4\ud788 \ubd84\ub9ac - \ub354 \ub113\uac8c \ud37c\uc9d0
+		float baseAngles[4] = {0.0f, 90.0f, 180.0f, 270.0f}; // ë™, ë¶, ì„œ, ë‚¨
+		float angle = (baseAngles[i] + (gen() % 90 - 45)) * (3.14159f / 180.0f); // Â±45\ub3c4 \ub7a8\ub364 (\ub354 \ub113\uac8c)
+		float distance = distanceDis(gen);  // 100-180 í”½ì…€ ëœë¤ ê±°ë¦¬
+		
+		// ë°©í–¥ë²¡í„°ë§Œ ê³„ì‚° (ê±°ë¦¬ëŠ” ì†ë„ë¡œ ì‚¬ìš©)
+		Vector2 direction;
+		direction.x = cos(angle);
+		direction.y = sin(angle);
+		
+		auto* scene = SceneManager::Get().GetCurrentScene();
+		if (!scene) 
+		{
+			OutputDebugStringA("Scene is null!\n");
+			continue;
+		}
+
+		OutputDebugStringA("Creating new Honmun object...\n");
+		auto* newHonmun = scene->CreateObject<Honmun>();
+		if (!newHonmun)
+		{
+			OutputDebugStringA("Failed to create Honmun!\n");
+			continue;
+		}
+		
+		newHonmun->SetHonmunType(honmunType);
+		// \uc6d0\ub798 \uc704\uce58\uc5d0\uc11c \uc2dc\uc791 - \ub354 \uba40\ub9ac \ub5a8\uc5b4\uc9c4 \ucd08\uae30 \uc624\ud504\uc14b
+		float largeOffset = 80.0f;  // \uc624\ud504\uc14b \ub300\ud3ed \uc99d\uac00
+		newHonmun->SetPosition(currentPos.x + direction.x * largeOffset, currentPos.y + direction.y * largeOffset);
+		
+		// \uc0c8\ub85c\uc6b4 \uac1d\uccb4\uc5d0 \uc18d\ub3c0 \ubd80\uc5ec \ubc0f \uc124\uc815
+		auto* newScript = newHonmun->GetComponent<HonmunCollisionScript>();
+		auto* newRigidbody = newHonmun->GetComponent<Rigidbody>();
+		if (newScript && newRigidbody)
+		{
+			// SetHonmunType ì´í›„ì— í¬ê¸°ë¥¼ ë‹¤ì‹œ ì„¤ì •í•´ì•¼ í•¨
+			float smallSize = currentSize * 0.7f; // ì›ë˜ í¬ê¸°ì˜ 70%
+			char debugMsg[200];
+			sprintf_s(debugMsg, "Creating split object: originalSize=%.2f, smallSize=%.2f\n", currentSize, smallSize);
+			OutputDebugStringA(debugMsg);
+			
+			// í¬ê¸°ë¥¼ ì €ì¥í•˜ê³  ë‚˜ì¤‘ì— ì ìš©í•˜ë„ë¡ ì„¤ì •
+			newScript->currentSize = smallSize;
+			newScript->targetSize = smallSize; // ëª©í‘œ í¬ê¸° ì„¤ì •
+			newScript->UpdateFallingSpeed(fallingSpeed * 1.2f); // \ub099\ud558\uc18d\ub3c4 20% \uc99d\uac00
+			newScript->SetHealth(1); // \uc5d0\ub108\uc9c0 1\ub85c \uc124\uc815
+			
+			// í‚¤ë„¤ë§ˆí‹± ëª¨ë“œë¡œ ë¶€ë“œëŸ¬ìš´ ì›€ì§ì„
+			newRigidbody->isKinematic = true;   // í‚¤ë„¤ë§ˆí‹± ìœ ì§€
+			newRigidbody->useGravity = false;   // ì¤‘ë ¥ ì‚¬ìš© ì•ˆí•¨
+			
+			// \ubd84\ud574 \uc2dc \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc - currentVelocity\ub85c \ud0a4\ub124\ub9c8\ud2f1 \uc6c0\uc9c1\uc784 (\uc54c\uae4c\uae30 \ucef4\uc149)
+			Vector2 splitVelocity;
+			splitVelocity.x = direction.x * distance * 7.0f;  // \ubc00\ub824\ub0a8 \uac70\ub9ac \ub300\ud3ed \uc99d\uac00
+			splitVelocity.y = direction.y * distance * 7.0f;
+			newScript->currentVelocity = splitVelocity;
+			
+			// \ub354 \uba00\ub9ac \ub098\uac00\ub3c4\ub85d \ub9c8\ucc30\ub825 \ub300\ud3ed \uac10\uc18c
+			newScript->friction = 0.97f;  // \ub9c8\ucc30\ub825 \ub354 \uac10\uc18c  // ì ë‹¹í•œ ë§ˆì°°ë ¥ìœ¼ë¡œ ìì—°ìŠ¤ëŸ¬ìš´ ë©ˆì¶¤
+			
+			sprintf_s(debugMsg, "Applied kinematic velocity: x=%.2f, y=%.2f\n", splitVelocity.x, splitVelocity.y);
+			OutputDebugStringA(debugMsg);
+			
+			// \ubd84\ud574 \uc9c1\ud6c4 \ucda9\ub3cc \ubc29\uc9c0\ub97c \uc704\ud55c \uae34 \ucfe8\ub2e4\uc6b4
+			newScript->reactionCooldown = 2.0f;  // 2\ucd08 \ub3d9\uc548 \ucda9\ub3cc \ube44\ud65c\uc131\ud654
+			
+			OutputDebugStringA("Split object created successfully!\n");
+		}
+		else
+		{
+			OutputDebugStringA("Failed to get HonmunCollisionScript from new object!\n");
+		}
+	}
+	
+	OutputDebugStringA("CreateSplitObjects completed!\n");
 }
 
 void HonmunCollisionScript::AbsorbNearbyEnemies(const Vector2& collisionPoint)
 {
-	auto nearbyHonmuns = GetNearbyHonmuns(100.0f); // 100 ÇÈ¼¿ ¹İ°æ
+	auto nearbyHonmuns = GetNearbyHonmuns(100.0f); // 100 ï¿½È¼ï¿½ ï¿½İ°ï¿½
 
 	for (auto* honmunScript : nearbyHonmuns)
 	{
 		if (honmunScript == this) continue;
 
-		// Ä«¸Ş¶ó ¹üÀ§ ³»¿¡ ÀÖ´ÂÁö È®ÀÎ
+		// Ä«ï¿½Ş¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		if (honmunScript->IsInCameraView())
 		{
-			// Ãæµ¹ÁöÁ¡À¸·Î ²ø¾î´ç±â±â
+			// ï¿½æµ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Vector2 direction = collisionPoint - honmunScript->transform->GetPosition();
 			direction = direction.Normalized();
 
-			// ¹Ğ¸®´Â °Å¸®ÀÇ 1/3¸¸Å­ ÀÌµ¿
+			// ï¿½Ğ¸ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ 1/3ï¿½ï¿½Å­ ï¿½Ìµï¿½
 			Vector2 pullForce = direction * (pushDistance / 3.0f);
 			honmunScript->rigidbody->AddImpulse(pullForce);
 
-			// ÀÏÁ¤ ½Ã°£ ÈÄ ÆÄ±« (ÈíÀÔ È¿°ú)
-			honmunScript->reactionCooldown = 1.0f; // 1ÃÊ ÈÄ ÆÄ±«µÇµµ·Ï ¼³Á¤
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ ï¿½Ä±ï¿½ (ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½)
+			honmunScript->reactionCooldown = 1.0f; // 1ï¿½ï¿½ ï¿½ï¿½ ï¿½Ä±ï¿½ï¿½Çµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 	}
 }
@@ -239,13 +622,29 @@ void HonmunCollisionScript::DestroyThis()
 {
 	if (gameObject)
 	{
-		gameObject->SetActive(false); // ¶Ç´Â Destroy ÇÔ¼ö »ç¿ë
+		// \ucda9\ub3cc\uc790 \ube44\ud65c\uc131\ud654\ub85c \ucda9\ub3cc \ubc29\uc9c0
+		auto* collider = gameObject->GetComponent<ICollider>();
+		if (collider)
+		{
+			collider->isTrigger = true; // \ucda9\ub3cc \ubb34\uc2dc\ub418\ub3c4\ub85d \uc124\uc815
+		}
+		
+		// \uc2a4\ud504\ub77c\uc774\ud2b8 \ube44\ud65c\uc131\ud654\ub85c \uc2dc\uac01\uc801 \uc228\uae40
+		if (spriteRenderer)
+		{
+			spriteRenderer->alpha = 0.0f;
+		}
+		
+		// \uac1d\uccb4 \ube44\ud65c\uc131\ud654
+		gameObject->SetActive(false);
+		
+		OutputDebugStringA("Object completely destroyed!\n");
 	}
 }
 
 void HonmunCollisionScript::BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact)
 {
-	// ÁøÇà¹æÇâ°ú ¹İ´ë·Î Æ¨°Ü³¿
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½İ´ï¿½ï¿½ Æ¨ï¿½Ü³ï¿½
 	Vector2 bounceDirection = -contact.normal;
 	Vector2 bounceForce = bounceDirection * pushDistance;
 
@@ -253,9 +652,30 @@ void HonmunCollisionScript::BounceAway(HonmunCollisionScript* otherScript, const
 	otherScript->rigidbody->AddImpulse(-bounceForce);
 }
 
+void HonmunCollisionScript::BounceAwayKinematic(HonmunCollisionScript* otherScript, const ContactInfo& contact)
+{
+	OutputDebugStringA("A & B kinematic bounce collision!\n");
+	
+	// \ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc\ub85c \ubcc0\uacbd
+	if (rigidbody) rigidbody->isKinematic = true;
+	if (otherScript->rigidbody) otherScript->rigidbody->isKinematic = true;
+
+	// \ucda9\ub3cc \ubc29\ud5a5 \uacc4\uc0b0
+	Vector2 myPos = transform->GetPosition();
+	Vector2 otherPos = otherScript->transform->GetPosition();
+	Vector2 collisionDirection = (myPos - otherPos).Normalized();
+	
+	// \ubc18\ub300 \ubc29\ud5a5\uc73c\ub85c \uc18d\ub3c4 \uc124\uc815 - \uc54c\uae4c\uae30 \ucef4\uc149\uc5d0 \ub9de\uac8c \uac15\ud654
+	float bounceSpeed = 800.0f;  // \ud295\uae40 \uc18d\ub3c4 \ub300\ud3ed \uc99d\uac00 (\uc54c\uae4c\uae30 \ucef4\uc149)
+	currentVelocity = collisionDirection * bounceSpeed;
+	otherScript->currentVelocity = -collisionDirection * bounceSpeed;
+	
+	OutputDebugStringA("Objects bounced with velocity-based motion!\n");
+}
+
 void HonmunCollisionScript::PushSideways(HonmunCollisionScript* otherScript)
 {
-	// ÁÂ¿ì·Î ¹Ğ¾î³¿
+	// ï¿½Â¿ï¿½ï¿½ ï¿½Ğ¾î³¿
 	Vector2 leftDirection(-1.0f, 0.0f);
 	Vector2 rightDirection(1.0f, 0.0f);
 
@@ -265,8 +685,8 @@ void HonmunCollisionScript::PushSideways(HonmunCollisionScript* otherScript)
 
 void HonmunCollisionScript::PassThrough(HonmunCollisionScript* otherScript)
 {
-	// °üÅë - ¹°¸®Àû Ãæµ¹À» ¹«½ÃÇÏÁö¸¸ °ãÄ¡Áö´Â ¾Ê°Ô ÇÔ
-	// ÀÏ½ÃÀûÀ¸·Î Äİ¶óÀÌ´õ¸¦ Æ®¸®°Å·Î º¯°æÇÏ°Å³ª À§Ä¡¸¦ ¾à°£ Á¶Á¤
+	// ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½
+	// ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½İ¶ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½Å·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°Å³ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½à°£ ï¿½ï¿½ï¿½ï¿½
 	Vector2 separationDirection = (transform->GetPosition() - otherScript->transform->GetPosition()).Normalized();
 	Vector2 separationForce = separationDirection * 1.0f;
 
@@ -278,9 +698,15 @@ std::vector<HonmunCollisionScript*> HonmunCollisionScript::GetNearbyHonmuns(floa
 {
 	std::vector<HonmunCollisionScript*> nearbyHonmuns;
 
-	// ÇöÀç ¾ÀÀÇ ¸ğµç °ÔÀÓ¿ÀºêÁ§Æ®¿¡¼­ HonmunCollisionScript¸¦ °¡Áø °ÍµéÀ» Ã£±â
-	// ÀÌ ºÎºĞÀº ¾À °ü¸® ½Ã½ºÅÛ¿¡ µû¶ó ±¸Çö ¹æ¹ıÀÌ ´Ş¶óÁú ¼ö ÀÖ½À´Ï´Ù
+	// í˜„ì¬ ì”¬ì˜ ëª¨ë“  ê²Œì„ì˜¤ë¸Œì íŠ¸ì—ì„œ HonmunCollisionScriptë¥¼ ê°€ì§„ ê²ƒë“¤ì„ ì°¾ê¸°
+	auto currentScene = SceneManager::Get().GetCurrentScene();
+	if (!currentScene) return nearbyHonmuns;
 
+	Vector2 myPosition = transform->GetPosition();
+	
+	// Sceneì˜ ëª¨ë“  ì˜¤ë¸Œì íŠ¸ë¥¼ ìˆœíšŒí•˜ë©° HonmunCollisionScriptë¥¼ ì°¾ê¸° (ì„ì‹œ êµ¬í˜„)
+	// ì‹¤ì œë¡œëŠ” Sceneì˜ GetAllObjects() ê°™ì€ í•¨ìˆ˜ê°€ í•„ìš”í•˜ì§€ë§Œ ì—†ìœ¼ë¯€ë¡œ ê°„ë‹¨íˆ êµ¬í˜„
+	
 	return nearbyHonmuns;
 }
 
@@ -295,11 +721,22 @@ Vector2 HonmunCollisionScript::GetRandomDirection()
 
 void HonmunCollisionScript::UpdateSize(float newSize)
 {
+	char debugMsg[200];
+	sprintf_s(debugMsg, "UpdateSize called: currentSize=%.2f, newSize=%.2f\n", currentSize, newSize);
+	OutputDebugStringA(debugMsg);
+	
 	currentSize = newSize;
 	if (transform)
 	{
-		float scaleFactor = newSize / 10.0f; // ±âº» Å©±â¸¦ 10À¸·Î °¡Á¤
+		float scaleFactor = newSize / 10.0f; // ï¿½âº» Å©ï¿½â¸¦ 10ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		transform->SetScale(scaleFactor, scaleFactor);
+		
+		sprintf_s(debugMsg, "Scale applied: scaleFactor=%.2f\n", scaleFactor);
+		OutputDebugStringA(debugMsg);
+	}
+	else
+	{
+		OutputDebugStringA("Transform is null in UpdateSize!\n");
 	}
 }
 
@@ -310,9 +747,9 @@ void HonmunCollisionScript::UpdateFallingSpeed(float speedMultiplier)
 
 bool HonmunCollisionScript::IsInCameraView()
 {
-	// Ä«¸Ş¶ó ¹üÀ§ ³»¿¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ·ÎÁ÷
-	// ½ÇÁ¦ ±¸ÇöÀº Ä«¸Ş¶ó ½Ã½ºÅÛ¿¡ µû¶ó ´Ş¶óÁú ¼ö ÀÖ½À´Ï´Ù
-	return true; // ÀÓ½Ã
+	// Ä«ï¿½Ş¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Ş¶ï¿½ ï¿½Ã½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¶ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½
+	return true; // ï¿½Ó½ï¿½
 }
 
 HonmunCollisionScript* HonmunCollisionScript::GetHonmunScript(ICollider* collider)

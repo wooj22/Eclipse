@@ -9,31 +9,31 @@ Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A)
 	rigidbody = AddComponent<Rigidbody>();
 	collider = AddComponent<CircleCollider>();
 
-	// Ãæµ¹ ½ºÅ©¸³Æ® Ãß°¡
+	// ï¿½æµ¹ ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½ß°ï¿½
 	auto* collisionScript = AddComponent<HonmunCollisionScript>();
 }
 
 void Honmun::Awake()
 {
-	// ÅØ½ºÃ³ ·Îµå ¹× ½ºÇÁ¶óÀÌÆ® »ý¼º
+	// ï¿½Ø½ï¿½Ã³ ï¿½Îµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 	auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
 	spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName());
 
-	// ¹°¸® ¼³Á¤
-	rigidbody->useGravity = true;
-	rigidbody->isKinematic = false;
+	// \ubb3c\ub9ac \uc124\uc815 - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 \ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc
+	rigidbody->useGravity = false;  // \uc911\ub825 \ube44\ud65c\uc131\ud654
+	rigidbody->isKinematic = true;  // \ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc\ub85c \uc124\uc815
 
-	// ÄÝ¶óÀÌ´õ ¼³Á¤
+	// ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½
 	collider->radius = 50.0f;
-	collider->isTrigger = false; // ¹°¸®Àû Ãæµ¹À» À§ÇØ false
+	collider->isTrigger = false; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ false
 
-	// ½ºÄÉÀÏ ¼³Á¤
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	transform->SetScale(1.0f, 1.0f);
 }
 
 void Honmun::SceneStart()
 {
-	// ¾À ½ÃÀÛ ½Ã Ãæµ¹ ½ºÅ©¸³Æ®¿¡ Å¸ÀÔ ¼³Á¤
+	// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½æµ¹ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	auto* collisionScript = GetComponent<HonmunCollisionScript>();
 	if (collisionScript)
 	{
@@ -43,7 +43,7 @@ void Honmun::SceneStart()
 
 void Honmun::Update()
 {
-	// µð¹ö±× ÄÝ¶óÀÌ´õ ±×¸®±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
 	if (collider)
 	{
 		collider->DebugColliderDraw();
@@ -52,21 +52,21 @@ void Honmun::Update()
 
 void Honmun::Destroyed()
 {
-	// ¿ÀºêÁ§Æ® ÆÄ±« ½Ã Á¤¸® ÀÛ¾÷
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ä±ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½
 }
 
 void Honmun::SetHonmunType(HonmunType type)
 {
 	honmunType = type;
 
-	// Å¸ÀÔÀÌ ¼³Á¤µÈ ÈÄ ¸®¼Ò½º¸¦ ´Ù½Ã ·Îµå
+	// Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Îµï¿½
 	if (spriteRenderer)
 	{
 		auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
 		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName());
 	}
 
-	// Ãæµ¹ ½ºÅ©¸³Æ®¿¡µµ Å¸ÀÔ ¼³Á¤
+	// ï¿½æµ¹ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	auto* collisionScript = GetComponent<HonmunCollisionScript>();
 	if (collisionScript)
 	{
