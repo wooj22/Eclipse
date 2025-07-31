@@ -7,6 +7,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "Bullet.h"
+#include "../Direct2D_EngineLib/Camera.h"
 
 /*-----------------  component life cycle  ----------------*/
 void BossController::Awake()
@@ -101,12 +102,15 @@ void BossController::Attack(int attackIndex)
 	{
 	case BossController::RoundShell:
 		Attack_RoundShell();
+		Camera::GetMainCamera()->Shake(7, 10, 0.7);
 		break;
 	case BossController::DiffusedShell:
 		Attack_DiffusedShell();
+		Camera::GetMainCamera()->Shake(10, 10, 0.7);
 		break;
 	case BossController::DropShell:
 		Attack_DropShell();
+		Camera::GetMainCamera()->Shake(10, 7, 4, 0.8);
 		break;
 	default:
 		break;

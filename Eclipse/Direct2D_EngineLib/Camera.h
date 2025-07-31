@@ -32,6 +32,16 @@ private:
 	bool useMapCondition = false;
 	Rect mapRect;
 
+	// shake
+	bool isShaking = false;
+	float shakeTime = 0.0f;
+	float shakeDuration = 0.0f;
+	float shakeAmplitude = 0.0f;
+	float shakeFrequency = 0.0f;
+	float shakeRoughness = 0.0f;
+	float shakeTimer = 0.0f;
+	Vector2 shakeOffset = Vector2::zero;
+
 public:
 	// main camera
 	static Camera* mainCamera;
@@ -71,6 +81,10 @@ public:
 	void SetMapCondition(const Rect rect) { mapRect = rect; useMapCondition = true; }
 private:
 	void MapBoundaryCondition();
+
+public:
+	// shake
+	void Shake(float amplitude, float frequency, float duration, float roughness = 0);
 
 public:
 	// screen -> world
