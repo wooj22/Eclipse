@@ -6,6 +6,8 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "BossController.h"
 
+/* 보스 웨이브에 등장하는 Boss GameObject 선언 클래스 */
+
 class Boss : public GameObject
 {
 public:
