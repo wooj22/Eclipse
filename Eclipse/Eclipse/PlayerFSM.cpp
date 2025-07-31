@@ -8,6 +8,7 @@
 #include "../Direct2D_EngineLib/ResourceManager.h"
 #include "../Direct2D_EngineLib/WorldTextRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
+#include "../Direct2D_EngineLib/Camera.h"
 
 // 컴포넌트 활성화 시점
 void PlayerFSM::OnEnable()
@@ -42,6 +43,8 @@ void PlayerFSM::Update()
 
 	movementFSM->Update();
 	actionFSM->Update();
+
+	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
 
 	// [ Speed Setting ]
 	if (isA || isD)

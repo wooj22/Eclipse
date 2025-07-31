@@ -62,8 +62,6 @@ void Walk_State::FixedUpdate(MovementFSM* fsm)
 {
     // Move ½ÇÇà 
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = fsm->GetPlayerFSM()->GetInputX() * fsm->GetPlayerFSM()->GetCurSpeed();
-
-    
 }
 
 void Walk_State::Exit(MovementFSM* fsm)

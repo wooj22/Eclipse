@@ -12,6 +12,7 @@ class SpriteRenderer;
 class AnimatorController;
 class WorldTextRenderer;
 class Rigidbody;
+// class BoxCollider;
 
 class PlayerFSM : public Script
 {
@@ -49,6 +50,7 @@ private:
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
 	AnimatorController* animatorController = nullptr;
+	// BoxCollider* boxCollider = nullptr;
 
 public:
 	// FSM 변수
@@ -58,6 +60,8 @@ public:
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
+
+	Vector2 MouseWorldPos;
 
 public:
 	// getter
@@ -80,6 +84,8 @@ public:
 
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 	AnimatorController* GetAnimatorController() const { return animatorController; }
+    Transform* GetTransform() const { return transform; }
+	// BoxCollider* GetBoxCollider() const { return boxCollider; }
 
 	// void SetLastWallDir(int dir) { lastWallDir = dir; }
 
