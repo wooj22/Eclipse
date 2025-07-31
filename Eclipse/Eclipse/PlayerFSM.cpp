@@ -70,7 +70,7 @@ void PlayerFSM::Update()
 	}
 	else
 	{
-		spriteRenderer->flipX = isBulletFlipX;
+		spriteRenderer->flipX = isBulletFlipX;  // BulletTime_State 에서 변수값 조정
 	}
 
 

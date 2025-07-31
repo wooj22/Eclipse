@@ -71,6 +71,5 @@ public:
 		// AABB ¿µ¿ª 
 		collider->DebugColliderDraw();
 	}
-
 };
 

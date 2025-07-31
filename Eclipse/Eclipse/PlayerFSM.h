@@ -83,6 +83,7 @@ public:
 	bool GetIsWallRight() const { return isWallRight; }
 
 	bool GetLastFlipX() const { return lastFlipX; } // true ¿ÞÂÊ 
+	void SetLastFlipX(bool isFlipX) { lastFlipX = isFlipX; } // true ¿ÞÂÊ 
 	bool GetisBulletFliping() const { return isBulletFliping; }
 	void SetisBulletFliping(bool isBulletTime) { isBulletFliping = isBulletTime; }
 	bool GetisBulletFlipX() const { return isBulletFlipX; } // true ¿ÞÂÊ 
