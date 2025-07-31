@@ -29,6 +29,7 @@ void EclipseApp::Init()
 	sceneManager.CreateScene<EndScene>();
 	sceneManager.SetCurrentScene(MOON);
 	sceneManager.Init();
+	gameManager.Init();
 }
 
 
