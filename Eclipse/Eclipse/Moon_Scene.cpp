@@ -8,7 +8,7 @@ void Moon_Scene::Awake()
 	// [ camera ]
 	cam = CreateObject<GameObject>();
 	cam->AddComponent<Transform>();
-	cam->AddComponent<Camera>(1920, 1080);
+	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
 
 	// [ BackGround ]
 	auto backGround = CreateObject<GameObject>();
@@ -26,6 +26,7 @@ void Moon_Scene::Awake()
 
 	// [ player ]
 	player = CreateObject<Player>();
+	// cam->transform->SetPosition(player->transform->GetPosition());
 
 	// [ ground ]
 	ground = CreateObject<GameObject>();
@@ -74,6 +75,18 @@ void Moon_Scene::Awake()
 	auto wall_l_rb = wall_l->AddComponent<Rigidbody>();
 	wall_l_rb->useGravity = false;
 	wall_l_rb->isKinematic = true;
+
+
+	// boundary condition
+	Rect mapRect;
+	mapRect.size = { 2560, 1920 };
+
+	// camera target
+	camCompo->SetTarget(player->transform);
+	camCompo->SetTargetTraceSpeed(200.0f);
+	camCompo->SetTargetTraceLimitX(30.0f);
+	camCompo->SetTargetTraceLimitY(100.0f);
+	camCompo->SetMapCondition(mapRect);
 }
 
 void Moon_Scene::Start()

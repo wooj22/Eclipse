@@ -24,6 +24,7 @@ private:
 	BoxCollider* wall_r_col;
 	BoxCollider* wall_l_col;
 
+
 public:
 	Moon_Scene() = default;
 	~Moon_Scene() = default;
