@@ -2,11 +2,13 @@
 #include "HonmunCollisionScript.h"
 #include "HonmunAFSM.h"
 #include "HonmunAAnimatorController.h"
+#include "HonmunBFSM.h"
+#include "HonmunBAnimatorController.h"
 #include "../Direct2D_EngineLib/ResourceManager.h"
 #include <iostream>
 #include <exception>
 
-Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A), honmunAFSM(nullptr), honmunAAnimatorController(nullptr)
+Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A), honmunAFSM(nullptr), honmunAAnimatorController(nullptr), honmunBFSM(nullptr), honmunBAnimatorController(nullptr)
 {
 	transform = AddComponent<Transform>();
 	spriteRenderer = AddComponent<SpriteRenderer>();
@@ -77,6 +79,11 @@ Honmun::~Honmun()
 		delete honmunAAnimatorController;
 		honmunAAnimatorController = nullptr;
 	}
+	if (honmunBAnimatorController)
+	{
+		delete honmunBAnimatorController;
+		honmunBAnimatorController = nullptr;
+	}
 }
 
 void Honmun::Destroyed()
@@ -88,37 +95,58 @@ void Honmun::SetHonmunType(HonmunType type)
 {
 	honmunType = type;
 
-	// Initialize FSM and Animator for Honmun A
+	// Clean up existing FSM components when switching types
+	if (honmunAAnimatorController && type != HonmunType::A)
+	{
+		delete honmunAAnimatorController;
+		honmunAAnimatorController = nullptr;
+	}
+	if (honmunBAnimatorController && type != HonmunType::B)
+	{
+		delete honmunBAnimatorController;
+		honmunBAnimatorController = nullptr;
+	}
+
+	// Initialize FSM and Animator based on type
 	if (type == HonmunType::A)
 	{
-		// Clean up existing animator controller if switching types
-		if (honmunAAnimatorController)
-		{
-			delete honmunAAnimatorController;
-		}
-		
 		// Create and setup animator controller for Honmun A
-		honmunAAnimatorController = new HonmunAAnimatorController();
+		if (!honmunAAnimatorController)
+		{
+			honmunAAnimatorController = new HonmunAAnimatorController();
+		}
 		if (animator)
 		{
 			animator->SetController(honmunAAnimatorController);
 		}
 		
 		// Add FSM component for Honmun A if not already present
-		if (!honmunAFSM)
+		if (!GetComponent<HonmunAFSM>())
 		{
 			honmunAFSM = AddComponent<HonmunAFSM>();
 		}
 	}
-	else
+	else if (type == HonmunType::B)
 	{
-		// For other types (B, C, D), use static sprites and clean up A-specific components
-		if (honmunAAnimatorController)
+		// Create and setup animator controller for Honmun B
+		if (!honmunBAnimatorController)
 		{
-			delete honmunAAnimatorController;
-			honmunAAnimatorController = nullptr;
+			honmunBAnimatorController = new HonmunBAnimatorController();
+		}
+		if (animator)
+		{
+			animator->SetController(honmunBAnimatorController);
 		}
 		
+		// Add FSM component for Honmun B if not already present
+		if (!GetComponent<HonmunBFSM>())
+		{
+			honmunBFSM = AddComponent<HonmunBFSM>();
+		}
+	}
+	else
+	{
+		// For other types (C, D), use static sprites
 		if (spriteRenderer)
 		{
 			auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
@@ -179,6 +207,19 @@ std::string Honmun::GetSpriteName()
 	case HonmunType::C: return "Honmun_C";
 	case HonmunType::D: return "Honmun_D";
 	default: return "Honmun_A";
+	}
+}
+
+void Honmun::SetSize(float newSize)
+{
+	size = newSize;
+	if (transform)
+	{
+		transform->SetScale(size * 0.7f, size * 0.7f); // 기본 크기 0.7에 새로운 크기 적용
+	}
+	if (collider)
+	{
+		collider->radius = 35.0f * size; // 기본 반지름 35에 크기 적용
 	}
 }
 
