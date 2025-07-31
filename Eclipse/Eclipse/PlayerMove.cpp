@@ -1,7 +1,7 @@
 #include "PlayerMove.h"
 #include "PlayUI.h"
 #include "Chat.h"
-#include "Quest.h"
+//#include "Quest.h"
 #include "../Direct2D_EngineLib/Time.h"
 
 void PlayerMove::OnEnable()

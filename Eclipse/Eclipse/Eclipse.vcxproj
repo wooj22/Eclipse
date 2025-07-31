@@ -134,7 +134,11 @@
   <ItemGroup>
     <ClCompile Include="Aron_Scene.cpp" />
     <ClCompile Include="Attack_State.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossController.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletTime_State.cpp" />
+    <ClCompile Include="Chat.cpp" />
     <ClCompile Include="EclipseApp.cpp" />
     <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="Hanging_State.cpp" />
@@ -154,8 +158,8 @@
     <ClCompile Include="Player_Woo.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PlayUI.cpp" />
+    <ClCompile Include="Quest.cpp" />
     <ClCompile Include="TitleUI.cpp" />
-    <ClCompile Include="Wait_State.cpp" />
     <ClCompile Include="Walk_State.cpp" />
     <ClCompile Include="Woo_Scene.cpp" />
     <ClCompile Include="Yunmo_Scene.cpp" />
@@ -165,7 +169,11 @@
     <ClInclude Include="ActionStateBase.h" />
     <ClInclude Include="Aron_Scene.h" />
     <ClInclude Include="Attack_State.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossController.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletTime_State.h" />
+    <ClInclude Include="Chat.h" />
     <ClInclude Include="EclipseApp.h" />
     <ClInclude Include="EndScene.h" />
     <ClInclude Include="FSMBase.h" />
@@ -189,9 +197,9 @@
     <ClInclude Include="Player_Woo.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayUI.h" />
+    <ClInclude Include="Quest.h" />
     <ClInclude Include="StateBase.h" />
     <ClInclude Include="TitleUI.h" />
-    <ClInclude Include="Wait_State.h" />
     <ClInclude Include="Walk_State.h" />
     <ClInclude Include="Woo_Scene.h" />
     <ClInclude Include="Yunmo_Scene.h" />

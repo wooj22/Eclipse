@@ -1,6 +1,6 @@
 #include "PlayUI.h"
 #include "Chat.h"
-#include "Quest.h"
+//#include "Quest.h"
 
 void PlayUI::Awake()
 {  
@@ -30,7 +30,7 @@ void PlayUI::SceneStart()
 	//chat_Text->rectTransform->SetPosition(0, -100);
 	quest_Text->rectTransform->SetSize(100, 180);
 	quest_Text->screenTextRenderer->SetText(L"퀘스트창 텍스트 예시.");
-	quest_Text->AddComponent<Quest>();
+	//quest_Text->AddComponent<Quest>();
 
 	// 대화창 UI
 	chat_Text->rectTransform->SetParent(chat_Image->rectTransform);

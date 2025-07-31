@@ -186,9 +186,6 @@
     <ClCompile Include="Attack_State.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Wait_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Honmun.cpp">
       <Filter>02. GameObject\Aron</Filter>
     </ClCompile>
@@ -200,6 +197,21 @@
     </ClCompile>
     <ClCompile Include="HonmunCollisionScript.cpp">
       <Filter>03. Script\Aron</Filter>
+    </ClCompile>
+    <ClCompile Include="Quest.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BossController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Chat.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -281,9 +293,6 @@
     <ClInclude Include="MovementStateBase.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Wait_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Honmun.h">
       <Filter>02. GameObject\Aron</Filter>
     </ClInclude>
@@ -304,6 +313,21 @@
     </ClInclude>
     <ClInclude Include="HonmunCollisionScript.h">
       <Filter>03. Script\Aron</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BossController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Chat.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
