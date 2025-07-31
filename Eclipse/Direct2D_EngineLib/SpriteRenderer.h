@@ -1,6 +1,6 @@
 #pragma once
-#include <assert.h>
 #include <wrl.h>
+#include <assert.h>
 #include "IRenderer.h"
 #include "RenderSystem.h"
 #include "Sprite.h"
@@ -9,9 +9,7 @@
 
 #include <d2d1_1.h>
 #include <d2d1effects_2.h>
-
 #pragma comment(lib, "d2d1.lib")
-//#pragma comment(lib, "d2d1effects.lib")
 #pragma comment(lib, "dxguid.lib")
 
 
@@ -31,7 +29,7 @@ private:
 private:
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
-	ColorRGBA colorMultiplier = { 1,0,1,1 };	// User Set : R, G, B, A
+	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix За·Д
 	colorMultiplier.a, 0, 0, 0,
 	0, colorMultiplier.g, 0, 0,
@@ -57,7 +55,8 @@ public:
 	void OnDestroy_Inner() override final;
 
 public:
-	// set
+	// Color
 	void SetColor(float r, float g, float b, float a = 1.0f);
+	ColorRGBA GetColor()  { return colorMultiplier; };
 };
 

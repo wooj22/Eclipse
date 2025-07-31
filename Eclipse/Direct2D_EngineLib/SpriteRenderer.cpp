@@ -54,39 +54,37 @@ void SpriteRenderer::Render()
 	float pivotX = sprite->pivot.x;
 	float pivotY = sprite->pivot.y;
 
-	// Crop 설정
+	// === Crop ===
 	cropEffect->SetInput(0, sprite->texture->texture2D.Get());
 	cropEffect->SetValue(D2D1_CROP_PROP_RECT, srcRect);
-
 	ComPtr<ID2D1Image> croppedImage;
 	cropEffect->GetOutput(&croppedImage);
 
-	// ColorMatrix 설정
+	// === Color Matrix ===
 	colorMatrixEffect->SetInput(0, croppedImage.Get());
 	colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
-
 	ComPtr<ID2D1Image> finalImage;
 	colorMatrixEffect->GetOutput(&finalImage);
 
-	// Flip 변환 행렬
+	// === Flip Matrix ===
 	float scaleX = flipX ? -1.0f : 1.0f;
 	float scaleY = flipY ? -1.0f : 1.0f;
 	auto flipMat = D2D1::Matrix3x2F::Scale(D2D1::Size(scaleX, scaleY), { 0, 0 });
 
-	// Pivot 변환 행렬
+	// === Pivot Matrix ===
 	D2D1_POINT_2F pivotOffset = { spriteSize.width * pivotX, spriteSize.height * pivotY };
 	auto pivotMat = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
 
-	// 최종 변환 행렬 세팅
+	// === Fianl Matrix ===
 	auto finalMat = flipMat * pivotMat * transform->GetScreenMatrix();
 	RenderSystem::Get().renderTarget->SetTransform(finalMat);
 
-	// sourceRect 위치 보정
+	// === sourceRect 위치 보정 ===
 	D2D1_POINT_2F drawOffset = { 0, 0 };
 	drawOffset.x = flipX ? (-srcRect.left - spriteSize.width) : -srcRect.left;
 	drawOffset.y = flipY ? (-srcRect.top - spriteSize.height) : -srcRect.top;
 
-	// 이미지 렌더링
+	// render
 	RenderSystem::Get().renderTarget->DrawImage(finalImage.Get(), drawOffset);
 }
 
@@ -106,8 +104,4 @@ void SpriteRenderer::SetColor(float r, float g, float b, float a)
 	0.0f,           0.0f,           colorMultiplier.b, 0.0f,
 	0.0f,           0.0f,           0.0f,           colorMultiplier.a
 	};
-
-	// multiply
-	colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
-	colorMatrixEffect->SetInput(0, sprite->texture->texture2D.Get());
 }
