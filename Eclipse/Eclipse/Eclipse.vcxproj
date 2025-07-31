@@ -137,6 +137,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossController.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BulletController.cpp" />
     <ClCompile Include="BulletTime_State.cpp" />
     <ClCompile Include="Chat.cpp" />
     <ClCompile Include="EclipseApp.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BossController.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletController.h" />
     <ClInclude Include="BulletTime_State.h" />
     <ClInclude Include="Chat.h" />
     <ClInclude Include="EclipseApp.h" />
