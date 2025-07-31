@@ -1,6 +1,6 @@
 #include "Aron_Scene.h"
 #include "EclipseApp.h"
-#include "Honmun.h"  // »õ·Î ¸¸µç Honmun Å¬·¡½º Æ÷ÇÔ
+#include "Honmun.h"  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Honmun Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Input.h"
@@ -21,34 +21,77 @@ void Aron_Scene::Awake()
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::LightBlue));
 	title_text->screenTextRenderer->SetText(L"Aron Scene");
 
-	// [ È¥¹® enemies ] - »õ·Î¿î Honmun Å¬·¡½º »ç¿ë
+	// [ \ud63c\ubb38 enemies ] - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 A, B \uc544\uc774\ud15c \uc5ec\ub7ec \uac1c \uc0dd\uc131
+	// A \ud0c0\uc785 \ud63c\ubb38 4\uac1c
 	honmun_a = CreateObject<Honmun>();
-	honmun_a->name = "Honmun_A";
+	honmun_a->name = "Honmun_A1";
 	honmun_a->SetHonmunType(HonmunType::A);
 	honmun_a->SetPosition(-300.0f, 200.0f);
 
+	auto* honmun_a2 = CreateObject<Honmun>();
+	honmun_a2->name = "Honmun_A2";
+	honmun_a2->SetHonmunType(HonmunType::A);
+	honmun_a2->SetPosition(-200.0f, 300.0f);
+
+	auto* honmun_a3 = CreateObject<Honmun>();
+	honmun_a3->name = "Honmun_A3";
+	honmun_a3->SetHonmunType(HonmunType::A);
+	honmun_a3->SetPosition(-400.0f, 100.0f);
+
+	auto* honmun_a4 = CreateObject<Honmun>();
+	honmun_a4->name = "Honmun_A4";
+	honmun_a4->SetHonmunType(HonmunType::A);
+	honmun_a4->SetPosition(-100.0f, 150.0f);
+
+	// B \ud0c0\uc785 \ud63c\ubb38 4\uac1c (ë” ë„“ê²Œ ë°°ì¹˜)
 	honmun_b = CreateObject<Honmun>();
-	honmun_b->name = "Honmun_B";
+	honmun_b->name = "Honmun_B1";
 	honmun_b->SetHonmunType(HonmunType::B);
-	honmun_b->SetPosition(-100.0f, 200.0f);
+	honmun_b->SetPosition(150.0f, 250.0f);
 
-	honmun_c = CreateObject<Honmun>();
-	honmun_c->name = "Honmun_C";
-	honmun_c->SetHonmunType(HonmunType::C);
-	honmun_c->SetPosition(100.0f, 200.0f);
+	auto* honmun_b2 = CreateObject<Honmun>();
+	honmun_b2->name = "Honmun_B2";
+	honmun_b2->SetHonmunType(HonmunType::B);
+	honmun_b2->SetPosition(350.0f, 400.0f);
 
-	honmun_d = CreateObject<Honmun>();
-	honmun_d->name = "Honmun_D";
-	honmun_d->SetHonmunType(HonmunType::D);
-	honmun_d->SetPosition(300.0f, 200.0f);
+	auto* honmun_b3 = CreateObject<Honmun>();
+	honmun_b3->name = "Honmun_B3";
+	honmun_b3->SetHonmunType(HonmunType::B);
+	honmun_b3->SetPosition(450.0f, 50.0f);
 
-	// [ ground ] - È¥¹®µéÀÌ ¶³¾îÁöÁö ¾Êµµ·Ï
+	auto* honmun_b4 = CreateObject<Honmun>();
+	honmun_b4->name = "Honmun_B4";
+	honmun_b4->SetHonmunType(HonmunType::B);
+	honmun_b4->SetPosition(50.0f, 50.0f);
+
+	// ëª¨ë“  í˜¼ë¬¸ì„ ë²¡í„°ì— ì¶”ê°€
+	allHonmuns.push_back(honmun_a);
+	allHonmuns.push_back(honmun_a2);
+	allHonmuns.push_back(honmun_a3);
+	allHonmuns.push_back(honmun_a4);
+	allHonmuns.push_back(honmun_b);
+	allHonmuns.push_back(honmun_b2);
+	allHonmuns.push_back(honmun_b3);
+	allHonmuns.push_back(honmun_b4);
+
+	// ì›¨ì´ë¸Œ 1 í…ŒìŠ¤íŠ¸: C, D ì£¼ì„ì²˜ë¦¬
+	// honmun_c = CreateObject<Honmun>();
+	// honmun_c->name = "Honmun_C";
+	// honmun_c->SetHonmunType(HonmunType::C);
+	// honmun_c->SetPosition(100.0f, 200.0f);
+
+	// honmun_d = CreateObject<Honmun>();
+	// honmun_d->name = "Honmun_D";
+	// honmun_d->SetHonmunType(HonmunType::D);
+	// honmun_d->SetPosition(300.0f, 200.0f);
+
+	// [ ground ] - È¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
 	ground->AddComponent<Transform>()->SetPosition(0.0f, -300.0f);
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
 	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Ground.png"), "Ground");
-	ground_sr->layer = 0; // ¹é±×¶ó¿îµå ·¹ÀÌ¾î
+	ground_sr->layer = 0; // ï¿½ï¿½×¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½
 	ground_col = ground->AddComponent<BoxCollider>();
 	ground_col->size = { 1110.0f, 30.0f };
 	auto ground_rb = ground->AddComponent<Rigidbody>();
@@ -67,8 +110,11 @@ void Aron_Scene::Update()
 	// game object -> Update()
 	__super::Update();
 
-	// Ãæµ¹ °¨Áö ¹× »ö»ó º¯°æ
+	// ì¶©ëŒ í…ŒìŠ¤íŠ¸ ë° ìƒ‰ìƒ ë³€ê²½
 	CheckCollisionAndChangeColor();
+	
+	// í˜¼ë¬¸ ì´ë™ ì»¨íŠ¸ë¡¤
+	HandleHonmunMovement();
 
 	// scene change
 	if (Input::GetKeyDown('1'))
@@ -100,36 +146,124 @@ void Aron_Scene::Update()
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
 
-	// AABB ±×¸®±â - µğ¹ö±ë¿ë (ÀÌÁ¦ °¢ Honmun ¿ÀºêÁ§Æ®¿¡¼­ ÀÚÃ¼ÀûÀ¸·Î Ã³¸®)
+	// AABB ï¿½×¸ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Honmun ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½)
 	if (ground_col) ground_col->DebugColliderDraw();
 
-	OutputDebugStringA("¾À ¾÷µ¥ÀÌÆ®Áß");
+	OutputDebugStringA("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½");
 }
 
 void Aron_Scene::Exit()
 {
-	OutputDebugStringA("¾À Á¾·á±îÁö´Â ¿È");
+	OutputDebugStringA("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½");
 	// game object -> destroy()
 	__super::Exit();
 }
 
 void Aron_Scene::CheckCollisionAndChangeColor()
 {
-	// ½ºÆäÀÌ½º¹Ù¸¦ ´©¸£¸é ¸ğµç È¥¹®À» ¹İÅõ¸íÇÏ°Ô ¸¸µé±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ È¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (Input::GetKeyDown(VK_SPACE))
 	{
 		if (honmun_a) honmun_a->SetAlpha(0.5f);
 		if (honmun_b) honmun_b->SetAlpha(0.5f);
-		if (honmun_c) honmun_c->SetAlpha(0.5f);
-		if (honmun_d) honmun_d->SetAlpha(0.5f);
+		// ì›¨ì´ë¸Œ 1 í…ŒìŠ¤íŠ¸: C, D ì£¼ì„ì²˜ë¦¬
+		// if (honmun_c) honmun_c->SetAlpha(0.5f);
+		// if (honmun_d) honmun_d->SetAlpha(0.5f);
 	}
 
-	// ½ºÆäÀÌ½º¹Ù¸¦ ¶¼¸é ¿ø·¡ Åõ¸íµµ·Î º¹¿ø
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (Input::GetKeyUp(VK_SPACE))
 	{
 		if (honmun_a) honmun_a->ResetAlpha();
 		if (honmun_b) honmun_b->ResetAlpha();
-		if (honmun_c) honmun_c->ResetAlpha();
-		if (honmun_d) honmun_d->ResetAlpha();
+		// ì›¨ì´ë¸Œ 1 í…ŒìŠ¤íŠ¸: C, D ì£¼ì„ì²˜ë¦¬
+		// if (honmun_c) honmun_c->ResetAlpha();
+		// if (honmun_d) honmun_d->ResetAlpha();
+	}
+}
+
+void Aron_Scene::HandleHonmunMovement()
+{
+	float moveSpeed = 3.0f; // í‚¤ë„¤ë§ˆí‹± ì´ë™ ì†ë„
+	
+	// Q/E í‚¤ë¡œ ì˜¤ë¸Œì íŠ¸ ì„ íƒ
+	if (Input::GetKeyDown('Q'))
+	{
+		selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
+		// ìœ íš¨í•˜ì§€ ì•Šì€ ì˜¤ë¸Œì íŠ¸ëŠ” ê±´ë„ˆë›°ê¸°
+		while (selectedHonmunIndex < allHonmuns.size() && 
+			   (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive()))
+		{
+			selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
+		}
+		char debugMsg[100];
+		sprintf_s(debugMsg, "Selected Honmun index: %d\n", selectedHonmunIndex);
+		OutputDebugStringA(debugMsg);
+	}
+	if (Input::GetKeyDown('E'))
+	{
+		selectedHonmunIndex = (selectedHonmunIndex + 1) % allHonmuns.size();
+		// ìœ íš¨í•˜ì§€ ì•Šì€ ì˜¤ë¸Œì íŠ¸ëŠ” ê±´ë„ˆë›°ê¸°
+		while (selectedHonmunIndex < allHonmuns.size() && 
+			   (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive()))
+		{
+			selectedHonmunIndex = (selectedHonmunIndex + 1) % allHonmuns.size();
+		}
+		char debugMsg[100];
+		sprintf_s(debugMsg, "Selected Honmun index: %d\n", selectedHonmunIndex);
+		OutputDebugStringA(debugMsg);
+	}
+	
+	// ì„ íƒëœ ì˜¤ë¸Œì íŠ¸ ì´ë™ (í™”ì‚´í‘œ í‚¤)
+	if (selectedHonmunIndex < allHonmuns.size() && 
+		allHonmuns[selectedHonmunIndex] && 
+		allHonmuns[selectedHonmunIndex]->IsActive())
+	{
+		auto* transform = allHonmuns[selectedHonmunIndex]->GetComponent<Transform>();
+		if (transform)
+		{
+			Vector2 currentPos = transform->GetPosition();
+			if (Input::GetKey(VK_LEFT)) transform->SetPosition(currentPos.x - moveSpeed, currentPos.y);
+			if (Input::GetKey(VK_RIGHT)) transform->SetPosition(currentPos.x + moveSpeed, currentPos.y);
+			if (Input::GetKey(VK_UP)) transform->SetPosition(currentPos.x, currentPos.y + moveSpeed);
+			if (Input::GetKey(VK_DOWN)) transform->SetPosition(currentPos.x, currentPos.y - moveSpeed);
+		}
+	}
+	
+	// ì›¨ì´ë¸Œ 1 í…ŒìŠ¤íŠ¸: C, D ì£¼ì„ì²˜ë¦¬
+	// // C í˜¼ë¬¸ (IJKLë¡œ ìƒí•˜ì¢Œìš° ì´ë™)
+	// if (honmun_c)
+	// {
+	// 	auto* rb = honmun_c->GetComponent<Rigidbody>();
+	// 	if (rb)
+	// 	{
+	// 		if (Input::GetKey('J')) rb->AddForce(Vector2(-moveSpeed, 0));
+	// 		if (Input::GetKey('L')) rb->AddForce(Vector2(moveSpeed, 0));
+	// 		if (Input::GetKey('I')) rb->AddForce(Vector2(0, moveSpeed));
+	// 		if (Input::GetKey('K')) rb->AddForce(Vector2(0, -moveSpeed));
+	// 	}
+	// }
+	// 
+	// // D í˜¼ë¬¸ (8456 ìˆ«ìí‚¤ë¡œ ìƒí•˜ì¢Œìš° ì´ë™)
+	// if (honmun_d)
+	// {
+	// 	auto* rb = honmun_d->GetComponent<Rigidbody>();
+	// 	if (rb)
+	// 	{
+	// 		if (Input::GetKey('4')) rb->AddForce(Vector2(-moveSpeed, 0));
+	// 		if (Input::GetKey('6')) rb->AddForce(Vector2(moveSpeed, 0));
+	// 		if (Input::GetKey('8')) rb->AddForce(Vector2(0, moveSpeed));
+	// 		if (Input::GetKey('5')) rb->AddForce(Vector2(0, -moveSpeed));
+	// 	}
+	// }
+	
+	// R - ëª¨ë“  í˜¼ë¬¸ ë¦¬ì…‹ (ì›ë˜ ìœ„ì¹˜ë¡œ)
+	if (Input::GetKeyDown('R'))
+	{
+		if (honmun_a) honmun_a->SetPosition(-300.0f, 200.0f);
+		if (honmun_b) honmun_b->SetPosition(-100.0f, 200.0f);
+		// ì›¨ì´ë¸Œ 1 í…ŒìŠ¤íŠ¸: C, D ì£¼ì„ì²˜ë¦¬
+		// if (honmun_c) honmun_c->SetPosition(100.0f, 200.0f);
+		// if (honmun_d) honmun_d->SetPosition(300.0f, 200.0f);
 	}
 }

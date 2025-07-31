@@ -8,6 +8,7 @@
 #include "../Direct2D_EngineLib/BoxCollider.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
+#include <vector>
 
 // Forward declaration for Honmun class
 class Honmun;
@@ -15,7 +16,7 @@ class Honmun;
 class Aron_Scene : public Scene
 {
 public:
-	// SceneÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// Sceneï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Óµï¿½
 	virtual void Awake() override;
 	virtual void Start() override;
 	virtual void Update() override;
@@ -28,11 +29,15 @@ private:
 	// UI
 	UI_Text* title_text = nullptr;
 
-	// È¥¹® enemies (Honmun Å¬·¡½º »ç¿ë)
+	// \ud63c\ubb38 enemies (Honmun \ud074\ub798\uc2a4 \uc0ac\uc6a9) - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: A, B\ub9cc \uc0ac\uc6a9
 	Honmun* honmun_a = nullptr;
 	Honmun* honmun_b = nullptr;
-	Honmun* honmun_c = nullptr;
-	Honmun* honmun_d = nullptr;
+	// Honmun* honmun_c = nullptr;  // \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc5d0\uc11c \uc8fc\uc11d\ucc98\ub9ac
+	// Honmun* honmun_d = nullptr;  // \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc5d0\uc11c \uc8fc\uc11d\ucc98\ub9ac
+	
+	// ì˜¤ë¸Œì íŠ¸ ì„ íƒ ì‹œìŠ¤í…œ
+	std::vector<Honmun*> allHonmuns;
+	int selectedHonmunIndex = 0;
 
 	// ground for enemies to stand on
 	GameObject* ground = nullptr;
@@ -40,4 +45,5 @@ private:
 
 	// collision detection function
 	void CheckCollisionAndChangeColor();
+	void HandleHonmunMovement();
 };
