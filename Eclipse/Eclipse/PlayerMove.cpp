@@ -44,7 +44,7 @@ void PlayerMove::Update()
 		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Fail);
 	}
 }
-void PlayerMove::OnTriggerStay(ICollider* other)
+void PlayerMove::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck() 
 		&& !GameManager::Get().isWave && Input::GetKey('F'))
