@@ -2,13 +2,7 @@
 #include "Component.h"
 #include "Vector2.h"
 
-/* Renderer Componenets Interface */
-
-enum class RenderType
-{
-	UI, GameObject
-};
-
+/* Text Aling */
 enum class TextHorizontalAlign {
 	Left,
 	Center,
@@ -21,6 +15,7 @@ enum class TextVerticalAlign {
 	Bottom
 };
 
+/* Color Matrix member */
 struct ColorRGBA
 {
 	float r = 1.0f;
@@ -29,11 +24,32 @@ struct ColorRGBA
 	float a = 1.0f;
 };
 
+/* Render Type */
+// RenderSystem Render :: GameObject -> UI
+enum class RenderType
+{
+	UI, GameObject
+};
+
+
+/* Render Mode */
+// Render 분기 처리
+enum class RenderMode
+{
+	Unlit,					// Draw Bitmap
+	UnlitColorTint,			// Draw Image (Crop + ColorEffect)
+	Lit_Glow,				// Draw Image (Crop + BlurEffect)
+	Lit_ColorTint,			// Draw Image (Crop + ColorEffect + BlurEffect)
+};
+
+/* --------------------------------*/
+/* Renderer Componenets Interface */
+/* ------------------------------*/
 class IRenderer : public Component
 {
-public : 
-	// layer
+public :  
 	RenderType rendertype = RenderType::GameObject;
+	RenderMode renderMode = RenderMode::Unlit;		// sprite (SprteRenderer, ImageRenderer)
 	int layer = 0;
 
 	// culling - gameobject
