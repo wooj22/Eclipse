@@ -98,7 +98,7 @@ void ImageRenderer::Render()
             // 원래 transform으로 복원
             renderTarget->SetTransform(prevTransform);
         }
-        else if (renderMode == RenderMode::UnlitColorTint)
+        else if (renderMode == RenderMode::Lit_Glow)
         {
             // TODO
         }

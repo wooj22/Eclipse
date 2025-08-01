@@ -35,6 +35,7 @@ public:
 	float alpha = 1.0f;				// 투명도			// TODO :: private!
 
 private:
+	// Fill Box (Empty Sprite)
 	ComPtr<ID2D1SolidColorBrush> brush;
 	D2D1_COLOR_F baseColor = D2D1::ColorF(D2D1::ColorF::White);
 
@@ -43,7 +44,7 @@ private:
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
 
-	// ColorMatrix
+	// ColorMatrix (Sprite)
 	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix 행렬
 	colorMultiplier.a, 0, 0, 0,
@@ -51,6 +52,9 @@ private:
 	0, 0, colorMultiplier.b, 0,
 	0, 0, 0, colorMultiplier.a
 	};
+
+	// Blur (Sprite)
+
 
 public:
 	// component cycle
