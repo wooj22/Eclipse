@@ -18,6 +18,10 @@
 * 컴포넌트 생성시 RenderSystem에 등록되어 sprite를 게속 render한다.
 * sprite가 있다면 sprite 출력, 없다면 white box 칠한다.
 * render시 필요한 rectTransform은 이 컴포넌트가 등록된 오브젝트의 rectTransform을 포인터에 담아 활용한다.
+* 
+* 기본 RenderMode는 UnLint이며 (DrawBitMap)
+* ColorEffect나 Glow(blur)Effect의 효과를 기대한다면 RenderMode를 바꿔주어야한다.
+* Sprite를 적용하지 않고 Box를 그리고있다면 RenderMode의 효과는 적용되지 않는다.
 */
 
 class RectTransform;
@@ -25,15 +29,21 @@ class ImageRenderer : public IRenderer
 {
 private:
 	RectTransform* rectTransform;
-	D2D1_RECT_F destRect;
 
 public:
 	shared_ptr<Sprite> sprite;		// 공유 자원  
 	float alpha = 1.0f;				// 투명도			// TODO :: private!
 
 private:
+	ComPtr<ID2D1SolidColorBrush> brush;
+	D2D1_COLOR_F baseColor = D2D1::ColorF(D2D1::ColorF::White);
+
+private:
+	// Effect
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
+
+	// ColorMatrix
 	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix 행렬
 	colorMultiplier.a, 0, 0, 0,
@@ -41,11 +51,6 @@ private:
 	0, 0, colorMultiplier.b, 0,
 	0, 0, 0, colorMultiplier.a
 	};
-
-private:
-	// sprite가 없을 경우 box draw
-	ComPtr<ID2D1SolidColorBrush> brush;
-	D2D1_COLOR_F baseColor = D2D1::ColorF(D2D1::ColorF::White);
 
 public:
 	// component cycle
