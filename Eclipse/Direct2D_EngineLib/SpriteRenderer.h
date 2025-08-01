@@ -54,7 +54,7 @@ private:
 
 public:
 	// component cycle
-	SpriteRenderer() { renderMode = RenderMode::Lit_ColorTint; }
+	SpriteRenderer() { renderMode = RenderMode::Unlit; }
 	~SpriteRenderer() override = default;
 
 	void OnEnable_Inner() override final;
@@ -72,6 +72,6 @@ public:
 
 public:
 	// Glow (Blur)
-	void SetBlur(float blur) { blurAmmount = blur; }
+	void SetGlowAmmount(float blur) { blurAmmount = blur; }
 };
 

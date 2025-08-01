@@ -43,6 +43,7 @@ private:
 	// Effect
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
+	ComPtr<ID2D1Effect> blurEffect = nullptr;
 
 	// ColorMatrix (Sprite)
 	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
@@ -54,7 +55,7 @@ private:
 	};
 
 	// Blur (Sprite)
-
+	float blurAmmount = 15.0f;
 
 public:
 	// component cycle
@@ -77,5 +78,9 @@ public:
 	ColorRGBA GetColor() { return colorMultiplier; };		// Sprite
 	void SetAlpha(float a);									// Sprite, Image
 	float GetAlpha() { return alpha; }						// Sprite, Image
+
+public:
+	// Glow (Blur)
+	void SetGlowAmmount(float blur) { blurAmmount = blur; }
 };
 

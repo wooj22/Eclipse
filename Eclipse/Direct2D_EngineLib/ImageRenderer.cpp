@@ -13,6 +13,7 @@ void ImageRenderer::OnEnable_Inner()
     // effect 생성
     RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1ColorMatrix, &colorMatrixEffect);
     RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1Crop, &cropEffect);
+    RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1GaussianBlur, &blurEffect);
 }
 
 void ImageRenderer::OnDisable_Inner()
@@ -27,6 +28,7 @@ void ImageRenderer::OnDestroy_Inner()
     sprite = nullptr;
     colorMatrixEffect = nullptr;
     cropEffect = nullptr;
+    blurEffect = nullptr;
 }
 
 void ImageRenderer::Update()
@@ -42,6 +44,7 @@ void ImageRenderer::Render()
     auto size = rectTransform->GetSize();
     D2D1_RECT_F destRect = { 0.0f, 0.0f, size.width, size.height };
 
+    // render targt get
     auto& renderTarget = RenderSystem::Get().renderTarget;
 
     if (sprite)
@@ -100,11 +103,81 @@ void ImageRenderer::Render()
         }
         else if (renderMode == RenderMode::Lit_Glow)
         {
-            // TODO
+            // === Crop ===
+            cropEffect->SetInput(0, sprite->texture->texture2D.Get());
+            cropEffect->SetValue(D2D1_CROP_PROP_RECT, sprite->sourceRect);
+            ComPtr<ID2D1Image> croppedImage;
+            cropEffect->GetOutput(&croppedImage);
+
+            // === Blur Source ===
+            blurEffect->SetInput(0, croppedImage.Get());
+            blurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, blurAmmount);
+            ComPtr<ID2D1Image> blurredImage;
+            blurEffect->GetOutput(&blurredImage);
+
+            // === Transform ===
+            // size에 맞게 채워질 수 있는 scale 수동 조정
+            const auto& spriteSize = sprite->size;
+            float scaleX = size.width / spriteSize.width;
+            float scaleY = size.height / spriteSize.height;
+
+            D2D1_MATRIX_3X2_F transform = rectTransform->GetScreenMatrix();
+            D2D1_MATRIX_3X2_F scale = D2D1::Matrix3x2F::Scale(scaleX, scaleY);
+            transform = scale * transform;
+
+            // === Draw ===
+            D2D1_MATRIX_3X2_F prevTransform;
+            renderTarget->GetTransform(&prevTransform);
+            renderTarget->SetTransform(transform);
+
+            // Render
+            RenderSystem::Get().renderTarget->DrawImage(blurredImage.Get(), nullptr);
+            RenderSystem::Get().renderTarget->DrawImage(croppedImage.Get(), nullptr);
+
+            // 원래 transform으로 복원
+            renderTarget->SetTransform(prevTransform);
         }
         else if (renderMode == RenderMode::Lit_ColorTint)
         {
-            // TODO
+            // === Crop ===
+            cropEffect->SetInput(0, sprite->texture->texture2D.Get());
+            cropEffect->SetValue(D2D1_CROP_PROP_RECT, sprite->sourceRect);
+            ComPtr<ID2D1Image> croppedImage;
+            cropEffect->GetOutput(&croppedImage);
+
+            // === Color Matrix ===
+            colorMatrixEffect->SetInput(0, croppedImage.Get());
+            colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
+            ComPtr<ID2D1Image> colorImage;
+            colorMatrixEffect->GetOutput(&colorImage);
+
+            // === Blur Source ===
+            blurEffect->SetInput(0, colorImage.Get());
+            blurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, blurAmmount);
+            ComPtr<ID2D1Image> blurredImage;
+            blurEffect->GetOutput(&blurredImage);
+
+            // === Transform ===
+            // size에 맞게 채워질 수 있는 scale 수동 조정
+            const auto& spriteSize = sprite->size;
+            float scaleX = size.width / spriteSize.width;
+            float scaleY = size.height / spriteSize.height;
+
+            D2D1_MATRIX_3X2_F transform = rectTransform->GetScreenMatrix();
+            D2D1_MATRIX_3X2_F scale = D2D1::Matrix3x2F::Scale(scaleX, scaleY);
+            transform = scale * transform;
+
+            // === Draw ===
+            D2D1_MATRIX_3X2_F prevTransform;
+            renderTarget->GetTransform(&prevTransform);
+            renderTarget->SetTransform(transform);
+
+            // Render
+            RenderSystem::Get().renderTarget->DrawImage(blurredImage.Get(), nullptr);
+            RenderSystem::Get().renderTarget->DrawImage(colorImage.Get(), nullptr);
+
+            // 원래 transform으로 복원
+            renderTarget->SetTransform(prevTransform);
         }
     }
     else
