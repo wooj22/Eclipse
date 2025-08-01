@@ -65,7 +65,9 @@ private:
 	// debug
 	vector<DebugDrawCommand> debugDrawCommands;
 	ComPtr<ID2D1SolidColorBrush> debug_brush;
+	ComPtr<ID2D1SolidColorBrush> line_brush;
 	D2D1_COLOR_F debug_color = D2D1::ColorF(D2D1::ColorF::Red);
+	D2D1_COLOR_F line_color = D2D1::ColorF(D2D1::ColorF::SkyBlue);
 
 public:
 	// 함수를 호출하면 vector에 저장되어 해당 프레임에 그려지고 clear 된다.

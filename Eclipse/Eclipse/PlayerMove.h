@@ -14,6 +14,6 @@ private:
 public: 
 	void OnEnable() override;				// 컴포넌트 활성화 시점)
 	void Update() override;					// 매 프레임 반복 호출
-	void OnTriggerStay(ICollider* other) override;
+	void OnTriggerStay(ICollider* other, const ContactInfo& contact) override;
 };
 

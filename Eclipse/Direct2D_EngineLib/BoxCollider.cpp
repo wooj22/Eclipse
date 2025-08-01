@@ -70,14 +70,14 @@ void BoxCollider::FinalizeCollision()
         if (lastFrameCollisions.find(other) == lastFrameCollisions.end())
         {
             if (isTrigger || other->isTrigger)
-                OnTriggerEnter(other);
+                OnTriggerEnter(other, contact);
             else
                 OnCollisionEnter(other, contact);
         }
         else
         {
             if (isTrigger || other->isTrigger)
-                OnTriggerStay(other);
+                OnTriggerStay(other, contact);
             else
                 OnCollisionStay(other, contact);
         }
@@ -92,7 +92,7 @@ void BoxCollider::FinalizeCollision()
         if (currentFrameCollisions.find(other) == currentFrameCollisions.end())
         {
             if (isTrigger || other->isTrigger)
-                OnTriggerExit(other);
+                OnTriggerExit(other, contact);
             else
                 OnCollisionExit(other, contact);
         }
@@ -316,28 +316,28 @@ void BoxCollider::OnCollisionExit(ICollider* other, ContactInfo& contact)
     } 
 }
 
-void BoxCollider::OnTriggerEnter(ICollider* other)
+void BoxCollider::OnTriggerEnter(ICollider* other, ContactInfo& contact)
 {
     // script
     auto scripts = gameObject->GetComponents<Script>();
     for (auto s : scripts)
-        s->OnTriggerEnter(other);
+        s->OnTriggerEnter(other, contact);
 }
 
-void BoxCollider::OnTriggerStay(ICollider* other)
+void BoxCollider::OnTriggerStay(ICollider* other, ContactInfo& contact)
 {
     // script
     auto scripts = gameObject->GetComponents<Script>();
     for (auto s : scripts)
-        s->OnTriggerStay(other);
+        s->OnTriggerStay(other, contact);
 }
 
-void BoxCollider::OnTriggerExit(ICollider* other)
+void BoxCollider::OnTriggerExit(ICollider* other, ContactInfo& contact)
 {
     // script
     auto scripts = gameObject->GetComponents<Script>();
     for (auto s : scripts)
-        s->OnTriggerExit(other);
+        s->OnTriggerExit(other, contact);
 }
 
 Vector2 BoxCollider::GetCenter() const
@@ -357,7 +357,7 @@ void BoxCollider::DebugColliderDraw()
     float bottom = size.y * 0.5f - offset.y;
 
     D2D1_RECT_F localRect = D2D1::RectF(left, top, right, bottom);
-    RenderSystem::Get().DebugDrawRect(localRect, transform->GetScreenMatrix());
+    RenderSystem::Get().DebugDrawRect(localRect, transform->GetScreenMatrix(), 1);
 
     // center
     D2D1_ELLIPSE ellipse2 = D2D1::Ellipse(

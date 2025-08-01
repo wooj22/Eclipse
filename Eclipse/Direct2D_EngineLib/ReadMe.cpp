@@ -67,14 +67,14 @@ class Script;
 
 	/* [collision event] */
 	// trigger
-	virtual void OnTriggerEnter(ICollider* other) {}
-	virtual void OnTriggerStay(ICollider* other) {}
-	virtual void OnTriggerExit(ICollider* other) {}
+	virtual void OnTriggerEnter(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnTriggerStay(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnTriggerExit(ICollider* other, const ContactInfo& contact) {}
 
 	// collision
-	virtual void OnCollisionEnter(ICollider* other) {}
-	virtual void OnCollisionStay(ICollider* other) {}
-	virtual void OnCollisionExit(ICollider* other) {}
+	virtual void OnCollisionEnter(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnCollisionStay(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnCollisionExit(ICollider* other, const ContactInfo& contact) {}
 }
 
 
@@ -242,3 +242,40 @@ class ColliderSystem;
 // ColliderSystem::Raycast() 함수를 호출하여 Ray를 던지면,
 // 충돌 정보가 담긴 RaycastHit 구조체를 반환합니다. (가장 가까운 콜라이더 1개)
 // Raycast는 isTrigger false인 콜라이더에 대해서만 충돌 체크를 진행합니다.
+
+
+
+
+
+/*------------------------------------------------------------------*/
+/*-------------------------   Render    ---------------------------*/
+/*-----------------------------------------------------------------*/
+class RenderSystem;
+class IRenderer;
+
+// RenderType에 따라 GameObject를 먼저 그리고 UI를 그린다.
+// RenderMode에 따라 다른 렌더 체인을 제공하며 기본은 Unlit이다.
+// 이때 Text 관련 렌더러들은 RenderMode에 영향을 받지 않으며,
+// 무조건 bitmap Image만 적용이 된다. (SpriteRenderer, ImageRenderer의 sprite 적용시)
+
+
+// SpriteRenderer와 ImageRenderer에서 sprite의 이펙트 효과를 받고싶다면
+// 아래의 렌더모드를 지정해주어야한다!
+
+// 1. Unlit	(Default)
+//    - Draw Bitmap
+//    - 일반 Bitmap 이미지를 그린다.
+//    - 색상 변경은 불가능하며 Alpha값만 조정 가능하다.
+
+// 2. UnlitColorTint
+//    - Draw Image (Crop + ColorEffect)
+//    - bitmap 이미지에 ColorMatirx를 적용시켜 색상 변환을 한 뒤 그린다.
+//    - R, G, B, A 조정이 가능하다.
+
+// 3. Lit_Glow
+//    - Draw Image (Crop + BlurEffect)
+//    - TODO 
+
+// 4. Lit_ColorTint			
+//    - Draw Image (Crop + ColorEffect + BlurEffect)
+//    - TODO

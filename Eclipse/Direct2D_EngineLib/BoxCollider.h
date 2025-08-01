@@ -57,9 +57,9 @@ private:
     void OnCollisionEnter(ICollider* other, ContactInfo& contact) override;
     void OnCollisionStay(ICollider* other, ContactInfo& contact) override;
     void OnCollisionExit(ICollider* other, ContactInfo& contact) override;
-    void OnTriggerEnter(ICollider* other) override;
-    void OnTriggerStay(ICollider* other) override;
-    void OnTriggerExit(ICollider* other) override;
+    void OnTriggerEnter(ICollider* other, ContactInfo& contact) override;
+    void OnTriggerStay(ICollider* other, ContactInfo& contact) override;
+    void OnTriggerExit(ICollider* other, ContactInfo& contact) override;
 
 public:
     // func

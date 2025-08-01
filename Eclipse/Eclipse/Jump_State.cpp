@@ -49,7 +49,10 @@ void Jump_State::Update(MovementFSM* fsm)
     // 두번째 Jump 실행 
     if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace() && canDoubleJump)
     {
+        fsm->GetPlayerFSM()->GetRigidbody()->useGravity = false;
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
+        fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
         canDoubleJump = false;
     }
 

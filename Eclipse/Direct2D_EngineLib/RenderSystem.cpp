@@ -105,14 +105,15 @@ void RenderSystem::Init(HWND hwnd, int width, int height)
 	renderTarget->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, backBufferBitmap.GetAddressOf());
 	renderTarget->SetTarget(backBufferBitmap.Get());
 
-	// DirectWrite ∆—≈Õ∏Æ∏¶ ∏∏µÏ¥œ¥Ÿ.
+	// DirectWrite Factory
 	DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
 		__uuidof(dWriteFactory),
 		reinterpret_cast<IUnknown**>(dWriteFactory.GetAddressOf()));
 
-	// debug
+	// brush
 	renderTarget->CreateSolidColorBrush(debug_color, &debug_brush);
+	renderTarget->CreateSolidColorBrush(line_color, &line_brush);
 }
 
 void RenderSystem::Update()
@@ -191,6 +192,7 @@ void RenderSystem::Render()
 	for (const DebugDrawCommand& cmd : debugDrawCommands)
 	{
 		renderTarget->SetTransform(cmd.transform);
+
 		switch (cmd.type)
 		{
 		case DebugDrawType::Rect:
@@ -200,7 +202,7 @@ void RenderSystem::Render()
 			renderTarget->DrawEllipse(cmd.ellipse, debug_brush.Get(), cmd.strokeWidth);
 			break;
 		case DebugDrawType::Line:
-			renderTarget->DrawLine(cmd.line.start, cmd.line.end, debug_brush.Get(), cmd.strokeWidth);
+			renderTarget->DrawLine(cmd.line.start, cmd.line.end, line_brush.Get(), cmd.strokeWidth);
 			break;
 		}
 	}
@@ -219,6 +221,9 @@ void RenderSystem::UnInit()
 	renderTarget.Reset();
 	backBufferBitmap.Reset();
 	dWriteFactory.Reset();
+
+	line_brush.Reset();
+	debug_brush.Reset();
 }
 
 
