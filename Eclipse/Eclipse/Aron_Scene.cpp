@@ -82,6 +82,17 @@ void Aron_Scene::Awake()
 	honmun_b4->SetHonmunType(HonmunType::B);
 	honmun_b4->SetPosition(50.0f, 50.0f);
 
+	// C 타입 혼문 2개 (테스트용)
+	auto* honmun_c = CreateObject<Honmun>();
+	honmun_c->name = "Honmun_C1";
+	honmun_c->SetHonmunType(HonmunType::C);
+	honmun_c->SetPosition(-500.0f, -200.0f);
+
+	auto* honmun_c2 = CreateObject<Honmun>();
+	honmun_c2->name = "Honmun_C2";
+	honmun_c2->SetHonmunType(HonmunType::C);
+	honmun_c2->SetPosition(500.0f, -200.0f);
+
 	// 모든 혼문을 벡터에 추가
 	allHonmuns.push_back(honmun_a);
 	allHonmuns.push_back(honmun_a2);
@@ -91,6 +102,8 @@ void Aron_Scene::Awake()
 	allHonmuns.push_back(honmun_b2);
 	allHonmuns.push_back(honmun_b3);
 	allHonmuns.push_back(honmun_b4);
+	allHonmuns.push_back(honmun_c);
+	allHonmuns.push_back(honmun_c2);
 	
 	// 웨이브 시스템 초기화
 	waveData.waveActive = false;
