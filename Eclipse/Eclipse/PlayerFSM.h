@@ -44,6 +44,7 @@ private:
 	bool isWallLeft = false;
 	bool isWallRight = false;
 
+
 	// key
 	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton;
 
@@ -55,7 +56,8 @@ private:
 	// BoxCollider* boxCollider = nullptr;
 
 public:
-	// FSM 변수
+	// [ FSM 변수 ]
+	// GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 해주기 
 	float holdTime = 0.0f;
 	float timer = 0.0f;
 	bool isHolding = false;
@@ -65,6 +67,7 @@ public:
 	const float defaultGravity = 100.0f;   // 기본 중력 
 	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
 	Vector2 MouseWorldPos;
+
 
 public:
 	// getter
@@ -118,6 +121,7 @@ public:
 	{
 		if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 		{ 
+			OutputDebugStringA("Ground과 충돌 했습니다.\n");
 			isGround = true; 
 		}
 		else if (other->gameObject->name == "Wall")
@@ -132,7 +136,11 @@ public:
 
 	void OnCollisionExit(ICollider* other, const ContactInfo& contact)  override
 	{
-		if (other->gameObject->name == "Ground") { isGround = false; }
+		if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
+		{ 
+			OutputDebugStringA("Ground 빠져나갔음 .\n");
+			isGround = false; 
+		}
 		else if (other->gameObject->name == "Wall")
 		{
 			if (contact.normal.x == 1)   isWallLeft = false;

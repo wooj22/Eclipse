@@ -19,6 +19,7 @@ void Attack_State::Enter(MovementFSM* fsm)
 
     // 시작 위치
     startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
+
     Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos;
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
