@@ -71,7 +71,7 @@ void HonmunCollisionScript::Update()
 	}
 }
 
-void HonmunCollisionScript::OnTriggerEnter(ICollider* other)
+void HonmunCollisionScript::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	OutputDebugStringA("OnTriggerEnter called!\n");
 	

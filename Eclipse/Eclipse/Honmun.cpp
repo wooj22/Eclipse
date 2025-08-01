@@ -211,13 +211,11 @@ void Honmun::SetSize(float newSize)
 	size = newSize;
 	if (transform)
 	{
-<<<<<<< HEAD
 		transform->SetScale(size * 0.7f, size * 0.7f); // 기본 크기 0.7에 새로운 크기 적용
 	}
 	if (collider)
 	{
 		collider->radius = 35.0f * size; // 기본 반지름 35에 크기 적용
-=======
 		transform->SetScale(size, size); // 원본 크기에 새로운 크기 적용
 	}
 	SetupColliderForType(); // 크기 변경 시 콜라이더도 재설정
@@ -251,7 +249,6 @@ void Honmun::SetupColliderForType()
 		collider->radius = 50.0f * size;
 		collider->offset.y = -10.0f;
 		break;
->>>>>>> origin/ron_dev
 	}
 }
 
