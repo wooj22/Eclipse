@@ -84,9 +84,9 @@ void PlayUI::SceneStart()
 	auto honImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Hon.png");
 	hon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
-	hon_Text->rectTransform->SetPosition(70, 0);
-	hon_Text->rectTransform->SetSize(100, 50);
-	hon_Text->screenTextRenderer->SetText(L"x 1");
+	hon_Text->rectTransform->SetPosition(200, 0);
+	hon_Text->rectTransform->SetSize(330, 50);
+	hon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	hon_Text->screenTextRenderer->SetFontSize(50);
 
 	// ½ºÅ³1
@@ -116,6 +116,8 @@ void PlayUI::SceneStart()
 
 void PlayUI::Update()
 {
+
+	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
 
 	if (waveInfo_Text->IsActive())
 	{
