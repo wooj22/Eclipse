@@ -220,7 +220,7 @@ void Honmun::SetupColliderForType()
 {
 	if (!collider) return;
 	
-	collider->isTrigger = false;
+	collider->isTrigger = true; // 트리거 모드로 변경
 	
 	switch (honmunType)
 	{

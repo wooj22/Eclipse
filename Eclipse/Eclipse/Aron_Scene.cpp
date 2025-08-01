@@ -20,6 +20,22 @@ void Aron_Scene::Awake()
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::LightBlue));
 	title_text->screenTextRenderer->SetText(L"Aron Scene");
+	
+	// 점수 UI 추가
+	score_text = CreateObject<UI_Text>();
+	score_text->rectTransform->SetPosition(0, 400);
+	score_text->rectTransform->SetSize(300, 50);
+	score_text->screenTextRenderer->SetFontSize(30);
+	score_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Yellow));
+	score_text->screenTextRenderer->SetText(L"Score: 0");
+	
+	// 디버그 정보 UI 추가
+	debug_text = CreateObject<UI_Text>();
+	debug_text->rectTransform->SetPosition(0, 300);
+	debug_text->rectTransform->SetSize(600, 50);
+	debug_text->screenTextRenderer->SetFontSize(20);
+	debug_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	debug_text->screenTextRenderer->SetText(L"Q/E: Select, Arrow: Move, R: Reset");
 
 	// [ \ud63c\ubb38 enemies ] - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 A, B \uc544\uc774\ud15c \uc5ec\ub7ec \uac1c \uc0dd\uc131
 	// A \ud0c0\uc785 \ud63c\ubb38 4\uac1c
@@ -265,5 +281,26 @@ void Aron_Scene::HandleHonmunMovement()
 		// 웨이브 1 테스트: C, D 주석처리
 		// if (honmun_c) honmun_c->SetPosition(100.0f, 200.0f);
 		// if (honmun_d) honmun_d->SetPosition(300.0f, 200.0f);
+	}
+}
+
+void Aron_Scene::AddScore(int points)
+{
+	currentScore += points;
+	UpdateScoreUI();
+	
+	// 디버그 출력
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Score added: +%d, Total: %d\n", points, currentScore);
+	OutputDebugStringA(debugMsg);
+}
+
+void Aron_Scene::UpdateScoreUI()
+{
+	if (score_text && score_text->screenTextRenderer)
+	{
+		wchar_t scoreText[50];
+		swprintf_s(scoreText, L"Score: %d", currentScore);
+		score_text->screenTextRenderer->SetText(scoreText);
 	}
 }

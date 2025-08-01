@@ -28,6 +28,8 @@ private:
 
 	// UI
 	UI_Text* title_text = nullptr;
+	UI_Text* score_text = nullptr;
+	UI_Text* debug_text = nullptr;
 
 	// \ud63c\ubb38 enemies (Honmun \ud074\ub798\uc2a4 \uc0ac\uc6a9) - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: A, B\ub9cc \uc0ac\uc6a9
 	Honmun* honmun_a = nullptr;
@@ -43,7 +45,16 @@ private:
 	GameObject* ground = nullptr;
 	BoxCollider* ground_col = nullptr;
 
+	// 점수 시스템
+	int currentScore = 0;
+	
 	// collision detection function
 	void CheckCollisionAndChangeColor();
 	void HandleHonmunMovement();
+	
+public:
+	// 점수 관련 함수들 (다른 클래스에서 접근 가능)
+	void AddScore(int points);
+	int GetScore() const { return currentScore; }
+	void UpdateScoreUI();
 };
