@@ -32,7 +32,7 @@ public:
 	void OnDestroy() override;
 
 	// trigger event
-	void OnTriggerEnter(ICollider* other) override;
+	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
 
 public:
 	// bullet functions
