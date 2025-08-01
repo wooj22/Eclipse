@@ -53,7 +53,7 @@ private:
 	// 점수 시스템
 	int currentScore = 0;
 	
-	// 웨이브 1 시스템
+	// 웨이브 시스템
 	struct WaveSpawnData {
 		float spawnY = 800.0f;          // 카메라 위 스폰 위치
 		float groundY = -350.0f;        // 바닥 위치 (1층 위쪽)
@@ -63,6 +63,7 @@ private:
 		float spawnInterval = 1.0f;     // 스폰 간격 (초)
 		float lastSpawnTime = 0.0f;     // 마지막 스폰 시간
 		bool waveActive = false;        // 웨이브 활성 상태
+		int currentWave = 1;            // 현재 웨이브 번호 (1 또는 2)
 		std::vector<Honmun*> spawnedHonmuns; // 스폰된 혼문들
 	} waveData;
 	
@@ -79,10 +80,13 @@ public:
 	
 	// 웨이브 시스템 함수들
 	void StartWave1();
+	void StartWave2();
 	void UpdateWaveSystem();
 	void SpawnHonmun();
+	void SpawnHonmunWave2();  // 웨이브 2용 스폰 (A, B, C 포함)
 	bool IsHonmunOnGround(Honmun* honmun);
 	void CheckHonmunsReachFloor1();
 	HonmunType GetRandomHonmunType();
+	HonmunType GetRandomHonmunTypeWave2();  // 웨이브 2용 (A, B, C 포함)
 	void ResetScene();  // 씬 완전 초기화
 };

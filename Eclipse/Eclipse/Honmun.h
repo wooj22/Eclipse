@@ -19,6 +19,8 @@ class HonmunAFSM;
 class HonmunAAnimatorController;
 class HonmunBFSM;
 class HonmunBAnimatorController;
+class HonmunCFSM;
+class HonmunCAnimatorController;
 
 class Honmun : public GameObject
 {
@@ -68,6 +70,8 @@ private:
 	HonmunAAnimatorController* honmunAAnimatorController;
 	HonmunBFSM* honmunBFSM;
 	HonmunBAnimatorController* honmunBAnimatorController;
+	HonmunCFSM* honmunCFSM;
+	HonmunCAnimatorController* honmunCAnimatorController;
 
 	// 혼문 상태 변수들
 	int hp = 2;                    // 체력 (기본값 2)

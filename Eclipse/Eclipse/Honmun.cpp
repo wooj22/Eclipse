@@ -4,11 +4,13 @@
 #include "HonmunAAnimatorController.h"
 #include "HonmunBFSM.h"
 #include "HonmunBAnimatorController.h"
+#include "HonmunCFSM.h"
+#include "HonmunCAnimatorController.h"
 #include "../Direct2D_EngineLib/ResourceManager.h"
 #include <iostream>
 #include <exception>
 
-Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A), honmunAFSM(nullptr), honmunAAnimatorController(nullptr), honmunBFSM(nullptr), honmunBAnimatorController(nullptr)
+Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A), honmunAFSM(nullptr), honmunAAnimatorController(nullptr), honmunBFSM(nullptr), honmunBAnimatorController(nullptr), honmunCFSM(nullptr), honmunCAnimatorController(nullptr)
 {
 	transform = AddComponent<Transform>();
 	spriteRenderer = AddComponent<SpriteRenderer>();
@@ -77,6 +79,11 @@ Honmun::~Honmun()
 		delete honmunBAnimatorController;
 		honmunBAnimatorController = nullptr;
 	}
+	if (honmunCAnimatorController)
+	{
+		delete honmunCAnimatorController;
+		honmunCAnimatorController = nullptr;
+	}
 }
 
 void Honmun::Destroyed()
@@ -98,6 +105,11 @@ void Honmun::SetHonmunType(HonmunType type)
 	{
 		delete honmunBAnimatorController;
 		honmunBAnimatorController = nullptr;
+	}
+	if (honmunCAnimatorController && type != HonmunType::C)
+	{
+		delete honmunCAnimatorController;
+		honmunCAnimatorController = nullptr;
 	}
 
 	// Initialize FSM and Animator based on type
@@ -137,9 +149,27 @@ void Honmun::SetHonmunType(HonmunType type)
 			honmunBFSM = AddComponent<HonmunBFSM>();
 		}
 	}
+	else if (type == HonmunType::C)
+	{
+		// Create and setup animator controller for Honmun C
+		if (!honmunCAnimatorController)
+		{
+			honmunCAnimatorController = new HonmunCAnimatorController();
+		}
+		if (animator)
+		{
+			animator->SetController(honmunCAnimatorController);
+		}
+		
+		// Add FSM component for Honmun C if not already present
+		if (!GetComponent<HonmunCFSM>())
+		{
+			honmunCFSM = AddComponent<HonmunCFSM>();
+		}
+	}
 	else
 	{
-		// For other types (C, D), use static sprites
+		// For other types (D), use static sprites
 		if (spriteRenderer)
 		{
 			auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
@@ -211,11 +241,6 @@ void Honmun::SetSize(float newSize)
 	size = newSize;
 	if (transform)
 	{
-		transform->SetScale(size * 0.7f, size * 0.7f); // 기본 크기 0.7에 새로운 크기 적용
-	}
-	if (collider)
-	{
-		collider->radius = 35.0f * size; // 기본 반지름 35에 크기 적용
 		transform->SetScale(size, size); // 원본 크기에 새로운 크기 적용
 	}
 	SetupColliderForType(); // 크기 변경 시 콜라이더도 재설정
