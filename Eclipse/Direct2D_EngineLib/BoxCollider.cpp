@@ -357,7 +357,7 @@ void BoxCollider::DebugColliderDraw()
     float bottom = size.y * 0.5f - offset.y;
 
     D2D1_RECT_F localRect = D2D1::RectF(left, top, right, bottom);
-    RenderSystem::Get().DebugDrawRect(localRect, transform->GetScreenMatrix(), 1);
+    RenderSystem::Get().DebugDrawRect(localRect, transform->GetScreenMatrix());
 
     // center
     D2D1_ELLIPSE ellipse2 = D2D1::Ellipse(
