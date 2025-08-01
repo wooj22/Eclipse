@@ -99,6 +99,35 @@ void HonmunCollisionScript::OnTriggerEnter(ICollider* other, const ContactInfo& 
 	isProcessingReaction = true;
 	otherScript->isProcessingReaction = true;
 
+	// 점수 시스템을 위한 현재 씬 가져오기 (체력 체크 전에 미리 준비)
+	auto* currentScene = SceneManager::Get().GetCurrentScene();
+	auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+
+	// 체력 1인 객체의 Mixed reaction 점수를 먼저 계산
+	bool shouldCalculateMixedScore = (health == 1 || otherScript->health == 1) && 
+		(honmunType != otherScript->honmunType);
+	
+	if (shouldCalculateMixedScore && aronScene)
+	{
+		// A<->B, A<->C, B<->C 충돌 시 +2점 (체력 1 객체 포함 시)
+		if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::B) ||
+			(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::A) ||
+			(honmunType == HonmunType::A && otherScript->honmunType == HonmunType::C) ||
+			(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::A) ||
+			(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::C) ||
+			(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::B))
+		{
+			aronScene->AddScore(2);
+			OutputDebugStringA("Mixed collision with HP=1 object: Score +2 added early!\n");
+		}
+		// D와의 충돌은 -2점 (체력 1 객체 포함 시)
+		else if (honmunType == HonmunType::D || otherScript->honmunType == HonmunType::D)
+		{
+			aronScene->AddScore(-2);
+			OutputDebugStringA("D collision with HP=1 object: Score -2 added early!\n");
+		}
+	}
+
 	// 체력 0인 객체는 어떤 충돌이든 즉시 파괴
 	if (health <= 0 || otherScript->health <= 0)
 	{
@@ -366,10 +395,21 @@ void HonmunCollisionScript::HandleUmbraReaction(HonmunCollisionScript* otherScri
 
 void HonmunCollisionScript::HandleDarknessReaction(HonmunCollisionScript* otherScript)
 {
-	// C + C = \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c (3 → 2 → 1 → 0 \uc644\uc804 \ud30c\uad34)
+	// C + C = \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c (3 → 2 → 1 → 0 \uc644\uc804 \ud30c\uad34) + 점수 +3점
 	
 	// \ub514\ubc84\uadf8 \ucd9c\ub825
 	OutputDebugStringA("C + C collision detected!\n");
+	
+	// 점수 시스템을 위한 현재 씬 가져오기
+	auto* currentScene = SceneManager::Get().GetCurrentScene();
+	auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+	
+	// C + C 충돌 시 항상 +3점 부여
+	if (aronScene)
+	{
+		aronScene->AddScore(3);
+		OutputDebugStringA("C + C collision: +3 points!\n");
+	}
 	
 	// \uccb4\ub825 \uac10\uc18c
 	health--;
@@ -422,17 +462,20 @@ void HonmunCollisionScript::HandleLunaReaction(HonmunCollisionScript* otherScrip
 
 void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScript)
 {
+	// 점수 시스템을 위한 현재 씬 가져오기
+	auto* currentScene = SceneManager::Get().GetCurrentScene();
+	auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+	
+	// 체력 1인 객체가 있었는지 확인 (이미 점수가 추가되었는지 체크)
+	bool wasHP1Collision = (health == 1 || otherScript->health == 1);
+	
 	// \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: A\uc640 B\ub9cc \uc0ac\uc6a9
 	// A&B \ub610\ub294 B&A - \ud295\uae40 (\ud0a4\ub124\ub9c8\ud2f1\uc73c\ub85c \ubcc0\uacbd) + A 체력 감소 + 점수 +1
 	if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::B) ||
 		(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::A))
 	{
-		// 점수 시스템을 위한 현재 씬 가져오기
-		auto* currentScene = SceneManager::Get().GetCurrentScene();
-		auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
-		
-		// 점수 +1 추가 (Aron_Scene에서만)
-		if (aronScene)
+		// 점수 +1 추가 (체력 1 객체가 아닌 경우에만 - 이미 추가되지 않았을 때만)
+		if (aronScene && !wasHP1Collision)
 		{
 			aronScene->AddScore(1);
 			OutputDebugStringA("A<->B collision: Score +1 added!\n");
@@ -501,31 +544,139 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 		
 		BounceAwayKinematic(otherScript);
 	}
-
-	// \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: C, D \uad00\ub828 \ucda9\ub3cc \ucf54\ub4dc \uc8fc\uc11d\ucc98\ub9ac
-	// // D�� ���Ե� �浹�� �׻� D�� �ı���
-	// if (honmunType == HonmunType::D)
-	// {
-	// 	DestroyThis();
-	// 	return;
-	// }
-	// if (otherScript->honmunType == HonmunType::D)
-	// {
-	// 	otherScript->DestroyThis();
-	// 	return;
-	// }
-	// // A&C �Ǵ� C&A - �и�
-	// else if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::C) ||
-	// 	(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::A))
-	// {
-	// 	PushSideways(otherScript);
-	// }
-	// // B&C �Ǵ� C&B - ����
-	// else if ((honmunType == HonmunType::B && otherScript->honmunType == HonmunType::C) ||
-	// 	(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::B))
-	// {
-	// 	PassThrough(otherScript);
-	// }
+	// A&C 또는 C&A - 점수 +1
+	else if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::C) ||
+		(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::A))
+	{
+		if (aronScene && !wasHP1Collision)
+		{
+			aronScene->AddScore(1);
+			OutputDebugStringA("A<->C collision: Score +1 added!\n");
+		}
+		
+		// A와 C 모두 체력 감소
+		if (honmunType == HonmunType::A) 
+		{
+			bool is2A = (currentSize > 15.0f && health == 1);
+			health--;
+			if (health <= 0) 
+			{
+				if (is2A && aronScene)
+				{
+					aronScene->AddScore(3);
+					OutputDebugStringA("2A destroyed in A<->C collision: +3 bonus points!\n");
+				}
+				DestroyThis();
+				return;
+			}
+		}
+		else if (honmunType == HonmunType::C)
+		{
+			health--;
+			if (health <= 0)
+			{
+				DestroyThis();
+				return;
+			}
+		}
+		
+		if (otherScript->honmunType == HonmunType::A) 
+		{
+			bool is2A = (otherScript->currentSize > 15.0f && otherScript->health == 1);
+			otherScript->health--;
+			if (otherScript->health <= 0) 
+			{
+				if (is2A && aronScene)
+				{
+					aronScene->AddScore(3);
+					OutputDebugStringA("2A destroyed in A<->C collision: +3 bonus points!\n");
+				}
+				otherScript->DestroyThis();
+				return;
+			}
+		}
+		else if (otherScript->honmunType == HonmunType::C)
+		{
+			otherScript->health--;
+			if (otherScript->health <= 0)
+			{
+				otherScript->DestroyThis();
+				return;
+			}
+		}
+		
+		BounceAwayKinematic(otherScript);
+	}
+	// B&C 또는 C&B - 점수 +1
+	else if ((honmunType == HonmunType::B && otherScript->honmunType == HonmunType::C) ||
+		(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::B))
+	{
+		if (aronScene && !wasHP1Collision)
+		{
+			aronScene->AddScore(1);
+			OutputDebugStringA("B<->C collision: Score +1 added!\n");
+		}
+		
+		// B와 C 모두 체력 감소
+		if (honmunType == HonmunType::B) 
+		{
+			health--;
+			if (health <= 0) 
+			{
+				DestroyThis();
+				return;
+			}
+		}
+		else if (honmunType == HonmunType::C)
+		{
+			health--;
+			if (health <= 0)
+			{
+				DestroyThis();
+				return;
+			}
+		}
+		
+		if (otherScript->honmunType == HonmunType::B) 
+		{
+			otherScript->health--;
+			if (otherScript->health <= 0) 
+			{
+				otherScript->DestroyThis();
+				return;
+			}
+		}
+		else if (otherScript->honmunType == HonmunType::C)
+		{
+			otherScript->health--;
+			if (otherScript->health <= 0)
+			{
+				otherScript->DestroyThis();
+				return;
+			}
+		}
+		
+		BounceAwayKinematic(otherScript);
+	}
+	// D와의 충돌 - 항상 -1점 (충돌하는 객체 파괴)
+	else if (honmunType == HonmunType::D || otherScript->honmunType == HonmunType::D)
+	{
+		if (aronScene && !wasHP1Collision)
+		{
+			aronScene->AddScore(-1);
+			OutputDebugStringA("D collision: Score -1!\n");
+		}
+		
+		// D가 아닌 객체 파괴
+		if (honmunType != HonmunType::D)
+		{
+			DestroyThis();
+		}
+		if (otherScript->honmunType != HonmunType::D)
+		{
+			otherScript->DestroyThis();
+		}
+	}
 }
 
 // MergeWithOther 함수는 더 이상 사용하지 않음 - 새로운 2A 생성 방식으로 변경

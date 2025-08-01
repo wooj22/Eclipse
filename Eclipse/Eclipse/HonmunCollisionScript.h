@@ -47,7 +47,7 @@ public:
 	void Update() override;
 
 	// 트리거 이벤트
-	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
+	void OnTriggerEnter(ICollider* other, const ContactInfo& contact);
 
 	// ȥ�� Ÿ�� ����
 	void SetHonmunType(HonmunType type);
