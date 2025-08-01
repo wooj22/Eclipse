@@ -101,7 +101,8 @@ void Moon_Scene::Awake()
 	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
 
 	platform1_col = platform1->AddComponent<BoxCollider>();
-	platform1_col->size = { 200.0f, 30.0f };
+	platform1_col->offset = { 0.0f, 12.0f };
+	platform1_col->size = { 200.0f, 5.0f };
 	
 
 	// [ Platform2 ]
