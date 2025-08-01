@@ -33,6 +33,8 @@ private:
 	float dashSpeed = 450.f;
 	float jumpForce = 700.0f;
 
+	float speedDownRate = 1.0;
+
 	// int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
 
 	// move
@@ -91,6 +93,12 @@ public:
 	float GetJumpForce() const { return jumpForce; }
 	float GetInputX() const { return inputX; }
 	float GetCurSpeed() const { return curSpeed; }
+
+	// TODO : 매개변수로 감속율 받는 함수 (우정)
+	// 감속률만 받도록 
+	// 쿨타임 후, 원래 속도 복원 
+	void SetSpeedDownRate(float speed) { speedDownRate = speed; }
+
 
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }

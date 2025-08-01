@@ -17,7 +17,7 @@ void BossController::Awake()
 	rb = gameObject->GetComponent<Rigidbody>();
 	collider = gameObject->GetComponent<CircleCollider>();
 
-	playerTr = GameObject::FindWithTag("Player_Woo")->GetComponent<Transform>();
+	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
 }
 
 void BossController::Start()
