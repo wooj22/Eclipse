@@ -63,3 +63,15 @@ bool GameManager::LevelUpSkill(SkillType skill)
 
 	return true;
 }
+
+void GameManager::AllSkillUnlock()
+{
+	if (g_playUI == nullptr)
+		return;
+	for (auto& pair : skillTree)
+	{
+		SkillInfo& info = pair.second;
+		info.unlocked = true;
+		info.unlockLevel = info.maxLevel;
+	}
+}
