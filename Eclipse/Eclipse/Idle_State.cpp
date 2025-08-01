@@ -9,6 +9,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include "Fall_State.h"
 
 void Idle_State::Enter(MovementFSM* fsm)
 {
@@ -60,6 +61,13 @@ void Idle_State::Update(MovementFSM* fsm)
 
         // ÃÊ±âÈ­
         fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
+    }
+
+
+    // [ Fall ]
+    if (!fsm->GetPlayerFSM()->GetIsGround())
+    {
+        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>());
     }
 }
 
