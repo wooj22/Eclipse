@@ -54,7 +54,6 @@ public:
 	UI_Text* tooltipName_Text;		// 툴팁 이름 텍스트
 	UI_Text* tooltipEx_Text;		// 툴팁 설명 텍스트
 
-	UI_Image* tooltip2_Image;		// 툴팁 이미지
 public:
 	// game object cycle
 	PlayUI() : GameObject("PlayUI","PlayUI") {}
