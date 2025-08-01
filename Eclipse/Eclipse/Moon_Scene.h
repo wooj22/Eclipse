@@ -5,7 +5,6 @@
 #include "../Direct2D_EngineLib/UI_Text.h"
 
 #include "Player.h"
-#include "playerAttackArea.h"
 
 class Moon_Scene : public Scene
 {
@@ -21,7 +20,7 @@ private:
 	GameObject* platform2;
 
 	Player* player;
-	playerAttackArea* playerAttackArea;
+	GameObject* playerAttack;
 
 	// component 
 	BoxCollider* ground_col;

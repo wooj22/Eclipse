@@ -49,89 +49,43 @@ void SpriteRenderer::Render()
 {
 	if (!transform || !sprite) return;
 
-	// source rect, size
-	D2D1_RECT_F srcRect = sprite->sourceRect;
-	D2D1_SIZE_F spriteSize = sprite->size;
+	auto& srcRect = sprite->sourceRect;
+	auto& spriteSize = sprite->size;
+	float pivotX = sprite->pivot.x;
+	float pivotY = sprite->pivot.y;
 
-	if (renderMode == RenderMode::Unlit)
-	{
-		// pivox
-		float pivotX = sprite->pivot.x;
-		float pivotY = 1.0f - sprite->pivot.y;
+	// === Crop ===
+	cropEffect->SetInput(0, sprite->texture->texture2D.Get());
+	cropEffect->SetValue(D2D1_CROP_PROP_RECT, srcRect);
+	ComPtr<ID2D1Image> croppedImage;
+	cropEffect->GetOutput(&croppedImage);
 
-		// dest rect
-		D2D1_RECT_F destRect = {
-			-spriteSize.width * pivotX,
-			-spriteSize.height * pivotY,
-			spriteSize.width * (1.0f - pivotX),
-			spriteSize.height * (1.0f - pivotY)
-		};
+	// === Color Matrix ===
+	colorMatrixEffect->SetInput(0, croppedImage.Get());
+	colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
+	ComPtr<ID2D1Image> finalImage;
+	colorMatrixEffect->GetOutput(&finalImage);
 
-		// filp
-		float scaleX = flipX ? -1.0f : 1.0f;
-		float scaleY = flipY ? -1.0f : 1.0f;
-		D2D1::Matrix3x2F flipMat = D2D1::Matrix3x2F::Scale(scaleX, scaleY, { 0, 0 });
-		auto finalMat = flipMat * transform->GetScreenMatrix();
+	// === Flip Matrix ===
+	float scaleX = flipX ? -1.0f : 1.0f;
+	float scaleY = flipY ? -1.0f : 1.0f;
+	auto flipMat = D2D1::Matrix3x2F::Scale(D2D1::Size(scaleX, scaleY), { 0, 0 });
 
-		// transform
-		RenderSystem::Get().renderTarget->SetTransform(finalMat);
+	// === Pivot Matrix ===
+	D2D1_POINT_2F pivotOffset = { spriteSize.width * pivotX, spriteSize.height * pivotY };
+	auto pivotMat = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
 
-		// render
-		RenderSystem::Get().renderTarget->SetTransform(finalMat);
-		RenderSystem::Get().renderTarget->DrawBitmap(
-			sprite->texture->texture2D.Get(),
-			destRect,           // 출력 위치 및 크기
-			alpha,				// 불투명도
-			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-			srcRect             // source rect
-		);
-	}
-	else if (renderMode == RenderMode::UnlitColorTint)
-	{
-		float pivotX = sprite->pivot.x;
-		float pivotY = sprite->pivot.y;
+	// === Fianl Matrix ===
+	auto finalMat = flipMat * pivotMat * transform->GetScreenMatrix();
+	RenderSystem::Get().renderTarget->SetTransform(finalMat);
 
-		// === Crop ===
-		cropEffect->SetInput(0, sprite->texture->texture2D.Get());
-		cropEffect->SetValue(D2D1_CROP_PROP_RECT, srcRect);
-		ComPtr<ID2D1Image> croppedImage;
-		cropEffect->GetOutput(&croppedImage);
+	// === sourceRect 위치 보정 ===
+	D2D1_POINT_2F drawOffset = { 0, 0 };
+	drawOffset.x = flipX ? (-srcRect.left - spriteSize.width) : -srcRect.left;
+	drawOffset.y = flipY ? (-srcRect.top - spriteSize.height) : -srcRect.top;
 
-		// === Color Matrix ===
-		colorMatrixEffect->SetInput(0, croppedImage.Get());
-		colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
-		ComPtr<ID2D1Image> finalImage;
-		colorMatrixEffect->GetOutput(&finalImage);
-
-		// === Flip Matrix ===
-		float scaleX = flipX ? -1.0f : 1.0f;
-		float scaleY = flipY ? -1.0f : 1.0f;
-		auto flipMat = D2D1::Matrix3x2F::Scale(D2D1::Size(scaleX, scaleY), { 0, 0 });
-
-		// === Pivot Matrix ===
-		D2D1_POINT_2F pivotOffset = { spriteSize.width * pivotX, spriteSize.height * pivotY };
-		auto pivotMat = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-
-		// === Fianl Matrix ===
-		auto finalMat = flipMat * pivotMat * transform->GetScreenMatrix();
-		RenderSystem::Get().renderTarget->SetTransform(finalMat);
-
-		// === sourceRect 위치 보정 ===
-		D2D1_POINT_2F drawOffset = { 0, 0 };
-		drawOffset.x = flipX ? (-srcRect.left - spriteSize.width) : -srcRect.left;
-		drawOffset.y = flipY ? (-srcRect.top - spriteSize.height) : -srcRect.top;
-
-		// render
-		RenderSystem::Get().renderTarget->DrawImage(finalImage.Get(), drawOffset);
-	}
-	else if (renderMode == RenderMode::UnlitColorTint)
-	{
-		// TODO
-	}
-	else if (renderMode == RenderMode::Lit_ColorTint)
-	{
-		// TODO
-	}
+	// render
+	RenderSystem::Get().renderTarget->DrawImage(finalImage.Get(), drawOffset);
 }
 
 // Set Color

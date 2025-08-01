@@ -20,8 +20,6 @@ private:
 	float tolltipInfoTimer = 0;
 	float tolltipInfoTime = 10;
 
-	float fadeTime = 2.5f;
-
 public:
 	UI_Text* timer_Text;			// 웨이브 타이머
 
@@ -80,6 +78,14 @@ public:
 
 	bool ChatActiveCheck() { return chat_Image->IsActive(); }
 
-	void ClickChatButton();
-	void StartWaveInfo(int waveNumber);
+	void ClickChatButton() {
+		GameManager::Get().isWave = true;
+		GameManager::Get().waveCount++;
+		chat_Button->SetActive(false);
+		chat_Image->SetActive(false);
+		waveInfo_Text->SetActive(true);
+
+		//wave 별 이름 변화는 툴팁에서
+		//tooltip_Image->SetActive(true);
+	}
 };

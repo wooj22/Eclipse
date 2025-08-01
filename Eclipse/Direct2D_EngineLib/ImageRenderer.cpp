@@ -38,74 +38,45 @@ void ImageRenderer::Render()
 {
     if (!rectTransform) return;
 
-    // rect
     auto size = rectTransform->GetSize();
-    D2D1_RECT_F destRect = { 0.0f, 0.0f, size.width, size.height };
+    destRect = { 0.0f, 0.0f, size.width, size.height };
 
     auto& renderTarget = RenderSystem::Get().renderTarget;
 
     if (sprite)
     {
-        if (renderMode == RenderMode::Unlit)
-        {
-            // tansform
-            RenderSystem::Get().renderTarget->SetTransform(rectTransform->GetScreenMatrix());
+        // === Crop ===
+        cropEffect->SetInput(0, sprite->texture->texture2D.Get());
+        cropEffect->SetValue(D2D1_CROP_PROP_RECT, sprite->sourceRect);
+        ComPtr<ID2D1Image> croppedImage;
+        cropEffect->GetOutput(&croppedImage);
 
-            // render
-            if (sprite)
-            {
-                RenderSystem::Get().renderTarget->DrawBitmap(
-                    sprite->texture->texture2D.Get(),
-                    destRect,
-                    alpha
-                );
-            }
-            else
-                RenderSystem::Get().renderTarget->FillRectangle(destRect, brush.Get());
-        }
-        else if (renderMode == RenderMode::UnlitColorTint)
-        {
-            // === Crop ===
-            cropEffect->SetInput(0, sprite->texture->texture2D.Get());
-            cropEffect->SetValue(D2D1_CROP_PROP_RECT, sprite->sourceRect);
-            ComPtr<ID2D1Image> croppedImage;
-            cropEffect->GetOutput(&croppedImage);
+        // === Color Matrix ===
+        colorMatrixEffect->SetInput(0, croppedImage.Get());
+        colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
+        ComPtr<ID2D1Image> finalImage;
+        colorMatrixEffect->GetOutput(&finalImage);
 
-            // === Color Matrix ===
-            colorMatrixEffect->SetInput(0, croppedImage.Get());
-            colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
-            ComPtr<ID2D1Image> finalImage;
-            colorMatrixEffect->GetOutput(&finalImage);
+        // === Transform ===
+        // size에 맞게 채워질 수 있는 scale 수동 조정
+        const auto& spriteSize = sprite->size;
+        float scaleX = size.width / spriteSize.width;
+        float scaleY = size.height / spriteSize.height;
 
-            // === Transform ===
-            // size에 맞게 채워질 수 있는 scale 수동 조정
-            const auto& spriteSize = sprite->size;
-            float scaleX = size.width / spriteSize.width;
-            float scaleY = size.height / spriteSize.height;
+        D2D1_MATRIX_3X2_F transform = rectTransform->GetScreenMatrix();
+        D2D1_MATRIX_3X2_F scale = D2D1::Matrix3x2F::Scale(scaleX, scaleY);
+        transform = scale * transform;
 
-            D2D1_MATRIX_3X2_F transform = rectTransform->GetScreenMatrix();
-            D2D1_MATRIX_3X2_F scale = D2D1::Matrix3x2F::Scale(scaleX, scaleY);
-            transform = scale * transform;
+        // === Draw ===
+        D2D1_MATRIX_3X2_F prevTransform;
+        renderTarget->GetTransform(&prevTransform);
+        renderTarget->SetTransform(transform);
 
-            // === Draw ===
-            D2D1_MATRIX_3X2_F prevTransform;
-            renderTarget->GetTransform(&prevTransform);
-            renderTarget->SetTransform(transform);
+        // render
+        renderTarget->DrawImage(finalImage.Get(), nullptr);
 
-            // render
-            renderTarget->DrawImage(finalImage.Get(), nullptr);
-
-            // 원래 transform으로 복원
-            renderTarget->SetTransform(prevTransform);
-        }
-        else if (renderMode == RenderMode::UnlitColorTint)
-        {
-            // TODO
-        }
-        else if (renderMode == RenderMode::Lit_ColorTint)
-        {
-            // TODO
-        }
+        // 원래 transform으로 복원
+        renderTarget->SetTransform(prevTransform);
     }
     else
     {
