@@ -8,6 +8,7 @@
 #include "../Direct2D_EngineLib/BoxCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Vector2.h"
+#include "Fall_State.h"
 
 void Attack_State::Enter(MovementFSM* fsm)
 {
@@ -46,18 +47,24 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
     // 도착 여부 판정
     if (traveled >= totalDistance)
     {
-        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
+        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>());
         return;
     }
-    else if( timer >=0.1f && (fsm->GetPlayerFSM()->GetIsGround() || fsm->GetPlayerFSM()->GetIsWallLeft() || fsm->GetPlayerFSM()->GetIsWallRight()))
+    else if (fsm->GetPlayerFSM()->GetIsGround() || fsm->GetPlayerFSM()->GetIsWallLeft() || fsm->GetPlayerFSM()->GetIsWallRight())
     {
         // 도착하지 못했는데, 땅 or 벽 이랑 충돌했을 때 
-        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
+        fsm->GetPlayerFSM()->GetRigidbody()->useGravity = false;
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
+        fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
+    }
+    
+    if( timer >= desiredTime)
+    {
+        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>());
         return;
     }
 
     // 이동 유지
-    // fsm->GetPlayerFSM()->GetRigidbody()->velocity = direction * moveSpeed;
     fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(direction * moveSpeed);
 }
 

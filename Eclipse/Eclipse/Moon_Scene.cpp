@@ -28,19 +28,19 @@ void Moon_Scene::Awake()
 	player = CreateObject<Player>();
 
 	// [ playerAttack ] Attack 콜라이더 영역 
-	playerAttack = CreateObject<GameObject>();
-	playerAttack->name = "playerAttack";
+	//playerAttackArea = CreateObject<playerAttackArea>();
+	//playerAttackArea->name = "playerAttackArea";
 
-	auto playerAttack_tr = playerAttack->AddComponent<Transform>();
-	playerAttack_tr->SetPosition(0.0f, 10.0f);
-	playerAttack_tr->SetParent(player->transform);
-	
-	auto playerAttack_sr = playerAttack->AddComponent<SpriteRenderer>();
-	playerAttack_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Attack.png"), "Attack");
-	
-	playerAttack_col = playerAttack->AddComponent<BoxCollider>();
-	playerAttack_col->size = { 10.0f, 10.0f };
-	playerAttack_col->isTrigger = true;
+	//auto playerAttack_tr = playerAttack->AddComponent<Transform>();
+	//playerAttack_tr->SetPosition(50.0f, 10.0f);
+	//playerAttack_tr->SetParent(player->transform);
+	//
+	//// auto playerAttack_sr = playerAttack->AddComponent<SpriteRenderer>();
+	//// playerAttack_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Attack.png"), "Attack");
+	//
+	//playerAttack_col = playerAttack->AddComponent<CircleCollider>();
+	// playerAttack_col->size = { 20.0f, 20.0f };
+	// playerAttack_col->isTrigger = true;
 
 
 	// [ ground ]
@@ -175,7 +175,7 @@ void Moon_Scene::Update()
 	wall_l_col->DebugColliderDraw();
 	platform1_col->DebugColliderDraw();
 	platform2_col->DebugColliderDraw();
-	playerAttack_col->DebugColliderDraw();
+	// playerAttack_col->DebugColliderDraw();
 }
 
 void Moon_Scene::Exit()
