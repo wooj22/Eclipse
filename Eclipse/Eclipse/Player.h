@@ -47,7 +47,7 @@ public:
 
 		// auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
 		// spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
-		spriteRenderer->layer = 1;
+		spriteRenderer->layer = 2;
 
 		playerFSM = AddComponent<PlayerFSM>();
 	}

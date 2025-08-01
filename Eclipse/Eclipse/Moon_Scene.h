@@ -20,8 +20,9 @@ private:
 	GameObject* platform1;
 	GameObject* platform2;
 
-	Player* player;
-	playerAttackArea* playerAttackArea;
+	Player* player;						// Parent
+	GameObject* playerAttack_Parent;	// Parent - Child
+	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
 
 	// component 
 	BoxCollider* ground_col;

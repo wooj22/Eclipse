@@ -38,8 +38,9 @@ private:
 	// Effect
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
+	ComPtr<ID2D1Effect> blurEffect = nullptr;
 
-	// ColorMatrix
+	// ColorMatrix (Sprite)
 	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix За·Д
 	colorMultiplier.a, 0, 0, 0,
@@ -48,10 +49,12 @@ private:
 	0, 0, 0, colorMultiplier.a
 	};
 
+	// Blur (Sprite)
+	float blurAmmount = 15.0f;
 
 public:
 	// component cycle
-	SpriteRenderer() = default;
+	SpriteRenderer() { renderMode = RenderMode::Unlit; }
 	~SpriteRenderer() override = default;
 
 	void OnEnable_Inner() override final;
@@ -66,5 +69,9 @@ public:
 	ColorRGBA GetColor()  { return colorMultiplier; };
 	void SetAlpha(float a);
 	float GetAlpha() { return alpha; }
+
+public:
+	// Glow (Blur)
+	void SetGlowAmmount(float blur) { blurAmmount = blur; }
 };
 

@@ -12,9 +12,9 @@ void SpriteRenderer::OnEnable_Inner()
 	transform = this->gameObject->transform;
 
 	// effect 생성
-	HRESULT hr = RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1ColorMatrix, &colorMatrixEffect);
-	hr = RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1Crop, &cropEffect);
-	SUCCEEDED(hr);
+	RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1ColorMatrix, &colorMatrixEffect);
+	RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1Crop, &cropEffect);
+	RenderSystem::Get().renderTarget->CreateEffect(CLSID_D2D1GaussianBlur, &blurEffect);
 }
 
 void SpriteRenderer::OnDisable_Inner()
@@ -29,6 +29,7 @@ void SpriteRenderer::OnDestroy_Inner()
 	sprite = nullptr;
 	colorMatrixEffect = nullptr;
 	cropEffect = nullptr;
+	blurEffect = nullptr;
 }
 
 void SpriteRenderer::Update() 
@@ -49,7 +50,7 @@ void SpriteRenderer::Render()
 {
 	if (!transform || !sprite) return;
 
-	// source rect, size
+	// sprite
 	D2D1_RECT_F srcRect = sprite->sourceRect;
 	D2D1_SIZE_F spriteSize = sprite->size;
 
@@ -124,13 +125,83 @@ void SpriteRenderer::Render()
 		// render
 		RenderSystem::Get().renderTarget->DrawImage(finalImage.Get(), drawOffset);
 	}
-	else if (renderMode == RenderMode::UnlitColorTint)
+	else if (renderMode == RenderMode::Lit_Glow)
 	{
-		// TODO
+		float pivotX = sprite->pivot.x;
+		float pivotY = sprite->pivot.y;
+
+		// === Crop ===
+		cropEffect->SetInput(0, sprite->texture->texture2D.Get());
+		cropEffect->SetValue(D2D1_CROP_PROP_RECT, srcRect);
+		ComPtr<ID2D1Image> croppedImage;
+		cropEffect->GetOutput(&croppedImage);
+
+		// === Blur Source ===
+		blurEffect->SetInput(0, croppedImage.Get());
+		blurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, blurAmmount);
+		ComPtr<ID2D1Image> blurredImage;
+		blurEffect->GetOutput(&blurredImage);
+
+		// === Flip & Transform ===
+		float scaleX = flipX ? -1.0f : 1.0f;
+		float scaleY = flipY ? -1.0f : 1.0f;
+		auto flipMat = D2D1::Matrix3x2F::Scale(D2D1::Size(scaleX, scaleY), { 0, 0 });
+
+		D2D1_POINT_2F pivotOffset = { spriteSize.width * sprite->pivot.x, spriteSize.height * sprite->pivot.y };
+		auto pivotMat = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
+		auto finalMat = flipMat * pivotMat * transform->GetScreenMatrix();
+		RenderSystem::Get().renderTarget->SetTransform(finalMat);
+
+		// drawOffset 계산
+		D2D1_POINT_2F drawOffset = { 0, 0 };
+		drawOffset.x = flipX ? (-srcRect.left - spriteSize.width) : -srcRect.left;
+		drawOffset.y = flipY ? (-srcRect.top - spriteSize.height) : -srcRect.top;
+
+		// Render
+		RenderSystem::Get().renderTarget->DrawImage(blurredImage.Get(), drawOffset);
+		RenderSystem::Get().renderTarget->DrawImage(croppedImage.Get(), drawOffset);
 	}
 	else if (renderMode == RenderMode::Lit_ColorTint)
 	{
-		// TODO
+		float pivotX = sprite->pivot.x;
+		float pivotY = sprite->pivot.y;
+
+		// === Crop ===
+		cropEffect->SetInput(0, sprite->texture->texture2D.Get());
+		cropEffect->SetValue(D2D1_CROP_PROP_RECT, srcRect);
+		ComPtr<ID2D1Image> croppedImage;
+		cropEffect->GetOutput(&croppedImage);
+
+		// === Color Matrix ===
+		colorMatrixEffect->SetInput(0, croppedImage.Get());
+		colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
+		ComPtr<ID2D1Image> colorImage;
+		colorMatrixEffect->GetOutput(&colorImage);
+
+		// === Blur Source ===
+		blurEffect->SetInput(0, colorImage.Get());
+		blurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, blurAmmount);
+		ComPtr<ID2D1Image> blurredImage;
+		blurEffect->GetOutput(&blurredImage);
+
+		// === Flip & Transform ===
+		float scaleX = flipX ? -1.0f : 1.0f;
+		float scaleY = flipY ? -1.0f : 1.0f;
+		auto flipMat = D2D1::Matrix3x2F::Scale(D2D1::Size(scaleX, scaleY), { 0, 0 });
+
+		D2D1_POINT_2F pivotOffset = { spriteSize.width * sprite->pivot.x, spriteSize.height * sprite->pivot.y };
+		auto pivotMat = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
+		auto finalMat = flipMat * pivotMat * transform->GetScreenMatrix();
+		RenderSystem::Get().renderTarget->SetTransform(finalMat);
+
+		// drawOffset 계산
+		D2D1_POINT_2F drawOffset = { 0, 0 };
+		drawOffset.x = flipX ? (-srcRect.left - spriteSize.width) : -srcRect.left;
+		drawOffset.y = flipY ? (-srcRect.top - spriteSize.height) : -srcRect.top;
+
+		// Render
+		RenderSystem::Get().renderTarget->DrawImage(blurredImage.Get(), drawOffset);
+		RenderSystem::Get().renderTarget->DrawImage(colorImage.Get(), drawOffset);
 	}
 }
 

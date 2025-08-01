@@ -10,6 +10,11 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Camera.h"
 
+#include "GameManager.h"
+#include "PlayUI.h"
+#include "Chat.h"
+
+
 // 컴포넌트 활성화 시점
 void PlayerFSM::OnEnable()
 {
@@ -85,6 +90,17 @@ void PlayerFSM::Update()
 
 	// [ animation ]
 	// animatorController->SetFloat("Dash", dashSpeed);
+
+
+	// [ mo_dev ] 
+	//if (isF)
+	//{
+	//	if (GameManager::Get().g_playUI->ChatActiveCheck())
+	//	{
+	//		if (!GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->GetFinished())
+	//			GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->AddChatCount();
+	//	}
+	//}
 }
 
 void PlayerFSM::FixedUpdate()
@@ -111,4 +127,69 @@ void PlayerFSM::InputCheak()
 
 	isLButton = Input::GetKeyDown(VK_LBUTTON);
 	isRButton = Input::GetKeyDown(VK_RBUTTON);
+
+	isF = Input::GetKey('F');
+}
+
+
+
+// *-------------- [ Collider ] --------------*
+
+// trigger
+
+void PlayerFSM::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
+{
+
+}
+
+void PlayerFSM::OnTriggerStay(ICollider* other, const ContactInfo& contact)
+{
+	// mo_dev
+	//if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck()
+	//	&& !GameManager::Get().isWave && Input::GetKey('F'))
+	//{
+	//	GameManager::Get().g_playUI->ChatSetActive(true);
+	//}
+}
+
+void PlayerFSM::OnTriggerExit(ICollider* other, const ContactInfo& contact)
+{
+
+}
+
+
+// collision
+
+void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
+{
+	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
+	{
+		OutputDebugStringA("Ground과 충돌 했습니다.\n");
+		isGround = true;
+	}
+	else if (other->gameObject->name == "Wall")
+	{
+		OutputDebugStringA("Wall과 충돌 했습니다.\n");
+		if (contact.normal.x == 1) { isWallLeft = true; }
+		if (contact.normal.x == -1) { isWallRight = true; }
+	}
+}
+
+void PlayerFSM::OnCollisionStay(ICollider* other, const ContactInfo& contact)
+{
+
+}
+
+void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
+{
+	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
+	{
+		OutputDebugStringA("Ground 빠져나갔음 .\n");
+		isGround = false;
+	}
+	else if (other->gameObject->name == "Wall")
+	{
+		if (contact.normal.x == 1)   isWallLeft = false;
+		if (contact.normal.x == -1)  isWallRight = false;
+	}
 }
