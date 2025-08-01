@@ -45,7 +45,7 @@ void HonmunCollisionScript::Update()
 	}
 
 	// \ucda9\ub3cc \ud6c4 \uad00\uc131 \ud6a8\uacfc \uc801\uc6a9
-	if (currentVelocity.Magnitude() > minVelocity)
+	if (rigidbody && rigidbody->isKinematic && currentVelocity.Magnitude() > minVelocity)
 	{
 		// \ud604\uc7ac \uc704\uce58\uc5d0 \uc18d\ub3c4 \uc801\uc6a9
 		Vector2 currentPos = transform->GetPosition();
@@ -55,7 +55,7 @@ void HonmunCollisionScript::Update()
 		// \ub9c8\ucc30\ub825\uc73c\ub85c \uc18d\ub3c4 \uac10\uc18c
 		currentVelocity = currentVelocity * friction;
 	}
-	else
+	else if (rigidbody && rigidbody->isKinematic)
 	{
 		// \ucd5c\uc18c \uc18d\ub3c4 \uc774\ud558\uc5d0\uc11c \uc815\uc9c0
 		currentVelocity.x = 0.0f;
@@ -63,9 +63,11 @@ void HonmunCollisionScript::Update()
 	}
 
 	// \uae30\uc874 \ub099\ud558 \uc18d\ub3c4 \ucc98\ub9ac (\ube44\ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc\uc5d0\uc11c\ub9cc)
-	if (rigidbody && !rigidbody->isKinematic)
+	if (rigidbody && rigidbody->isKinematic)
 	{
-		rigidbody->velocity.y -= fallingSpeed * 0.1f;
+		// \ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc\uc5d0\uc11c\ub9cc \uc218\ub3d9 \ub099\ud558 \uc18d\ub3c4 \uc801\uc6a9
+		Vector2 currentPos = transform->GetPosition();
+		transform->SetPosition(currentPos.x, currentPos.y - fallingSpeed * Time::GetDeltaTime());
 	}
 }
 
@@ -436,7 +438,7 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 			OutputDebugStringA("A<->B collision: Score +1 added!\n");
 		}
 		
-		// A타입 체력 감소 + 2A 파괴 시 추가 점수
+		// A와 B 모두 체력 감소 + 파괴 시 추가 점수
 		if (honmunType == HonmunType::A) 
 		{
 			// 2A인지 확인 (파괴 전에)
@@ -455,6 +457,18 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 				return;
 			}
 		}
+		else if (honmunType == HonmunType::B)
+		{
+			// B 타입도 체력 감소
+			health--;
+			if (health <= 0)
+			{
+				OutputDebugStringA("B destroyed in A<->B collision!\n");
+				DestroyThis();
+				return;
+			}
+		}
+		
 		if (otherScript->honmunType == HonmunType::A) 
 		{
 			// 2A인지 확인 (파괴 전에)
@@ -469,6 +483,17 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 					aronScene->AddScore(3);
 					OutputDebugStringA("2A destroyed in A<->B collision: +3 bonus points!\n");
 				}
+				otherScript->DestroyThis();
+				return;
+			}
+		}
+		else if (otherScript->honmunType == HonmunType::B)
+		{
+			// B 타입도 체력 감소
+			otherScript->health--;
+			if (otherScript->health <= 0)
+			{
+				OutputDebugStringA("B destroyed in A<->B collision!\n");
 				otherScript->DestroyThis();
 				return;
 			}
@@ -606,15 +631,16 @@ void HonmunCollisionScript::CreateSplitObjectsWithCollision(int count, HonmunCol
 			newScript->SetHealth(1);
 			newScript->isSplitFragment = true;  // \ubd84\ud574\ub41c \uc870\uac01\uc784\uc744 \ud45c\uc2dc
 			
-			// 키네마틱 모드로 부드러운 움직임
-			newRigidbody->isKinematic = true;
-			newRigidbody->useGravity = false;
+			// 분열 조각은 물리 모드로 설정 (중력으로 떨어지게)
+			newRigidbody->isKinematic = false;
+			newRigidbody->useGravity = true;
 			
 			// \ubd84\ud574 \uc2dc \ub9e4\uc6b0 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
 			Vector2 splitVelocity;
-			splitVelocity.x = direction.x * distance * 7.0f;  // \ubc00\ub824\ub0a8 \uac70\ub9ac \ub300\ud3ed \uc99d\uac00
-			splitVelocity.y = direction.y * distance * 7.0f;
-			newScript->currentVelocity = splitVelocity;
+			splitVelocity.x = direction.x * distance * 3.0f;  // \ubb3c\ub9ac \uc2dc\uc2a4\ud15c\uc5d0 \ub9de\uac8c \uac15\ub3c4 \uc870\uc808
+			splitVelocity.y = direction.y * distance * 3.0f;
+			// \ubb3c\ub9ac \ubaa8\ub4dc\uc5d0\uc11c\ub294 currentVelocity \ub300\uc2e0 rigidbody\uc5d0 \uc9c1\uc811 \uc18d\ub3c4 \uc124\uc815
+			newRigidbody->velocity = splitVelocity;
 			
 			// \ub354 \uba00\ub9ac \ub098\uac00\ub3c4\ub85d \ub9c8\ucc30\ub825 \ub300\ud3ed \uac10\uc18c
 			newScript->friction = 0.97f;  // \ub9c8\ucc30\ub825 \ub354 \uac10\uc18c
@@ -695,15 +721,16 @@ void HonmunCollisionScript::CreateSplitObjects(int count)
 			newScript->UpdateFallingSpeed(fallingSpeed * 1.2f); // \ub099\ud558\uc18d\ub3c4 20% \uc99d\uac00
 			newScript->SetHealth(1); // \uc5d0\ub108\uc9c0 1\ub85c \uc124\uc815
 			
-			// 키네마틱 모드로 부드러운 움직임
-			newRigidbody->isKinematic = true;   // 키네마틱 유지
-			newRigidbody->useGravity = false;   // 중력 사용 안함
+			// 분열 조각은 물리 모드로 설정 (중력으로 떨어지게)
+			newRigidbody->isKinematic = false;   // 물리 모드
+			newRigidbody->useGravity = true;     // 중력 활성화
 			
 			// \ubd84\ud574 \uc2dc \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc - currentVelocity\ub85c \ud0a4\ub124\ub9c8\ud2f1 \uc6c0\uc9c1\uc784 (\uc54c\uae4c\uae30 \ucef4\uc149)
 			Vector2 splitVelocity;
-			splitVelocity.x = direction.x * distance * 7.0f;  // \ubc00\ub824\ub0a8 \uac70\ub9ac \ub300\ud3ed \uc99d\uac00
-			splitVelocity.y = direction.y * distance * 7.0f;
-			newScript->currentVelocity = splitVelocity;
+			splitVelocity.x = direction.x * distance * 3.0f;  // \ubb3c\ub9ac \uc2dc\uc2a4\ud15c\uc5d0 \ub9de\uac8c \uac15\ub3c4 \uc870\uc808
+			splitVelocity.y = direction.y * distance * 3.0f;
+			// \ubb3c\ub9ac \ubaa8\ub4dc\uc5d0\uc11c\ub294 currentVelocity \ub300\uc2e0 rigidbody\uc5d0 \uc9c1\uc811 \uc18d\ub3c4 \uc124\uc815
+			newRigidbody->velocity = splitVelocity;
 			
 			// \ub354 \uba00\ub9ac \ub098\uac00\ub3c4\ub85d \ub9c8\ucc30\ub825 \ub300\ud3ed \uac10\uc18c
 			newScript->friction = 0.97f;  // \ub9c8\ucc30\ub825 \ub354 \uac10\uc18c  // 적당한 마찰력으로 자연스러운 멈춤

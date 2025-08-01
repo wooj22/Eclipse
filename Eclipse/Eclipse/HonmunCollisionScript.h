@@ -27,6 +27,10 @@ private:
 	float fallingSpeed = 1.0f;
 	float pushDistance = 150.0f;  // \ucda9\ub3bc \ud798 \uc54c\uae4c\uae30 \ucef4\uc149\uc5d0 \ub9de\uac8c \uc99d\uac00
 	bool isSplitFragment = false;  // \ubd84\ud574\ub41c \uc870\uac01\uc778\uc9c0 \ud45c\uc2dc
+	
+	// 분열 조각 물리 전환용
+	float splitPhysicsTimer = 0.0f;  // 분열 후 물리 전환 타이머
+	bool needsPhysicsTransition = false;  // 물리 전환 필요 여부
 
 	// ������� ó����
 	bool isProcessingReaction = false;
@@ -48,6 +52,9 @@ public:
 	// ȥ�� Ÿ�� ����
 	void SetHonmunType(HonmunType type);
 	void SetHealth(int hp) { health = hp; }
+	
+	// 공개 함수들
+	void DestroyThis();  // 혼문 파괴 (외부에서 호출 가능)
 
 private:
 	// \uac01 \ud0c0\uc785\ubcc4 \ucda9\ub3cc \ucc98\ub9ac - \ubaa8\ub4e0 \ud0c0\uc785 \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c
@@ -65,7 +72,6 @@ private:
 	void CreateSplitObjects(int count);                                         // 다중 분열
 	void CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript); // 충돌 기반 분열
 	void AbsorbNearbyEnemies(const Vector2& collisionPoint);                    // ����
-	void DestroyThis();                                                         // ����
 	void BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // ƨ��
 	void BounceAwayKinematic(HonmunCollisionScript* otherScript);  // \ud0a4\ub124\ub9c8\ud2f1 \ud295\uae40
 	void PushSideways(HonmunCollisionScript* otherScript);                      // �и�
