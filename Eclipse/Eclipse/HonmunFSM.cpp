@@ -1,4 +1,4 @@
-#include "HonmunAFSM.h"
+#include "HonmunFSM.h"
 #include "Honmun.h"
 #include "../Direct2D_EngineLib/Animator.h"
 #include "../Direct2D_EngineLib/AnimatorController.h"
@@ -8,21 +8,16 @@
 #include "../Direct2D_EngineLib/ResourceManager.h"
 #include <memory>
 
-// HonmunAIdleState Implementation
-void HonmunAIdleState::Enter(HonmunAFSM* fsm)
+// HonmunIdleState Implementation
+void HonmunIdleState::Enter(HonmunFSM* fsm)
 {
     idleTimer = 0.0f;
     
-    // Start idle animation - use PlayerFSM approach
-    auto animatorController = fsm->GetAnimatorController();
-    if (animatorController != nullptr)
-    {
-        // Play the Honmun_A_Idle animation
-        animatorController->PlayAnimation("Honmun_A_Idle");
-    }
+    // Start idle animation based on type
+    fsm->PlayIdleAnimation();
 }
 
-void HonmunAIdleState::Update(HonmunAFSM* fsm)
+void HonmunIdleState::Update(HonmunFSM* fsm)
 {
     idleTimer += Time::GetDeltaTime();
     
@@ -35,19 +30,19 @@ void HonmunAIdleState::Update(HonmunAFSM* fsm)
     }
 }
 
-void HonmunAIdleState::Exit(HonmunAFSM* fsm)
+void HonmunIdleState::Exit(HonmunFSM* fsm)
 {
     // Clean up when exiting idle state
     idleTimer = 0.0f;
 }
 
-// HonmunAFSM Implementation
-void HonmunAFSM::OnEnable()
+// HonmunFSM Implementation
+void HonmunFSM::OnEnable()
 {
     // Component activation
 }
 
-void HonmunAFSM::Awake()
+void HonmunFSM::Awake()
 {
     // Get component references
     honmun = dynamic_cast<Honmun*>(gameObject);
@@ -62,31 +57,58 @@ void HonmunAFSM::Awake()
     }
 }
 
-void HonmunAFSM::Start()
+void HonmunFSM::Start()
 {
     InitializeIdleState();
 }
 
-void HonmunAFSM::Update()
+void HonmunFSM::Update()
 {
     // Update the current state
-    FSMBase<HonmunAFSM, HonmunAState>::Update();
+    FSMBase<HonmunFSM, HonmunState>::Update();
 }
 
-void HonmunAFSM::FixedUpdate()
+void HonmunFSM::FixedUpdate()
 {
     // Fixed update for physics-related state updates
-    FSMBase<HonmunAFSM, HonmunAState>::FixedUpdate();
+    FSMBase<HonmunFSM, HonmunState>::FixedUpdate();
 }
 
-void HonmunAFSM::OnDestroy()
+void HonmunFSM::OnDestroy()
 {
     // Cleanup
 }
 
-void HonmunAFSM::InitializeIdleState()
+void HonmunFSM::InitializeIdleState()
 {
     // Start with idle state
-    auto idleState = std::make_unique<HonmunAIdleState>();
+    auto idleState = std::make_unique<HonmunIdleState>();
     ChangeState(std::move(idleState));
+}
+
+void HonmunFSM::PlayIdleAnimation()
+{
+    auto animatorController = GetAnimatorController();
+    if (animatorController != nullptr)
+    {
+        const char* clipName = GetAnimationClipName();
+        animatorController->PlayAnimation(clipName);
+    }
+}
+
+const char* HonmunFSM::GetAnimationClipName() const
+{
+    switch (honmunType)
+    {
+    case HonmunType::A:
+        return "Honmun_A_Idle";
+    case HonmunType::B:
+        return "Honmun_B_Idle";
+    case HonmunType::C:
+        return "Honmun_C_Idle";
+    case HonmunType::D:
+        return "Honmun_D_Idle";
+    default:
+        return "Honmun_A_Idle";
+    }
 }

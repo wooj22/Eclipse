@@ -8,32 +8,40 @@ class Honmun;
 class Animator;
 class Transform;
 class Rigidbody;
-
-class HonmunAFSM;
 class AnimatorController;
 
-class HonmunAState : public StateBase<HonmunAFSM>
+enum class HonmunType
 {
-public:
-    virtual ~HonmunAState() = default;
-    virtual void Enter(HonmunAFSM* fsm) override = 0;
-    virtual void Update(HonmunAFSM* fsm) override = 0;
-    virtual void Exit(HonmunAFSM* fsm) override = 0;
-    virtual void FixedUpdate(HonmunAFSM* fsm) {}
+    A = 0,  // Ignis
+    B = 1,  // Umbra  
+    C = 2,  // Darkness
+    D = 3   // Luna
 };
 
-class HonmunAIdleState : public HonmunAState
+class HonmunFSM;
+
+class HonmunState : public StateBase<HonmunFSM>
+{
+public:
+    virtual ~HonmunState() = default;
+    virtual void Enter(HonmunFSM* fsm) override = 0;
+    virtual void Update(HonmunFSM* fsm) override = 0;
+    virtual void Exit(HonmunFSM* fsm) override = 0;
+    virtual void FixedUpdate(HonmunFSM* fsm) {}
+};
+
+class HonmunIdleState : public HonmunState
 {
 private:
     float idleTimer = 0.0f;
     
 public:
-    void Enter(HonmunAFSM* fsm) override;
-    void Update(HonmunAFSM* fsm) override;
-    void Exit(HonmunAFSM* fsm) override;
+    void Enter(HonmunFSM* fsm) override;
+    void Update(HonmunFSM* fsm) override;
+    void Exit(HonmunFSM* fsm) override;
 };
 
-class HonmunAFSM : public FSMBase<HonmunAFSM, HonmunAState>, public Script
+class HonmunFSM : public FSMBase<HonmunFSM, HonmunState>, public Script
 {
 private:
     Honmun* honmun = nullptr;
@@ -42,9 +50,11 @@ private:
     Transform* transform = nullptr;
     Rigidbody* rigidbody = nullptr;
     
+    HonmunType honmunType = HonmunType::A;
+    
 public:
-    HonmunAFSM() = default;
-    virtual ~HonmunAFSM() = default;
+    HonmunFSM() = default;
+    virtual ~HonmunFSM() = default;
     
     // Getters for components
     Honmun* GetHonmun() const { return honmun; }
@@ -52,6 +62,10 @@ public:
     AnimatorController* GetAnimatorController() const { return animatorController; }
     Transform* GetTransform() const { return transform; }
     Rigidbody* GetRigidbody() const { return rigidbody; }
+    
+    // Type management
+    HonmunType GetHonmunType() const { return honmunType; }
+    void SetHonmunType(HonmunType type) { honmunType = type; }
     
     // Script component lifecycle
     void OnEnable() override;
@@ -63,4 +77,8 @@ public:
     
     // Initialize idle state
     void InitializeIdleState();
+    
+    // Animation helpers
+    void PlayIdleAnimation();
+    const char* GetAnimationClipName() const;
 };
