@@ -20,10 +20,18 @@ public:
                 LoadSpriteSheetFromJson(texture, "../Resource/Aron/Data/SpriteSheet/Honmun_C_sprites.json");
                 LoadAnimationClipFromJson(texture, "../Resource/Aron/Data/AnimationClip/Honmun_C_Idle_AniClip.json");
             }
+            else
+            {
+                OutputDebugStringA("Failed to load Honmun_c.png texture\n");
+            }
+        }
+        catch (const std::exception& e)
+        {
+            OutputDebugStringA("Honmun C animation loading failed\n");
         }
         catch (...)
         {
-            // JSON 로딩 실패 시 무시
+            OutputDebugStringA("Honmun C animation loading failed (unknown error)\n");
         }
     }
     ~HonmunCIdleClip() override {}
