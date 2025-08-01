@@ -210,7 +210,7 @@ void BossController::Die()
 }
 
 /*-----------------  trigger event  -----------------*/ 
-void BossController::OnTriggerEnter(ICollider* other)
+void BossController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->tag == "Goal")
 	{
@@ -219,12 +219,12 @@ void BossController::OnTriggerEnter(ICollider* other)
 	}
 }
 
-void BossController::OnTriggerStay(ICollider* other)
+void BossController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 
 }
 
-void BossController::OnTriggerExit(ICollider* other)
+void BossController::OnTriggerExit(ICollider* other, const ContactInfo& contact)
 {
 
 }

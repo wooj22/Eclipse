@@ -37,6 +37,7 @@ public:
 	HonmunType GetHonmunType() const { return honmunType; }
 	void SetPosition(float x, float y);
 	void AdjustSpritePosition(); // 스프라이트 위치 조정 함수
+	void SetupColliderForType(); // 타입별 콜라이더 설정 함수
 
 	// 체력 관련
 	int GetHP() const { return hp; }

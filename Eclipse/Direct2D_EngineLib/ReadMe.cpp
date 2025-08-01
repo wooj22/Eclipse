@@ -67,14 +67,14 @@ class Script;
 
 	/* [collision event] */
 	// trigger
-	virtual void OnTriggerEnter(ICollider* other) {}
-	virtual void OnTriggerStay(ICollider* other) {}
-	virtual void OnTriggerExit(ICollider* other) {}
+	virtual void OnTriggerEnter(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnTriggerStay(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnTriggerExit(ICollider* other, const ContactInfo& contact) {}
 
 	// collision
-	virtual void OnCollisionEnter(ICollider* other) {}
-	virtual void OnCollisionStay(ICollider* other) {}
-	virtual void OnCollisionExit(ICollider* other) {}
+	virtual void OnCollisionEnter(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnCollisionStay(ICollider* other, const ContactInfo& contact) {}
+	virtual void OnCollisionExit(ICollider* other, const ContactInfo& contact) {}
 }
 
 

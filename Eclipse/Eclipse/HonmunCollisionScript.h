@@ -42,8 +42,8 @@ public:
 	void Start() override;
 	void Update() override;
 
-	// �浹 �̺�Ʈ
-	void OnCollisionEnter(ICollider* other, const ContactInfo& contact) override;
+	// 트리거 이벤트
+	void OnTriggerEnter(ICollider* other) override;
 
 	// ȥ�� Ÿ�� ����
 	void SetHonmunType(HonmunType type);
@@ -51,23 +51,23 @@ public:
 
 private:
 	// \uac01 \ud0c0\uc785\ubcc4 \ucda9\ub3cc \ucc98\ub9ac - \ubaa8\ub4e0 \ud0c0\uc785 \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c
-	void HandleIgnisReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // A - \uccb4\ub825 \uac10\uc18c
-	void HandleUmbraReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);     // B - \uccb4\ub825 \uac10\uc18c
-	void HandleDarknessReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // C - \uccb4\ub825 \uac10\uc18c
-	void HandleLunaReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);      // D - \uccb4\ub825 \uac10\uc18c
+	void HandleIgnisReaction(HonmunCollisionScript* otherScript);     // A - \uccb4\ub825 \uac10\uc18c
+	void HandleUmbraReaction(HonmunCollisionScript* otherScript);     // B - \uccb4\ub825 \uac10\uc18c
+	void HandleDarknessReaction(HonmunCollisionScript* otherScript);  // C - \uccb4\ub825 \uac10\uc18c
+	void HandleLunaReaction(HonmunCollisionScript* otherScript);      // D - \uccb4\ub825 \uac10\uc18c
 
 	// ȥ�� Ÿ�� �浹 ����
-	void HandleMixedReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact);
+	void HandleMixedReaction(HonmunCollisionScript* otherScript);
 
 	// ��ƿ��Ƽ �Լ���
 	void MergeWithOther(HonmunCollisionScript* otherScript);                    // ��ü
 	void SplitIntoTwo();                                                        // 분열
 	void CreateSplitObjects(int count);                                         // 다중 분열
-	void CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript, const ContactInfo& contact); // 충돌 기반 분열
+	void CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript); // 충돌 기반 분열
 	void AbsorbNearbyEnemies(const Vector2& collisionPoint);                    // ����
 	void DestroyThis();                                                         // ����
 	void BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // ƨ��
-	void BounceAwayKinematic(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // \ud0a4\ub124\ub9c8\ud2f1 \ud295\uae40
+	void BounceAwayKinematic(HonmunCollisionScript* otherScript);  // \ud0a4\ub124\ub9c8\ud2f1 \ud295\uae40
 	void PushSideways(HonmunCollisionScript* otherScript);                      // �и�
 	void PassThrough(HonmunCollisionScript* otherScript);                       // ����
 

@@ -37,9 +37,9 @@ public:
 	void OnDestroy() override;
 
 	// trigger
-	void OnTriggerEnter(ICollider* other) override;
-	void OnTriggerStay(ICollider* other)  override;
-	void OnTriggerExit(ICollider* other)  override;
+	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
+	void OnTriggerStay(ICollider* other, const ContactInfo& contact)  override;
+	void OnTriggerExit(ICollider* other, const ContactInfo& contact)  override;
 
 	// collision
 	void OnCollisionEnter(ICollider* other, const ContactInfo& contact)  override;

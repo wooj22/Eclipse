@@ -73,17 +73,17 @@ void PlayerController_Woo::OnDestroy()
 
 }
 
-void PlayerController_Woo::OnTriggerEnter(ICollider* other)
+void PlayerController_Woo::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 
 }
 
-void PlayerController_Woo::OnTriggerStay(ICollider* other)
+void PlayerController_Woo::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 
 }
 
-void PlayerController_Woo::OnTriggerExit(ICollider* other)
+void PlayerController_Woo::OnTriggerExit(ICollider* other, const ContactInfo& contact)
 {
 
 }
