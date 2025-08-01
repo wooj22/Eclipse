@@ -53,7 +53,13 @@ void ImageRenderer::Render()
 
             // render
             if (sprite)
-                RenderSystem::Get().renderTarget->DrawBitmap(sprite->texture->texture2D.Get(), destRect);
+            {
+                RenderSystem::Get().renderTarget->DrawBitmap(
+                    sprite->texture->texture2D.Get(),
+                    destRect,
+                    alpha
+                );
+            }
             else
                 RenderSystem::Get().renderTarget->FillRectangle(destRect, brush.Get());
         }
