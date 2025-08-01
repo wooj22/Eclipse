@@ -8,6 +8,7 @@
 #include "../Direct2D_EngineLib/BoxCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Vector2.h"
+
 #include "Fall_State.h"
 
 void Attack_State::Enter(MovementFSM* fsm)
@@ -29,6 +30,11 @@ void Attack_State::Enter(MovementFSM* fsm)
 
     // 속도 계산: 거리 / 시간
     moveSpeed = actualDistance / desiredTime;
+
+
+    // 이펙트, 충돌 활성화
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(true);
+
 }
 
 void Attack_State::Update(MovementFSM* fsm)
@@ -72,6 +78,8 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
 void Attack_State::Exit(MovementFSM* fsm)
 {
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
+
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", false);
 }

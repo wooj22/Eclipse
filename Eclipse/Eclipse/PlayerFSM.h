@@ -13,6 +13,7 @@ class AnimatorController;
 class WorldTextRenderer;
 class Rigidbody;
 // class BoxCollider;
+class PlayerAttackArea;
 
 class PlayerFSM : public Script
 {
@@ -46,14 +47,20 @@ private:
 
 
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton;
+	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton; // moon_dev
 
+public:
+	// key
+	bool isF; // mo_dev 
+
+private:
 	// ref component
 	Transform* transform = nullptr;
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
 	AnimatorController* animatorController = nullptr;
 	// BoxCollider* boxCollider = nullptr;
+	PlayerAttackArea* playerAttackArea = nullptr;
 
 public:
 	// [ FSM 변수 ]
@@ -67,7 +74,6 @@ public:
 	const float defaultGravity = 100.0f;   // 기본 중력 
 	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
 	Vector2 MouseWorldPos;
-
 
 public:
 	// getter
@@ -97,6 +103,8 @@ public:
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 	AnimatorController* GetAnimatorController() const { return animatorController; }
     Transform* GetTransform() const { return transform; }
+	void SetPlayerAttackArea(PlayerAttackArea* obj) { playerAttackArea = obj; }
+	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	// BoxCollider* GetBoxCollider() const { return boxCollider; }
 
 	// void SetLastWallDir(int dir) { lastWallDir = dir; }
@@ -112,41 +120,15 @@ public:
 	void OnDestroy() override;				// 컴포넌트 or 오브젝트 소멸 시점
 
 	// trigger
-	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override {}
-	void OnTriggerStay(ICollider* other, const ContactInfo& contact)  override {}
-	void OnTriggerExit(ICollider* other, const ContactInfo& contact)  override {}
+	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
+	void OnTriggerStay(ICollider* other, const ContactInfo& contact)  override;
+	void OnTriggerExit(ICollider* other, const ContactInfo& contact)  override;
 
 	// collision
-	void OnCollisionEnter(ICollider* other, const ContactInfo& contact)  override
-	{
-		if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
-		{ 
-			OutputDebugStringA("Ground과 충돌 했습니다.\n");
-			isGround = true; 
-		}
-		else if (other->gameObject->name == "Wall")
-		{
-			OutputDebugStringA("Wall과 충돌 했습니다.\n");
-			if (contact.normal.x == 1) { isWallLeft = true; }
-			if (contact.normal.x == -1) { isWallRight = true; }
-		}
-	}
+	void OnCollisionEnter(ICollider* other, const ContactInfo& contact)  override;
+	void OnCollisionStay(ICollider* other, const ContactInfo& contact) override;
+	void OnCollisionExit(ICollider* other, const ContactInfo& contact)  override;
 
-	void OnCollisionStay(ICollider* other, const ContactInfo& contact) override {}
-
-	void OnCollisionExit(ICollider* other, const ContactInfo& contact)  override
-	{
-		if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
-		{ 
-			OutputDebugStringA("Ground 빠져나갔음 .\n");
-			isGround = false; 
-		}
-		else if (other->gameObject->name == "Wall")
-		{
-			if (contact.normal.x == 1)   isWallLeft = false;
-			if (contact.normal.x == -1)  isWallRight = false;
-		}
-	}
 
 public:
 	float GetSpeed() { return curSpeed; }

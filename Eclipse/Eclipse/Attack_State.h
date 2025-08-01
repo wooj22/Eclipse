@@ -2,6 +2,8 @@
 #include "MovementStateBase.h" 
 #include "../Direct2D_EngineLib/Vector2.h"
 
+#include "PlayerAttackArea.h"
+
 class MovementFSM;
 
 class Attack_State : public MovementStateBase
@@ -17,6 +19,7 @@ class Attack_State : public MovementStateBase
     Vector2 direction;
 
     float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
+
 
 public:
     void Enter(MovementFSM* fsm) override;

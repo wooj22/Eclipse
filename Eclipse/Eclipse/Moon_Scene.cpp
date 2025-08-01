@@ -3,6 +3,7 @@
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 
+
 void Moon_Scene::Awake()
 {
 	// [ camera ]
@@ -24,24 +25,21 @@ void Moon_Scene::Awake()
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::LightPink));
 	title_text->screenTextRenderer->SetText(L"Moon Scene");
 
-	// [ player ]
+
+	// [ player ] 
 	player = CreateObject<Player>();
 
-	// [ playerAttack ] Attack 콜라이더 영역 
-	//playerAttackArea = CreateObject<playerAttackArea>();
-	//playerAttackArea->name = "playerAttackArea";
+	// [ playerAttack_Parent ]
+	playerAttack_Parent = CreateObject<GameObject>();
+	auto playerAttack_Parent_tr = playerAttack_Parent->AddComponent<Transform>();
+	playerAttack_Parent_tr->SetParent(player->transform);
+	playerAttack_Parent_tr->SetPosition(0.0f, 0.0f);
 
-	//auto playerAttack_tr = playerAttack->AddComponent<Transform>();
-	//playerAttack_tr->SetPosition(50.0f, 10.0f);
-	//playerAttack_tr->SetParent(player->transform);
-	//
-	//// auto playerAttack_sr = playerAttack->AddComponent<SpriteRenderer>();
-	//// playerAttack_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Attack.png"), "Attack");
-	//
-	//playerAttack_col = playerAttack->AddComponent<CircleCollider>();
-	// playerAttack_col->size = { 20.0f, 20.0f };
-	// playerAttack_col->isTrigger = true;
-
+	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
+	playerAttackArea = CreateObject<PlayerAttackArea>();
+	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
+	playerAttackArea->SetActive(false);
+	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 	// [ ground ]
 	ground = CreateObject<GameObject>();
@@ -50,14 +48,10 @@ void Moon_Scene::Awake()
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
 	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
-	// ground_sr->layer = -1;
+	ground_sr->layer = 0;
 
 	ground_col = ground->AddComponent<BoxCollider>();
 	ground_col->size = { 1110.0f, 30.0f };
-
-	//auto ground_rb = ground->AddComponent<Rigidbody>();
-	//ground_rb->useGravity = false;
-	//ground_rb->isKinematic = true;
 
 
 	// [ wall_r ]
@@ -71,10 +65,6 @@ void Moon_Scene::Awake()
 	wall_r_col = wall_r->AddComponent<BoxCollider>();
 	wall_r_col->size = { 30.0f, 750.0f };
 
-	//auto wall_r_rb = wall_r->AddComponent<Rigidbody>();
-	//wall_r_rb->useGravity = false;
-	//wall_r_rb->isKinematic = true;
-
 
 	// [ wall_l ]
 	wall_l = CreateObject<GameObject>();
@@ -86,10 +76,6 @@ void Moon_Scene::Awake()
 
 	wall_l_col = wall_l->AddComponent<BoxCollider>();
 	wall_l_col->size = { 30.0f, 750.0f };
-
-	//auto wall_l_rb = wall_l->AddComponent<Rigidbody>();
-	//wall_l_rb->useGravity = false;
-	//wall_l_rb->isKinematic = true;
 
 
 	// [ Platform1 ]
