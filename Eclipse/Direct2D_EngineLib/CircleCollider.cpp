@@ -338,7 +338,7 @@ void CircleCollider::DebugColliderDraw()
         radius
     );
 
-    RenderSystem::Get().DebugDrawCircle(ellipse, transform->GetScreenMatrix(), 2.0f);
+    RenderSystem::Get().DebugDrawCircle(ellipse, transform->GetScreenMatrix(), 1);
 
     // center
     Vector2 localPos2 = Vector2(offset.x, -offset.y);
