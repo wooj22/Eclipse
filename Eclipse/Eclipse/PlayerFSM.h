@@ -60,7 +60,9 @@ private:
 	Rigidbody* rigidbody = nullptr;
 	AnimatorController* animatorController = nullptr;
 	// BoxCollider* boxCollider = nullptr;
+
 	PlayerAttackArea* playerAttackArea = nullptr;
+	GameObject* playerAttackParent = nullptr;
 
 public:
 	// [ FSM º¯¼ö ]
@@ -105,6 +107,9 @@ public:
     Transform* GetTransform() const { return transform; }
 	void SetPlayerAttackArea(PlayerAttackArea* obj) { playerAttackArea = obj; }
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
+	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
+	GameObject* GetPlayerAttackParent() const { return playerAttackParent; }
+
 	// BoxCollider* GetBoxCollider() const { return boxCollider; }
 
 	// void SetLastWallDir(int dir) { lastWallDir = dir; }

@@ -18,10 +18,9 @@ void Attack_State::Enter(MovementFSM* fsm)
     // 애니메이션 재생 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", true);
 
-    // 시작 위치
-    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
-
-    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos;
+    // [ 공격 이동 ] 
+    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
+    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
     float actualDistance = (((toMouse.Magnitude()) < (maxDistance)) ? (toMouse.Magnitude()) : (maxDistance)); // sts::min 
@@ -32,9 +31,17 @@ void Attack_State::Enter(MovementFSM* fsm)
     moveSpeed = actualDistance / desiredTime;
 
 
-    // 이펙트, 충돌 활성화
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(true);
+    // [ 이펙트, 충돌 ]
 
+    // 각도 계산 
+    float angleRad = atan2(direction.y, direction.x);
+    float angleDeg = angleRad * (180.0f / 3.14159265f);
+
+    // playerAttack_Parent 회전 : ( 원본 이미지가 위쪽 방향 기준 -> 시계방향 -90도 회전 적용 )
+    fsm->GetPlayerFSM()->GetPlayerAttackParent()->GetComponent<Transform>()->SetRotation(angleDeg - 90.0f);
+
+    // 활성화
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(true);
 }
 
 void Attack_State::Update(MovementFSM* fsm)

@@ -9,7 +9,7 @@ class MovementFSM;
 class Attack_State : public MovementStateBase
 {
     float maxDistance = 300.0f;  // 최대 이동 거리
-    float desiredTime = 0.3f;    // 도달 시간
+    float desiredTime = 0.3f;    // 도달 시간 0.3f
 
     float timer = 0.0f;
     float moveSpeed = 0.0f;
@@ -19,7 +19,6 @@ class Attack_State : public MovementStateBase
     Vector2 direction;
 
     float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
-
 
 public:
     void Enter(MovementFSM* fsm) override;
