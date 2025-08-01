@@ -73,110 +73,122 @@ void HonmunCollisionScript::Update()
 
 void HonmunCollisionScript::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
-	OutputDebugStringA("OnTriggerEnter called!\n");
-	
-	// \ucfe8\ub2e4\uc6b4 \uc911\uc774\uac70\ub098 \uc774\ubbf8 \ube44\ud65c\uc131\ud654\ub41c \uac1d\uccb4\ub294 \ucc98\ub9ac \uc548\ud568
-	if (reactionCooldown > 0 || isProcessingReaction || !gameObject->IsActive()) 
+	if (other->gameObject->name == "Player")
 	{
-		OutputDebugStringA("Collision blocked by cooldown, processing, or inactive object!\n");
-		return;
+		Vector2 dir = other->gameObject->transform->GetWorldPosition() - this->gameObject->transform->GetWorldPosition();
+		dir = dir.Normalized();
+
+		// TODO :: 플레이어 -> 혼 방향으로 일정거리 이동하기
+		// 혼 체력 깎기
 	}
 
-	HonmunCollisionScript* otherScript = GetHonmunScript(other);
-	if (!otherScript) 
+	if (other->gameObject->name == "Honmun")
 	{
-		OutputDebugStringA("No HonmunCollisionScript found on other object!\n");
-		return;
-	}
+		OutputDebugStringA("OnTriggerEnter called!\n");
 
-	// \ucda9\ub3cc \uac1d\uccb4 \ud0c0\uc785 \ucd9c\ub825
-	char debugMsg[100];
-	sprintf_s(debugMsg, "Trigger: My type = %d, Other type = %d (Speeds: %.2f vs %.2f)\n", 
-		(int)honmunType, (int)otherScript->honmunType, currentVelocity.Magnitude(), otherScript->currentVelocity.Magnitude());
-	OutputDebugStringA(debugMsg);
-
-	// \ubc18\uc751 \ucc98\ub9ac \ud50c\ub798\uadf8 \uc124\uc815
-	isProcessingReaction = true;
-	otherScript->isProcessingReaction = true;
-
-	// 점수 시스템을 위한 현재 씬 가져오기 (체력 체크 전에 미리 준비)
-	auto* currentScene = SceneManager::Get().GetCurrentScene();
-	auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
-
-	// 체력 1인 객체의 Mixed reaction 점수를 먼저 계산
-	bool shouldCalculateMixedScore = (health == 1 || otherScript->health == 1) && 
-		(honmunType != otherScript->honmunType);
-	
-	if (shouldCalculateMixedScore && aronScene)
-	{
-		// A<->B, A<->C, B<->C 충돌 시 +2점 (체력 1 객체 포함 시)
-		if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::B) ||
-			(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::A) ||
-			(honmunType == HonmunType::A && otherScript->honmunType == HonmunType::C) ||
-			(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::A) ||
-			(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::C) ||
-			(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::B))
+		// \ucfe8\ub2e4\uc6b4 \uc911\uc774\uac70\ub098 \uc774\ubbf8 \ube44\ud65c\uc131\ud654\ub41c \uac1d\uccb4\ub294 \ucc98\ub9ac \uc548\ud568
+		if (reactionCooldown > 0 || isProcessingReaction || !gameObject->IsActive())
 		{
-			aronScene->AddScore(2);
-			OutputDebugStringA("Mixed collision with HP=1 object: Score +2 added early!\n");
+			OutputDebugStringA("Collision blocked by cooldown, processing, or inactive object!\n");
+			return;
 		}
-		// D와의 충돌은 -2점 (체력 1 객체 포함 시)
-		else if (honmunType == HonmunType::D || otherScript->honmunType == HonmunType::D)
+
+		HonmunCollisionScript* otherScript = GetHonmunScript(other);
+		if (!otherScript)
 		{
-			aronScene->AddScore(-2);
-			OutputDebugStringA("D collision with HP=1 object: Score -2 added early!\n");
+			OutputDebugStringA("No HonmunCollisionScript found on other object!\n");
+			return;
 		}
-	}
 
-	// 체력 0인 객체는 어떤 충돌이든 즉시 파괴
-	if (health <= 0 || otherScript->health <= 0)
-	{
-		OutputDebugStringA("Health <= 0 object detected, destroying!\n");
-		if (health <= 0) DestroyThis();
-		if (otherScript->health <= 0) otherScript->DestroyThis();
-		return;
-	}
+		// \ucda9\ub3cc \uac1d\uccb4 \ud0c0\uc785 \ucd9c\ub825
+		char debugMsg[100];
+		sprintf_s(debugMsg, "Trigger: My type = %d, Other type = %d (Speeds: %.2f vs %.2f)\n",
+			(int)honmunType, (int)otherScript->honmunType, currentVelocity.Magnitude(), otherScript->currentVelocity.Magnitude());
+		OutputDebugStringA(debugMsg);
 
-	// \ud0c0\uc785\ubcc4 \ucda9\ub3bc \ucc98\ub9ac
-	if (honmunType == otherScript->honmunType)
-	{
-		// \uac19\uc740 \ud0c0\uc785\ub07c\ub9ac \ucda9\ub3cc
-		OutputDebugStringA("Same type collision detected!\n");
-		switch (honmunType)
+		// \ubc18\uc751 \ucc98\ub9ac \ud50c\ub798\uadf8 \uc124\uc815
+		isProcessingReaction = true;
+		otherScript->isProcessingReaction = true;
+
+		// 점수 시스템을 위한 현재 씬 가져오기 (체력 체크 전에 미리 준비)
+		auto* currentScene = SceneManager::Get().GetCurrentScene();
+		auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+
+		// 체력 1인 객체의 Mixed reaction 점수를 먼저 계산
+		bool shouldCalculateMixedScore = (health == 1 || otherScript->health == 1) &&
+			(honmunType != otherScript->honmunType);
+
+		if (shouldCalculateMixedScore && aronScene)
 		{
-		case HonmunType::A: // Ignis - \ud569\uccb4
-			OutputDebugStringA("A + A collision!\n");
-			HandleIgnisReaction(otherScript);
-			break;
-		case HonmunType::B: // Umbra - \uccb4\ub825 \uac10\uc18c
-			OutputDebugStringA("B + B collision calling HandleUmbraReaction!\n");
-			HandleUmbraReaction(otherScript);
-			break;
-		case HonmunType::C: // Darkness - \uccb4\ub825 \uac10\uc18c
-			OutputDebugStringA("C + C collision!\n");
-			HandleDarknessReaction(otherScript);
-			break;
-		case HonmunType::D: // Luna - \uccb4\ub825 \uac10\uc18c
-			OutputDebugStringA("D + D collision!\n");
-			HandleLunaReaction(otherScript);
-			break;
+			// A<->B, A<->C, B<->C 충돌 시 +2점 (체력 1 객체 포함 시)
+			if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::B) ||
+				(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::A) ||
+				(honmunType == HonmunType::A && otherScript->honmunType == HonmunType::C) ||
+				(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::A) ||
+				(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::C) ||
+				(honmunType == HonmunType::C && otherScript->honmunType == HonmunType::B))
+			{
+				aronScene->AddScore(2);
+				OutputDebugStringA("Mixed collision with HP=1 object: Score +2 added early!\n");
+			}
+			// D와의 충돌은 -2점 (체력 1 객체 포함 시)
+			else if (honmunType == HonmunType::D || otherScript->honmunType == HonmunType::D)
+			{
+				aronScene->AddScore(-2);
+				OutputDebugStringA("D collision with HP=1 object: Score -2 added early!\n");
+			}
 		}
-	}
-	else
-	{
-		// �ٸ� Ÿ�Գ��� �浹
-		HandleMixedReaction(otherScript);
-	}
 
-	// \ucfe8\ub2e4\uc6b4 \uc124\uc815 - B \ud0c0\uc785\uc740 \ub354 \uc9e7\uc740 \ucfe8\ub2e4\uc6b4
-	float cooldownTime = (honmunType == HonmunType::B) ? 0.3f : 1.0f;
-	reactionCooldown = cooldownTime;
-	isProcessingReaction = false;
-	if (otherScript && otherScript->gameObject && otherScript->gameObject->IsActive()) 
-	{
-		float otherCooldown = (otherScript->honmunType == HonmunType::B) ? 0.3f : 1.0f;
-		otherScript->reactionCooldown = otherCooldown;
-		otherScript->isProcessingReaction = false;
+		// 체력 0인 객체는 어떤 충돌이든 즉시 파괴
+		if (health <= 0 || otherScript->health <= 0)
+		{
+			OutputDebugStringA("Health <= 0 object detected, destroying!\n");
+			if (health <= 0) DestroyThis();
+			if (otherScript->health <= 0) otherScript->DestroyThis();
+			return;
+		}
+
+		// \ud0c0\uc785\ubcc4 \ucda9\ub3bc \ucc98\ub9ac
+		if (honmunType == otherScript->honmunType)
+		{
+			// \uac19\uc740 \ud0c0\uc785\ub07c\ub9ac \ucda9\ub3cc
+			OutputDebugStringA("Same type collision detected!\n");
+			switch (honmunType)
+			{
+			case HonmunType::A: // Ignis - \ud569\uccb4
+				OutputDebugStringA("A + A collision!\n");
+				HandleIgnisReaction(otherScript);
+				break;
+			case HonmunType::B: // Umbra - \uccb4\ub825 \uac10\uc18c
+				OutputDebugStringA("B + B collision calling HandleUmbraReaction!\n");
+				HandleUmbraReaction(otherScript);
+				break;
+			case HonmunType::C: // Darkness - \uccb4\ub825 \uac10\uc18c
+				OutputDebugStringA("C + C collision!\n");
+				HandleDarknessReaction(otherScript);
+				break;
+			case HonmunType::D: // Luna - \uccb4\ub825 \uac10\uc18c
+				OutputDebugStringA("D + D collision!\n");
+				HandleLunaReaction(otherScript);
+				break;
+			}
+		}
+		else
+		{
+			// �ٸ� Ÿ�Գ��� �浹
+			HandleMixedReaction(otherScript);
+		}
+
+		// \ucfe8\ub2e4\uc6b4 \uc124\uc815 - B \ud0c0\uc785\uc740 \ub354 \uc9e7\uc740 \ucfe8\ub2e4\uc6b4
+		float cooldownTime = (honmunType == HonmunType::B) ? 0.3f : 1.0f;
+		reactionCooldown = cooldownTime;
+		isProcessingReaction = false;
+		if (otherScript && otherScript->gameObject && otherScript->gameObject->IsActive())
+		{
+			float otherCooldown = (otherScript->honmunType == HonmunType::B) ? 0.3f : 1.0f;
+			otherScript->reactionCooldown = otherCooldown;
+			otherScript->isProcessingReaction = false;
+		}
 	}
 }
 
