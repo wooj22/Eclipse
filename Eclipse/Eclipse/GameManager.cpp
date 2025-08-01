@@ -46,22 +46,24 @@ bool GameManager::LevelUpSkill(SkillType skill)
 {
 	auto& info = skillTree[skill];
 
-	// 조건 1: 해금 조건 미충족 시 레벨업 불가
-	if (!CanUnlock(skill))
-		return false;
-
-	// 조건 2: 최대 레벨 도달 시 레벨업 불가
-	if (info.unlockLevel >= info.maxLevel)
-		return false;
-
-	// 레벨업
-	info.unlockLevel++;
-
-	// unlockLevel > 0이면 해금 처리
-	if (info.unlockLevel > 0)
+	if (CanUnlock(skill))
+	{
 		info.unlocked = true;
+		info.unlockLevel = 1;
+		return true;
+	}
+	else
+	{
+		if (info.unlockLevel >= info.maxLevel)
+			return false;
+		else 
+		{
+			info.unlockLevel++;
+			return true;
+		}
+	}
 
-	return true;
+
 }
 
 void GameManager::AllSkillUnlock()

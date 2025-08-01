@@ -7,18 +7,20 @@ class PlayUI;
 
 
 enum class SkillType {
-	KnockbackDistanceUp,
-	DoubleJump,
-	WallJump,
-	SkillCooldownDown,
-	JumpAttackExtra,
-	FastFall,
-	MoveSpeedUp,
-	AttackRangeUp,
-	Dash,
-	COUNT // 총 개수 관리용
-};
+	KnockbackDistanceUp,	// 1-1	충돌 비거리 증가	최대 3
+	DoubleJump,				// 1-2	더블 점프			최대 1
+	WallJump,				// 1-3	벽 점프				최대 1
 
+	SkillCooldownDown,		// 2-1	스킬 쿨타임 감소	최대 2	
+	JumpAttackExtra,		// 2-2	점프 후 추가공격	최대 1
+	FastFall,				// 2-3	빠른 낙하			최대 1
+
+	MoveSpeedUp,			// 3-1	이동속도 증가		최대 3
+	AttackRangeUp,			// 3-2	공격 이동거리 증가	최대 3
+	Dash,					// 3-3	대시				최대 1
+
+	COUNT					// 총 개수 관리용
+};
 
 // unordered_map의 키로 사용하기 위해 hash 함수를 정의
 namespace std {
@@ -71,6 +73,7 @@ public:
 	void UnInit();
 	void ReSetData();
 	bool CanUnlock(SkillType skill);
+	bool CheckUnlock(SkillType skill) { return skillTree[skill].unlocked; }
 	bool LevelUpSkill(SkillType skill);
 	void AllSkillUnlock();
 };
