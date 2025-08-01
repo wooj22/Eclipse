@@ -111,8 +111,9 @@ void RenderSystem::Init(HWND hwnd, int width, int height)
 		__uuidof(dWriteFactory),
 		reinterpret_cast<IUnknown**>(dWriteFactory.GetAddressOf()));
 
-	// debug
+	// brush
 	renderTarget->CreateSolidColorBrush(debug_color, &debug_brush);
+	renderTarget->CreateSolidColorBrush(line_color, &line_brush);
 }
 
 void RenderSystem::Update()
@@ -200,7 +201,7 @@ void RenderSystem::Render()
 			renderTarget->DrawEllipse(cmd.ellipse, debug_brush.Get(), cmd.strokeWidth);
 			break;
 		case DebugDrawType::Line:
-			renderTarget->DrawLine(cmd.line.start, cmd.line.end, debug_brush.Get(), cmd.strokeWidth);
+			renderTarget->DrawLine(cmd.line.start, cmd.line.end, line_brush.Get(), cmd.strokeWidth);
 			break;
 		}
 	}
@@ -219,6 +220,9 @@ void RenderSystem::UnInit()
 	renderTarget.Reset();
 	backBufferBitmap.Reset();
 	dWriteFactory.Reset();
+
+	line_brush.Reset();
+	debug_brush.Reset();
 }
 
 

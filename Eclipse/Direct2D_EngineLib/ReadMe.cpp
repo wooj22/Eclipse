@@ -252,6 +252,8 @@ class ColliderSystem;
 /*-----------------------------------------------------------------*/
 class RenderSystem;
 class IRenderer;
+class SpriteRenderer;
+class ImageRenderer;
 
 // RenderType에 따라 GameObject를 먼저 그리고 UI를 그린다.
 // RenderMode에 따라 다른 렌더 체인을 제공하며 기본은 Unlit이다.
@@ -274,8 +276,12 @@ class IRenderer;
 
 // 3. Lit_Glow
 //    - Draw Image (Crop + BlurEffect)
-//    - TODO 
+//    - bitmap 이미지에 Blur효과를 준 이미지를 그리고, 이미지를 그려 후광 효과를 준다.
+//    - ColorMatrix를 쓰는 비용을 줄이기 위해 만든거라 RGBA 모두 지원하지 않는다.
+//      DrawIamge에서 A를 사용하려면 무조건 colormatrix 연산 해야함
 
 // 4. Lit_ColorTint			
 //    - Draw Image (Crop + ColorEffect + BlurEffect)
-//    - TODO
+//    - bitmap 이미지에 Blur효과를 준 이미지를 그리고, 이미지를 그려 후광 효과를 준다.
+//    - ColorMatrix를 통해 bitmap의 색상을 변경하면 그에 따라 광원도 조정된다.
+//    - R, G, B, A 조정이 가능하다.

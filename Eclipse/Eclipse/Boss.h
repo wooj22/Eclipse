@@ -41,6 +41,9 @@ public:
 		collider->isTrigger = true;
 		collider->radius = 180;
 		collider->offset = { 0,-40 };
+
+		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
+		spriteRenderer->SetGlowAmmount(150);
 	}
 
 	void Update() override
