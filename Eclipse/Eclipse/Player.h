@@ -27,6 +27,12 @@ public:
 	// [ script ]
 	PlayerFSM* playerFSM;
 
+	// [ player setting ]
+	float playerGravityScale = 100; 
+
+public:
+	float GetPlayerGravityScale() const { return playerGravityScale; }
+
 public:
 	Player() : GameObject("Player", "Player")
 	{
@@ -62,7 +68,7 @@ public:
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;
-		rigidbody->gravityScale = 100;
+		rigidbody->gravityScale = playerFSM->defaultGravity;
 		rigidbody->mass = 1.3f;
 	}
 

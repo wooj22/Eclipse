@@ -105,6 +105,7 @@ void PlayerFSM::InputCheak()
 	// isW = Input::GetKey('W');
 	isA = Input::GetKey('A');
 	isD = Input::GetKey('D');
+	isS = Input::GetKey('S');
 	isShift = Input::GetKey(VK_SHIFT);
 	isSpace = Input::GetKeyDown(VK_SPACE);
 

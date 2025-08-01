@@ -10,6 +10,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include "Player.h"
 
 void Fall_State::Enter(MovementFSM* fsm)
 {
@@ -34,11 +35,17 @@ void Fall_State::Update(MovementFSM* fsm)
 
 void Fall_State::FixedUpdate(MovementFSM* fsm) 
 {
-
+    if (fsm->GetPlayerFSM()->GetIsS())
+    {
+        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;;
+    }
 }
 
 void Fall_State::Exit(MovementFSM* fsm)
 {
     // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", false);
+    // fsm->GetPlayerFSM()->GetRigidbody()->gameObject->GetComponent<Player>()->GetPlayerGravityScale() = 100;
+
+    fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
 }
