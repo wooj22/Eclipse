@@ -438,7 +438,11 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 			OutputDebugStringA("A<->B collision: Score +1 added!\n");
 		}
 		
+<<<<<<< HEAD
 		// A와 B 모두 체력 감소 + 파괴 시 추가 점수
+=======
+		// A타입 체력 감소 + 2A 파괴 시 추가 점수
+>>>>>>> d9bcc8974b8f00e26a9dcd5e38c0b519500617db
 		if (honmunType == HonmunType::A) 
 		{
 			// 2A인지 확인 (파괴 전에)
@@ -483,6 +487,7 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 					aronScene->AddScore(3);
 					OutputDebugStringA("2A destroyed in A<->B collision: +3 bonus points!\n");
 				}
+<<<<<<< HEAD
 				otherScript->DestroyThis();
 				return;
 			}
@@ -494,6 +499,8 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 			if (otherScript->health <= 0)
 			{
 				OutputDebugStringA("B destroyed in A<->B collision!\n");
+=======
+>>>>>>> d9bcc8974b8f00e26a9dcd5e38c0b519500617db
 				otherScript->DestroyThis();
 				return;
 			}

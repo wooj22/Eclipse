@@ -53,6 +53,7 @@ private:
 	// 점수 시스템
 	int currentScore = 0;
 	
+<<<<<<< HEAD
 	// 웨이브 1 시스템
 	struct WaveSpawnData {
 		float spawnY = 800.0f;          // 카메라 위 스폰 위치
@@ -70,12 +71,18 @@ private:
 	void CheckCollisionAndChangeColor();
 	void HandleHonmunMovement();
 	void HandleCameraMovement();
+=======
+	// collision detection function
+	void CheckCollisionAndChangeColor();
+	void HandleHonmunMovement();
+>>>>>>> d9bcc8974b8f00e26a9dcd5e38c0b519500617db
 	
 public:
 	// 점수 관련 함수들 (다른 클래스에서 접근 가능)
 	void AddScore(int points);
 	int GetScore() const { return currentScore; }
 	void UpdateScoreUI();
+<<<<<<< HEAD
 	
 	// 웨이브 시스템 함수들
 	void StartWave1();
@@ -85,4 +92,6 @@ public:
 	void CheckHonmunsReachFloor1();
 	HonmunType GetRandomHonmunType();
 	void ResetScene();  // 씬 완전 초기화
+=======
+>>>>>>> d9bcc8974b8f00e26a9dcd5e38c0b519500617db
 };

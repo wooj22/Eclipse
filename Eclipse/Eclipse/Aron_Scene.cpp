@@ -37,7 +37,11 @@ void Aron_Scene::Awake()
 	debug_text->rectTransform->SetSize(600, 50);
 	debug_text->screenTextRenderer->SetFontSize(20);
 	debug_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+<<<<<<< HEAD
 	debug_text->screenTextRenderer->SetText(L"SPACE: Start Wave 1 | WASD: Camera | C: Reset Cam | Q/E: Select | R: Reset Scene | 3: Restart");
+=======
+	debug_text->screenTextRenderer->SetText(L"Q/E: Select, Arrow: Move, R: Reset");
+>>>>>>> d9bcc8974b8f00e26a9dcd5e38c0b519500617db
 
 	// [ \ud63c\ubb38 enemies ] - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 A, B \uc544\uc774\ud15c \uc5ec\ub7ec \uac1c \uc0dd\uc131
 	// A \ud0c0\uc785 \ud63c\ubb38 4\uac1c
@@ -367,6 +371,7 @@ void Aron_Scene::UpdateScoreUI()
 	}
 }
 
+<<<<<<< HEAD
 void Aron_Scene::StartWave1()
 {
 	OutputDebugStringA("Wave 1 started!\n");
@@ -599,4 +604,25 @@ void Aron_Scene::ResetScene()
 	}
 	
 	OutputDebugStringA("Scene reset completed!\n");
+=======
+void Aron_Scene::AddScore(int points)
+{
+	currentScore += points;
+	UpdateScoreUI();
+	
+	// 디버그 출력
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Score added: +%d, Total: %d\n", points, currentScore);
+	OutputDebugStringA(debugMsg);
+}
+
+void Aron_Scene::UpdateScoreUI()
+{
+	if (score_text && score_text->screenTextRenderer)
+	{
+		wchar_t scoreText[50];
+		swprintf_s(scoreText, L"Score: %d", currentScore);
+		score_text->screenTextRenderer->SetText(scoreText);
+	}
+>>>>>>> d9bcc8974b8f00e26a9dcd5e38c0b519500617db
 }
