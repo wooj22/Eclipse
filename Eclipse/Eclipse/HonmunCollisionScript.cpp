@@ -1,4 +1,5 @@
 #include "HonmunCollisionScript.h"
+#include "Aron_Scene.h"
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/Time.h"
@@ -68,9 +69,9 @@ void HonmunCollisionScript::Update()
 	}
 }
 
-void HonmunCollisionScript::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
+void HonmunCollisionScript::OnTriggerEnter(ICollider* other)
 {
-	OutputDebugStringA("OnCollisionEnter called!\n");
+	OutputDebugStringA("OnTriggerEnter called!\n");
 	
 	// \ucfe8\ub2e4\uc6b4 \uc911\uc774\uac70\ub098 \uc774\ubbf8 \ube44\ud65c\uc131\ud654\ub41c \uac1d\uccb4\ub294 \ucc98\ub9ac \uc548\ud568
 	if (reactionCooldown > 0 || isProcessingReaction || !gameObject->IsActive()) 
@@ -88,7 +89,8 @@ void HonmunCollisionScript::OnCollisionEnter(ICollider* other, const ContactInfo
 
 	// \ucda9\ub3cc \uac1d\uccb4 \ud0c0\uc785 \ucd9c\ub825
 	char debugMsg[100];
-	sprintf_s(debugMsg, "Collision: My type = %d, Other type = %d\n", (int)honmunType, (int)otherScript->honmunType);
+	sprintf_s(debugMsg, "Trigger: My type = %d, Other type = %d (Speeds: %.2f vs %.2f)\n", 
+		(int)honmunType, (int)otherScript->honmunType, currentVelocity.Magnitude(), otherScript->currentVelocity.Magnitude());
 	OutputDebugStringA(debugMsg);
 
 	// \ubc18\uc751 \ucc98\ub9ac \ud50c\ub798\uadf8 \uc124\uc815
@@ -113,26 +115,26 @@ void HonmunCollisionScript::OnCollisionEnter(ICollider* other, const ContactInfo
 		{
 		case HonmunType::A: // Ignis - \ud569\uccb4
 			OutputDebugStringA("A + A collision!\n");
-			HandleIgnisReaction(otherScript, contact);
+			HandleIgnisReaction(otherScript);
 			break;
 		case HonmunType::B: // Umbra - \uccb4\ub825 \uac10\uc18c
 			OutputDebugStringA("B + B collision calling HandleUmbraReaction!\n");
-			HandleUmbraReaction(otherScript, contact);
+			HandleUmbraReaction(otherScript);
 			break;
 		case HonmunType::C: // Darkness - \uccb4\ub825 \uac10\uc18c
 			OutputDebugStringA("C + C collision!\n");
-			HandleDarknessReaction(otherScript, contact);
+			HandleDarknessReaction(otherScript);
 			break;
 		case HonmunType::D: // Luna - \uccb4\ub825 \uac10\uc18c
 			OutputDebugStringA("D + D collision!\n");
-			HandleLunaReaction(otherScript, contact);
+			HandleLunaReaction(otherScript);
 			break;
 		}
 	}
 	else
 	{
 		// �ٸ� Ÿ�Գ��� �浹
-		HandleMixedReaction(otherScript, contact);
+		HandleMixedReaction(otherScript);
 	}
 
 	// \ucfe8\ub2e4\uc6b4 \uc124\uc815 - B \ud0c0\uc785\uc740 \ub354 \uc9e7\uc740 \ucfe8\ub2e4\uc6b4
@@ -177,47 +179,134 @@ void HonmunCollisionScript::SetHonmunType(HonmunType type)
 	}
 }
 
-void HonmunCollisionScript::HandleIgnisReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
+void HonmunCollisionScript::HandleIgnisReaction(HonmunCollisionScript* otherScript)
 {
-	// A + A = \uccb4\ub825 \uac10\uc18c + \ud569\uccb4 \uc2dc\uc2a4\ud15c (3 → 2 → 1 → 0 \uc644\uc804 \ud30c\uad34)
+	// A + A = \uccb4\ub825 \uac10\uc18c + \ud569\uccb4 \uc2dc\uc2a4\ud15c (체력 2 이상 남으면 합체)
+	
+	// 점수 시스템을 위한 현재 씬 가져오기
+	auto* currentScene = SceneManager::Get().GetCurrentScene();
+	auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
 	
 	// \uccb4\ub825 \uac10\uc18c
 	health--;
 	otherScript->health--;
 	
-	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34
+	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34 + 점수 부여
 	if (health <= 0 || otherScript->health <= 0)
 	{
 		OutputDebugStringA("A type health reached 0, destroying objects!\n");
-		if (health <= 0) DestroyThis();
-		if (otherScript->health <= 0) otherScript->DestroyThis();
+		
+		if (health <= 0) 
+		{
+			// 파괴되는 A가 2A인지 확인 (HP=1이고 크기가 큰 경우)
+			if (aronScene)
+			{
+				bool is2A = (currentSize > 15.0f && health + 1 == 1); // 체력감소 전이 1이었다면 2A
+				int points = is2A ? 3 : 1;
+				aronScene->AddScore(points);
+				
+				char debugMsg[100];
+				sprintf_s(debugMsg, "A destroyed! Was 2A: %s, Points: %d\n", is2A ? "Yes" : "No", points);
+				OutputDebugStringA(debugMsg);
+			}
+			DestroyThis();
+		}
+		
+		if (otherScript->health <= 0) 
+		{
+			// 파괴되는 A가 2A인지 확인
+			if (aronScene)
+			{
+				bool is2A = (otherScript->currentSize > 15.0f && otherScript->health + 1 == 1);
+				int points = is2A ? 3 : 1;
+				aronScene->AddScore(points);
+				
+				char debugMsg[100];
+				sprintf_s(debugMsg, "A destroyed! Was 2A: %s, Points: %d\n", is2A ? "Yes" : "No", points);
+				OutputDebugStringA(debugMsg);
+			}
+			otherScript->DestroyThis();
+		}
 	}
 	else
 	{
-		// \uccb4\ub825\uc774 \ub0a8\uc544\uc788\uc73c\uba74 \ud569\uccb4 \uc2dc\uc2a4\ud15c \uc791\ub3d9
-		OutputDebugStringA("Both A objects still have health, merging with bounce!\n");
-		
-		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
-		BounceAwayKinematic(otherScript, contact);
-		
-		// \ud569\uccb4: \ud55c \uac1c\ub294 \uc0ac\ub77c\uc9c0\uace0 \ub2e4\ub978 \ud55c \uac1c\ub294 \ucee4\uc9c4\ub2e4
-		MergeWithOther(otherScript);
+		// 체력 감소 후 둘 다 1 이상 남으면 합체 가능
+		if (health >= 1 && otherScript->health >= 1)
+		{
+			OutputDebugStringA("Both A have health >= 2, merging into 2A!\n");
+			
+			// 합체: 둘 다 사라지고 새로운 2A(HP=1) 생성
+			Vector2 midPosition = (transform->GetPosition() + otherScript->transform->GetPosition()) * 0.5f;
+			
+			// 새로운 2A 생성
+			auto* scene = SceneManager::Get().GetCurrentScene();
+			if (scene)
+			{
+				auto* new2A = scene->CreateObject<Honmun>();
+				new2A->SetHonmunType(HonmunType::A);
+				new2A->SetPosition(midPosition.x, midPosition.y);
+				new2A->SetSize(1.5f); // 2A 크기로 설정
+				
+				auto* newScript = new2A->GetComponent<HonmunCollisionScript>();
+				if (newScript)
+				{
+					newScript->SetHealth(1); // 2A는 HP=1
+					newScript->currentSize = 15.0f; // 2A 크기
+					
+					OutputDebugStringA("New 2A created with HP=1!\n");
+				}
+			}
+			
+			// 기존 A들 파괴
+			otherScript->DestroyThis();
+			DestroyThis();
+		}
+		else
+		{
+			// 체력이 부족하면 합체 안하고 튕김만
+			OutputDebugStringA("Not enough health for merge, bounce only!\n");
+			BounceAwayKinematic(otherScript);
+		}
 	}
 }
 
-void HonmunCollisionScript::HandleUmbraReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
+void HonmunCollisionScript::HandleUmbraReaction(HonmunCollisionScript* otherScript)
 {
 	// B + B = \uccb4\ub825 \uac10\uc18c + \ubd84\ud574 \uc2dc\uc2a4\ud15c (3 → 2 → 1 → 0 \uc644\uc804 \ud30c\uad34)
 	
 	// \ub514\ubc84\uadf8 \ucd9c\ub825
 	OutputDebugStringA("B + B collision detected!\n");
 	
-	// \ubd84\ud574\ub41c \uc870\uac01\ub4e4 \ucc98\ub9ac: \ucda9\ub3cc \uc2dc \uc989\uc2dc \ud30c\uad34
+	// \ubd84\ud574\ub41c \uc870\uac01\ub4e4 \ucc98\ub9ac: \ucda9\ub3bc \uc2dc \uc989\uc2dc \ud30c\uad34 + 점수 부여
 	if (isSplitFragment || otherScript->isSplitFragment)
 	{
 		OutputDebugStringA("Split fragment collision, destroying immediately!\n");
-		if (isSplitFragment) DestroyThis();
-		if (otherScript->isSplitFragment) otherScript->DestroyThis();
+		
+		// 점수 시스템을 위한 현재 씬 가져오기
+		auto* currentScene = SceneManager::Get().GetCurrentScene();
+		auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+		
+		if (isSplitFragment) 
+		{
+			// b 조각 파괴 시 +1점
+			if (aronScene)
+			{
+				aronScene->AddScore(1);
+				OutputDebugStringA("b fragment destroyed! Points: +1\n");
+			}
+			DestroyThis();
+		}
+		
+		if (otherScript->isSplitFragment) 
+		{
+			// b 조각 파괴 시 +1점
+			if (aronScene)
+			{
+				aronScene->AddScore(1);
+				OutputDebugStringA("b fragment destroyed! Points: +1\n");
+			}
+			otherScript->DestroyThis();
+		}
 		return;
 	}
 	
@@ -226,12 +315,36 @@ void HonmunCollisionScript::HandleUmbraReaction(HonmunCollisionScript* otherScri
 	health--;
 	otherScript->health--;
 	
-	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34
+	// \uccb4\ub825\uc774 0\uc774 \ub418\uba74 \uc644\uc804 \ud30c\uad34 + 점수 부여
 	if (health <= 0 || otherScript->health <= 0)
 	{
 		OutputDebugStringA("B type health reached 0, destroying objects!\n");
-		if (health <= 0) DestroyThis();
-		if (otherScript->health <= 0) otherScript->DestroyThis();
+		
+		// 점수 시스템을 위한 현재 씬 가져오기
+		auto* currentScene = SceneManager::Get().GetCurrentScene();
+		auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+		
+		if (health <= 0) 
+		{
+			// B 파괴 시 +1점
+			if (aronScene)
+			{
+				aronScene->AddScore(1);
+				OutputDebugStringA("B destroyed! Points: +1\n");
+			}
+			DestroyThis();
+		}
+		
+		if (otherScript->health <= 0) 
+		{
+			// B 파괴 시 +1점
+			if (aronScene)
+			{
+				aronScene->AddScore(1);
+				OutputDebugStringA("B destroyed! Points: +1\n");
+			}
+			otherScript->DestroyThis();
+		}
 	}
 	else
 	{
@@ -239,17 +352,17 @@ void HonmunCollisionScript::HandleUmbraReaction(HonmunCollisionScript* otherScri
 		OutputDebugStringA("Both original B objects still have health, splitting with bounce!\n");
 		
 		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
-		BounceAwayKinematic(otherScript, contact);
+		BounceAwayKinematic(otherScript);
 		
 		// \ubd84\ud574: \ucd1d 4\uac1c \uc0dd\uc131 (\uae30\uc874 2\uac1c\ub294 \ud30c\uad34\ub418\uace0 \uc0c8\ub85c 4\uac1c \uc0dd\uc131)
-		CreateSplitObjectsWithCollision(4, otherScript, contact);
+		CreateSplitObjectsWithCollision(4, otherScript);
 		
 		otherScript->DestroyThis();
 		DestroyThis();
 	}
 }
 
-void HonmunCollisionScript::HandleDarknessReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
+void HonmunCollisionScript::HandleDarknessReaction(HonmunCollisionScript* otherScript)
 {
 	// C + C = \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c (3 → 2 → 1 → 0 \uc644\uc804 \ud30c\uad34)
 	
@@ -273,11 +386,11 @@ void HonmunCollisionScript::HandleDarknessReaction(HonmunCollisionScript* otherS
 		OutputDebugStringA("Both C objects still have health, strong bounce!\n");
 		
 		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc
-		BounceAwayKinematic(otherScript, contact);
+		BounceAwayKinematic(otherScript);
 	}
 }
 
-void HonmunCollisionScript::HandleLunaReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
+void HonmunCollisionScript::HandleLunaReaction(HonmunCollisionScript* otherScript)
 {
 	// D + D = \uccb4\ub825 \uac10\uc18c \uc2dc\uc2a4\ud15c (3 → 2 → 1 → 0 \uc644\uc804 \ud30c\uad34)
 	
@@ -301,38 +414,67 @@ void HonmunCollisionScript::HandleLunaReaction(HonmunCollisionScript* otherScrip
 		OutputDebugStringA("Both D objects still have health, strong bounce!\n");
 		
 		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc
-		BounceAwayKinematic(otherScript, contact);
+		BounceAwayKinematic(otherScript);
 	}
 }
 
-void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScript, const ContactInfo& contact)
+void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScript)
 {
 	// \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: A\uc640 B\ub9cc \uc0ac\uc6a9
-	// A&B \ub610\ub294 B&A - \ud295\uae40 (\ud0a4\ub124\ub9c8\ud2f1\uc73c\ub85c \ubcc0\uacbd) + A 체력 감소
+	// A&B \ub610\ub294 B&A - \ud295\uae40 (\ud0a4\ub124\ub9c8\ud2f1\uc73c\ub85c \ubcc0\uacbd) + A 체력 감소 + 점수 +1
 	if ((honmunType == HonmunType::A && otherScript->honmunType == HonmunType::B) ||
 		(honmunType == HonmunType::B && otherScript->honmunType == HonmunType::A))
 	{
-		// A타입 체력 감소
+		// 점수 시스템을 위한 현재 씬 가져오기
+		auto* currentScene = SceneManager::Get().GetCurrentScene();
+		auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+		
+		// 점수 +1 추가 (Aron_Scene에서만)
+		if (aronScene)
+		{
+			aronScene->AddScore(1);
+			OutputDebugStringA("A<->B collision: Score +1 added!\n");
+		}
+		
+		// A타입 체력 감소 + 2A 파괴 시 추가 점수
 		if (honmunType == HonmunType::A) 
 		{
+			// 2A인지 확인 (파괴 전에)
+			bool is2A = (currentSize > 15.0f && health == 1);
+			
 			health--;
 			if (health <= 0) 
 			{
+				// 2A가 파괴되면 추가 +3점
+				if (is2A && aronScene)
+				{
+					aronScene->AddScore(3);
+					OutputDebugStringA("2A destroyed in A<->B collision: +3 bonus points!\n");
+				}
 				DestroyThis();
 				return;
 			}
 		}
 		if (otherScript->honmunType == HonmunType::A) 
 		{
+			// 2A인지 확인 (파괴 전에)
+			bool is2A = (otherScript->currentSize > 15.0f && otherScript->health == 1);
+			
 			otherScript->health--;
 			if (otherScript->health <= 0) 
 			{
+				// 2A가 파괴되면 추가 +3점
+				if (is2A && aronScene)
+				{
+					aronScene->AddScore(3);
+					OutputDebugStringA("2A destroyed in A<->B collision: +3 bonus points!\n");
+				}
 				otherScript->DestroyThis();
 				return;
 			}
 		}
 		
-		BounceAwayKinematic(otherScript, contact);
+		BounceAwayKinematic(otherScript);
 	}
 
 	// \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: C, D \uad00\ub828 \ucda9\ub3cc \ucf54\ub4dc \uc8fc\uc11d\ucc98\ub9ac
@@ -361,17 +503,7 @@ void HonmunCollisionScript::HandleMixedReaction(HonmunCollisionScript* otherScri
 	// }
 }
 
-void HonmunCollisionScript::MergeWithOther(HonmunCollisionScript* otherScript)
-{
-	// ũ�� 10% ����
-	UpdateSize(currentSize * 1.1f);
-
-	// ���ϼӵ� 20% ����
-	UpdateFallingSpeed(0.8f);
-
-	// ���� ����
-	otherScript->DestroyThis();
-}
+// MergeWithOther 함수는 더 이상 사용하지 않음 - 새로운 2A 생성 방식으로 변경
 
 void HonmunCollisionScript::SplitIntoTwo()
 {
@@ -393,7 +525,7 @@ void HonmunCollisionScript::SplitIntoTwo()
 	newScript->SetHealth(1); // 에너지 1로 설정
 }
 
-void HonmunCollisionScript::CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript, const ContactInfo& contact)
+void HonmunCollisionScript::CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript)
 {
 	Vector2 myPos = transform->GetPosition();
 	Vector2 otherPos = otherScript->transform->GetPosition();
@@ -652,7 +784,7 @@ void HonmunCollisionScript::BounceAway(HonmunCollisionScript* otherScript, const
 	otherScript->rigidbody->AddImpulse(-bounceForce);
 }
 
-void HonmunCollisionScript::BounceAwayKinematic(HonmunCollisionScript* otherScript, const ContactInfo& contact)
+void HonmunCollisionScript::BounceAwayKinematic(HonmunCollisionScript* otherScript)
 {
 	OutputDebugStringA("A & B kinematic bounce collision!\n");
 	
