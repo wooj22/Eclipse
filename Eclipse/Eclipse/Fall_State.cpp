@@ -15,6 +15,8 @@ void Fall_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Fall_State] Player의 Fall_State 진입 \n");
 
+    fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
+
     // 애니메이션 재생
     // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", true);
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);

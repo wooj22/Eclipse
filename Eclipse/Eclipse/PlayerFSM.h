@@ -114,7 +114,10 @@ public:
 	// collision
 	void OnCollisionEnter(ICollider* other, const ContactInfo& contact)  override
 	{
-		if (other->gameObject->name == "Ground") { isGround = true; }
+		if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
+		{ 
+			isGround = true; 
+		}
 		else if (other->gameObject->name == "Wall")
 		{
 			OutputDebugStringA("Wall과 충돌 했습니다.\n");
