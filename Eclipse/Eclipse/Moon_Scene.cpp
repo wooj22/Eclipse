@@ -41,6 +41,7 @@ void Moon_Scene::Awake()
 	playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
+
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";

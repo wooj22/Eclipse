@@ -36,12 +36,14 @@ public:
 		transform->SetPosition(0.0f, 30.0f);
 		transform->SetRotation(0.0f);
 
-		collider->radius = 10.0f;
+		collider->offset = { 0.0f, 20.0f };
+		collider->radius = 40.0f;
 		collider->isTrigger = true;
 	}
 
 	void Update() override
 	{
-
+		// AABB ¿µ¿ª 
+		collider->DebugColliderDraw();
 	}
 };
