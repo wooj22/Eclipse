@@ -2,6 +2,7 @@
 #include "EclipseApp.h"
 #include "Honmun.h"  // Honmun 클래스 포함
 #include "HonmunCollisionScript.h"
+#include "GameManager.h"  // GameManager 추가
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Input.h"
@@ -375,9 +376,13 @@ void Aron_Scene::AddScore(int points)
 	currentScore += points;
 	UpdateScoreUI();
 	
+	// GameManager로 혼문 카운트 전송
+	GameManager::Get().honCount += points;
+	
 	// 디버그 출력
 	char debugMsg[100];
-	sprintf_s(debugMsg, "Score added: +%d, Total: %d\n", points, currentScore);
+	sprintf_s(debugMsg, "Score added: +%d, Total: %d, GameManager honCount: %d\n", 
+		points, currentScore, GameManager::Get().honCount);
 	OutputDebugStringA(debugMsg);
 }
 
@@ -402,6 +407,10 @@ void Aron_Scene::UpdateScoreUI()
 void Aron_Scene::StartWave1()
 {
 	OutputDebugStringA("Wave 1 started!\n");
+	
+	// GameManager 웨이브 정보 업데이트
+	GameManager::Get().waveCount = 1;
+	GameManager::Get().isWave = true;
 	
 	// 웨이브 시스템 완전 초기화
 	waveData.waveActive = true;
@@ -442,6 +451,10 @@ void Aron_Scene::StartWave1()
 void Aron_Scene::StartWave2()
 {
 	OutputDebugStringA("Wave 2 started!\n");
+	
+	// GameManager 웨이브 정보 업데이트
+	GameManager::Get().waveCount = 2;
+	GameManager::Get().isWave = true;
 	
 	// 웨이브 시스템 완전 초기화
 	waveData.waveActive = true;
@@ -691,6 +704,11 @@ void Aron_Scene::HandleCameraMovement()
 void Aron_Scene::ResetScene()
 {
 	OutputDebugStringA("ResetScene called - complete scene reset!\n");
+	
+	// GameManager 상태 초기화
+	GameManager::Get().waveCount = 0;
+	GameManager::Get().isWave = false;
+	// honCount는 유지 (누적 점수)
 	
 	// 웨이브 시스템 완전 정지
 	waveData.waveActive = false;
