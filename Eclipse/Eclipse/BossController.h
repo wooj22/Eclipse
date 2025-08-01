@@ -70,9 +70,9 @@ public:
 	void OnDestroy() override;
 
 	// trigger event
-	void OnTriggerEnter(ICollider* other) override;
-	void OnTriggerStay(ICollider* other)  override;
-	void OnTriggerExit(ICollider* other)  override;
+	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
+	void OnTriggerStay(ICollider* other, const ContactInfo& contact)  override;
+	void OnTriggerExit(ICollider* other, const ContactInfo& contact)  override;
 
 private:
 	// boss contoll func

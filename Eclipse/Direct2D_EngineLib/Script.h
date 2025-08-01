@@ -54,9 +54,9 @@ public:
 
     /* Collition Event */
     // trigger
-    virtual void OnTriggerEnter(ICollider* other) {}
-    virtual void OnTriggerStay(ICollider* other) {}
-    virtual void OnTriggerExit(ICollider* other) {}
+    virtual void OnTriggerEnter(ICollider* other, const ContactInfo& contact) {}
+    virtual void OnTriggerStay(ICollider* other, const ContactInfo& contact) {}
+    virtual void OnTriggerExit(ICollider* other, const ContactInfo& contact) {}
 
     // collision
     virtual void OnCollisionEnter(ICollider* other, const ContactInfo& contact) {}

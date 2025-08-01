@@ -25,7 +25,7 @@ void BulletController::OnDestroy()
 
 }
 
-void BulletController::OnTriggerEnter(ICollider* other)
+void BulletController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->tag == "Player_Woo")
 	{
