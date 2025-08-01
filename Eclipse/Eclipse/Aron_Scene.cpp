@@ -37,7 +37,7 @@ void Aron_Scene::Awake()
 	debug_text->rectTransform->SetSize(600, 50);
 	debug_text->screenTextRenderer->SetFontSize(20);
 	debug_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-	debug_text->screenTextRenderer->SetText(L"SPACE: Start Wave 1 | WASD: Camera | C: Reset Cam | Q/E: Select | R: Reset Scene | 3: Restart");
+	debug_text->screenTextRenderer->SetText(L"SPACE: Wave 1 | 2: Wave 2 | WASD: Camera | C: Reset Cam | Q/E: Select | R: Reset Scene | 3: Restart");
 
 	// [ \ud63c\ubb38 enemies ] - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 A, B \uc544\uc774\ud15c \uc5ec\ub7ec \uac1c \uc0dd\uc131
 	// A \ud0c0\uc785 \ud63c\ubb38 4\uac1c
@@ -82,6 +82,17 @@ void Aron_Scene::Awake()
 	honmun_b4->SetHonmunType(HonmunType::B);
 	honmun_b4->SetPosition(50.0f, 50.0f);
 
+	// C 타입 혼문 2개 (테스트용)
+	auto* honmun_c = CreateObject<Honmun>();
+	honmun_c->name = "Honmun_C1";
+	honmun_c->SetHonmunType(HonmunType::C);
+	honmun_c->SetPosition(-500.0f, -200.0f);
+
+	auto* honmun_c2 = CreateObject<Honmun>();
+	honmun_c2->name = "Honmun_C2";
+	honmun_c2->SetHonmunType(HonmunType::C);
+	honmun_c2->SetPosition(500.0f, -200.0f);
+
 	// 모든 혼문을 벡터에 추가
 	allHonmuns.push_back(honmun_a);
 	allHonmuns.push_back(honmun_a2);
@@ -91,6 +102,8 @@ void Aron_Scene::Awake()
 	allHonmuns.push_back(honmun_b2);
 	allHonmuns.push_back(honmun_b3);
 	allHonmuns.push_back(honmun_b4);
+	allHonmuns.push_back(honmun_c);
+	allHonmuns.push_back(honmun_c2);
 	
 	// 웨이브 시스템 초기화
 	waveData.waveActive = false;
@@ -175,6 +188,19 @@ void Aron_Scene::Update()
 		if (!waveData.waveActive)
 		{
 			StartWave1();
+		}
+		else
+		{
+			OutputDebugStringA("Wave already active! Press R to reset first.\n");
+		}
+	}
+	
+	// 웨이브 2 시작 (2키)
+	if (Input::GetKeyDown('2'))
+	{
+		if (!waveData.waveActive)
+		{
+			StartWave2();
 		}
 		else
 		{
@@ -356,12 +382,12 @@ void Aron_Scene::UpdateScoreUI()
 		wchar_t scoreText[100];
 		if (waveData.waveActive)
 		{
-			swprintf_s(scoreText, L"Score: %d | Wave 1: %d/%d spawned", 
-				currentScore, waveData.currentSpawnIndex, waveData.totalSpawnCount);
+			swprintf_s(scoreText, L"Score: %d | Wave %d: %d/%d spawned", 
+				currentScore, waveData.currentWave, waveData.currentSpawnIndex, waveData.totalSpawnCount);
 		}
 		else
 		{
-			swprintf_s(scoreText, L"Score: %d | Press SPACE for Wave 1", currentScore);
+			swprintf_s(scoreText, L"Score: %d | Press SPACE(Wave1) or 2(Wave2)", currentScore);
 		}
 		score_text->screenTextRenderer->SetText(scoreText);
 	}
@@ -397,6 +423,48 @@ void Aron_Scene::StartWave1()
 	}
 	allHonmuns.clear();
 	
+	// 웨이브 1 설정
+	waveData.currentWave = 1;
+	waveData.totalSpawnCount = 20;  // 웨이브 1: 20마리
+	
+	// 점수 초기화 (선택사항)
+	currentScore = 0;
+	UpdateScoreUI();
+}
+
+void Aron_Scene::StartWave2()
+{
+	OutputDebugStringA("Wave 2 started!\n");
+	
+	// 웨이브 시스템 완전 초기화
+	waveData.waveActive = true;
+	waveData.currentSpawnIndex = 0;
+	waveData.lastSpawnTime = 0.0f;
+	waveData.spawnInterval = 0.8f;  // 웨이브 2는 조금 더 빠른 스폰
+	waveData.spawnedHonmuns.clear();
+	
+	// 기존 테스트용 혼문들 완전 제거
+	for (auto* honmun : allHonmuns)
+	{
+		if (honmun && honmun->IsActive())
+		{
+			auto* script = honmun->GetComponent<HonmunCollisionScript>();
+			if (script)
+			{
+				script->DestroyThis();
+			}
+			else
+			{
+				honmun->SetActive(false);
+			}
+		}
+	}
+	allHonmuns.clear();
+	
+	// 웨이브 2 설정
+	waveData.currentWave = 2;
+	waveData.totalSpawnCount = 25;  // 웨이브 2: 25마리 (더 많음)
+	
 	// 점수 초기화 (선택사항)
 	currentScore = 0;
 	UpdateScoreUI();
@@ -415,7 +483,16 @@ void Aron_Scene::UpdateWaveSystem()
 	{
 		if (currentTime - waveData.lastSpawnTime >= waveData.spawnInterval)
 		{
-			SpawnHonmun();
+			// 웨이브에 따라 다른 스폰 함수 호출
+			if (waveData.currentWave == 1)
+			{
+				SpawnHonmun();  // 웨이브 1: A, B만
+			}
+			else if (waveData.currentWave == 2)
+			{
+				SpawnHonmunWave2();  // 웨이브 2: A, B, C 포함
+			}
+			
 			waveData.lastSpawnTime = currentTime;
 			waveData.currentSpawnIndex++;
 		}
