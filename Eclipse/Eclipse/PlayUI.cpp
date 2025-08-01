@@ -33,7 +33,6 @@ void PlayUI::SceneStart()
 	tooltip_Image->rectTransform->SetSize(450, 150);
 	auto tooltipTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Tooltip.png");
 	tooltip_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(tooltipTexture, "Tooltip");
-	tooltip_Image->SetActive(false);
 
 
 	
@@ -84,9 +83,9 @@ void PlayUI::SceneStart()
 	auto honImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Hon.png");
 	hon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
-	hon_Text->rectTransform->SetPosition(200, 0);
-	hon_Text->rectTransform->SetSize(330, 50);
-	hon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
+	hon_Text->rectTransform->SetPosition(70, 0);
+	hon_Text->rectTransform->SetSize(100, 50);
+	hon_Text->screenTextRenderer->SetText(L"x 1");
 	hon_Text->screenTextRenderer->SetFontSize(50);
 
 	// 스킬1
@@ -116,97 +115,33 @@ void PlayUI::SceneStart()
 
 void PlayUI::Update()
 {
+	waveInfo_Text->screenTextRenderer->SetText(L"Wave " + std::to_wstring(GameManager::Get().waveCount));
 
-	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
+	tolltipInfoTimer += Time::GetDeltaTime();
 
 	if (waveInfo_Text->IsActive())
 	{
 		if (waveInfoTimer < waveIntoTime)
 		{
 			waveInfoTimer += Time::GetDeltaTime();
-
-			float alpha = 1.0f;
-
-			if (waveInfoTimer < fadeTime) // 페이드 인 구간
-			{
-				alpha = waveInfoTimer / fadeTime;
-			}
-			else if (waveInfoTimer > (waveIntoTime - fadeTime)) // 페이드 아웃 구간
-			{
-				alpha = (waveIntoTime - waveInfoTimer) / fadeTime;
-			}
-			else // 알파 1 유지 구간
-			{
-				alpha = 1.0f;
-			}
-
-			// clamp 알파값 (0 ~ 1)
-			alpha = std::max(0.0f, std::min(1.0f, alpha));
+			float t = waveInfoTimer / waveIntoTime;
+			t = std::max(0.0f, std::min(1.0f, t));
+			float alpha = 1.0f - std::abs(2.0f * t - 1.0f);
 			waveInfo_Text->screenTextRenderer->SetAlpha(alpha);
 		}
 		else
 		{
+			waveInfo_Text->SetActive(false);
 			waveInfoTimer = 0;
 			waveInfo_Text->screenTextRenderer->SetAlpha(0);
-			waveInfo_Text->SetActive(false);
 		}
 	}
 
-	if (tooltip_Image->IsActive())
-	{
-		if (tolltipInfoTimer < tolltipInfoTime)
-		{
-			tolltipInfoTimer += Time::GetDeltaTime();
 
-			float alpha = 1.0f;
-
-			if (tolltipInfoTimer < fadeTime) // 페이드 인
-			{
-				alpha = tolltipInfoTimer / fadeTime;
-			}
-			else if (tolltipInfoTimer > (tolltipInfoTime - fadeTime)) // 페이드 아웃
-			{
-				alpha = (tolltipInfoTime - tolltipInfoTimer) / fadeTime;
-			}
-			else // 알파 1 유지
-			{
-				alpha = 1.0f;
-			}
-
-			alpha = std::max(0.0f, std::min(1.0f, alpha));
-			tooltip_Image->imageRenderer->SetAlpha(alpha);
-		}
-		else
-		{
-			tolltipInfoTimer = 0;
-			tooltip_Image->imageRenderer->SetAlpha(0);
-			tooltip_Image->SetActive(false);
-		}
-	}
+	if (tooltip_Image->IsActive() && tolltipInfoTimer > 10) tooltip_Image->SetActive(false);
 }
 
 void PlayUI::Destroyed()
 {
 
-}
-
-void PlayUI::ClickChatButton() {
-	GameManager::Get().isWave = true;
-	GameManager::Get().waveCount++;
-	chat_Button->SetActive(false);
-	chat_Image->SetActive(false);
-	StartWaveInfo(GameManager::Get().waveCount);
-}
-
-void PlayUI::StartWaveInfo(int waveNumber)
-{
-	waveInfo_Text->screenTextRenderer->SetText(L"Wave " + std::to_wstring(waveNumber));
-	
-	waveInfoTimer = 0;
-	waveInfo_Text->SetActive(true);
-	waveInfo_Text->screenTextRenderer->SetAlpha(0);
-
-	tolltipInfoTimer = 0;
-	tooltip_Image->SetActive(true);
-	tooltip_Image->imageRenderer->SetAlpha(0);
 }

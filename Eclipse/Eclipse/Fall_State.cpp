@@ -10,17 +10,13 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "Player.h"
 
 void Fall_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Fall_State] Player의 Fall_State 진입 \n");
 
-    fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
-
     // 애니메이션 재생
-    // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", true);
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", true);
 }
 
 void Fall_State::Update(MovementFSM* fsm)
@@ -35,14 +31,10 @@ void Fall_State::Update(MovementFSM* fsm)
 
 void Fall_State::FixedUpdate(MovementFSM* fsm) 
 {
-    if (fsm->GetPlayerFSM()->GetIsS())
-    {
-        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;;
-    }
+
 }
 
 void Fall_State::Exit(MovementFSM* fsm)
 {
-    fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", false);
 }

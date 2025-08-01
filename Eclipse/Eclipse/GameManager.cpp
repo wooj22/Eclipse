@@ -3,7 +3,7 @@
 void GameManager::UnInit()
 {
 	g_playUI = nullptr;
-	skillTree.clear();
+	//skillMap.clear();
 }
 
 void GameManager::ReSetData()
@@ -31,15 +31,15 @@ bool GameManager::CanUnlock(SkillType skill)
 {
 	const auto& info = skillTree[skill];
 	if (info.unlocked)
-		return false; // ÀÌ¹Ì ÇØ±ÝµÊ
+		return false; // ï¿½Ì¹ï¿½ ï¿½Ø±Ýµï¿½
 
 	if (info.prerequisiteSkill != SkillType::COUNT) {
 		const auto& preInfo = skillTree[info.prerequisiteSkill];
 		if (preInfo.unlockLevel < info.requiredLevel)
-			return false; // Á¶°Ç ¹Ì´Þ
+			return false; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ì´ï¿½
 	}
 
-	return true; // Á¶°Ç ¸¸Á·
+	return true; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 bool GameManager::LevelUpSkill(SkillType skill)

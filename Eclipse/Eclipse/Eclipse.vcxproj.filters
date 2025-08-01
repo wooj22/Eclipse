@@ -201,32 +201,17 @@
     <ClCompile Include="Quest.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Chat.cpp">
+    <ClCompile Include="Boss.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Fall_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="HonmunAFSM.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="HonmunBFSM.cpp">
+    <ClCompile Include="BossController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>02. GameObject\Woo\Boss</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Boss.cpp">
-      <Filter>02. GameObject\Woo\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletController.cpp">
-      <Filter>03. Script\Woo\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="BossController.cpp">
-      <Filter>03. Script\Woo\Boss</Filter>
+    <ClCompile Include="Chat.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,32 +317,17 @@
     <ClInclude Include="Quest.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Chat.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Fall_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunAFSM.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunBFSM.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Boss.h">
-      <Filter>02. GameObject\Woo\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>02. GameObject\Woo\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletController.h">
-      <Filter>03. Script\Woo\Boss</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BossController.h">
-      <Filter>03. Script\Woo\Boss</Filter>
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Chat.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

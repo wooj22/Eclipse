@@ -1,28 +1,24 @@
 #pragma once
 #include "../Direct2D_EngineLib/Singleton.h"
-#include <unordered_map>
-#include <string>
 
 class PlayUI;
-
-
 enum class SkillType {
-	KnockbackDistanceUp,	// 1-1	Ãæµ¹ ºñ°Å¸® Áõ°¡	ÃÖ´ë 3
-	DoubleJump,				// 1-2	´õºí Á¡ÇÁ			ÃÖ´ë 1
-	WallJump,				// 1-3	º® Á¡ÇÁ				ÃÖ´ë 1
+	KnockbackDistanceUp,	// 1-1	ï¿½æµ¹ ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½	ï¿½Ö´ï¿½ 3
+	DoubleJump,				// 1-2	ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½			ï¿½Ö´ï¿½ 1
+	WallJump,				// 1-3	ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½				ï¿½Ö´ï¿½ 1
 
-	SkillCooldownDown,		// 2-1	½ºÅ³ ÄðÅ¸ÀÓ °¨¼Ò	ÃÖ´ë 2	
-	JumpAttackExtra,		// 2-2	Á¡ÇÁ ÈÄ Ãß°¡°ø°Ý	ÃÖ´ë 1
-	FastFall,				// 2-3	ºü¸¥ ³«ÇÏ			ÃÖ´ë 1
+	SkillCooldownDown,		// 2-1	ï¿½ï¿½Å³ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½	ï¿½Ö´ï¿½ 2	
+	JumpAttackExtra,		// 2-2	ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½	ï¿½Ö´ï¿½ 1
+	FastFall,				// 2-3	ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½			ï¿½Ö´ï¿½ 1
 
-	MoveSpeedUp,			// 3-1	ÀÌµ¿¼Óµµ Áõ°¡		ÃÖ´ë 3
-	AttackRangeUp,			// 3-2	°ø°Ý ÀÌµ¿°Å¸® Áõ°¡	ÃÖ´ë 3
-	Dash,					// 3-3	´ë½Ã				ÃÖ´ë 1
+	MoveSpeedUp,			// 3-1	ï¿½Ìµï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½		ï¿½Ö´ï¿½ 3
+	AttackRangeUp,			// 3-2	ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½	ï¿½Ö´ï¿½ 3
+	Dash,					// 3-3	ï¿½ï¿½ï¿½				ï¿½Ö´ï¿½ 1
 
-	COUNT					// ÃÑ °³¼ö °ü¸®¿ë
+	COUNT					// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 };
 
-// unordered_mapÀÇ Å°·Î »ç¿ëÇÏ±â À§ÇØ hash ÇÔ¼ö¸¦ Á¤ÀÇ
+// unordered_mapï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ hash ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 namespace std {
 	template<>
 	struct hash<SkillType> {
@@ -33,13 +29,13 @@ namespace std {
 }
 
 struct SkillInfo {
-	bool unlocked = false;  // ÇØ±Ý ¿©ºÎ
-	int unlockLevel = 0;    // ÇØ±ÝµÈ ·¹º§ (È¤Àº Á¶°Ç ·¹º§)
-	int maxLevel = 1;		// ½ºÅ³ ÃÖ´ë ·¹º§ (±âº» 1)
+	bool unlocked = false;  // ï¿½Ø±ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int unlockLevel = 0;    // ï¿½Ø±Ýµï¿½ ï¿½ï¿½ï¿½ï¿½ (È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+	int maxLevel = 1;		// ï¿½ï¿½Å³ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½âº» 1)
 
-	// ¼±Çà Á¶°Ç: optional
-	SkillType prerequisiteSkill = SkillType::COUNT; // ±âº»°ª = ¾øÀ½
-	int requiredLevel = 0; // À§ ½ºÅ³ÀÌ ÀÌ ·¹º§ ÀÌ»óÀÏ ¶§¸¸ ÇØ±Ý °¡´É
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: optional
+	SkillType prerequisiteSkill = SkillType::COUNT; // ï¿½âº»ï¿½ï¿½ = ï¿½ï¿½ï¿½ï¿½
+	int requiredLevel = 0; // ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø±ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	SkillInfo(
 		bool unlocked = false,
@@ -55,7 +51,6 @@ struct SkillInfo {
 	{
 	}
 };
-
 class GameManager : public Singleton<GameManager>
 {
 
@@ -64,12 +59,11 @@ public:
 	int honCount;
 	int waveCount;
 	bool isWave;
-	std::unordered_map<SkillType, SkillInfo> skillTree;
 
 	GameManager() = default;
 	~GameManager() = default;
 
-	void Init() { g_playUI = nullptr; ReSetData(); }
+	void Init() { ReSetData(); }
 	void UnInit();
 	void ReSetData();
 	bool CanUnlock(SkillType skill);

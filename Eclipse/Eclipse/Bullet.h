@@ -33,7 +33,6 @@ public:
 		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "Bullet");
 		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->layer = 10;
-		spriteRenderer->renderMode = RenderMode::UnlitColorTint;
 
 		rigidbody->isKinematic = true;
 		collider->isTrigger = true;
