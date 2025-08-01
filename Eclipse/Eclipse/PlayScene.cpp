@@ -81,26 +81,6 @@ void PlayScene::Update()
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
-
-	if (Input::GetKeyDown(VK_F1))
-	{
-		GameManager::Get().honCount += 10000; // 혼 치트
-	}
-
-	if (Input::GetKeyDown(VK_F2))
-	{
-		GameManager::Get().AllSkillUnlock(); // 모든 스킬 해금 치트
-	}
-
-	if (Input::GetKeyDown(VK_F3))
-	{
-
-	}
-
-	if (Input::GetKeyDown(VK_F4))
-	{
-
-	}
 }
 
 void PlayScene::Exit()

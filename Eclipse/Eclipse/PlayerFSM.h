@@ -45,7 +45,7 @@ private:
 	bool isWallRight = false;
 
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton;
+	bool isA, isD, isShift, isSpace, isLButton, isRButton;
 
 	// ref component
 	Transform* transform = nullptr;
@@ -62,8 +62,7 @@ public:
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
-	const float defaultGravity = 100.0f;   // 기본 중력 
-	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
+
 	Vector2 MouseWorldPos;
 
 public:
@@ -73,7 +72,6 @@ public:
 	bool GetisShift() const { return isShift; }   // 임시 대쉬
 	bool GetIsA() const { return isA; }
 	bool GetIsD() const { return isD; }
-	bool GetIsS() const { return isS; }
 	bool GetIsLButton() const { return isLButton; }
 	bool GetIsRButton() const { return isRButton; }
 
@@ -116,10 +114,7 @@ public:
 	// collision
 	void OnCollisionEnter(ICollider* other, const ContactInfo& contact)  override
 	{
-		if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
-		{ 
-			isGround = true; 
-		}
+		if (other->gameObject->name == "Ground") { isGround = true; }
 		else if (other->gameObject->name == "Wall")
 		{
 			OutputDebugStringA("Wall과 충돌 했습니다.\n");

@@ -16,10 +16,7 @@
 /* [Sprite Renderer Conponent]
 * <World>의 이미지 한 장(sprite)의 render를 담당하는 component로
 * 컴포넌트 생성시 RenderSystem에 등록되어 sprite를 게속 render한다.
-* render시 필요한 transform은 이 컴포넌트가 등록된 오브젝트의 transform을 포인터에 담아 활용한다.
-* 
-* 기본 RenderMode는 UnLint이며 (DrawBitMap)
-* ColorEffect나 Glow(blur)Effect의 효과를 기대한다면 RenderMode를 바꿔주어야한다.
+* render시 필요한 transform은 이 컴포넌트가 등록된 오브젝트의 transform을 포인터에 담아 활용한다
 */
 
 class Transform;
@@ -27,19 +24,11 @@ class SpriteRenderer : public IRenderer
 {
 private:
 	Transform* transform;
-
-public:
-	shared_ptr<Sprite> sprite;		// 공유 자원	
-	float alpha = 1.0f;				// 투명도		// TODO :: private!
-	bool flipX = false;				// x축 반전
-	bool flipY = false;				// y축 반전
+	D2D1_RECT_F destRect;
 
 private:
-	// Effect
 	ComPtr<ID2D1Effect> colorMatrixEffect = nullptr;
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
-
-	// ColorMatrix
 	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix 행렬
 	colorMultiplier.a, 0, 0, 0,
@@ -48,6 +37,11 @@ private:
 	0, 0, 0, colorMultiplier.a
 	};
 
+public:
+	shared_ptr<Sprite> sprite;		// 공유 자원	
+	float alpha = 1.0f;				// 투명도		// TODO :: private!
+	bool flipX = false;				// x축 반전
+	bool flipY = false;				// y축 반전
 
 public:
 	// component cycle

@@ -8,6 +8,7 @@
 #include "EclipseApp.h"
 #include "NPC.h"
 #include "Player_Test.h"
+//#include "NPCScript.h"
 
 class PlayScene : public Scene
 {

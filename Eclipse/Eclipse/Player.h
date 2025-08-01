@@ -19,7 +19,6 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
-	// CircleCollider* attackCollider;
 	Animator* animator;
 
 	// [ animation asset ]
@@ -27,12 +26,6 @@ public:
 
 	// [ script ]
 	PlayerFSM* playerFSM;
-
-	// [ player setting ]
-	float playerGravityScale = 100; 
-
-public:
-	float GetPlayerGravityScale() const { return playerGravityScale; }
 
 public:
 	Player() : GameObject("Player", "Player")
@@ -42,8 +35,6 @@ public:
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<BoxCollider>();
 		animator = AddComponent<Animator>();
-		// attackCollider = AddComponent<CircleCollider>();
-
 
 		// auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
 		// spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
@@ -71,7 +62,7 @@ public:
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;
-		rigidbody->gravityScale = playerFSM->defaultGravity;
+		rigidbody->gravityScale = 100;
 		rigidbody->mass = 1.3f;
 	}
 
