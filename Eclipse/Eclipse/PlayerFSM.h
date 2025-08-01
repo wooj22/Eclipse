@@ -107,9 +107,9 @@ public:
 	void OnDestroy() override;				// 컴포넌트 or 오브젝트 소멸 시점
 
 	// trigger
-	void OnTriggerEnter(ICollider* other) override {}
-	void OnTriggerStay(ICollider* other)  override {}
-	void OnTriggerExit(ICollider* other)  override {}
+	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override {}
+	void OnTriggerStay(ICollider* other, const ContactInfo& contact)  override {}
+	void OnTriggerExit(ICollider* other, const ContactInfo& contact)  override {}
 
 	// collision
 	void OnCollisionEnter(ICollider* other, const ContactInfo& contact)  override
