@@ -16,7 +16,8 @@ void Fall_State::Enter(MovementFSM* fsm)
     OutputDebugStringA("[Fall_State] Player의 Fall_State 진입 \n");
 
     // 애니메이션 재생
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", true);
+    // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", true);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
 }
 
 void Fall_State::Update(MovementFSM* fsm)
@@ -36,5 +37,6 @@ void Fall_State::FixedUpdate(MovementFSM* fsm)
 
 void Fall_State::Exit(MovementFSM* fsm)
 {
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", false);
+    // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
 }
