@@ -67,9 +67,10 @@ public:
 	GameManager() = default;
 	~GameManager() = default;
 
-	void Init() { ReSetData(); }
+	void Init() { g_playUI = nullptr; ReSetData(); }
 	void UnInit();
 	void ReSetData();
 	bool CanUnlock(SkillType skill);
 	bool LevelUpSkill(SkillType skill);
+	void AllSkillUnlock();
 };
