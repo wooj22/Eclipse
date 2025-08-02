@@ -14,7 +14,9 @@ public:
 private:
     // Type-specific reactions
     void HandleIgnisReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);     // A type
+    void Handle2AReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);        // A2 type (2A+2A)
     void HandleUmbraReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);     // B type
+    void HandleSmallBReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);    // b type (split B)
     void HandleDarknessReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);  // C type
     void HandleLunaReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);      // D type
 
@@ -24,4 +26,8 @@ private:
     // Helper methods
     bool ShouldProcessCollision(HonmunCollisionBase* script1, HonmunCollisionBase* script2);
     void ApplyHealthChange(HonmunCollisionBase* script, int healthChange);
+    void ApplyCollisionForce(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, float force);
+    void ApplyOppositeForces(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force);
+    void ApplyLeftRightPush(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force);
+    void ApplyPenetration(HonmunCollisionBase* script1, HonmunCollisionBase* script2);
 };

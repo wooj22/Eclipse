@@ -1,8 +1,11 @@
 #include "Aron_Scene.h"
 #include "EclipseApp.h"
 #include "Honmun.h"  // Honmun 클래스 포함
-#include "HonmunCollisionScript.h"
 #include "GameManager.h"  // GameManager 추가
+#include "Player.h"      // 플레이어 추가
+#include "playerAttackArea.h"  // 공격 영역 추가
+#include "Attack_State.h"  // 공격 상태 추가
+#include "HonmunKnockbackTest.h" // 넉백 테스트 스크립트
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Input.h"
@@ -10,10 +13,21 @@
 
 void Aron_Scene::Awake()
 {
-	// camera init
+	// camera init - Moon_Scene 방식으로 변경
 	cam = CreateObject<GameObject>();
 	cam->AddComponent<Transform>();
-	cam->AddComponent<Camera>(1920, 1080);
+	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
+	
+	// boundary condition (Moon_Scene과 동일)
+	Rect mapRect;
+	mapRect.size = { 2560, 1920 };
+	
+	// camera target을 일단 주석처리 (수동 카메라 이동을 위해)
+	// camCompo->SetTarget(player->transform);
+	// camCompo->SetTargetTraceSpeed(200.0f);
+	// camCompo->SetTargetTraceLimitX(30.0f);
+	// camCompo->SetTargetTraceLimitY(100.0f);
+	// camCompo->SetMapCondition(mapRect);
 
 	// create gameobject
 	// title sample
@@ -158,6 +172,159 @@ void Aron_Scene::Awake()
 	floor2_rb->useGravity = false;
 	floor2_rb->isKinematic = true;
 	// 2층 플랫폼은 트리거로 설정됨 (통과 가능)
+
+	// [ Player System ] - Moon_Scene 완전 복붙 (문선민님 허락)
+	// [ player ] 
+	player = CreateObject<Player>();
+
+	// [ playerAttack_Parent ]
+	playerAttack_Parent = CreateObject<GameObject>();
+	auto playerAttack_Parent_tr = playerAttack_Parent->AddComponent<Transform>();
+	playerAttack_Parent_tr->SetParent(player->transform);
+	playerAttack_Parent_tr->SetPosition(0.0f, 0.0f);
+	player->playerFSM->SetPlayerAttackParent(playerAttack_Parent);
+
+	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
+	playerAttackArea = CreateObject<PlayerAttackArea>();
+	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
+	playerAttackArea->SetActive(false);
+	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+	
+	// 혼문 넉백을 위한 스크립트 추가
+	auto* attackKnockbackScript = playerAttackArea->AddComponent<HonmunKnockbackTest>();
+
+	// [ ground ] - Moon_Scene과 동일
+	ground = CreateObject<GameObject>();
+	ground->name = "Ground";
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -350.0f);
+
+	auto moon_ground_sr = ground->AddComponent<SpriteRenderer>();
+	moon_ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
+	moon_ground_sr->layer = 0;
+
+	ground_col = ground->AddComponent<BoxCollider>();
+	ground_col->size = { 1110.0f, 30.0f };
+
+	// [ wall_r ] - Moon_Scene과 동일
+	wall_r = CreateObject<GameObject>();
+	wall_r->name = "Wall";
+	wall_r->AddComponent<Transform>()->SetPosition(550.0f, 0.0f);
+
+	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
+	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
+
+	wall_r_col = wall_r->AddComponent<BoxCollider>();
+	wall_r_col->size = { 30.0f, 750.0f };
+
+	// [ wall_l ] - Moon_Scene과 동일
+	wall_l = CreateObject<GameObject>();
+	wall_l->name = "Wall";
+	wall_l->AddComponent<Transform>()->SetPosition(-550.0f, 0.0f);
+
+	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
+	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
+
+	wall_l_col = wall_l->AddComponent<BoxCollider>();
+	wall_l_col->size = { 30.0f, 750.0f };
+
+	// [ Platform1 ] - Moon_Scene과 동일
+	platform1 = CreateObject<GameObject>();
+	platform1->name = "Ground";
+	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -200.0f);
+
+	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
+	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+
+	platform1_col = platform1->AddComponent<BoxCollider>();
+	platform1_col->offset = { 0.0f, 12.0f };
+	platform1_col->size = { 200.0f, 5.0f };
+
+	// [ Platform2 ] - Moon_Scene과 동일
+	platform2 = CreateObject<GameObject>();
+	platform2->name = "Ground";
+	platform2->AddComponent<Transform>()->SetPosition(200.0f, 0.0f);
+
+	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
+	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+
+	platform2_col = platform2->AddComponent<BoxCollider>();
+	platform2_col->size = { 200.0f, 30.0f };
+	
+	// 혼문들 추가 (Moon_Scene 플레이어 시스템에 혼문 테스트 추가)
+	// A 타입 혼문들 (플레이어 근처에 배치하여 테스트)
+	honmun_a = CreateObject<Honmun>();
+	honmun_a->name = "Honmun_A1";
+	honmun_a->SetHonmunType(HonmunType::A);
+	honmun_a->SetPosition(100.0f, -100.0f); // 플랫폼 근처
+	// 물리 설정 (넉백 가능하도록)
+	auto* honmunA_rb = honmun_a->GetComponent<Rigidbody>();
+	if (honmunA_rb) {
+		honmunA_rb->isKinematic = false;
+		honmunA_rb->useGravity = false;
+	}
+
+	auto* test_honmun_a2 = CreateObject<Honmun>();
+	test_honmun_a2->name = "Honmun_A2";
+	test_honmun_a2->SetHonmunType(HonmunType::A);
+	test_honmun_a2->SetPosition(-100.0f, -100.0f);
+	// 물리 설정
+	auto* honmunA2_rb = test_honmun_a2->GetComponent<Rigidbody>();
+	if (honmunA2_rb) {
+		honmunA2_rb->isKinematic = false;
+		honmunA2_rb->useGravity = false;
+	}
+
+	// B 타입 혼문들
+	honmun_b = CreateObject<Honmun>();
+	honmun_b->name = "Honmun_B1";
+	honmun_b->SetHonmunType(HonmunType::B);
+	honmun_b->SetPosition(200.0f, 100.0f);
+	// 물리 설정
+	auto* honmunB_rb = honmun_b->GetComponent<Rigidbody>();
+	if (honmunB_rb) {
+		honmunB_rb->isKinematic = false;
+		honmunB_rb->useGravity = false;
+	}
+
+	auto* test_honmun_b2 = CreateObject<Honmun>();
+	test_honmun_b2->name = "Honmun_B2";
+	test_honmun_b2->SetHonmunType(HonmunType::B);
+	test_honmun_b2->SetPosition(-200.0f, 100.0f);
+	// 물리 설정
+	auto* honmunB2_rb = test_honmun_b2->GetComponent<Rigidbody>();
+	if (honmunB2_rb) {
+		honmunB2_rb->isKinematic = false;
+		honmunB2_rb->useGravity = false;
+	}
+
+	// 혼문들을 벡터에 추가
+	allHonmuns.push_back(honmun_a);
+	allHonmuns.push_back(test_honmun_a2);
+	allHonmuns.push_back(honmun_b);
+	allHonmuns.push_back(test_honmun_b2);
+	
+	// 모든 혼문의 물리 설정을 강제로 다시 적용 (Awake에서 덮어쓰인 설정 복구)
+	for (auto* honmun : allHonmuns) {
+		auto* rb = honmun->GetComponent<Rigidbody>();
+		if (rb) {
+			rb->isKinematic = false;  // 충돌 감지를 위해 반드시 false
+			rb->useGravity = false;   // 중력은 비활성화 유지
+		}
+		
+		auto* collider = honmun->GetComponent<CircleCollider>();
+		if (collider) {
+			collider->isTrigger = true; // 트리거 모드 확실히 설정
+		}
+		
+		// 혼문 관리 시스템에 등록
+		AddHonmunToManager(honmun);
+		
+		OutputDebugStringA("Honmun physics reset for collision detection\n");
+	}
+	
+	// 초기 혼문 관리 시스템 설정
+	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	OutputDebugStringA("Honmun manager initialized with test Honmuns\n");
 }
 
 void Aron_Scene::Start()
@@ -186,8 +353,31 @@ void Aron_Scene::Update()
 	// UI 업데이트
 	UpdateScoreUI();
 	
-	// 웨이브 1 시작 (스페이스바) - 활성화되지 않은 경우에만
-	if (Input::GetKeyDown(VK_SPACE))
+	// 혼문 관리 시스템 업데이트
+	UpdateHonmunManager();
+
+	// 마우스 클릭 공격 처리
+	if (Input::GetMouseButtonDown(0)) // 왼쪽 마우스 버튼
+	{
+		if (player && playerAttackArea)
+		{
+			// 플레이어 공격 활성화
+			auto* playerFSM = player->GetComponent<PlayerFSM>();
+			if (playerFSM)
+			{
+				// MovementFSM을 통한 공격 상태 전환
+				auto* movementFSM = playerFSM->GetMovementFSM();
+				if (movementFSM)
+				{
+					movementFSM->ChangeState(std::make_unique<Attack_State>());
+					OutputDebugStringA("Mouse click - Player attack triggered!\n");
+				}
+			}
+		}
+	}
+	
+	// 웨이브 1 시작 (Q키로 변경 - 스페이스바 충돌 방지) - 활성화되지 않은 경우에만
+	if (Input::GetKeyDown('Q'))
 	{
 		if (!waveData.waveActive)
 		{
@@ -199,8 +389,8 @@ void Aron_Scene::Update()
 		}
 	}
 	
-	// 웨이브 2 시작 (2키)
-	if (Input::GetKeyDown('2'))
+	// 웨이브 2 시작 (E키로 변경 - 숫자키 충돌 방지)
+	if (Input::GetKeyDown('E'))
 	{
 		if (!waveData.waveActive)
 		{
@@ -253,9 +443,13 @@ void Aron_Scene::Update()
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
 
-	// AABB 그리기 - 바닥들 (모든 층 표시)
-	if (ground_col) ground_col->DebugColliderDraw(); // 1층 (파괴)
-	if (floor2_col) floor2_col->DebugColliderDraw(); // 2층 (통과)
+	// AABB 그리기 - Moon_Scene과 동일한 디버그 드로잉
+	if (ground_col) ground_col->DebugColliderDraw();
+	if (wall_r_col) wall_r_col->DebugColliderDraw();
+	if (wall_l_col) wall_l_col->DebugColliderDraw();
+	if (platform1_col) platform1_col->DebugColliderDraw();
+	if (platform2_col) platform2_col->DebugColliderDraw();
+	if (floor2_col) floor2_col->DebugColliderDraw(); // 기존 2층 (통과)
 
 	
 }
@@ -425,15 +619,15 @@ void Aron_Scene::StartWave1()
 		if (honmun && honmun->IsActive())
 		{
 			// 스크립트의 DestroyThis 호출로 완전 파괴
-			auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			if (script)
-			{
-				script->DestroyThis();
-			}
-			else
-			{
+			// auto* script = honmun->GetComponent<HonmunCollisionScript>();
+			// if (script)
+			// {
+			//	script->DestroyThis();
+			// }
+			// else
+			// {
 				honmun->SetActive(false);
-			}
+			// }
 		}
 	}
 	allHonmuns.clear();
@@ -468,15 +662,15 @@ void Aron_Scene::StartWave2()
 	{
 		if (honmun && honmun->IsActive())
 		{
-			auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			if (script)
-			{
-				script->DestroyThis();
-			}
-			else
-			{
+			// auto* script = honmun->GetComponent<HonmunCollisionScript>();
+			// if (script)
+			// {
+			//	script->DestroyThis();
+			// }
+			// else
+			// {
 				honmun->SetActive(false);
-			}
+			// }
 		}
 	}
 	allHonmuns.clear();
@@ -651,11 +845,12 @@ void Aron_Scene::CheckHonmunsReachFloor1()
 				OutputDebugStringA("Honmun reached floor 1, destroying!\n");
 				
 				// 혼문 파괴
-				auto* honmunScript = honmun->GetComponent<HonmunCollisionScript>();
-				if (honmunScript)
-				{
-					honmunScript->DestroyThis();
-				}
+				// auto* honmunScript = honmun->GetComponent<HonmunCollisionScript>();
+				// if (honmunScript)
+				// {
+				//	honmunScript->DestroyThis();
+				// }
+				honmun->SetActive(false);
 				
 				it = waveData.spawnedHonmuns.erase(it);
 				continue;
@@ -675,20 +870,20 @@ void Aron_Scene::HandleCameraMovement()
 	Vector2 currentPos = cameraTransform->GetPosition();
 	float moveSpeed = 300.0f * Time::GetDeltaTime(); // 초당 300픽셀 이동
 	
-	// WASD로 카메라 이동
-	if (Input::GetKey('W')) // 위로
+	// UHJK로 카메라 이동 (플레이어 WASD와 분리)
+	if (Input::GetKey('U')) // 위로
 	{
 		cameraTransform->SetPosition(currentPos.x, currentPos.y + moveSpeed);
 	}
-	if (Input::GetKey('S')) // 아래로
+	if (Input::GetKey('J')) // 아래로
 	{
 		cameraTransform->SetPosition(currentPos.x, currentPos.y - moveSpeed);
 	}
-	if (Input::GetKey('A')) // 왼쪽으로
+	if (Input::GetKey('H')) // 왼쪽으로
 	{
 		cameraTransform->SetPosition(currentPos.x - moveSpeed, currentPos.y);
 	}
-	if (Input::GetKey('D')) // 오른쪽으로
+	if (Input::GetKey('K')) // 오른쪽으로
 	{
 		cameraTransform->SetPosition(currentPos.x + moveSpeed, currentPos.y);
 	}
@@ -722,11 +917,12 @@ void Aron_Scene::ResetScene()
 	{
 		if (honmun && honmun->IsActive())
 		{
-			auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			if (script)
-			{
-				script->DestroyThis();
-			}
+			// auto* script = honmun->GetComponent<HonmunCollisionScript>();
+			// if (script)
+			// {
+			//	script->DestroyThis();
+			// }
+			honmun->SetActive(false);
 		}
 	}
 	allHonmuns.clear();
@@ -747,4 +943,158 @@ void Aron_Scene::ResetScene()
 	}
 	
 	OutputDebugStringA("Scene reset completed!\n");
+}
+
+// ===== 혼문 관리 시스템 구현 =====
+
+void Aron_Scene::UpdateHonmunManager()
+{
+	// 맵 밖으로 나간 혼문들 제거
+	CheckAndRemoveOutOfBounds();
+	
+	// 현재 혼문 수 업데이트
+	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	
+	// 목표 수량보다 적으면 새로 생성
+	if (honmunManager.currentCount < honmunManager.targetCount)
+	{
+		// DeltaTime을 누적해서 시간 추적
+		static float accumulatedTime = 0.0f;
+		accumulatedTime += Time::GetDeltaTime();
+		
+		if (accumulatedTime - honmunManager.lastRespawnTime >= honmunManager.respawnInterval)
+		{
+			int needCount = honmunManager.targetCount - honmunManager.currentCount;
+			for (int i = 0; i < needCount && i < 3; i++) // 한 번에 최대 3개씩 생성
+			{
+				SpawnNewHonmun();
+			}
+			honmunManager.lastRespawnTime = accumulatedTime;
+		}
+	}
+	
+	// 디버그 UI 업데이트
+	if (debug_text && debug_text->screenTextRenderer)
+	{
+		wchar_t debugInfo[200];
+		swprintf_s(debugInfo, L"Honmuns: %d/%d | Camera: UHJK | Wave: Q/E | Reset: R", 
+			honmunManager.currentCount, honmunManager.targetCount);
+		debug_text->screenTextRenderer->SetText(debugInfo);
+	}
+}
+
+void Aron_Scene::CheckAndRemoveOutOfBounds()
+{
+	for (auto it = honmunManager.activeHonmuns.begin(); it != honmunManager.activeHonmuns.end();)
+	{
+		Honmun* honmun = *it;
+		if (!honmun || IsOutOfBounds(honmun))
+		{
+			if (honmun)
+			{
+				char debugMsg[100];
+				sprintf_s(debugMsg, "Removing out-of-bounds Honmun: %s\n", honmun->name.c_str());
+				OutputDebugStringA(debugMsg);
+				
+				// 리스트에서 제거
+				honmun->Destroy();
+			}
+			it = honmunManager.activeHonmuns.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
+void Aron_Scene::SpawnNewHonmun()
+{
+	// 랜덤 위치 생성 (화면 가장자리)
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_real_distribution<float> xDis(-600.0f, 600.0f);
+	static std::uniform_real_distribution<float> yDis(400.0f, 600.0f); // 화면 위쪽에서 스폰
+	static std::uniform_int_distribution<int> typeDis(0, 3); // A, B, C, D 타입
+	
+	float spawnX = xDis(gen);
+	float spawnY = yDis(gen);
+	
+	// 새 혼문 생성
+	auto* newHonmun = CreateObject<Honmun>();
+	newHonmun->SetPosition(spawnX, spawnY);
+	
+	// 랜덤 타입 설정
+	HonmunType types[] = { HonmunType::A, HonmunType::B, HonmunType::C, HonmunType::D };
+	HonmunType randomType = types[typeDis(gen)];
+	newHonmun->SetHonmunType(randomType);
+	
+	// 이름 설정
+	static int spawnCounter = 0;
+	char honmunName[50];
+	sprintf_s(honmunName, "Honmun_Auto_%d", ++spawnCounter);
+	newHonmun->name = honmunName;
+	
+	// 물리 설정
+	auto* rb = newHonmun->GetComponent<Rigidbody>();
+	if (rb) {
+		rb->isKinematic = false;
+		rb->useGravity = false;
+	}
+	
+	auto* collider = newHonmun->GetComponent<CircleCollider>();
+	if (collider) {
+		collider->isTrigger = true;
+	}
+	
+	// 관리 리스트에 추가
+	AddHonmunToManager(newHonmun);
+	
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Spawned new Honmun: %s at (%.1f, %.1f), Type: %d\n", 
+		honmunName, spawnX, spawnY, static_cast<int>(randomType));
+	OutputDebugStringA(debugMsg);
+}
+
+void Aron_Scene::AddHonmunToManager(Honmun* honmun)
+{
+	if (honmun)
+	{
+		honmunManager.activeHonmuns.push_back(honmun);
+		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	}
+}
+
+void Aron_Scene::RemoveHonmunFromManager(Honmun* honmun)
+{
+	auto it = std::find(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun);
+	if (it != honmunManager.activeHonmuns.end())
+	{
+		honmunManager.activeHonmuns.erase(it);
+		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	}
+}
+
+bool Aron_Scene::IsOutOfBounds(Honmun* honmun)
+{
+	if (!honmun) return true;
+	
+	auto* transform = honmun->GetComponent<Transform>();
+	if (!transform) return true;
+	
+	Vector2 pos = transform->GetPosition();
+	
+	// 맵 경계를 벗어났는지 확인
+	bool outOfBounds = (abs(pos.x) > honmunManager.mapBoundaryX || 
+	                   abs(pos.y) > honmunManager.mapBoundaryY);
+	
+	if (outOfBounds)
+	{
+		char debugMsg[100];
+		sprintf_s(debugMsg, "Honmun %s out of bounds: (%.1f, %.1f)\n", 
+			honmun->name.c_str(), pos.x, pos.y);
+		OutputDebugStringA(debugMsg);
+	}
+	
+	return outOfBounds;
 }

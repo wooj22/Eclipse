@@ -10,17 +10,14 @@
 enum class HonmunType
 {
 	A,
+	A2,  // 2A (A+A 합체 결과)
 	B,
+	b,   // B 분열 조각
 	C,
 	D
 };
 
-class HonmunAFSM;
-class HonmunAAnimatorController;
-class HonmunBFSM;
-class HonmunBAnimatorController;
-class HonmunCFSM;
-class HonmunCAnimatorController;
+class HonmunFSM;
 
 class Honmun : public GameObject
 {
@@ -56,6 +53,10 @@ public:
 	// 충돌 효과를 위한 함수들
 	void SetAlpha(float alpha);
 	void ResetAlpha();
+	
+	// 타입별 리소스 경로 (FSM에서 접근 가능하도록 public)
+	std::string GetTexturePath();
+	std::string GetSpriteName();
 
 private:
 	HonmunType honmunType;
@@ -65,20 +66,18 @@ private:
 	CircleCollider* collider;
 	Animator* animator;
 
-	// FSM and AnimatorController for each type
-	HonmunAFSM* honmunAFSM;
-	HonmunAAnimatorController* honmunAAnimatorController;
-	HonmunBFSM* honmunBFSM;
-	HonmunBAnimatorController* honmunBAnimatorController;
-	HonmunCFSM* honmunCFSM;
-	HonmunCAnimatorController* honmunCAnimatorController;
+	// 통합 FSM
+	HonmunFSM* honmunFSM;
 
 	// 혼문 상태 변수들
-	int hp = 2;                    // 체력 (기본값 2)
-	float size = 1.0f;             // 크기 (기본값 1.0)
+	int hp = 3;                    // 체력 (기본값 3 - A타입 기준)
+	float size = 1.0f;             // 크기 (기본값 1.0로 복원)
 	bool isMerged = false;         // 합체 상태 (기본값 false)
 
-	// �� Ÿ�Ժ� ���ҽ� ���
-	std::string GetTexturePath();
-	std::string GetSpriteName();
+	// 타입별 리소스 경로 (private으로 이동된 나머지)
+	std::string GetSpriteSheetPath();
+	std::string GetAnimationClipPath();
+	
+	// 애니메이션 시스템 설정
+	void SetupAnimationSystem();
 };

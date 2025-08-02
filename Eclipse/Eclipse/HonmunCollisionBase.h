@@ -59,6 +59,7 @@ public:
 
 	// Collision events
 	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
+	void OnCollisionEnter(ICollider* other, const ContactInfo& contact) override;
 
 	// Public interface
 	void SetHonmunType(HonmunType type);
@@ -87,6 +88,12 @@ public:
 	void SetCurrentSize(float size) { currentSize = size; }
 	void SetSplitFragment(bool isFragment) { isSplitFragment = isFragment; }
 	void SetProcessingReaction(bool processing) { isProcessingReaction = processing; }
+	
+	// Status checks
+	bool IsMarkedForDestroy() const { return markedForDestroy; }
+
+protected:
+	bool markedForDestroy = false;
 
 private:
 	void InitializeHelperClasses();

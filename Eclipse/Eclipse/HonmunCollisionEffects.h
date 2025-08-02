@@ -19,6 +19,13 @@ public:
     void BounceAwayKinematic(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
     void PushSideways(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
     void PassThrough(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
+    
+    // New chain reaction effects
+    void CreateSplitFragments(HonmunCollisionBase* script, const Vector2& collisionPoint, int count, float newSize, float speedMultiplier);
+    void AttractAndDestroyEnemies(HonmunCollisionBase* script, const Vector2& attractionPoint, float pullRatio);
+    void BounceOppositeDirections(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
+    void PushLeftRight(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
+    void PenetrateWithoutOverlap(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
 
 private:
     // Helper methods

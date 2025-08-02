@@ -3,20 +3,12 @@
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "FSMBase.h"
 #include "StateBase.h"
+#include "Honmun.h"  // HonmunType 정의를 위해 포함
 
-class Honmun;
 class Animator;
 class Transform;
 class Rigidbody;
 class AnimatorController;
-
-enum class HonmunType
-{
-    A = 0,  // Ignis
-    B = 1,  // Umbra  
-    C = 2,  // Darkness
-    D = 3   // Luna
-};
 
 class HonmunFSM;
 
@@ -81,4 +73,12 @@ public:
     // Animation helpers
     void PlayIdleAnimation();
     const char* GetAnimationClipName() const;
+    void UpdateManualAnimation();
+    
+private:
+    // Manual animation variables
+    float animationTimer = 0.0f;
+    int currentFrame = 0;
+    const float frameInterval = 0.033333f; // 30 FPS animation (1/30)
+    const int maxFrames = 8; // Most sprite sheets have 8 frames
 };
