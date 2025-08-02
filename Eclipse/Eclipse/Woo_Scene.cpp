@@ -59,6 +59,8 @@ void Woo_Scene::Awake()
 
 	child->imageRenderer->SetAlpha(0.1);*/
 
+	button = CreateObject<UI_Button>();
+
 	// [ player ] 
 	player = CreateObject<Player>();
 

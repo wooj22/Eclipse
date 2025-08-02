@@ -13,10 +13,7 @@ class RectTransform;
 class Button : public Component
 {
 private:
-    RectTransform* rectTransform;     // button ¿µ¿ª get
-
-public:
-    MultiDelegate<> onClickListeners; // callback functions
+    RectTransform* rectTransform; 
 
 public:
     // component cycle
@@ -29,6 +26,17 @@ public:
     void OnDestroy_Inner() override final;
 
 private:
-    void OnClick(); // event
+    bool isMouseInside = false;
+
+public:
+    /* Event */
+    MultiDelegate<> onClickListeners;       // On Click
+    MultiDelegate<> onPointEnterListeners;  // On Point Enter
+    MultiDelegate<> onPointExitListeners;   // On Point Exit
+
+private:
+    void OnClick();
+    void OnPointEnter();
+    void OnPointExit();
 };
 
