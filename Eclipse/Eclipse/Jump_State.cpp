@@ -9,6 +9,7 @@
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
+#include "GameManager.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
@@ -20,7 +21,7 @@ void Jump_State::Enter(MovementFSM* fsm)
     OutputDebugStringA("[Jump_State] Player의 Jump_State 진입 \n");
 
     // 초기화 
-    canDoubleJump = true;
+    fsm->GetPlayerFSM()->canDoubleJump = true;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
     fsm->GetPlayerFSM()->timer = 0.0f;
@@ -37,27 +38,29 @@ void Jump_State::Update(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
     // [ Jump_Wall ]
-    if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace())
-    {
-        if (fsm->GetPlayerFSM()->GetIsWallLeft() || fsm->GetPlayerFSM()->GetIsWallRight())
-        {
-            fsm->ChangeState(std::make_unique<Jump_Wall_State>());
-            return;
-        }
-    }
+    //if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace())
+    //{
+    //    if (fsm->GetPlayerFSM()->GetIsWallLeft() || fsm->GetPlayerFSM()->GetIsWallRight())
+    //    {
+    //        fsm->ChangeState(std::make_unique<Jump_Wall_State>());
+    //        return;
+    //    }
+    //}
 
     // 두번째 Jump 실행 
-    if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace() && canDoubleJump)
+    if (GameManager::Get().CheckUnlock(SkillType::DoubleJump) && fsm->GetPlayerFSM()->canDoubleJump
+        && !fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace()
+        && !fsm->GetPlayerFSM()->GetIsWall())
     {
         fsm->GetPlayerFSM()->GetRigidbody()->useGravity = false;
         fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
         fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
-        canDoubleJump = false;
+        fsm->GetPlayerFSM()->canDoubleJump = false;
     }
 
     // [ Hanging ]
-    if (!fsm->GetPlayerFSM()->GetIsGround())
+    if (!fsm->GetPlayerFSM()->GetIsGround() && GameManager::Get().CheckUnlock(SkillType::WallJump))
     {
         if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
         {
@@ -91,6 +94,7 @@ void Jump_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
     }
 
+
     // [ Idle ] : 일정 시간 후에만 감지
     if (fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->timer > coyoteTime)
     {
@@ -120,10 +124,10 @@ void Jump_State::FixedUpdate(MovementFSM* fsm)
 
 void Jump_State::Exit(MovementFSM* fsm)
 {
-    if (fsm->GetPlayerFSM()->GetIsGround())
-    {
-        canDoubleJump = true;  // 착지 시 더블 점프를 할 수 있도록 설정
-    }
+    //if (fsm->GetPlayerFSM()->GetIsGround())
+    //{
+    //    canDoubleJump = true;  // 착지 시 더블 점프를 할 수 있도록 설정
+    //}
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
 }

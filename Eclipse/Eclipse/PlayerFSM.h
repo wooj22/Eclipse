@@ -12,7 +12,6 @@ class SpriteRenderer;
 class AnimatorController;
 class WorldTextRenderer;
 class Rigidbody;
-// class BoxCollider;
 class PlayerAttackArea;
 
 class PlayerFSM : public Script
@@ -33,12 +32,10 @@ private:
 	float dashSpeed = 450.f;
 	float jumpForce = 700.0f;
 
-	float speedDownRate = 1.0;
-
-	// int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
+	float speedDownRate = 1.0; 
 
 	// move
-	float inputX, inputY;
+	float inputX, inputY; // x : 왼쪽 -1 
 	bool isGround;
 	bool lastFlipX = false;
 	bool isBulletFliping = false;
@@ -46,6 +43,7 @@ private:
 
 	bool isWallLeft = false;
 	bool isWallRight = false;
+	bool isWall = false;
 
 
 	// key
@@ -61,23 +59,25 @@ private:
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
 	AnimatorController* animatorController = nullptr;
-	// BoxCollider* boxCollider = nullptr;
 
 	PlayerAttackArea* playerAttackArea = nullptr;
 	GameObject* playerAttackParent = nullptr;
 
 public:
-	// [ FSM 변수 ]
-	// GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 해주기 
+	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 
 	float holdTime = 0.0f;
 	float timer = 0.0f;
+
+	bool canDoubleJump = false;             // 다시 땅 밟기 전까지 더블점프는 한번만 가능 
 	bool isHolding = false;
+
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
-	const float defaultGravity = 100.0f;   // 기본 중력 
+	const float defaultGravity = 100.0f;    // 기본 중력 
 	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
-	Vector2 MouseWorldPos;
+
+	Vector2 MouseWorldPos;					// 실시간 마우스 월드 좌표 
 
 public:
 	// getter
@@ -95,11 +95,10 @@ public:
 	float GetCurSpeed() const { return curSpeed; }
 
 	// TODO : 매개변수로 감속율 받는 함수 (우정)
-	// 감속률만 받도록 
-	// 쿨타임 후, 원래 속도 복원 
+	// 감속률만 받도록.  쿨타임 후, 원래 속도 복원 
 	void SetSpeedDownRate(float speed) { speedDownRate = speed; }
 
-
+	bool GetIsWall() const { return isWall; }
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }
 
@@ -117,10 +116,6 @@ public:
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
 	GameObject* GetPlayerAttackParent() const { return playerAttackParent; }
-
-	// BoxCollider* GetBoxCollider() const { return boxCollider; }
-
-	// void SetLastWallDir(int dir) { lastWallDir = dir; }
 
 
 public:
@@ -141,7 +136,6 @@ public:
 	void OnCollisionEnter(ICollider* other, const ContactInfo& contact)  override;
 	void OnCollisionStay(ICollider* other, const ContactInfo& contact) override;
 	void OnCollisionExit(ICollider* other, const ContactInfo& contact)  override;
-
 
 public:
 	float GetSpeed() { return curSpeed; }

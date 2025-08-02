@@ -1,22 +1,25 @@
 #include "Jump_Wall_State.h"
+#include "Hanging_State.h"
 #include "Idle_State.h"
+#include "BulletTime_State.h"
+#include "Attack_State.h"
+
 #include "MovementFSM.h"
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
+#include "GameManager.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "Hanging_State.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "BulletTime_State.h"
-#include "Attack_State.h"
+
 
 void Jump_Wall_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Jump_Wall_State] 벽 점프 상태 진입\n");
  
     // 초기화 
-    canDoubleJump = true;
+    // canDoubleJump = true;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
     fsm->GetPlayerFSM()->timer = 0.0f;
@@ -42,9 +45,6 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
         lastWallDir = 0;
     }
 
-    // 벽방향 기록
-    // fsm->GetPlayerFSM()->SetLastWallDir(lastWallDir);
-
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
 }
@@ -52,21 +52,22 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
 void Jump_Wall_State::Update(MovementFSM* fsm)
 {
     // 두번째 Wall Jump 실행 
-    if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace() && canDoubleJump && !fsm->GetPlayerFSM()->GetLastFlipX())
+    if (GameManager::Get().CheckUnlock(SkillType::DoubleJump) && fsm->GetPlayerFSM()->canDoubleJump && fsm->GetPlayerFSM()->GetIsSpace())
     {
-        fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(+doubleJumpXPower, wallJumpForce));
-        canDoubleJump = false;
+        if (!fsm->GetPlayerFSM()->GetIsGround() && !fsm->GetPlayerFSM()->GetLastFlipX())
+        {
+            fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(+doubleJumpXPower, wallJumpForce));
+            // canDoubleJump = false;
+        }
+        else if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetLastFlipX())
+        {
+            fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-doubleJumpXPower, wallJumpForce));
+            // canDoubleJump = false;
+        }
     }
-    else if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace() && canDoubleJump && fsm->GetPlayerFSM()->GetLastFlipX())
-    {
-        fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-doubleJumpXPower, wallJumpForce));
-        canDoubleJump = false;
-    }
-
+    
 
     // [ Hanging ] 
-    // if (elapsedTime < hangingBlockTime) return;
-
     // 왼쪽으로 튕긴 후, 왼쪽 이동 중이면, 왼쪽벽에 매달리기 
     if (lastWallDir == 1 && fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
     {

@@ -32,7 +32,6 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 }
 
-
 void Fall_State::FixedUpdate(MovementFSM* fsm) 
 {
     if (fsm->GetPlayerFSM()->GetIsS())

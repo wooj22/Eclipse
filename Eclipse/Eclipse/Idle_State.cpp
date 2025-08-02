@@ -30,6 +30,12 @@ void Idle_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
+    // DubleJump ÃÊ±âÈ­
+    if (!fsm->GetPlayerFSM()->canDoubleJump && fsm->GetPlayerFSM()->GetIsGround())
+    {
+        fsm->GetPlayerFSM()->canDoubleJump = true;
+    }
+
     // [ Jump ]
     if (fsm->GetPlayerFSM()->GetIsSpace() && fsm->GetPlayerFSM()->GetIsGround())
     {
@@ -42,7 +48,6 @@ void Idle_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Walk_State>());
     }
 
-
     // [ Attack / Bullet ]
     if (fsm->GetPlayerFSM()->GetIsGround() && Input::GetKey(VK_LBUTTON))
     {
@@ -52,7 +57,6 @@ void Idle_State::Update(MovementFSM* fsm)
 
         // [ BulletTime ]
         if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
-
     }
     else
     {

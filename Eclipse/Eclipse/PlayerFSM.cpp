@@ -54,8 +54,8 @@ void PlayerFSM::Update()
 	// [ Speed Setting ]
 	if (isA || isD)
 	{
-		if (!isShift) curSpeed = walkSpeed;
-		else curSpeed = dashSpeed;
+		if (!isShift) curSpeed = walkSpeed * speedDownRate;
+		else curSpeed = dashSpeed * speedDownRate;
 	}
 	else curSpeed = 0;
 
@@ -164,12 +164,13 @@ void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		OutputDebugStringA("Ground과 충돌 했습니다.\n");
+		// OutputDebugStringA("Ground과 충돌 했습니다.\n");
 		isGround = true;
 	}
 	else if (other->gameObject->name == "Wall")
 	{
-		OutputDebugStringA("Wall과 충돌 했습니다.\n");
+		// OutputDebugStringA("Wall과 충돌 했습니다.\n");
+		isWall = true;
 		if (contact.normal.x == 1) { isWallLeft = true; }
 		if (contact.normal.x == -1) { isWallRight = true; }
 	}
@@ -184,11 +185,12 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		OutputDebugStringA("Ground 빠져나갔음 .\n");
+		// OutputDebugStringA("Ground 빠져나갔음 .\n");
 		isGround = false;
 	}
 	else if (other->gameObject->name == "Wall")
 	{
+		isWall = false;
 		if (contact.normal.x == 1)   isWallLeft = false;
 		if (contact.normal.x == -1)  isWallRight = false;
 	}

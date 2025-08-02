@@ -2,12 +2,16 @@
 #include "Jump_Wall_State.h"
 #include "Jump_State.h"
 #include "Idle_State.h"
+#include "Fall_State.h"
+
 #include "MovementFSM.h"
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
+#include "GameManager.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
+
 
 void Hanging_State::Enter(MovementFSM * fsm)
 {
@@ -21,28 +25,29 @@ void Hanging_State::Enter(MovementFSM * fsm)
 
 void Hanging_State::Update(MovementFSM* fsm)
 {
-    PlayerFSM* player = fsm->GetPlayerFSM();
-
-    // 1. 점프 키 누르면 벽 점프로 전환
-    if (player->GetIsSpace())
+    // 점프 키 누르면 벽 점프로 전환
+    if (/*GameManager::Get().CheckUnlock(SkillType::WallJump) &&*/ fsm->GetPlayerFSM()->GetIsSpace())
     {
         fsm->ChangeState(std::make_unique<Jump_Wall_State>());
         return;
     }
 
-    // 2. 벽이 사라지거나 방향키를 떼면 다시 점프 상태
-    if (!player->GetIsWallLeft() && !player->GetIsWallRight())
+    // 벽이 사라지면
+    if (!fsm->GetPlayerFSM()->GetIsWallLeft() && !fsm->GetPlayerFSM()->GetIsWallRight())
     {
         fsm->ChangeState(std::make_unique<Idle_State>());
         return;
     }
 
-    //float inputX = player->GetInputX();
-    //if ((player->GetIsWallLeft() && inputX > -0.5f) ||(player->GetIsWallRight() && inputX < 0.5f))
-    //{
-    //    fsm->ChangeState(std::make_unique<Jump_State>());
-    //    return;
-    //}
+    // 반대 방향키 입력하면 떨어짐 
+    float inputX = fsm->GetPlayerFSM()->GetInputX();
+    if ((fsm->GetPlayerFSM()->GetIsWallLeft() && inputX > 0.5f) || (fsm->GetPlayerFSM()->GetIsWallRight() && inputX < -0.5f))
+    {
+        fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
+
+        fsm->ChangeState(std::make_unique<Fall_State>());
+        return;
+    }
 
     // [ Idle ] 
     if (fsm->GetPlayerFSM()->GetIsGround())
