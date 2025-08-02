@@ -146,6 +146,9 @@
     <ClInclude Include="Animator.h" />
     <ClInclude Include="AnimatorController.h" />
     <ClInclude Include="AnimatorSystem.h" />
+    <ClInclude Include="AudioClip.h" />
+    <ClInclude Include="AudioSource.h" />
+    <ClInclude Include="AudioSystem.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonSystem.h" />
@@ -197,6 +200,9 @@
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="AnimatorController.cpp" />
     <ClCompile Include="AnimatorSystem.cpp" />
+    <ClCompile Include="AudioClip.cpp" />
+    <ClCompile Include="AudioSource.cpp" />
+    <ClCompile Include="AudioSystem.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonSystem.cpp" />

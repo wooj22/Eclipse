@@ -112,6 +112,9 @@ class Animator;
 class ButtonSystem;			// button system
 class Button;
 
+class AudioSystem;			// audio system
+class AudoiSource;
+
 
 
 
@@ -247,8 +250,8 @@ class ColliderSystem;
 
 
 
-/*------------------------------------------------------------------*/
-/*-------------------------   Render    ---------------------------*/
+/*-------------------------------------------------------------------*/
+/*-------------------------   Render    ----------------------------*/
 /*-----------------------------------------------------------------*/
 class RenderSystem;
 class IRenderer;
@@ -272,16 +275,24 @@ class ImageRenderer;
 // 2. UnlitColorTint
 //    - Draw Image (Crop + ColorEffect)
 //    - bitmap 이미지에 ColorMatirx를 적용시켜 색상 변환을 한 뒤 그린다.
-//    - R, G, B, A 조정이 가능하다.
+//    - R, G, B, A 조정이 가능하다. + 채도 조절 추가!
 
 // 3. Lit_Glow
 //    - Draw Image (Crop + BlurEffect)
 //    - bitmap 이미지에 Blur효과를 준 이미지를 그리고, 이미지를 그려 후광 효과를 준다.
-//    - ColorMatrix를 쓰는 비용을 줄이기 위해 만든거라 RGBA 모두 지원하지 않는다.
+//    - ColorMatrix를 쓰는 비용을 줄이기 위해 만든거라 RGBA, 채도 모두 지원하지 않는다.
 //      DrawIamge에서 A를 사용하려면 무조건 colormatrix 연산 해야함
 
 // 4. Lit_ColorTint			
 //    - Draw Image (Crop + ColorEffect + BlurEffect)
 //    - bitmap 이미지에 Blur효과를 준 이미지를 그리고, 이미지를 그려 후광 효과를 준다.
 //    - ColorMatrix를 통해 bitmap의 색상을 변경하면 그에 따라 광원도 조정된다.
-//    - R, G, B, A 조정이 가능하다.
+//    - R, G, B, A 조정이 가능하다. + 채도 조절 추가!
+
+
+/*-------------------------------------------------------------------*/
+/*--------------------------   Sound    ----------------------------*/
+/*-----------------------------------------------------------------*/
+class AudioSystem;		// componet system
+class AudioSource;		// component
+class AudioCilp;		// asset
