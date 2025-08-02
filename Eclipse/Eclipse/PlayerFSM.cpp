@@ -39,7 +39,26 @@ void PlayerFSM::Awake()
 
 void PlayerFSM::Start()
 {
+	// [ 스킬 해금 ] 테스트 위해서 
+	// for (int i = 0; i < 3; ++i) 
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
+	GameManager::Get().LevelUpSkill(SkillType::WallJump);
 
+	// GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	// GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	// GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
+	// GameManager::Get().LevelUpSkill(SkillType::FastFall);
+
+	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	// GameManager::Get().LevelUpSkill(SkillType::Dash);
 }
 
 void PlayerFSM::Update()
