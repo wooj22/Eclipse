@@ -46,6 +46,10 @@ void Woo_Scene::Awake()
 	ground2->collider->size = { 100,20 };
 	ground3->collider->size = { 100,20 };
 
+	ground1->collider->isFlatform = true;
+	ground2->collider->isFlatform = true;
+	ground3->collider->isFlatform = true;
+
 	// ui test
 	/*parent = CreateObject<UI_Image>();
 	child = CreateObject<UI_Image>();
