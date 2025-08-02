@@ -74,11 +74,21 @@ inline void Button::OnClick()
 inline void Button::OnPointEnter()
 {
     OutputDebugStringA("Button Event! OnPointEnter()\n");
+    
+    // TODO :: 채도 변환 함수로 바꾸기
+    ImageRenderer* ir = this->gameObject->GetComponent<ImageRenderer>();
+    if (ir) ir->SetAlpha(0.5);
+
     onPointEnterListeners.Invoke();
 }
 
 inline void Button::OnPointExit()
 {
     OutputDebugStringA("Button Event! OnPointExit()\n");
+    
+    // TODO :: 채도 변환 함수로 바꾸기
+    ImageRenderer* ir = this->gameObject->GetComponent<ImageRenderer>();
+    if (ir) ir->SetAlpha(1);
+
     onPointExitListeners.Invoke();
 }
