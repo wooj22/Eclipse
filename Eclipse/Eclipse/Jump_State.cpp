@@ -105,7 +105,20 @@ void Jump_State::Update(MovementFSM* fsm)
 
 void Jump_State::FixedUpdate(MovementFSM* fsm)
 {
-    // 매 FixedUpdate마다 최신 입력 갱신
+    // [ 빠른 하강 ]
+    if (GameManager::Get().CheckUnlock(SkillType::FastFall) &&
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.y < 0 && // 최고점 도달 이후
+        fsm->GetPlayerFSM()->GetIsS())
+    {
+        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;
+    }
+    else
+    {
+        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
+    }
+
+
+    // [ 좌우 이동 ]
     inputX = fsm->GetPlayerFSM()->GetInputX();
     curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
 

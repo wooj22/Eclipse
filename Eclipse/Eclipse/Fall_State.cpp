@@ -2,15 +2,19 @@
 #include "Idle_State.h"
 #include "Walk_State.h"
 #include "Jump_State.h"
-#include "MovementFSM.h" 
-#include "PlayerFSM.h"
-#include "PlayerAnimatorController.h"
 #include "Attack_State.h"
 #include "BulletTime_State.h"
+
+#include "MovementFSM.h" 
+#include "PlayerFSM.h"
+#include "Player.h"
+#include "PlayerAnimatorController.h"
+#include "GameManager.h"
+
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "Player.h"
+
 
 void Fall_State::Enter(MovementFSM* fsm)
 {
@@ -34,9 +38,10 @@ void Fall_State::Update(MovementFSM* fsm)
 
 void Fall_State::FixedUpdate(MovementFSM* fsm) 
 {
-    if (fsm->GetPlayerFSM()->GetIsS())
+    // 빠른 하강 
+    if (GameManager::Get().CheckUnlock(SkillType::FastFall) && fsm->GetPlayerFSM()->GetIsS())
     {
-        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;;
+        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;
     }
 }
 

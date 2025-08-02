@@ -47,10 +47,10 @@ void PlayerFSM::Start()
 	GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
 	GameManager::Get().LevelUpSkill(SkillType::WallJump);
 
-	// GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	// GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	// GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
-	// GameManager::Get().LevelUpSkill(SkillType::FastFall);
+	 GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	 GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	 GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
+	 GameManager::Get().LevelUpSkill(SkillType::FastFall);
 
 	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
 	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);

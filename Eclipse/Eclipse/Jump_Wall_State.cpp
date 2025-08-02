@@ -116,6 +116,20 @@ void Jump_Wall_State::FixedUpdate(MovementFSM* fsm)
 
     if (elapsedTime < inputBlockTime) return;
 
+    // [ 빠른 하강 ]
+    if (GameManager::Get().CheckUnlock(SkillType::FastFall) &&
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.y < 0 && // 최고점 도달 이후
+        fsm->GetPlayerFSM()->GetIsS())
+    {
+        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;
+    }
+    else
+    {
+        fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
+    }
+
+
+    // [ 좌우 이동 ]
     inputX = fsm->GetPlayerFSM()->GetInputX();
     curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
 
