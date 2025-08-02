@@ -41,6 +41,8 @@ public:
     Vector2& operator*=(float scalar);
     Vector2& operator/=(float scalar);
 
+    bool operator==(const Vector2& other) const;
+    bool operator!=(const Vector2& other) const;
     // function
     Vector2 Normalized() const;
     float Magnitude() const;
