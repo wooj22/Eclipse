@@ -113,6 +113,7 @@ void GameApp::Update()
 	buttonSystem.Update();
 	renderSystem.Update();
 	cameraSystem.Update();
+	audioSystem.Update();
 }
 
 /// Fixed Update

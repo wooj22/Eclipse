@@ -31,8 +31,8 @@ void Woo_Scene::Awake()
 	map->transform->SetPosition(0, -500);
 
 	// player sample
-	player = CreateObject<Player_Woo>({ 0, -500 });
-	cam->transform->SetPosition(player->transform->GetPosition());
+	//player = CreateObject<Player_Woo>({ 0, -500 });
+	//cam->transform->SetPosition(player->transform->GetPosition());
 
 	// boss
 	boss = CreateObject<Boss>();
@@ -46,6 +46,10 @@ void Woo_Scene::Awake()
 	ground2->collider->size = { 100,20 };
 	ground3->collider->size = { 100,20 };
 
+	ground1->collider->isFlatform = true;
+	ground2->collider->isFlatform = true;
+	ground3->collider->isFlatform = true;
+
 	// ui test
 	/*parent = CreateObject<UI_Image>();
 	child = CreateObject<UI_Image>();
@@ -54,6 +58,47 @@ void Woo_Scene::Awake()
 	child->rectTransform->SetPosition(100, 0);
 
 	child->imageRenderer->SetAlpha(0.1);*/
+
+	button = CreateObject<UI_Button>();
+
+	// [ player ] 
+	player = CreateObject<Player>();
+
+	// [ playerAttack_Parent ]
+	playerAttack_Parent = CreateObject<GameObject>();
+	auto playerAttack_Parent_tr = playerAttack_Parent->AddComponent<Transform>();
+	playerAttack_Parent_tr->SetParent(player->transform);
+	playerAttack_Parent_tr->SetPosition(0.0f, 0.0f);
+	player->playerFSM->SetPlayerAttackParent(playerAttack_Parent);
+
+	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
+	playerAttackArea = CreateObject<PlayerAttackArea>();
+	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
+	playerAttackArea->SetActive(false);
+	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+
+	// [ wall_r ]
+	wall_r = CreateObject<GameObject>();
+	wall_r->name = "Wall";
+	wall_r->AddComponent<Transform>()->SetPosition(550.0f, 0.0f);;
+
+	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
+	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
+
+	wall_r_col = wall_r->AddComponent<BoxCollider>();
+	wall_r_col->size = { 30.0f, 750.0f };
+
+
+	// [ wall_l ]
+	wall_l = CreateObject<GameObject>();
+	wall_l->name = "Wall";
+	wall_l->AddComponent<Transform>()->SetPosition(-550.0f, 0.0f);;
+
+	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
+	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
+
+	wall_l_col = wall_l->AddComponent<BoxCollider>();
+	wall_l_col->size = { 30.0f, 750.0f };
 
 	// camera tartget
 	Camera* camera = cam->GetComponent<Camera>();
@@ -114,6 +159,10 @@ void Woo_Scene::Update()
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
+
+	// AABB 그리기 
+	wall_r_col->DebugColliderDraw();
+	wall_l_col->DebugColliderDraw();
 }
 
 void Woo_Scene::Exit()

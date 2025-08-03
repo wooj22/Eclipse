@@ -82,18 +82,18 @@ void Aron_Scene::Awake()
 	honmun_b4->SetHonmunType(HonmunType::B);
 	honmun_b4->SetPosition(50.0f, 50.0f);
 
-	// C 타입 혼문 2개 (테스트용)
-	auto* honmun_c = CreateObject<Honmun>();
-	honmun_c->name = "Honmun_C1";
-	honmun_c->SetHonmunType(HonmunType::C);
-	honmun_c->SetPosition(-500.0f, -200.0f);
+	// C 타입 혼문 임시 제거 (테스트용)
+	// auto* honmun_c = CreateObject<Honmun>();
+	// honmun_c->name = "Honmun_C1";
+	// honmun_c->SetHonmunType(HonmunType::C);
+	// honmun_c->SetPosition(-500.0f, -200.0f);
 
-	auto* honmun_c2 = CreateObject<Honmun>();
-	honmun_c2->name = "Honmun_C2";
-	honmun_c2->SetHonmunType(HonmunType::C);
-	honmun_c2->SetPosition(500.0f, -200.0f);
+	// auto* honmun_c2 = CreateObject<Honmun>();
+	// honmun_c2->name = "Honmun_C2";
+	// honmun_c2->SetHonmunType(HonmunType::C);
+	// honmun_c2->SetPosition(500.0f, -200.0f);
 
-	// 모든 혼문을 벡터에 추가
+	// 모든 혼문을 벡터에 추가 (C 타입 제외)
 	allHonmuns.push_back(honmun_a);
 	allHonmuns.push_back(honmun_a2);
 	allHonmuns.push_back(honmun_a3);
@@ -102,8 +102,8 @@ void Aron_Scene::Awake()
 	allHonmuns.push_back(honmun_b2);
 	allHonmuns.push_back(honmun_b3);
 	allHonmuns.push_back(honmun_b4);
-	allHonmuns.push_back(honmun_c);
-	allHonmuns.push_back(honmun_c2);
+	// allHonmuns.push_back(honmun_c);   // 임시 제거
+	// allHonmuns.push_back(honmun_c2);  // 임시 제거
 	
 	// 웨이브 시스템 초기화
 	waveData.waveActive = false;
@@ -112,6 +112,9 @@ void Aron_Scene::Awake()
 	waveData.spawnInterval = 1.0f;
 	waveData.spawnedHonmuns.clear();
 	currentScore = 0;
+	
+	// 선택 인덱스 안전 초기화
+	selectedHonmunIndex = 0;
 
 	// 웨이브 1 테스트: C, D 주석처리
 	// honmun_c = CreateObject<Honmun>();
@@ -290,36 +293,39 @@ void Aron_Scene::HandleHonmunMovement()
 {
 	float moveSpeed = 3.0f; // 키네마틱 이동 속도
 	
-	// Q/E 키로 오브젝트 선택
-	if (Input::GetKeyDown('Q'))
+	// Q/E 키로 오브젝트 선택 (벡터가 비어있지 않을 때만)
+	if (Input::GetKeyDown('Q') && !allHonmuns.empty())
 	{
 		selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
 		// 유효하지 않은 오브젝트는 건너뛰기
-		while (selectedHonmunIndex < allHonmuns.size() && 
-			   (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive()))
+		int startIndex = selectedHonmunIndex;
+		while (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive())
 		{
 			selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
+			if (selectedHonmunIndex == startIndex) break; // 무한루프 방지
 		}
 		char debugMsg[100];
 		sprintf_s(debugMsg, "Selected Honmun index: %d\n", selectedHonmunIndex);
 		OutputDebugStringA(debugMsg);
 	}
-	if (Input::GetKeyDown('E'))
+	if (Input::GetKeyDown('E') && !allHonmuns.empty())
 	{
 		selectedHonmunIndex = (selectedHonmunIndex + 1) % allHonmuns.size();
 		// 유효하지 않은 오브젝트는 건너뛰기
-		while (selectedHonmunIndex < allHonmuns.size() && 
-			   (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive()))
+		int startIndex = selectedHonmunIndex;
+		while (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive())
 		{
 			selectedHonmunIndex = (selectedHonmunIndex + 1) % allHonmuns.size();
+			if (selectedHonmunIndex == startIndex) break; // 무한루프 방지
 		}
 		char debugMsg[100];
 		sprintf_s(debugMsg, "Selected Honmun index: %d\n", selectedHonmunIndex);
 		OutputDebugStringA(debugMsg);
 	}
 	
-	// 선택된 오브젝트 이동 (화살표 키)
-	if (selectedHonmunIndex < allHonmuns.size() && 
+	// 선택된 오브젝트 이동 (화살표 키) - 벡터가 비어있지 않고 유효한 인덱스일 때만
+	if (!allHonmuns.empty() && 
+		selectedHonmunIndex < allHonmuns.size() && 
 		allHonmuns[selectedHonmunIndex] && 
 		allHonmuns[selectedHonmunIndex]->IsActive())
 	{
@@ -422,6 +428,7 @@ void Aron_Scene::StartWave1()
 		}
 	}
 	allHonmuns.clear();
+	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
 	
 	// 웨이브 1 설정
 	waveData.currentWave = 1;
@@ -460,6 +467,7 @@ void Aron_Scene::StartWave2()
 		}
 	}
 	allHonmuns.clear();
+	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
 	
 	// 웨이브 2 설정
 	waveData.currentWave = 2;
@@ -562,6 +570,50 @@ HonmunType Aron_Scene::GetRandomHonmunType()
 	return (dis(gen) == 0) ? HonmunType::A : HonmunType::B;
 }
 
+HonmunType Aron_Scene::GetRandomHonmunTypeWave2()
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<int> dis(0, 2); // 0 = A, 1 = B, 2 = C
+	
+	int choice = dis(gen);
+	if (choice == 0) return HonmunType::A;
+	else if (choice == 1) return HonmunType::B;
+	else return HonmunType::C;
+}
+
+void Aron_Scene::SpawnHonmunWave2()
+{
+	// 랜덤 X 위치 (카메라 영역 내)
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_real_distribution<float> xDis(-400.0f, 400.0f);
+	
+	float spawnX = xDis(gen);
+	
+	// 새로운 혼문 생성 (Wave 2는 A, B, C 타입 포함)
+	auto* newHonmun = CreateObject<Honmun>();
+	newHonmun->SetHonmunType(GetRandomHonmunTypeWave2());
+	newHonmun->SetPosition(spawnX, waveData.spawnY);
+	
+	// 중력과 물리 활성화
+	auto* rb = newHonmun->GetComponent<Rigidbody>();
+	if (rb)
+	{
+		rb->useGravity = true;      // 중력 활성화
+		rb->isKinematic = false;    // 물리 시뮬레이션 활성화
+	}
+	
+	// 리스트에 추가
+	waveData.spawnedHonmuns.push_back(newHonmun);
+	allHonmuns.push_back(newHonmun);
+	
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Wave 2: Spawned Honmun %d/%d at (%.2f, %.2f)\n", 
+		waveData.currentSpawnIndex + 1, waveData.totalSpawnCount, spawnX, waveData.spawnY);
+	OutputDebugStringA(debugMsg);
+}
+
 void Aron_Scene::CheckHonmunsReachFloor1()
 {
 	if (!waveData.waveActive) return;
@@ -660,6 +712,7 @@ void Aron_Scene::ResetScene()
 		}
 	}
 	allHonmuns.clear();
+	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
 	
 	// 점수 초기화
 	currentScore = 0;

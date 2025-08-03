@@ -151,6 +151,15 @@ void Honmun::SetHonmunType(HonmunType type)
 	}
 	else if (type == HonmunType::C)
 	{
+		// 임시로 C 타입도 정적 스프라이트만 사용 (애니메이션 시스템 안정화될 때까지)
+		if (spriteRenderer)
+		{
+			auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
+			spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName());
+		}
+		
+		// TODO: 애니메이션 시스템 안정화 후 다시 활성화
+		/*
 		// Create and setup animator controller for Honmun C
 		if (!honmunCAnimatorController)
 		{
@@ -166,6 +175,7 @@ void Honmun::SetHonmunType(HonmunType type)
 		{
 			honmunCFSM = AddComponent<HonmunCFSM>();
 		}
+		*/
 	}
 	else
 	{

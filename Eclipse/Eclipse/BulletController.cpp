@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Vector2.h"
+#include "PlayerFSM.h"
 
 void BulletController::Awake()
 {
@@ -27,9 +28,9 @@ void BulletController::OnDestroy()
 
 void BulletController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
-	if (other->gameObject->tag == "Player_Woo")
+	if (other->gameObject->name == "Player")
 	{
-		// Player TakeDamage
+		other->gameObject->GetComponent<PlayerFSM>()->SetSpeedDownRate(palyer_deceleration);
 		this->gameObject->Destroy();
 	}
 }
