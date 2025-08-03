@@ -1,5 +1,6 @@
 #include "AudioSystem.h"
 #include "AudioSource.h"
+#include <Windows.h>
 
 // component 등록
 void AudioSystem::Regist(AudioSource* component)
@@ -27,7 +28,21 @@ void AudioSystem::Unregist(AudioSource* component)
 	}
 }
 
-// component system
+void AudioSystem::Init()
+{
+	FMOD_RESULT result = FMOD::System_Create(&system);
+	if (result != FMOD_OK)
+	{
+		OutputDebugStringA("[Woo Engine] FMOD System 생성 실패\n");
+	}
+
+	result = system->init(512, FMOD_INIT_NORMAL, nullptr);
+	if (result != FMOD_OK)
+	{
+		OutputDebugStringA("[Woo Engine] FMOD System 초기화 실패\n");
+	}
+}
+
 void AudioSystem::Update()
 {
 	// pending_components push
@@ -37,10 +52,23 @@ void AudioSystem::Update()
 	}
 	pending_components.clear();
 
+	//system update
+	if (system)
+		system->update();
 
 	// update
 	for (AudioSource* component : components)
 	{
 		//component->Update();
+	}
+}
+
+void AudioSystem::UnInit()
+{
+	if (system)
+	{
+		system->close();
+		system->release();
+		system = nullptr;
 	}
 }

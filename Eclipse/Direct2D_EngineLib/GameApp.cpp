@@ -97,6 +97,7 @@ void GameApp::Init()
 	// init
 	Input::Init(hWnd);
 	Time::Init();
+	audioSystem.Init();
 	renderSystem.Init(hWnd, width, height);
 	resourceManager.Init();	 // rendersystem init 후에 호출해야 함
 
@@ -172,6 +173,7 @@ void GameApp::Loop()
 void GameApp::UnInit()
 {
 	sceneManager.UnInit();
+	audioSystem.UnInit();
 	renderSystem.UnInit();   
 	resourceManager.UnInit();
 	CoUninitialize();			 // com 객체 해제
