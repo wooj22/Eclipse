@@ -32,9 +32,6 @@ void PlayerFSM::Awake()
 	// [ FSM 초기화 ]
 	movementFSM = std::make_unique<MovementFSM>();
 	movementFSM->Init(this);
-
-	// actionFSM = std::make_unique<ActionFSM>();
-	// actionFSM->Init(this);
 }
 
 void PlayerFSM::Start()
@@ -52,9 +49,9 @@ void PlayerFSM::Start()
 	GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
 	GameManager::Get().LevelUpSkill(SkillType::FastFall);
 
-	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	// GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
 	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
 	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
 	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
@@ -63,39 +60,15 @@ void PlayerFSM::Start()
 
 void PlayerFSM::Update()
 {
-	InputCheak(); // input 키값 확인
+	InputSetting(); // input 키값 확인
 
 	movementFSM->Update();
-	// actionFSM->Update();
 
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
 
-	// [ Speed Setting ]
-	if (isA || isD)
-	{
-		if (!isShift) curSpeed = walkSpeed * speedDownRate;
-		else curSpeed = dashSpeed * speedDownRate;
-	}
-	else curSpeed = 0;
+	SpeedSetting(); // [ Speed Setting ]
 
-
-	// [ FlipX Setting - 실제 이동 방향 기준 ]
-	if (!isBulletFliping)
-	{
-		if (abs(rigidbody->velocity.x) > 0.01f)   // 정지 상태가 아닐 때만 방향 반영
-		{
-			spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
-			lastFlipX = spriteRenderer->flipX;
-		}
-		else
-		{
-			spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
-		}
-	}
-	else
-	{
-		spriteRenderer->flipX = isBulletFlipX;  // BulletTime_State 에서 변수값 조정
-	}
+	FlipXSetting(); // [ FlipX Setting - 실제 이동 방향 기준 ]
 
 
 	// [ FSM 상태 ] 
@@ -132,7 +105,7 @@ void PlayerFSM::OnDestroy()
 
 }
 
-void PlayerFSM::InputCheak()
+void PlayerFSM::InputSetting()
 {
 	inputX = Input::GetAxisHorizontal();
 	inputY = Input::GetAxisVertical();
@@ -150,11 +123,105 @@ void PlayerFSM::InputCheak()
 	isF = Input::GetKey('F');
 }
 
+void PlayerFSM::FlipXSetting()
+{
+	if (!isBulletFliping)
+	{
+		if (abs(rigidbody->velocity.x) > 0.01f)   // 정지 상태가 아닐 때만 방향 반영
+		{
+			spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
+			lastFlipX = spriteRenderer->flipX;
+		}
+		else
+		{
+			spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
+		}
+	}
+	else
+	{
+		spriteRenderer->flipX = isBulletFlipX;  // BulletTime_State 에서 변수값 조정
+	}
+}
+
+void PlayerFSM::SpeedSetting()
+{
+	if (isA || isD)
+	{
+		float moveBonus = GetMoveSpeedBonus(); // 스킬 해금에 따른 추가 이동 속도
+		if (!isShift)
+			curSpeed = (walkSpeed + moveBonus) * speedDownRate;
+		else
+			curSpeed = (dashSpeed + moveBonus) * speedDownRate;
+	}
+	else curSpeed = 0;
+
+	std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
+	OutputDebugStringA(debugStr.c_str());
+}
+
+
+
+// *-------------- [ Skill ] --------------*
+
+// jump
+
+void PlayerFSM::OnGround()
+{
+	canAttackAfterJump[JumpPhase::NormalJump] = true;
+	canAttackAfterJump[JumpPhase::DoubleJump] = true;
+	canAttackAfterJump[JumpPhase::WallJump] = true;
+}
+
+void PlayerFSM::OnJump(JumpPhase jumpType)
+{
+	// 점프 시 공격 가능 여부를 설정
+	if (!GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra))
+	{
+		if (jumpType == JumpPhase::NormalJump)	canAttackAfterJump[jumpType] = true;
+		else									canAttackAfterJump[jumpType] = false;
+	}
+	else
+	{
+		canAttackAfterJump[jumpType] = true;
+	}
+}
+
+bool PlayerFSM::CanAttack()
+{
+	for (auto it = canAttackAfterJump.begin(); it != canAttackAfterJump.end(); ++it)
+	{
+		if (it->second)  return true;
+	}
+	return false;
+}
+
+void PlayerFSM::UseAttack()
+{
+	for (auto it = canAttackAfterJump.begin(); it != canAttackAfterJump.end(); ++it)
+	{
+		if (it->second)
+		{
+			it->second = false;
+			break; // 한 번만 비활성화
+		}
+	}
+}
+
+// speed 
+
+float PlayerFSM::GetMoveSpeedBonus() const 
+{
+	static const float speedBonusTable[] = { 0.0f, 100.0f, 300.0f, 500.0f }; // 0 1 3 5 
+	int level = GameManager::Get().skillTree.at(SkillType::MoveSpeedUp).unlockLevel;
+
+	// 안전 처리
+	if (level < 0) level = 0; if (level > 3) level = 3;
+
+	return speedBonusTable[level];
+}
 
 
 // *-------------- [ Collider ] --------------*
-
-// trigger
 
 void PlayerFSM::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
@@ -176,8 +243,6 @@ void PlayerFSM::OnTriggerExit(ICollider* other, const ContactInfo& contact)
 
 }
 
-
-// collision
 
 void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 {
