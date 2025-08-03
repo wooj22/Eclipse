@@ -117,6 +117,7 @@ public:
 	float GetInputX() const { return inputX; }
 	float GetCurSpeed() const { return curSpeed; }
 	float GetWalkSpeed() const { return walkSpeed; }
+	// float GetSpeed() const { return walkSpeed + GetMoveSpeedBonus(); }
 
 	// TODO : 매개변수로 감속율 받는 함수 (우정)
 	// 감속률만 받도록.  쿨타임 후, 원래 속도 복원 
@@ -170,6 +171,10 @@ public:
 	bool canAttack_Unlock = true;          // 기본 공격 횟수 (해금 이후 공격 횟수는 각 State에서 관리)
 	int airAttackCount = 0;
 
+	// dash 
+	float dashCooldown = 2.0f;         // 대시 쿨타임 (2초)
+	float dashCooldownTimer = 0.0f;    // 대시 쿨타임 타이머
+
 	// jump 
 	void OnGround();
 	void OnJump(JumpPhase jumpType);
@@ -181,6 +186,11 @@ public:
 
 	// attack 
 	float GetAttackRangeBonus() const;
+
+	// dash 
+	void UpdateDashCooldown(); 
+	bool CanDash() const;
+	void ResetDashCooldown();
 
 private:
 	// [ FSM setting ] 

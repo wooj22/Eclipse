@@ -71,6 +71,7 @@ void PlayerFSM::Update()
 
 	FlipXSetting(); // [ FlipX Setting - 실제 이동 방향 기준 ]
 
+	UpdateDashCooldown(); // dash 쿨타임 업데이트
 
 	// [ FSM 상태 ] 
 	//MovementStateBase* currentState = playerFSM->GetMovementFSM()->GetCurrentState();
@@ -146,18 +147,12 @@ void PlayerFSM::SpeedSetting()
 
 	if (isA || isD)
 	{
-		curSpeed = (walkSpeed + GetMoveSpeedBonus()) * speedDownRate;
-
-		//float moveBonus = GetMoveSpeedBonus(); // 스킬 해금에 따른 추가 이동 속도
-		//if (!isShift)
-		//	curSpeed = (walkSpeed + moveBonus) * speedDownRate;
-		//else
-		//	curSpeed = (dashSpeed + moveBonus) * speedDownRate;
+		curSpeed = (walkSpeed + GetMoveSpeedBonus()) * speedDownRate; // 스킬 해금에 따른 추가 이동 속도
 	}
 	else curSpeed = 0;
 
-	std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
-	OutputDebugStringA(debugStr.c_str());
+	// std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
+	// OutputDebugStringA(debugStr.c_str());
 }
 
 
@@ -207,6 +202,27 @@ void PlayerFSM::UseAttack()
 		}
 	}
 }
+
+// dash
+
+void PlayerFSM::UpdateDashCooldown() // Dash 쿨타임 업데이트
+{
+	if (dashCooldownTimer > 0.0f)
+	{
+		dashCooldownTimer -= Time::GetDeltaTime();  // 쿨타임 타이머를 감소시킴
+	}
+}
+
+bool PlayerFSM::CanDash() const // 대시가 가능한지 체크
+{
+	return dashCooldownTimer <= 0.0f;  // 쿨타임이 끝났으면 대시 가능
+}
+
+void PlayerFSM::ResetDashCooldown() // 대시 후 쿨타임 초기화
+{
+	dashCooldownTimer = dashCooldown;
+}
+
 
 // speed 
 float PlayerFSM::GetMoveSpeedBonus() const 

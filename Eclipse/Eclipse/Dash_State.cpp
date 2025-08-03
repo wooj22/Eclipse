@@ -47,12 +47,26 @@ void Dash_State::FixedUpdate(MovementFSM* fsm)
     float dashSpeed = (fsm->GetPlayerFSM()->GetWalkSpeed() + moveBonus) * 1.5f; // 150%
 
     int inputX = fsm->GetPlayerFSM()->GetInputX();
+
+    // 입력이 없을 경우 바라보는 방향으로 설정
+    if (inputX == 0)
+    {
+        bool flipX = fsm->GetPlayerFSM()->GetLastFlipX();
+        inputX = flipX ? -1 : 1;  // true: 왼쪽 → -1, false: 오른쪽 → +1
+    }
+
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = inputX * dashSpeed;
+
+    // std::string debugStr = "[Dash_State] Dash Speed: " + std::to_string(dashSpeed) + "\n";
+    // OutputDebugStringA(debugStr.c_str());
 }
 
 void Dash_State::Exit(MovementFSM* fsm)
 {
     OutputDebugStringA("[Dash_State] Dash 종료\n");
+
+    // 대시 후 쿨타임 설정
+    fsm->GetPlayerFSM()->ResetDashCooldown(); 
 
     // 애니메이션 종료
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", false);
