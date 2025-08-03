@@ -67,26 +67,28 @@ void Button::Update()
 
 inline void Button::OnClick()
 {
-    OutputDebugStringA("Button Event! OnClick()\n");
+    OutputDebugStringA("[Woo Engine] Button Event! OnClick()\n");
     onClickListeners.Invoke();
 }
 
 inline void Button::OnPointEnter()
 {
-    OutputDebugStringA("Button Event! OnPointEnter()\n");
+    OutputDebugStringA("[Woo Engine] Button Event! OnPointEnter()\n");
     
     // TODO :: 채도 변환 함수로 바꾸기
+    // 렌더모드를 바꿔야해서 안바꾸는게 나을 것 같음
     ImageRenderer* ir = this->gameObject->GetComponent<ImageRenderer>();
-    if (ir) ir->SetAlpha(0.5);
+    if (ir) ir->SetAlpha(0.8);
 
     onPointEnterListeners.Invoke();
 }
 
 inline void Button::OnPointExit()
 {
-    OutputDebugStringA("Button Event! OnPointExit()\n");
+    OutputDebugStringA("[Woo Engine] Button Event! OnPointExit()\n");
     
     // TODO :: 채도 변환 함수로 바꾸기
+    // 렌더모드를 바꿔야해서 안바꾸는게 나을 것 같음
     ImageRenderer* ir = this->gameObject->GetComponent<ImageRenderer>();
     if (ir) ir->SetAlpha(1);
 
