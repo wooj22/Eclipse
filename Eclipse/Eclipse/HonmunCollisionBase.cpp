@@ -197,10 +197,10 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
         return;
     }
     
-    // Prevent processing if either is already processing
-    if (isProcessingReaction || otherScript->IsProcessingReaction()) 
+    // Allow chain reactions - only prevent same pair collision within short time
+    if (reactionCooldown > 0.0f || otherScript->reactionCooldown > 0.0f) 
     {
-        OutputDebugStringA("Collision already processing, skipping\n");
+        OutputDebugStringA("Collision cooldown active, skipping\n");
         return;
     }
     
@@ -236,8 +236,8 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
     // Set cooldown (only if objects are still valid)
     if (!markedForDestroy && !otherScript->IsMarkedForDestroy())
     {
-        reactionCooldown = 0.1f;
-        otherScript->reactionCooldown = 0.1f;
+        reactionCooldown = 0.05f;  // 연쇄 반응을 위해 쿨타임 단축
+        otherScript->reactionCooldown = 0.05f;
     }
 }
 
