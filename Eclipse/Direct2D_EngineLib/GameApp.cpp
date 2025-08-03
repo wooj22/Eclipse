@@ -90,6 +90,8 @@ void GameApp::Init()
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
 
+	OutputDebugStringA("[Woo Engine] Window Create\n");
+
 	CoInitialize(nullptr);			// com 객체 초기화	
 	
 	// init
@@ -97,6 +99,8 @@ void GameApp::Init()
 	Time::Init();
 	renderSystem.Init(hWnd, width, height);
 	resourceManager.Init();	 // rendersystem init 후에 호출해야 함
+
+	OutputDebugStringA("[Woo Engine] System Init\n");
 }
 
 /// Update
@@ -142,12 +146,12 @@ void GameApp::Loop()
 		{
 			if (msg.message == WM_QUIT) {
 				isLoop = false;
+				OutputDebugStringA("[Woo Engine] WM_QUIT!\n");
 				break;
 			}
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-
 		}
 
 		// physics update -> fixed udpate
@@ -171,4 +175,6 @@ void GameApp::UnInit()
 	renderSystem.UnInit();   
 	resourceManager.UnInit();
 	CoUninitialize();			 // com 객체 해제
+
+	OutputDebugStringA("[Woo Engine] GameApp Release\n");
 }

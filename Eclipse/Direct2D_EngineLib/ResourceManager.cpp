@@ -120,7 +120,7 @@ void ResourceManager::Trim() {
     // 救 静绰 府家胶 沥府 (VRAM/DRAM/pagefile.sys( 府家胶 力芭)
     dxgiDevice->Trim();
 
-    OutputDebugStringA("********* Trim() 府家胶 沥府 *********\n");
+    OutputDebugStringA("[Woo Engine] Trim() 府家胶 沥府\n");
 }
 
 /// Texture2D Resource Create
