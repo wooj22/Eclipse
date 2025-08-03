@@ -266,14 +266,19 @@ void HonmunCollisionBase::DestroyThis()
     markedForDestroy = true;
     
     char debugMsg[100];
-    sprintf_s(debugMsg, "DestroyThis called for %s\n", 
+    sprintf_s(debugMsg, "DestroyThis called for %s - MARKED for destruction\n", 
               gameObject ? gameObject->name.c_str() : "null");
     OutputDebugStringA(debugMsg);
     
-    if (honmun)
+    //  FIXED: 즉시 파괴하지 말고 비활성화만 하기
+    if (honmun && honmun->IsActive())
     {
-        honmun->Destroy();
+        honmun->SetActive(false);  // 즉시 비활성화
+        OutputDebugStringA("Object deactivated safely\n");
     }
+    
+    //  FIXED: 실제 파괴는 Scene의 Update 끝에서 안전하게 처리
+    // honmun->Destroy(); // 제거: 즉시 파괴 금지
 }
 
 void HonmunCollisionBase::InitializeHelperClasses()

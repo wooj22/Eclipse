@@ -356,6 +356,139 @@ bool Aron_Scene::IsOutOfBounds(Honmun* honmun)
     return (abs(pos.x) > 5000.0f || abs(pos.y) > 5000.0f);
 }
 
+//  NEW: 웨이브 시스템 헬퍼 함수들
+bool Aron_Scene::AllEnemiesDefeated()
+{
+    // 화면에 살아있는 혼문이 있는지 체크
+    for (auto* honmun : waveData.spawnedHonmuns)
+    {
+        if (honmun && honmun->IsActive())
+        {
+            return false; // 살아있는 혼문 발견
+        }
+    }
+    return true; // 모든 혼문이 처치됨
+}
+
+void Aron_Scene::CompleteCurrentWave()
+{
+    char debugMsg[100];
+    sprintf_s(debugMsg, "Wave %d completed!\n", waveData.currentWave);
+    OutputDebugStringA(debugMsg);
+    
+    // 현재 웨이브 정리
+    waveData.waveActive = false;
+    waveData.waveCompleted = true;
+    waveData.spawnedHonmuns.clear();
+    
+    // 자동으로 다음 웨이브 시작
+    if (waveData.currentWave < 3)
+    {
+        // 다음 웨이브 즉시 시작
+        sprintf_s(debugMsg, "Starting Wave %d immediately (70 seconds each)\n", waveData.currentWave + 1);
+        OutputDebugStringA(debugMsg);
+        
+        // 즉시 다음 웨이브 시작 (각 웨이브 70초씩)
+        StartNextWave();
+    }
+    else
+    {
+        OutputDebugStringA("All waves completed! Victory!\n");
+        // 게임 클리어 처리
+    }
+}
+
+void Aron_Scene::StartNextWave()
+{
+    int nextWave = waveData.currentWave + 1;
+    
+    //  FIXED: 시간 리셋 추가
+    waveData.lastSpawnTime = Time::GetTotalTime(); // 현재 시간으로 리셋
+    
+    switch (nextWave)
+    {
+        case 2:
+            StartWave2();
+            break;
+        case 3:
+            StartWave3();
+            break;
+        default:
+            OutputDebugStringA("No more waves available\n");
+            break;
+    }
+}
+
+//  NEW: 안전한 객체 정리 시스템
+void Aron_Scene::SafeCleanupDestroyedObjects()
+{
+    std::vector<Honmun*> toDestroy;
+    
+    // 1. spawnedHonmuns에서 파괴된 객체들 제거
+    for (auto it = waveData.spawnedHonmuns.begin(); it != waveData.spawnedHonmuns.end();)
+    {
+        auto* honmun = *it;
+        if (!honmun || !honmun->IsActive())
+        {
+            if (honmun) toDestroy.push_back(honmun);
+            it = waveData.spawnedHonmuns.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    
+    // 2. allHonmuns에서도 제거
+    for (auto it = allHonmuns.begin(); it != allHonmuns.end();)
+    {
+        auto* honmun = *it;
+        if (!honmun || !honmun->IsActive())
+        {
+            it = allHonmuns.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    
+    // 3. activeHonmuns에서도 제거
+    for (auto it = honmunManager.activeHonmuns.begin(); it != honmunManager.activeHonmuns.end();)
+    {
+        auto* honmun = *it;
+        if (!honmun || !honmun->IsActive())
+        {
+            it = honmunManager.activeHonmuns.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    
+    // 4. 마지막에 안전하게 파괴
+    for (auto* honmun : toDestroy)
+    {
+        if (honmun)
+        {
+            honmun->Destroy();  // 이제 안전하게 파괴
+        }
+    }
+    
+    if (!toDestroy.empty())
+    {
+        char debugMsg[100];
+        sprintf_s(debugMsg, "SafeCleanup: Destroyed %zu objects safely\n", toDestroy.size());
+        OutputDebugStringA(debugMsg);
+    }
+}
+
+bool Aron_Scene::IsValidHonmun(Honmun* honmun)
+{
+    return honmun != nullptr && honmun->IsActive();
+}
+
 void Aron_Scene::Start()
 {
 	// game object -> SceneStart()
@@ -534,7 +667,8 @@ void Aron_Scene::Update()
 	if (platform2_col) platform2_col->DebugColliderDraw();
 	if (floor2_col) floor2_col->DebugColliderDraw(); // 기존 2층 (통과)
 
-	
+	//  NEW: 프레임 끝에 안전한 정리
+	SafeCleanupDestroyedObjects();
 }
 
 void Aron_Scene::Exit()
@@ -656,11 +790,15 @@ void Aron_Scene::UpdateScoreUI()
 {
 	if (score_text && score_text->screenTextRenderer)
 	{
-		wchar_t scoreText[100];
+		wchar_t scoreText[150];
 		if (waveData.waveActive)
 		{
-			swprintf_s(scoreText, L"Score: %d | Wave %d: %d/%d spawned", 
-				currentScore, waveData.currentWave, waveData.currentSpawnIndex, waveData.totalSpawnCount);
+			float elapsedTime = Time::GetTotalTime() - waveData.waveStartTime;
+			float remainingTime = waveData.waveDuration - elapsedTime;
+			if (remainingTime < 0) remainingTime = 0;
+			
+			swprintf_s(scoreText, L"Score: %d | Wave %d: %d/%d spawned | Time: %.1fs", 
+				currentScore, waveData.currentWave, waveData.currentSpawnIndex, waveData.totalSpawnCount, remainingTime);
 		}
 		else
 		{
@@ -672,7 +810,11 @@ void Aron_Scene::UpdateScoreUI()
 
 void Aron_Scene::StartWave1()
 {
-	OutputDebugStringA("Wave 1 started!\n");
+	OutputDebugStringA("Wave 1 started! (70 seconds)\n");
+	
+	// 웨이브 타이머 초기화
+	waveData.waveStartTime = Time::GetTotalTime();
+	waveData.waveCompleted = false;
 	
 	// GameManager 웨이브 정보 업데이트
 	GameManager::Get().waveCount = 1;
@@ -740,7 +882,11 @@ void Aron_Scene::StartWave1()
 
 void Aron_Scene::StartWave2()
 {
-	OutputDebugStringA("Wave 2 started!\n");
+	OutputDebugStringA("Wave 2 started! (70 seconds)\n");
+	
+	// 웨이브 타이머 초기화
+	waveData.waveStartTime = Time::GetTotalTime();
+	waveData.waveCompleted = false;
 	
 	// GameManager 웨이브 정보 업데이트
 	GameManager::Get().waveCount = 2;
@@ -802,7 +948,11 @@ void Aron_Scene::StartWave2()
 
 void Aron_Scene::StartWave3()
 {
-	OutputDebugStringA("Wave 3 started!\n");
+	OutputDebugStringA("Wave 3 started! (70 seconds)\n");
+	
+	// 웨이브 타이머 초기화
+	waveData.waveStartTime = Time::GetTotalTime();
+	waveData.waveCompleted = false;
 	
 	// GameManager 웨이브 정보 업데이트
 	GameManager::Get().waveCount = 3;
@@ -866,9 +1016,17 @@ void Aron_Scene::UpdateWaveSystem()
 {
 	if (!waveData.waveActive) return;
 	
-	static float totalTime = 0.0f;
-	totalTime += Time::GetDeltaTime();
-	float currentTime = totalTime;
+	//  FIXED: static 변수 제거 - 씬 전환마다 초기화되도록
+	float currentTime = Time::GetTotalTime();
+	
+	// 웨이브 시간 체크 (70초 제한)
+	float elapsedTime = currentTime - waveData.waveStartTime;
+	if (elapsedTime >= waveData.waveDuration)
+	{
+		OutputDebugStringA("Wave time limit reached (70 seconds) - Auto advancing to next wave\n");
+		CompleteCurrentWave();
+		return;
+	}
 	
 	// 스폰 간격에 따라 새로운 혼문 스폰
 	if (waveData.currentSpawnIndex < waveData.totalSpawnCount)
@@ -891,6 +1049,16 @@ void Aron_Scene::UpdateWaveSystem()
 			
 			waveData.lastSpawnTime = currentTime;
 			waveData.currentSpawnIndex++;
+		}
+	}
+	
+	//  FIXED: 웨이브 완료 감지 및 자동 전환 로직 추가
+	else if (waveData.currentSpawnIndex >= waveData.totalSpawnCount)
+	{
+		// 모든 적이 스폰되었고, 화면에 남은 적이 없으면 웨이브 완료
+		if (waveData.spawnedHonmuns.size() == 0 || AllEnemiesDefeated())
+		{
+			CompleteCurrentWave();
 		}
 	}
 	
@@ -927,9 +1095,9 @@ void Aron_Scene::SpawnHonmun()
 		rb->isKinematic = false;    // 물리 시뮬레이션 활성화
 	}
 	
-	// 리스트에 추가
+	//  FIXED: 중복 제거 - 하나의 벡터만 사용
 	waveData.spawnedHonmuns.push_back(newHonmun);
-	allHonmuns.push_back(newHonmun);
+	// allHonmuns.push_back(newHonmun); // 제거: 중복 방지
 	
 	char debugMsg[100];
 	sprintf_s(debugMsg, "Spawned Honmun %d/%d at (%.2f, %.2f)\n", 
@@ -1014,9 +1182,9 @@ void Aron_Scene::SpawnHonmunWave2()
 		rb->isKinematic = false;    // 물리 시뮬레이션 활성화
 	}
 	
-	// 리스트에 추가
+	//  FIXED: 중복 제거 - 하나의 벡터만 사용
 	waveData.spawnedHonmuns.push_back(newHonmun);
-	allHonmuns.push_back(newHonmun);
+	// allHonmuns.push_back(newHonmun); // 제거: 중복 방지
 	
 	char debugMsg[100];
 	sprintf_s(debugMsg, "Wave 2: Spawned Honmun %d/%d at (%.2f, %.2f)\n", 
@@ -1046,9 +1214,9 @@ void Aron_Scene::SpawnHonmunWave3()
 		rb->isKinematic = false;    // 물리 시뮬레이션 활성화
 	}
 	
-	// 리스트에 추가
+	//  FIXED: 중복 제거 - 하나의 벡터만 사용
 	waveData.spawnedHonmuns.push_back(newHonmun);
-	allHonmuns.push_back(newHonmun);
+	// allHonmuns.push_back(newHonmun); // 제거: 중복 방지
 	
 	char debugMsg[100];
 	sprintf_s(debugMsg, "Wave 3: Spawned Honmun %d/%d at (%.2f, %.2f)\n", 

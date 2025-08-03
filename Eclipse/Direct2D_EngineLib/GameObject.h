@@ -263,7 +263,7 @@ public:
 
     template<typename T>
     T* GetComponent() {
-        for (Component* comp : components) {
+         for (Component* comp : components) {
             if (typeid(*comp) == typeid(T))
                 return static_cast<T*>(comp);
         }

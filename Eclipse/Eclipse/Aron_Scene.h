@@ -88,6 +88,9 @@ private:
 		float lastSpawnTime = 0.0f;     // 마지막 스폰 시간
 		bool waveActive = false;        // 웨이브 활성 상태
 		int currentWave = 1;            // 현재 웨이브 번호 (1, 2, 3)
+		float waveStartTime = 0.0f;     // 웨이브 시작 시간
+		float waveDuration = 70.0f;     // 웨이브 지속 시간 (70초)
+		bool waveCompleted = false;     // 웨이브 완료 여부
 		std::vector<int> spawnedHonmunIds; // 스폰된 혼문 ID들
 		std::vector<Honmun*> spawnedHonmuns; // 임시 호환성
 	} waveData;
@@ -144,4 +147,13 @@ public:
 	void AddHonmunToManager(Honmun* honmun);
 	void RemoveHonmunFromManager(Honmun* honmun);
 	bool IsOutOfBounds(Honmun* honmun);
+	
+	// 웨이브 시스템 헬퍼 함수들
+	bool AllEnemiesDefeated();
+	void CompleteCurrentWave();
+	void StartNextWave();
+	
+	// 안전한 메모리 관리 함수들
+	void SafeCleanupDestroyedObjects();
+	bool IsValidHonmun(Honmun* honmun);
 };
