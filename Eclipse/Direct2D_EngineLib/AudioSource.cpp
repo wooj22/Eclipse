@@ -32,7 +32,7 @@ void AudioSource::SetVolume(float volume)
 
 float AudioSource::GetVolume()
 {
-    return channel->setVolume(volume);
+    return volume;
 }
 
 void AudioSource::SetLoop(bool loop)
@@ -69,6 +69,10 @@ void AudioSource::Play()
     if (system)
     {
         system->playSound(clip->GetSound(), nullptr, false, &channel);
+        
+        // group
+        if (channel && outputChannel)
+            channel->setChannelGroup(outputChannel);
     }
 }
 
@@ -96,6 +100,10 @@ void AudioSource::PlayOneShot()
     if (system)
     {
         system->playSound(clip->GetSound(), nullptr, false, &channel);
+   
+        // group
+        if (channel && outputChannel)
+            channel->setChannelGroup(outputChannel);
     }
 }
 
@@ -114,4 +122,14 @@ bool AudioSource::IsPlaying() const
     if (channel)
         channel->isPlaying(&playing);
     return playing;
+}
+
+void AudioSource::SetChannelGroup(FMOD::ChannelGroup* channelGroup)
+{
+    outputChannel = channelGroup;
+}
+
+FMOD::ChannelGroup* AudioSource::GetChannelGroup()
+{
+    return outputChannel;
 }

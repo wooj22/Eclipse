@@ -15,6 +15,10 @@ private:
     AudioClip* clip = nullptr;                  // 이 audiosource가 재생할 audioClip
     FMOD::Channel* channel = nullptr;           // sound가 출력될 channel
 
+    // channel output group
+    FMOD::ChannelGroup* outputChannel = nullptr;
+
+    // audoi source data
     float volume = 1.0;
     bool isLoop = false;
 
@@ -38,5 +42,9 @@ public:
     void PlayOneShot();
     void Stop();
     bool IsPlaying() const;
+
+    // group
+    void SetChannelGroup(FMOD::ChannelGroup* channelGroup);
+    FMOD::ChannelGroup* GetChannelGroup();
 };
 

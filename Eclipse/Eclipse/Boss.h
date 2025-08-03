@@ -67,6 +67,10 @@ public:
 		bgmClip = new AudioClip("../Resource/Audio/Sample/BGM_Stage1.wav");
 		sfxClip = new AudioClip("../Resource/Audio/Sample/SFX_Score.wav");
 	
+		AudioSystem::Get().SetBGMVolume(0.5);
+
+		bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
+		bgmSource->SetVolume(1);
 		bgmSource->SetClip(bgmClip);
 		bgmSource->SetLoop(true);
 		bgmSource->Play();
