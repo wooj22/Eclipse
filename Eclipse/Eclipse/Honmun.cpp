@@ -211,8 +211,8 @@ void Honmun::SetupColliderForType()
 		collider->offset.y = -23.0f; // B타입은 더 아래로
 		break;
 	case HonmunType::b:
-		collider->radius = 24.0f; // 소문자 b는 더 작게 (30% 감소)
-		collider->offset.y = -23.0f; // B와 동일한 위치
+		collider->radius = 30.0f; // 소문자 b 가시성 개선 (25% 증가)
+		collider->offset.y = -20.0f; // 약간 위로 올려서 더 잘 보이게
 		break;
 	case HonmunType::C:
 		collider->radius = 30.0f; // 고정 크기로 변경

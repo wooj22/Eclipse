@@ -153,7 +153,7 @@ void HonmunCollisionEffects::BounceAwayKinematic(HonmunCollisionBase* script, Ho
     Vector2 pos2 = otherScript->GetTransform()->GetPosition();
     
     Vector2 direction = (pos1 - pos2).Normalized();
-    float pushDistance = 30.0f;
+    float pushDistance = 20.0f; // 연쇄 작용을 위해 거리 단축 (30→20)
     
     script->GetTransform()->SetPosition(pos1 + direction * pushDistance);
     otherScript->GetTransform()->SetPosition(pos2 - direction * pushDistance);
@@ -168,7 +168,7 @@ void HonmunCollisionEffects::PushSideways(HonmunCollisionBase* script, HonmunCol
     Vector2 pos2 = otherScript->GetTransform()->GetPosition();
     
     Vector2 direction = (pos1 - pos2).Normalized();
-    float pushDistance = 40.0f;
+    float pushDistance = 25.0f; // 연쇄 작용을 위해 거리 단축 (40→25)
     
     script->GetTransform()->SetPosition(pos1 + direction * pushDistance);
     otherScript->GetTransform()->SetPosition(pos2 - direction * pushDistance);
@@ -239,22 +239,26 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
     // 1차 분해: 주요 조각들 (더 큰 크기)
     for (int i = 0; i < enhancedCount; i++)
     {
-        // 방사형으로 퍼지는 방향 계산 (더 세밀한 각도로)
-        float angle = (2.0f * 3.14159f * i) / enhancedCount; // 더 많은 조각으로 나눔
+        // 방사형으로 퍼지는 방향 계산 (예측 가능한 고정 각도)
+        float angle = (2.0f * 3.14159f * i) / enhancedCount; // 고정된 각도 패턴
+        // 45도씩 오프셋 추가하여 더 자연스러운 분산
+        angle += 3.14159f * 0.25f; // 45도 오프셋
         Vector2 direction(cos(angle), sin(angle));
         
         // 연쇄 충돌 최적화: 더 넓은 범위로 분산
         static std::random_device rd;
         static std::mt19937 gen(rd());
-        static std::uniform_real_distribution<float> distanceDis(150.0f, 300.0f); // 연쇄 충돌을 위해 훨씬 넓게
-        float randomDistance = distanceDis(gen);
+        // 예측 가능한 거리 패턴 (랜덤 요소 줄임)
+        float baseDistance = 180.0f; // 기본 거리
+        float distanceVariation = 50.0f; // 변화량
+        float predictableDistance = baseDistance + (distanceVariation * (i % 2)); // 교대로 거리 변화
         
-        // 각 조각마다 다른 거리로 배치 (연쇄 충돌 최적화)
+        // 각 조각마다 예측 가능한 거리로 배치
         if (i % 2 == 0) { // 짝수 인덱스는 더 멀리
-            randomDistance *= 1.5f; // 50% 더 멀리 배치
+            predictableDistance *= 1.3f; // 30% 더 멀리 배치
         }
         
-        Vector2 spawnPos = collisionPoint + direction * randomDistance;
+        Vector2 spawnPos = collisionPoint + direction * predictableDistance;
         
         // Scene::CreateObject 방식으로 변경하여 올바른 타입으로 생성
         HonmunType originalType = script->GetHonmunType();
@@ -291,7 +295,9 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
         if (!fragmentScript) {
             fragmentScript = fragmentHonmun->AddComponent<HonmunCollisionBase>();
         }
-        fragmentScript->SetCurrentSize(newSize);
+        // b 조각 가시성 개선: 크기 1.3배 증가
+        float enhancedBSize = newSize * 1.3f;
+        fragmentScript->SetCurrentSize(enhancedBSize);
         fragmentScript->SetHealth(1); // b 조각들은 HP 1
         fragmentScript->SetSplitFragment(true);
         
@@ -299,10 +305,10 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
         fragmentScript->SetNeedsPhysicsTransition(true);
         fragmentScript->SetHonmunType(fragmentType); // 스크립트에도 올바른 타입 설정
         
-        // 크기 적용
+        // 크기 적용 (가시성 개선을 위해 증가된 크기)
         if (fragmentScript->GetHonmun())
         {
-            fragmentScript->GetHonmun()->SetSize(newSize);
+            fragmentScript->GetHonmun()->SetSize(enhancedBSize);
         }
         
         // 포켓볼/드래곤볼 스타일: 폭발적인 방사형 퍼짐 물리 설정
@@ -328,11 +334,9 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
             float scatterSpeed = baseSpeed * layerMultiplier;
             Vector2 scatterVelocity = direction * scatterSpeed;
             
-            // 포켓볼 스타일: 더 강한 랜덤 변화 (더 자연스러운 폭발)
-            static std::random_device rd;
-            static std::mt19937 gen(rd());
-            static std::uniform_real_distribution<float> randomFactor(0.7f, 1.4f); // 더 넓은 범위
-            scatterVelocity = scatterVelocity * randomFactor(gen);
+            // 예측 가능한 속도 패턴 (랜덤 요소 줄임)
+            float predictableFactor = 0.9f + (0.2f * (i % 3) / 3.0f); // 0.9~1.1 범위에서 예측 가능한 변화
+            scatterVelocity = scatterVelocity * predictableFactor;
             
             rigidbody->velocity = scatterVelocity;
             
@@ -416,7 +420,7 @@ void HonmunCollisionEffects::BounceOppositeDirections(HonmunCollisionBase* scrip
     Vector2 pos2 = otherScript->GetTransform()->GetPosition();
     
     Vector2 direction = (pos1 - pos2).Normalized();
-    float bounceDistance = 80.0f;
+    float bounceDistance = 50.0f; // 연쇄 작용을 위해 거리 단축 (80→50)
     
     // 서로 반대 방향으로 밀어냄
     script->GetTransform()->SetPosition(pos1 + direction * bounceDistance);
@@ -440,8 +444,8 @@ void HonmunCollisionEffects::PushLeftRight(HonmunCollisionBase* script, HonmunCo
     Vector2 pos1 = script->GetTransform()->GetPosition();
     Vector2 pos2 = otherScript->GetTransform()->GetPosition();
     
-    // 좌우 방향 결정
-    float pushDistance = 100.0f;
+    // 좌우 방향 결정 - 연쇄 작용을 위해 거리 단축
+    float pushDistance = 60.0f; // 연쇄 작용을 위해 거리 단축 (100→60)
     Vector2 leftDirection(-1.0f, 0.0f);
     Vector2 rightDirection(1.0f, 0.0f);
     
@@ -468,7 +472,7 @@ void HonmunCollisionEffects::PenetrateWithoutOverlap(HonmunCollisionBase* script
     Vector2 pos2 = otherScript->GetTransform()->GetPosition();
     
     Vector2 direction = (pos1 - pos2).Normalized();
-    float separationDistance = 70.0f; // 겹치지 않도록 최소 거리 확보
+    float separationDistance = 45.0f; // 연쇄 작용을 위해 거리 단축 (70→45)
     
     // 서로 약간 떨어뜨림
     script->GetTransform()->SetPosition(pos1 + direction * separationDistance * 0.5f);
