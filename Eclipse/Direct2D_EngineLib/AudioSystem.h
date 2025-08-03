@@ -12,11 +12,10 @@ class AudioSource;
 class AudioSystem : public Singleton<AudioSystem>
 {
 private:
-	FMOD::System* system = nullptr;
+	FMOD::System* system = nullptr;			// FMOD system
 
 private:
 	vector<AudioSource*> components;
-	vector<AudioSource*> pending_components;
 
 public:
 	// componenet

@@ -11,7 +11,7 @@ private:
 	FMOD::Sound* sound = nullptr;
 
 public:
-	AudioClip(FMOD::System* system, const std::string& filePath);
+	AudioClip(const std::string& filePath);
 	~AudioClip();
 
 	FMOD::Sound* GetSound() const { return sound; }

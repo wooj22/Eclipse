@@ -6,6 +6,11 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "BossController.h"
 
+// audio test
+#include "../Direct2D_EngineLib/AudioSystem.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+
 /* 보스 웨이브에 등장하는 Boss GameObject 선언 클래스 */
 
 class Boss : public GameObject
@@ -17,7 +22,13 @@ public:
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
 	BossController* bossController;
-	
+
+	// audio test
+	AudioSource* bgmSource = nullptr;
+	AudioSource* sfxSource = nullptr;
+	AudioClip* bgmClip = nullptr;
+	AudioClip* sfxClip = nullptr;
+
 	Boss()
 	{
 		transform = AddComponent<Transform>();
@@ -42,11 +53,27 @@ public:
 		collider->radius = 180;
 		collider->offset = { 0,-40 };
 
+		// color matrix test
 		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
 		//spriteRenderer->SetColor(0, 1, 0);
 		spriteRenderer->SetAlpha(0.8);
 		spriteRenderer->SetSaturation(0.6);
 		spriteRenderer->SetGlowAmmount(150);
+
+		// audio test
+		bgmSource = AddComponent<AudioSource>();
+		sfxSource = AddComponent<AudioSource>();
+
+		bgmClip = new AudioClip("../Resource/Audio/Sample/BGM_Stage1.wav");
+		sfxClip = new AudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+	
+		bgmSource->SetClip(bgmClip);
+		bgmSource->SetLoop(true);
+		bgmSource->Play();
+
+		sfxSource->SetClip(sfxClip);
+		sfxSource->SetLoop(true);
+		sfxSource->Play();
 	}
 
 	void Update() override
