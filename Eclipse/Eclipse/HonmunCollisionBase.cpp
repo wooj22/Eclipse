@@ -136,14 +136,13 @@ void HonmunCollisionBase::Update()
         }
     }
     
-    // Handle velocity and friction
-    if (currentVelocity.Magnitude() > minVelocity)
+    // 타입별 마찰력 적용 및 b 조각 지속 운동
+    ApplyTypeSpecificFriction();
+    
+    // b 조각들은 지속적인 운동량 유지
+    if (honmunType == HonmunType::b && isSplitFragment)
     {
-        currentVelocity *= friction;
-    }
-    else
-    {
-        currentVelocity = Vector2(0, 0);
+        MaintainFragmentMomentum();
     }
 }
 
@@ -297,4 +296,68 @@ void HonmunCollisionBase::CleanupHelperClasses()
     collisionTypes = nullptr;
     collisionEffects = nullptr;
     collisionManager = nullptr;
+}
+
+void HonmunCollisionBase::ApplyTypeSpecificFriction()
+{
+    if (currentVelocity.Magnitude() > minVelocity)
+    {
+        float typeFriction = GetFrictionByType(honmunType);
+        currentVelocity *= typeFriction;
+        
+        // Rigidbody 속도도 함께 감소시킴
+        if (rigidbody && !needsPhysicsTransition)
+        {
+            Vector2 rbVelocity = rigidbody->velocity;
+            if (rbVelocity.Magnitude() > minVelocity)
+            {
+                rigidbody->velocity = rbVelocity * typeFriction;
+            }
+        }
+    }
+    else
+    {
+        currentVelocity = Vector2(0, 0);
+    }
+}
+
+void HonmunCollisionBase::MaintainFragmentMomentum()
+{
+    if (!rigidbody) return;
+    
+    // b 조각들은 분열 시 받은 초기 속도를 persistentVelocity에 저장
+    if (persistentVelocity.Magnitude() > 5.0f)  // 최소 임계값
+    {
+        // 지속적인 운동량 감소 (천천히)
+        persistentVelocity *= fragmentMomentumDecay;
+        
+        // Rigidbody에 지속 속도 적용
+        Vector2 currentRbVel = rigidbody->velocity;
+        
+        // 현재 속도가 너무 작으면 지속 속도로 보충
+        if (currentRbVel.Magnitude() < persistentVelocity.Magnitude() * 0.5f)
+        {
+            rigidbody->velocity = persistentVelocity;
+            
+            char momentumMsg[100];
+            sprintf_s(momentumMsg, "b fragment momentum maintained: velocity(%.1f, %.1f)\n", 
+                     persistentVelocity.x, persistentVelocity.y);
+            OutputDebugStringA(momentumMsg);
+        }
+    }
+}
+
+float HonmunCollisionBase::GetFrictionByType(HonmunType type)
+{
+    // 타입별 차등 마찰력 (값이 작을수록 빨리 멈춤)
+    switch (type)
+    {
+    case HonmunType::A:  return 0.94f;  // A: 높은 마찰력 (빨리 멈춤)
+    case HonmunType::A2: return 0.92f;  // 2A: 더 높은 마찰력 (무거워서 빨리 멈춤)
+    case HonmunType::B:  return 0.96f;  // B: 중간 마찰력
+    case HonmunType::b:  return 0.985f; // b: 낮은 마찰력 (오래 움직임)
+    case HonmunType::C:  return 0.93f;  // C: 높은 마찰력
+    case HonmunType::D:  return 0.91f;  // D: 가장 높은 마찰력 (빨리 멈춤)
+    default: return 0.95f;  // 기본값
+    }
 }

@@ -40,8 +40,12 @@ protected:
 	
 	// 충돌 후 관성 효과
 	Vector2 currentVelocity;
-	float friction = 0.95f;
+	float friction = 0.95f;  // 기본 마찰력
 	float minVelocity = 0.1f;
+	
+	// 타입별 마찰력 및 운동 관련
+	Vector2 persistentVelocity;  // b 조각용 지속 속도
+	float fragmentMomentumDecay = 0.98f;  // b 조각 운동량 감소율
 
 	// Helper classes
 	HonmunCollisionTypes* collisionTypes = nullptr;
@@ -88,6 +92,7 @@ public:
 	void SetCurrentSize(float size) { currentSize = size; }
 	void SetSplitFragment(bool isFragment) { isSplitFragment = isFragment; }
 	void SetProcessingReaction(bool processing) { isProcessingReaction = processing; }
+	void SetPersistentVelocity(const Vector2& velocity) { persistentVelocity = velocity; }
 	void SetNeedsPhysicsTransition(bool needs) { needsPhysicsTransition = needs; }
 	
 	// Status checks
@@ -99,4 +104,9 @@ protected:
 private:
 	void InitializeHelperClasses();
 	void CleanupHelperClasses();
+	
+	// 타입별 마찰력 및 운동 시스템
+	void ApplyTypeSpecificFriction();
+	void MaintainFragmentMomentum();
+	float GetFrictionByType(HonmunType type);
 };

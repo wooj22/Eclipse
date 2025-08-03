@@ -357,6 +357,13 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
             
             rigidbody->velocity = scatterVelocity;
             
+            // b 조각의 지속 운동량 초기화 (타입별 마찰력 시스템)
+            if (fragmentType == HonmunType::b)
+            {
+                fragmentScript->SetPersistentVelocity(scatterVelocity);
+                OutputDebugStringA("b fragment persistent velocity initialized for sustained motion\n");
+            }
+            
             char velocityMsg[150];
             sprintf_s(velocityMsg, "Fragment %d velocity: (%.1f, %.1f), speed: %.1f, layer: %.1fx\n", 
                      i+1, scatterVelocity.x, scatterVelocity.y, scatterSpeed, layerMultiplier);
