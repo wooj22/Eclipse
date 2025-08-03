@@ -13,6 +13,12 @@
 
 void Aron_Scene::Awake()
 {
+	// 임시 호환성 초기화
+	honmun_a = nullptr;
+	honmun_b = nullptr;
+	selectedHonmunIndex = 0;
+	allHonmuns.clear();
+	
 	// camera init - Moon_Scene 방식으로 변경
 	cam = CreateObject<GameObject>();
 	cam->AddComponent<Transform>();
@@ -321,6 +327,33 @@ void Aron_Scene::Awake()
 	// 초기 혼문 관리 시스템 설정
 	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
 	OutputDebugStringA("Honmun manager initialized with test Honmuns\n");
+}
+
+// 임시 호환성 함수들 (기존 코드와의 호환성을 위해)
+void Aron_Scene::AddHonmunToManager(Honmun* honmun)
+{
+    if (!honmun) return;
+    honmunManager.activeHonmuns.push_back(honmun);
+    honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+}
+
+void Aron_Scene::RemoveHonmunFromManager(Honmun* honmun)
+{
+    if (!honmun) return;
+    auto it = std::find(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun);
+    if (it != honmunManager.activeHonmuns.end()) {
+        honmunManager.activeHonmuns.erase(it);
+        honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+    }
+}
+
+bool Aron_Scene::IsOutOfBounds(Honmun* honmun)
+{
+    if (!honmun) return true;
+    auto* transform = honmun->GetComponent<Transform>();
+    if (!transform) return true;
+    Vector2 pos = transform->GetPosition();
+    return (abs(pos.x) > 5000.0f || abs(pos.y) > 5000.0f);
 }
 
 void Aron_Scene::Start()
@@ -1317,107 +1350,3 @@ void Aron_Scene::SpawnNewHonmun()
 	}
 }
 
-void Aron_Scene::AddHonmunToManager(Honmun* honmun)
-{
-	if (!honmun) {
-		OutputDebugStringA("ERROR: AddHonmunToManager called with null honmun\n");
-		return;
-	}
-	
-	// 동시 수정 방지
-	if (honmunManager.isUpdating) {
-		OutputDebugStringA("AddHonmunToManager: Manager is updating, skipping addition\n");
-		return;
-	}
-	
-	// 안전한 이름 접근 with try-catch
-	std::string safeName = "UNKNOWN";
-	try {
-		if (!honmun->name.empty()) {
-			safeName = honmun->name;
-		}
-	} catch (...) {
-		OutputDebugStringA("WARNING: Exception accessing honmun->name\n");
-		safeName = "CORRUPTED_NAME";
-	}
-	
-	honmunManager.activeHonmuns.push_back(honmun);
-	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
-	
-	char debugMsg[150];
-	sprintf_s(debugMsg, "AddHonmunToManager: %s added, current count: %d\n", 
-		safeName.c_str(), honmunManager.currentCount);
-	OutputDebugStringA(debugMsg);
-}
-
-void Aron_Scene::RemoveHonmunFromManager(Honmun* honmun)
-{
-	if (!honmun) {
-		OutputDebugStringA("ERROR: RemoveHonmunFromManager called with null honmun\n");
-		return;
-	}
-	
-	// 동시 수정 방지: 업데이트 중이면 잠시 대기
-	if (honmunManager.isUpdating) {
-		OutputDebugStringA("RemoveHonmunFromManager: Manager is updating, skipping removal\n");
-		return;
-	}
-	
-	// 안전한 이름 접근 with try-catch
-	std::string safeName = "UNKNOWN";
-	try {
-		if (!honmun->name.empty()) {
-			safeName = honmun->name;
-		}
-	} catch (...) {
-		OutputDebugStringA("WARNING: Exception accessing honmun->name in removal\n");
-		safeName = "CORRUPTED_NAME";
-	}
-	
-	// 안전한 벡터 조작
-	try {
-		// 모든 인스턴스 제거 (중복이 있을 수 있음)
-		honmunManager.activeHonmuns.erase(
-			std::remove(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun),
-			honmunManager.activeHonmuns.end()
-		);
-		
-		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
-		
-		char debugMsg[150];
-		sprintf_s(debugMsg, "RemoveHonmunFromManager: %s removed, current count: %d\n", 
-			safeName.c_str(), honmunManager.currentCount);
-		OutputDebugStringA(debugMsg);
-		
-	} catch (...) {
-		OutputDebugStringA("EXCEPTION: Error during honmun removal from manager\n");
-		// 안전하게 카운트 재계산
-		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
-	}
-}
-
-bool Aron_Scene::IsOutOfBounds(Honmun* honmun)
-{
-	if (!honmun) return true;
-	
-	auto* transform = honmun->GetComponent<Transform>();
-	if (!transform) return true;
-	
-	Vector2 pos = transform->GetPosition();
-	
-	// 맵 경계를 벗어났는지 확인 (확장된 범위)
-	float expandedBoundaryX = 1600.0f; // 충돌 연구를 위해 확장
-	float expandedBoundaryY = 1500.0f; // 충돌 연구를 위해 확장
-	bool outOfBounds = (abs(pos.x) > expandedBoundaryX || 
-	                   abs(pos.y) > expandedBoundaryY);
-	
-	if (outOfBounds)
-	{
-		char debugMsg[100];
-		sprintf_s(debugMsg, "Honmun %s out of bounds: (%.1f, %.1f)\n", 
-			honmun->name.c_str(), pos.x, pos.y);
-		OutputDebugStringA(debugMsg);
-	}
-	
-	return outOfBounds;
-}
