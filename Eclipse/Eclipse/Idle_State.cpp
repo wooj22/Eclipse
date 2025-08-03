@@ -19,6 +19,7 @@ void Idle_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
     // fsm->GetPlayerFSM()->timer = 0.0f;
+
     fsm->GetPlayerFSM()->OnGround();  // 모든 공격 기회 리셋
 
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // 움직임이 있었다면 정지 
@@ -31,14 +32,10 @@ void Idle_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
-    // DubleJump / canAttack_Unlock 초기화
-    if (fsm->GetPlayerFSM()->GetIsGround())
+    // DubleJump 초기화
+    if (fsm->GetPlayerFSM()->GetIsGround() && !fsm->GetPlayerFSM()->canDoubleJump)
     {
-        // fsm->GetPlayerFSM()->ResetAirAttack(); // 착지 시 공격 카운트 리셋
-
-        if (!fsm->GetPlayerFSM()->canDoubleJump)    fsm->GetPlayerFSM()->canDoubleJump = true;
-        // fsm->GetPlayerFSM()->airAttackCount = 0;
-        // if (!fsm->GetPlayerFSM()->canAttack_Unlock) fsm->GetPlayerFSM()->canAttack_Unlock = true;
+        fsm->GetPlayerFSM()->canDoubleJump = true;
     }
 
     // [ Jump ]

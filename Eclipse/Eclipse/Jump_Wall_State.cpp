@@ -58,12 +58,10 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
         if (!fsm->GetPlayerFSM()->GetIsGround() && !fsm->GetPlayerFSM()->GetLastFlipX())
         {
             fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(+doubleJumpXPower, wallJumpForce));
-            // canDoubleJump = false;
         }
         else if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetLastFlipX())
         {
             fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-doubleJumpXPower, wallJumpForce));
-            // canDoubleJump = false;
         }
 
         fsm->GetPlayerFSM()->OnJump(JumpPhase::DoubleJump);
@@ -95,7 +93,6 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
         if ( fsm->GetPlayerFSM()->CanAttack() &&
             (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold))
         {
-            // fsm->GetPlayerFSM()->UseAttack();
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
         }
     }
@@ -105,7 +102,6 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
         if ( fsm->GetPlayerFSM()->CanAttack() &&
             (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold))
         {
-            // fsm->GetPlayerFSM()->UseAttack();
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
         }
 

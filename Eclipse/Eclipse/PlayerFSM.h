@@ -95,6 +95,9 @@ public:
 
 	Vector2 MouseWorldPos;					// 실시간 마우스 월드 좌표 
 
+	// attack 
+	float maxAttackDistance = 300.0f;       // 공격 시, 최대 이동 거리
+	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
 
 public:
 	// getter
@@ -170,6 +173,8 @@ public:
 	// speed 
 	float GetMoveSpeedBonus() const;
 
+	// attack 
+	float GetAttackRangeBonus() const;
 
 private:
 	// [ FSM setting ] 

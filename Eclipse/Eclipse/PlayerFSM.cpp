@@ -52,9 +52,9 @@ void PlayerFSM::Start()
 	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
 	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
 	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	// GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
 	// GameManager::Get().LevelUpSkill(SkillType::Dash);
 }
 
@@ -132,15 +132,10 @@ void PlayerFSM::FlipXSetting()
 			spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
 			lastFlipX = spriteRenderer->flipX;
 		}
-		else
-		{
-			spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
-		}
+		else   spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
 	}
-	else
-	{
-		spriteRenderer->flipX = isBulletFlipX;  // BulletTime_State 에서 변수값 조정
-	}
+	else   spriteRenderer->flipX = isBulletFlipX;  // BulletTime_State 에서 변수값 조정
+
 }
 
 void PlayerFSM::SpeedSetting()
@@ -155,8 +150,8 @@ void PlayerFSM::SpeedSetting()
 	}
 	else curSpeed = 0;
 
-	std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
-	OutputDebugStringA(debugStr.c_str());
+	//std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
+	//OutputDebugStringA(debugStr.c_str());
 }
 
 
@@ -208,10 +203,9 @@ void PlayerFSM::UseAttack()
 }
 
 // speed 
-
 float PlayerFSM::GetMoveSpeedBonus() const 
 {
-	static const float speedBonusTable[] = { 0.0f, 100.0f, 300.0f, 500.0f }; // 0 1 3 5 
+	static const float speedBonusTable[] = { 0.0f, 50.0f, 150.0f, 250.0f }; // 0, 1, 3, 5, 
 	int level = GameManager::Get().skillTree.at(SkillType::MoveSpeedUp).unlockLevel;
 
 	// 안전 처리
@@ -220,6 +214,18 @@ float PlayerFSM::GetMoveSpeedBonus() const
 	return speedBonusTable[level];
 }
 
+// attack
+float PlayerFSM::GetAttackRangeBonus() const
+{
+	int level = GameManager::Get().skillTree[SkillType::AttackRangeUp].unlockLevel;
+	switch (level)
+	{
+	case 1: return 50.0f;   // 0.5f;
+	case 2: return 100.0f;  // 1.0f;
+	case 3: return 150.0f;  // 1.5f;
+	default: return 0.0f;
+	}
+}
 
 // *-------------- [ Collider ] --------------*
 

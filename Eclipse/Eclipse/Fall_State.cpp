@@ -4,6 +4,7 @@
 #include "Jump_State.h"
 #include "Attack_State.h"
 #include "BulletTime_State.h"
+#include "Hanging_State.h"
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
@@ -14,7 +15,6 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "Hanging_State.h"
 
 
 void Fall_State::Enter(MovementFSM* fsm)
@@ -24,7 +24,6 @@ void Fall_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
 
     // 애니메이션 재생
-    // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Fall", true);
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
 }
 
@@ -38,7 +37,6 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Jump ] 해금 유무 확인
-    // if (!GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra)) return;
     if (GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra) &&
         fsm->GetPlayerFSM()->canDoubleJump &&
         !fsm->GetPlayerFSM()->GetIsGround() &&
@@ -63,35 +61,6 @@ void Fall_State::Update(MovementFSM* fsm)
             return;
         }
     }
-
-    //// [ Attack / Bullet ]
-    //if (Input::GetKey(VK_LBUTTON))
-    //{
-    //    if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
-
-    //    fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
-
-    //    // [ BulletTime ]
-    //    if (fsm->GetPlayerFSM()->CanAttack() &&
-    //        fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold)
-    //    {
-    //        // fsm->GetPlayerFSM()->UseAttack();  // 공격 기회 사용
-    //        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
-    //    }
-    //}
-    //else
-    //{
-    //    // [ Attack ]
-    //    if (fsm->GetPlayerFSM()->CanAttack() &&
-    //        fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold)
-    //    {
-    //        // fsm->GetPlayerFSM()->UseAttack();  // 공격 기회 사용
-    //        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
-    //    }
-
-    //    // 초기화
-    //    fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
-    //}
 }
 
 void Fall_State::FixedUpdate(MovementFSM* fsm) 
