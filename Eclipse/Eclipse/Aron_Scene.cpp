@@ -513,43 +513,7 @@ void Aron_Scene::Exit()
 
 void Aron_Scene::CheckCollisionAndChangeColor()
 {
-	// 스페이스바로 활성 혼문들의 투명도 변경 (간단하고 안전한 방법)
-	if (Input::GetKeyDown(VK_SPACE))
-	{
-		OutputDebugStringA("Space pressed - setting alpha to 0.5f for active Honmuns\n");
-		
-		// allHonmuns 벡터 순회 (인덱스 기반으로 안전하게)
-		for (size_t i = 0; i < allHonmuns.size(); ++i)
-		{
-			if (allHonmuns[i] && allHonmuns[i]->IsActive())
-			{
-				auto* spriteRenderer = allHonmuns[i]->GetComponent<SpriteRenderer>();
-				if (spriteRenderer)
-				{
-					spriteRenderer->alpha = 0.5f;
-				}
-			}
-		}
-	}
-
-	// 스페이스바 해제 시 투명도 복원
-	if (Input::GetKeyUp(VK_SPACE))
-	{
-		OutputDebugStringA("Space released - resetting alpha for active Honmuns\n");
-		
-		// allHonmuns 벡터 순회 (인덱스 기반으로 안전하게)
-		for (size_t i = 0; i < allHonmuns.size(); ++i)
-		{
-			if (allHonmuns[i] && allHonmuns[i]->IsActive())
-			{
-				auto* spriteRenderer = allHonmuns[i]->GetComponent<SpriteRenderer>();
-				if (spriteRenderer)
-				{
-					spriteRenderer->alpha = 1.0f;
-				}
-			}
-		}
-	}
+	// 알파값 기능 제거됨 - 이펙트로 대체 예정
 }
 
 void Aron_Scene::HandleHonmunMovement()
