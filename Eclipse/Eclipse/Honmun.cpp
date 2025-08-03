@@ -1,15 +1,16 @@
 #include "Honmun.h"
-#include "HonmunCollisionBase.h"
-#include "HonmunFSM.h"
+#include "HonmunCollisionScript.h"
+#include "HonmunAFSM.h"
 #include "HonmunAAnimatorController.h"
+#include "HonmunBFSM.h"
 #include "HonmunBAnimatorController.h"
+#include "HonmunCFSM.h"
 #include "HonmunCAnimatorController.h"
-#include "HonmunDAnimatorController.h"
 #include "../Direct2D_EngineLib/ResourceManager.h"
 #include <iostream>
 #include <exception>
 
-Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A), honmunFSM(nullptr)
+Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A), honmunAFSM(nullptr), honmunAAnimatorController(nullptr), honmunBFSM(nullptr), honmunBAnimatorController(nullptr), honmunCFSM(nullptr), honmunCAnimatorController(nullptr)
 {
 	transform = AddComponent<Transform>();
 	spriteRenderer = AddComponent<SpriteRenderer>();
@@ -17,21 +18,27 @@ Honmun::Honmun() : GameObject("Honmun"), honmunType(HonmunType::A), honmunFSM(nu
 	collider = AddComponent<CircleCollider>();
 	animator = AddComponent<Animator>();
 
-	// 새로운 충돌 시스템 추가
-	auto* collisionScript = AddComponent<HonmunCollisionBase>();
-	
-	// 통합 FSM 추가
-	honmunFSM = AddComponent<HonmunFSM>();
+	// �浹 ��ũ��Ʈ �߰�
+	auto* collisionScript = AddComponent<HonmunCollisionScript>();
 }
 
 void Honmun::Awake()
 {
-	// 애니메이션 시스템 활성화 - 통합 FSM 사용
-	SetupAnimationSystem();
+	// 임시로 모든 타입에 정적 스프라이트 사용 (애니메이션 시스템 비활성화)
+	auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
+	spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName());
+	
+	// TODO: 나중에 A 타입에 애니메이션 시스템 다시 적용
+	/*
+	if (honmunType == HonmunType::A)
+	{
+		// 애니메이션 시스템 - 안정화 후 다시 적용 예정
+	}
+	*/
 
-	// 물리 설정 - 충돌 테스트용 (중력 비활성화)
-	rigidbody->useGravity = false;  // 중력 완전 비활성화
-	rigidbody->isKinematic = true;  // 키네마틱 모드
+	// \ubb3c\ub9ac \uc124\uc815 - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 \ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc
+	rigidbody->useGravity = false;  // \uc911\ub825 \ube44\ud65c\uc131\ud654
+	rigidbody->isKinematic = true;  // \ud0a4\ub124\ub9c8\ud2f1 \ubaa8\ub4dc\ub85c \uc124\uc815
 
 	// 스프라이트 크기를 원본 크기로 설정
 	transform->SetScale(1.0f, 1.0f);
@@ -42,17 +49,11 @@ void Honmun::Awake()
 
 void Honmun::SceneStart()
 {
-	// 씬 시작 시 충돌 스크립트에 타입 설정
-	auto* collisionScript = GetComponent<HonmunCollisionBase>();
+	// �� ���� �� �浹 ��ũ��Ʈ�� Ÿ�� ����
+	auto* collisionScript = GetComponent<HonmunCollisionScript>();
 	if (collisionScript)
 	{
 		collisionScript->SetHonmunType(honmunType);
-	}
-	
-	// FSM에도 타입 설정
-	if (honmunFSM)
-	{
-		honmunFSM->SetHonmunType(honmunType);
 	}
 }
 
@@ -67,7 +68,22 @@ void Honmun::Update()
 
 Honmun::~Honmun()
 {
-	// 소멸자 - 필요시 정리 작업
+	// Clean up dynamically allocated objects
+	if (honmunAAnimatorController)
+	{
+		delete honmunAAnimatorController;
+		honmunAAnimatorController = nullptr;
+	}
+	if (honmunBAnimatorController)
+	{
+		delete honmunBAnimatorController;
+		honmunBAnimatorController = nullptr;
+	}
+	if (honmunCAnimatorController)
+	{
+		delete honmunCAnimatorController;
+		honmunCAnimatorController = nullptr;
+	}
 }
 
 void Honmun::Destroyed()
@@ -77,70 +93,108 @@ void Honmun::Destroyed()
 
 void Honmun::SetHonmunType(HonmunType type)
 {
-	// 안전한 타입 변경 추적을 위한 디버그 로그
-	std::string safeName = "UNKNOWN";
-	try {
-		if (!name.empty()) {
-			safeName = name;
-		}
-	} catch (...) {
-		OutputDebugStringA("WARNING: Exception accessing name in SetHonmunType\n");
-		safeName = "CORRUPTED_NAME";
-	}
-	
-	char debugMsg[150];
-	sprintf_s(debugMsg, "SetHonmunType called: %s changing from %d to %d\n", 
-		safeName.c_str(), static_cast<int>(honmunType), static_cast<int>(type));
-	OutputDebugStringA(debugMsg);
-	
 	honmunType = type;
 
-	// 타입별 기본 체력 설정 (HP가 1이면 2A 상태이므로 유지)
-	if (hp != 1) // 2A 상태(HP=1)가 아닌 경우에만 기본 HP 설정
+	// Clean up existing FSM components when switching types
+	if (honmunAAnimatorController && type != HonmunType::A)
 	{
-		switch (type)
-		{
-		case HonmunType::A:
-			hp = 3; // A타입: 3 HP
-			break;
-		case HonmunType::B:
-			hp = 2; // B타입: 2 HP
-			break;
-		case HonmunType::C:
-			hp = 3; // C타입: 3 HP로 수정
-			break;
-		case HonmunType::D:
-			hp = 1; // D타입: 1 HP
-			break;
-		case HonmunType::A2:
-			hp = 1; // A2타입: 1 HP (2A)
-			break;
-		case HonmunType::b:
-			hp = 1; // b타입: 1 HP (B 분열 조각)
-			break;
-		default:
-			hp = 3;
-			break;
-		}
+		delete honmunAAnimatorController;
+		honmunAAnimatorController = nullptr;
+	}
+	if (honmunBAnimatorController && type != HonmunType::B)
+	{
+		delete honmunBAnimatorController;
+		honmunBAnimatorController = nullptr;
+	}
+	if (honmunCAnimatorController && type != HonmunType::C)
+	{
+		delete honmunCAnimatorController;
+		honmunCAnimatorController = nullptr;
 	}
 
-	// 애니메이션 시스템 재설정
-	SetupAnimationSystem();
+	// Initialize FSM and Animator based on type
+	if (type == HonmunType::A)
+	{
+		// Create and setup animator controller for Honmun A
+		if (!honmunAAnimatorController)
+		{
+			honmunAAnimatorController = new HonmunAAnimatorController();
+		}
+		if (animator)
+		{
+			animator->SetController(honmunAAnimatorController);
+		}
+		
+		// Add FSM component for Honmun A if not already present
+		if (!GetComponent<HonmunAFSM>())
+		{
+			honmunAFSM = AddComponent<HonmunAFSM>();
+		}
+	}
+	else if (type == HonmunType::B)
+	{
+		// Create and setup animator controller for Honmun B
+		if (!honmunBAnimatorController)
+		{
+			honmunBAnimatorController = new HonmunBAnimatorController();
+		}
+		if (animator)
+		{
+			animator->SetController(honmunBAnimatorController);
+		}
+		
+		// Add FSM component for Honmun B if not already present
+		if (!GetComponent<HonmunBFSM>())
+		{
+			honmunBFSM = AddComponent<HonmunBFSM>();
+		}
+	}
+	else if (type == HonmunType::C)
+	{
+		// 임시로 C 타입도 정적 스프라이트만 사용 (애니메이션 시스템 안정화될 때까지)
+		if (spriteRenderer)
+		{
+			auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
+			spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName());
+		}
+		
+		// TODO: 애니메이션 시스템 안정화 후 다시 활성화
+		/*
+		// Create and setup animator controller for Honmun C
+		if (!honmunCAnimatorController)
+		{
+			honmunCAnimatorController = new HonmunCAnimatorController();
+		}
+		if (animator)
+		{
+			animator->SetController(honmunCAnimatorController);
+		}
+		
+		// Add FSM component for Honmun C if not already present
+		if (!GetComponent<HonmunCFSM>())
+		{
+			honmunCFSM = AddComponent<HonmunCFSM>();
+		}
+		*/
+	}
+	else
+	{
+		// For other types (D), use static sprites
+		if (spriteRenderer)
+		{
+			auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
+			spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName());
+		}
+	}
 
 	// 타입 변경 시 콜라이더 재설정
 	SetupColliderForType();
 	
-	// 충돌 스크립트에 타입 설정
-	auto* collisionScript = GetComponent<HonmunCollisionBase>();
+	// �浹 ��ũ��Ʈ���� Ÿ�� ����
+	auto* collisionScript = GetComponent<HonmunCollisionScript>();
 	if (collisionScript)
 	{
 		collisionScript->SetHonmunType(type);
-	}
-	
-	// FSM에 타입 설정
-	if (honmunFSM)
-	{
-		honmunFSM->SetHonmunType(type);
 	}
 }
 
@@ -176,8 +230,6 @@ std::string Honmun::GetTexturePath()
 	case HonmunType::B: return "../Resource/Aron/Honmun_b.png";
 	case HonmunType::C: return "../Resource/Aron/Honmun_c.png";
 	case HonmunType::D: return "../Resource/Aron/Honmun_d.png";
-	case HonmunType::A2: return "../Resource/Aron/Honmun_a.png"; // A2도 A 텍스처 사용
-	case HonmunType::b: return "../Resource/Aron/Honmun_b.png"; // 소문자 b도 B 텍스처 사용
 	default: return "../Resource/Aron/Honmun_a.png";
 	}
 }
@@ -186,13 +238,11 @@ std::string Honmun::GetSpriteName()
 {
 	switch (honmunType)
 	{
-	case HonmunType::A: return "Honmun_A_0";  // 첫 번째 프레임 사용
-	case HonmunType::B: return "Honmun_B_0";  // 첫 번째 프레임 사용
-	case HonmunType::C: return "Honmun_C_0";  // 첫 번째 프레임 사용
-	case HonmunType::D: return "Honmun_D_0";  // 첫 번째 프레임 사용
-	case HonmunType::A2: return "Honmun_A2_0"; // A2 전용 스프라이트
-	case HonmunType::b: return "Honmun_b_0";  // 소문자 b 전용 스프라이트
-	default: return "Honmun_A_0";
+	case HonmunType::A: return "Honmun_A";
+	case HonmunType::B: return "Honmun_B";
+	case HonmunType::C: return "Honmun_C";
+	case HonmunType::D: return "Honmun_D";
+	default: return "Honmun_A";
 	}
 }
 
@@ -215,31 +265,23 @@ void Honmun::SetupColliderForType()
 	switch (honmunType)
 	{
 	case HonmunType::A:
-		collider->radius = 35.0f; // 고정 크기로 변경
+		collider->radius = 35.0f * size;
 		collider->offset.y = -11.0f; // A타입은 살짝 아래로
 		break;
 	case HonmunType::B:
-		collider->radius = 34.0f; // 고정 크기로 변경
+		collider->radius = 34.0f * size;
 		collider->offset.y = -23.0f; // B타입은 더 아래로
 		break;
 	case HonmunType::C:
-		collider->radius = 30.0f; // 고정 크기로 변경
-		collider->offset.y = -15.0f; // C타입 위치 조정
+		collider->radius = 50.0f * size;
+		collider->offset.y = -10.0f; // C타입은 A와 비슷
 		break;
 	case HonmunType::D:
-		collider->radius = 26.0f; // 고정 크기로 변경
-		collider->offset.y = -2.0f; // D타입 위치 조정
-		break;
-	case HonmunType::A2:
-		collider->radius = 38.0f; // A2는 조금 더 크게 (10% 증가)
-		collider->offset.y = -11.0f; // A와 동일한 위치
-		break;
-	case HonmunType::b:
-		collider->radius = 30.0f; // 소문자 b 가시성 개선 (25% 증가)
-		collider->offset.y = -20.0f; // 약간 위로 올려서 더 잘 보이게
+		collider->radius = 50.0f * size;
+		collider->offset.y = -10.0f; // D타입은 A와 비슷
 		break;
 	default:
-		collider->radius = 35.0f; // 기본값도 고정 크기
+		collider->radius = 50.0f * size;
 		collider->offset.y = -10.0f;
 		break;
 	}
@@ -254,65 +296,5 @@ void Honmun::AdjustSpritePosition()
 		
 		auto currentPos = transform->GetPosition();
 		transform->SetPosition(currentPos.x, currentPos.y + offsetY);
-	}
-}
-
-void Honmun::SetupAnimationSystem()
-{
-	// JSON 파싱 에러 방지를 위해 안전한 정적 스프라이트만 사용
-	char debugMsg[100];
-	sprintf_s(debugMsg, "Loading static sprite for type %d\n", static_cast<int>(honmunType));
-	OutputDebugStringA(debugMsg);
-	
-	auto texture = ResourceManager::Get().CreateTexture2D(GetTexturePath());
-	if (spriteRenderer && texture) 
-	{
-		// 스프라이트 시트에서 첫 번째 프레임의 영역 계산 (128x128 크기)
-		D2D1_RECT_F firstFrameRect;
-		firstFrameRect.left = 0.0f;      // 첫 번째 프레임 X 시작
-		firstFrameRect.top = 0.0f;       // 첫 번째 프레임 Y 시작  
-		firstFrameRect.right = 128.0f;   // 프레임 폭
-		firstFrameRect.bottom = 128.0f;  // 프레임 높이
-		
-		// 피벗 포인트 (중앙)
-		D2D1_POINT_2F pivotPoint = { 0.5f, 0.5f };
-		
-		// 첫 번째 프레임만 잘라서 스프라이트 생성
-		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, GetSpriteName(), firstFrameRect, pivotPoint);
-		
-		sprintf_s(debugMsg, "Static sprite loaded for type %d (128x128)\n", static_cast<int>(honmunType));
-		OutputDebugStringA(debugMsg);
-	}
-	else
-	{
-		OutputDebugStringA("Failed to load texture or spriteRenderer is null\n");
-	}
-}
-
-std::string Honmun::GetSpriteSheetPath()
-{
-	switch (honmunType)
-	{
-	case HonmunType::A: return "../Resource/Aron/Data/SpriteSheet/Honmun_A_sprites.json";
-	case HonmunType::B: return "../Resource/Aron/Data/SpriteSheet/Honmun_B_sprites.json";
-	case HonmunType::C: return "../Resource/Aron/Data/SpriteSheet/Honmun_C_sprites.json";
-	case HonmunType::D: return "../Resource/Aron/Data/SpriteSheet/Honmun_D_sprites.json";
-	case HonmunType::A2: return "../Resource/Aron/Data/SpriteSheet/Honmun_A_sprites.json"; // A2는 A 사용
-	case HonmunType::b: return "../Resource/Aron/Data/SpriteSheet/Honmun_B_sprites.json"; // b는 B 사용
-	default: return "../Resource/Aron/Data/SpriteSheet/Honmun_A_sprites.json";
-	}
-}
-
-std::string Honmun::GetAnimationClipPath()
-{
-	switch (honmunType)
-	{
-	case HonmunType::A: return "../Resource/Aron/Data/AnimationClip/Honmun_A_Idle_AniClip.json";
-	case HonmunType::B: return "../Resource/Aron/Data/AnimationClip/Honmun_B_Idle_AniClip.json";
-	case HonmunType::C: return "../Resource/Aron/Data/AnimationClip/Honmun_C_Idle_AniClip.json";
-	case HonmunType::D: return "../Resource/Aron/Data/AnimationClip/Honmun_D_Idle_AniClip.json";
-	case HonmunType::A2: return "../Resource/Aron/Data/AnimationClip/Honmun_A_Idle_AniClip.json"; // A2는 A 사용
-	case HonmunType::b: return "../Resource/Aron/Data/AnimationClip/Honmun_B_Idle_AniClip.json"; // b는 B 사용
-	default: return "../Resource/Aron/Data/AnimationClip/Honmun_A_Idle_AniClip.json";
 	}
 }
