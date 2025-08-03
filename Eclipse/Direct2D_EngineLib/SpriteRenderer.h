@@ -62,7 +62,7 @@ private:
 
 public:
 	// component cycle
-	SpriteRenderer() { renderMode = RenderMode::Unlit; }
+	SpriteRenderer() = default;
 	~SpriteRenderer() override = default;
 
 	void OnEnable_Inner() override final;
