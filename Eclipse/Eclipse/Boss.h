@@ -43,6 +43,9 @@ public:
 		collider->offset = { 0,-40 };
 
 		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
+		//spriteRenderer->SetColor(0, 1, 0);
+		spriteRenderer->SetAlpha(0.8);
+		spriteRenderer->SetSaturation(0.6);
 		spriteRenderer->SetGlowAmmount(150);
 	}
 
