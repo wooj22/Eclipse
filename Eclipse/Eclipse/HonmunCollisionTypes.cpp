@@ -779,6 +779,45 @@ int HonmunCollisionTypes::GetMixedCollisionScore(HonmunType type1, int hp1, Honm
         if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 3;
         if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -2;
     }
+    else if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3))
+    {
+        // C(체력3) 관련 충돌 (기획서 C 테이블 추가)
+        if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1)) return 1;
+        if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2)) return 4;
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 2;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -1;
+    }
+    else if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2))
+    {
+        // C(체력2) 관련 충돌
+        if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1)) return 1;
+        if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2)) return 4;
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 2;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -1;
+    }
+    else if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1))
+    {
+        // C(체력1) 관련 충돌
+        if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3)) return 2;
+        if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2)) return 2;
+        if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2)) return 5;
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 2;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 2;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 3;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 3;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -2;
+    }
     
     return 0; // 해당 없는 경우
 }
