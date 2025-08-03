@@ -40,7 +40,7 @@ private:
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
 	ComPtr<ID2D1Effect> blurEffect = nullptr;
 
-	// ColorMatrix (Sprite)
+	// ColorMatrix
 	ColorRGBA colorMultiplier = { 1,1,1,1 };	// R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix
 	colorMultiplier.a, 0, 0, 0,
@@ -57,7 +57,7 @@ private:
 	float gw = 0.6094f;
 	float bw = 0.0820f;
 
-	// Blur (Sprite)
+	// Blur
 	float blurAmmount = 15.0f;
 
 public:
