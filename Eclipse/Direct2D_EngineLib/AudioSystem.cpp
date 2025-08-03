@@ -41,6 +41,6 @@ void AudioSystem::Update()
 	// update
 	for (AudioSource* component : components)
 	{
-		component->Update();
+		//component->Update();
 	}
 }
