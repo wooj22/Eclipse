@@ -513,57 +513,22 @@ void Aron_Scene::Exit()
 
 void Aron_Scene::CheckCollisionAndChangeColor()
 {
-	// 스페이스바로 활성 혼문들의 투명도 변경 (최대한 안전한 벡터 순회)
+	// 스페이스바로 활성 혼문들의 투명도 변경 (간단하고 안전한 방법)
 	if (Input::GetKeyDown(VK_SPACE))
 	{
 		OutputDebugStringA("Space pressed - setting alpha to 0.5f for active Honmuns\n");
 		
-		try {
-			// 먼저 honmunManager 업데이트가 진행 중인지 확인
-			if (honmunManager.isUpdating) {
-				OutputDebugStringA("HonmunManager is updating, skipping alpha change\n");
-				return;
-			}
-			
-			// 안전한 복사본 생성 후 순회
-			std::vector<Honmun*> allHonmunsCopy;
-			std::vector<Honmun*> activeHonmunsCopy;
-			
-			try {
-				allHonmunsCopy = allHonmuns;
-				activeHonmunsCopy = honmunManager.activeHonmuns;
-			} catch (...) {
-				OutputDebugStringA("Failed to copy vectors, skipping alpha change\n");
-				return;
-			}
-			
-			// allHonmuns 벡터 순회
-			for (auto* honmun : allHonmunsCopy)
+		// allHonmuns 벡터 순회 (인덱스 기반으로 안전하게)
+		for (size_t i = 0; i < allHonmuns.size(); ++i)
+		{
+			if (allHonmuns[i] && allHonmuns[i]->IsActive())
 			{
-				try {
-					if (honmun && honmun->IsActive())
-					{
-						honmun->SetAlpha(0.5f);
-					}
-				} catch (...) {
-					OutputDebugStringA("Exception while setting alpha on allHonmuns item\n");
+				auto* spriteRenderer = allHonmuns[i]->GetComponent<SpriteRenderer>();
+				if (spriteRenderer)
+				{
+					spriteRenderer->alpha = 0.5f;
 				}
 			}
-			
-			// 혼문 관리 시스템의 활성 혼문들도 처리
-			for (auto* honmun : activeHonmunsCopy)
-			{
-				try {
-					if (honmun && honmun->IsActive())
-					{
-						honmun->SetAlpha(0.5f);
-					}
-				} catch (...) {
-					OutputDebugStringA("Exception while setting alpha on activeHonmuns item\n");
-				}
-			}
-		} catch (...) {
-			OutputDebugStringA("Exception in Space key down processing\n");
 		}
 	}
 
@@ -572,52 +537,17 @@ void Aron_Scene::CheckCollisionAndChangeColor()
 	{
 		OutputDebugStringA("Space released - resetting alpha for active Honmuns\n");
 		
-		try {
-			// 먼저 honmunManager 업데이트가 진행 중인지 확인
-			if (honmunManager.isUpdating) {
-				OutputDebugStringA("HonmunManager is updating, skipping alpha reset\n");
-				return;
-			}
-			
-			// 안전한 복사본 생성 후 순회
-			std::vector<Honmun*> allHonmunsCopy;
-			std::vector<Honmun*> activeHonmunsCopy;
-			
-			try {
-				allHonmunsCopy = allHonmuns;
-				activeHonmunsCopy = honmunManager.activeHonmuns;
-			} catch (...) {
-				OutputDebugStringA("Failed to copy vectors, skipping alpha reset\n");
-				return;
-			}
-			
-			// allHonmuns 벡터 순회
-			for (auto* honmun : allHonmunsCopy)
+		// allHonmuns 벡터 순회 (인덱스 기반으로 안전하게)
+		for (size_t i = 0; i < allHonmuns.size(); ++i)
+		{
+			if (allHonmuns[i] && allHonmuns[i]->IsActive())
 			{
-				try {
-					if (honmun && honmun->IsActive())
-					{
-						honmun->ResetAlpha();
-					}
-				} catch (...) {
-					OutputDebugStringA("Exception while resetting alpha on allHonmuns item\n");
+				auto* spriteRenderer = allHonmuns[i]->GetComponent<SpriteRenderer>();
+				if (spriteRenderer)
+				{
+					spriteRenderer->alpha = 1.0f;
 				}
 			}
-			
-			// 혼문 관리 시스템의 활성 혼문들도 처리
-			for (auto* honmun : activeHonmunsCopy)
-			{
-				try {
-					if (honmun && honmun->IsActive())
-					{
-						honmun->ResetAlpha();
-					}
-				} catch (...) {
-					OutputDebugStringA("Exception while resetting alpha on activeHonmuns item\n");
-				}
-			}
-		} catch (...) {
-			OutputDebugStringA("Exception in Space key up processing\n");
 		}
 	}
 }
