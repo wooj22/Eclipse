@@ -1476,9 +1476,20 @@ void Aron_Scene::SpawnNewHonmun()
 		return;
 	}
 	
-	// 랜덤 타입 설정 (스코프 문제 해결을 위해 try 블록 밖으로 이동)
-	HonmunType types[] = { HonmunType::A, HonmunType::B, HonmunType::C, HonmunType::D };
-	HonmunType randomType = types[typeDis(gen)];
+	// 웨이브별 타입 제한 (FIXED: 1웨이브에서 C,D 나타나는 문제 해결)
+	HonmunType randomType;
+	if (waveData.currentWave == 1) {
+		randomType = GetRandomHonmunTypeWave1(); // A, B만
+	} else if (waveData.currentWave == 2) {
+		randomType = GetRandomHonmunTypeWave2(); // A, B, C
+	} else if (waveData.currentWave == 3) {
+		randomType = GetRandomHonmunTypeWave3(); // A, B, C, D
+	} else {
+		// 기본값 (웨이브 비활성 시)
+		HonmunType types[] = { HonmunType::A, HonmunType::B };
+		static std::uniform_int_distribution<int> defaultTypeDis(0, 1);
+		randomType = types[defaultTypeDis(gen)];
+	}
 	
 	try {
 		newHonmun->SetPosition(spawnX, spawnY);
