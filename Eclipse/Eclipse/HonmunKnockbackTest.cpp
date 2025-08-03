@@ -55,15 +55,59 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
         if (transform && rigidbody && attackTransform) {
             Vector2 attackPos = attackTransform->GetPosition();
             Vector2 targetPos = transform->GetPosition();
-            Vector2 knockbackDirection = (targetPos - attackPos).Normalized();
+            
+            // 실제 플레이어 위치 찾기 (GameObject 버전)
+            Vector2 playerPos = attackPos; // 기본값은 attackPos
+            
+            // PlayerAttackArea는 플레이어보다 Y축으로 약 50픽셀 위에 있음
+            if (gameObject->name == "PlayerAttackArea") {
+                playerPos.y = attackPos.y - 50.0f; // 플레이어 실제 위치 추정
+                
+                char posMsg[100];
+                sprintf_s(posMsg, "GameObject - Player estimated pos: (%.1f, %.1f), Attack pos: (%.1f, %.1f)\n", 
+                         playerPos.x, playerPos.y, attackPos.x, attackPos.y);
+                OutputDebugStringA(posMsg);
+            }
+            
+            // 연쇄반응을 위한 향상된 넉백 방향 계산 (실제 플레이어 위치 기준)
+            Vector2 basicDirection = (targetPos - playerPos).Normalized(); // 플레이어 기준 방향
+            
+            // 약간의 변화를 주어 연쇄반응 유도
+            static int gameObjKnockbackCounter = 0;
+            gameObjKnockbackCounter++;
+            
+            float angleVariation = (gameObjKnockbackCounter % 3 - 1) * 0.2f; // -0.2, 0, 0.2 라디안씩 변화
+            float cosVar = cos(angleVariation);
+            float sinVar = sin(angleVariation);
+            
+            // 회전 매트릭스 적용하여 약간의 방향 변화
+            Vector2 knockbackDirection;
+            knockbackDirection.x = basicDirection.x * cosVar - basicDirection.y * sinVar;
+            knockbackDirection.y = basicDirection.x * sinVar + basicDirection.y * cosVar;
+            knockbackDirection = knockbackDirection.Normalized();
+            
+            char dirMsg[100];
+            sprintf_s(dirMsg, "GameObject enhanced knockback (variation: %.2f)\n", angleVariation);
+            OutputDebugStringA(dirMsg);
             
             rigidbody->isKinematic = false;
             rigidbody->useGravity = false;
             
-            // 훨씬 더 강한 넉백 (눈에 확실히 보이도록)
-            float knockbackForce = 1500.0f; // 4배 증가!
+            // 연쇄반응을 위한 넉백 강도 조절 (GameObject 버전)
+            float baseKnockbackForce = 1500.0f;
+            float speedMultiplier = 1.0f;
+            
+            // 약간의 강도 변화로 연쇄반응 유도
+            float forceVariation = 0.8f + (gameObjKnockbackCounter % 5) * 0.1f; // 0.8~1.2 범위
+            speedMultiplier = forceVariation;
+            
+            float knockbackForce = baseKnockbackForce * speedMultiplier;
             Vector2 knockbackImpulse = knockbackDirection * knockbackForce;
-            rigidbody->AddImpulse(knockbackImpulse); // AddImpulse로 변경 (더 강함)
+            rigidbody->AddImpulse(knockbackImpulse);
+            
+            char forceMsg[100];
+            sprintf_s(forceMsg, "GameObject knockback force: %.1f (multiplier: %.2f)\n", knockbackForce, speedMultiplier);
+            OutputDebugStringA(forceMsg);
             
             OutputDebugStringA("Knockback applied to GameObject by HonmunKnockbackTest!\n");
         }
@@ -87,8 +131,40 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
     Vector2 attackPos = attackTransform->GetPosition();
     Vector2 honmunPos = honmunTransform->GetPosition();
     
-    // 밀어낼 방향 계산
-    Vector2 knockbackDirection = (honmunPos - attackPos).Normalized();
+    // 실제 플레이어 위치 찾기 (PlayerAttackArea의 부모의 부모)
+    Vector2 playerPos = attackPos; // 기본값은 attackPos
+    
+    // 이름으로 실제 플레이어 위치 추정 (PlayerAttackArea는 플레이어 위에 있음)
+    if (gameObject->name == "PlayerAttackArea") {
+        // PlayerAttackArea는 플레이어보다 Y축으로 약 50픽셀 위에 있음 (30 + 20 오프셋)
+        playerPos.y = attackPos.y - 50.0f; // 플레이어 실제 위치 추정
+        
+        char posMsg[100];
+        sprintf_s(posMsg, "Player estimated pos: (%.1f, %.1f), Attack pos: (%.1f, %.1f)\n", 
+                 playerPos.x, playerPos.y, attackPos.x, attackPos.y);
+        OutputDebugStringA(posMsg);
+    }
+    
+    // 연쇄반응을 위한 향상된 넉백 방향 계산 (실제 플레이어 위치 기준)
+    Vector2 basicDirection = (honmunPos - playerPos).Normalized(); // 플레이어 기준 방향
+    
+    // 약간의 변화를 주어 연쇄반응 유도 (너무 평행하게 날아가지 않도록)
+    static int knockbackCounter = 0;
+    knockbackCounter++;
+    
+    float angleVariation = (knockbackCounter % 3 - 1) * 0.2f; // -0.2, 0, 0.2 라디안씩 변화
+    float cosVar = cos(angleVariation);
+    float sinVar = sin(angleVariation);
+    
+    // 회전 매트릭스 적용하여 약간의 방향 변화
+    Vector2 knockbackDirection;
+    knockbackDirection.x = basicDirection.x * cosVar - basicDirection.y * sinVar;
+    knockbackDirection.y = basicDirection.x * sinVar + basicDirection.y * cosVar;
+    knockbackDirection = knockbackDirection.Normalized();
+    
+    char dirMsg[100];
+    sprintf_s(dirMsg, "Enhanced knockback direction applied (variation: %.2f)\n", angleVariation);
+    OutputDebugStringA(dirMsg);
     
     // 안전한 Rigidbody 접근 (양우정님 가이드)
     auto* honmunRb = otherHonmun->GetComponent<Rigidbody>();
@@ -98,12 +174,23 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
         honmunRb->isKinematic = false;
         honmunRb->useGravity = false;
         
-        // 훨씬 더 강한 넉백 (눈에 확실히 보이도록)
-        float knockbackForce = 1500.0f; // 4배 증가!
-        Vector2 knockbackImpulse = knockbackDirection * knockbackForce;
-        honmunRb->AddImpulse(knockbackImpulse); // AddImpulse로 변경 (더 강함)
+        // 연쇄반응을 위한 넉백 강도 조절
+        float baseKnockbackForce = 1500.0f;
+        float speedMultiplier = 1.0f;
         
-        OutputDebugStringA("Knockback applied to Honmun by HonmunKnockbackTest!\n");
+        // 약간의 강도 변화로 연쇄반응 유도 (다른 속도로 날아가게)
+        float forceVariation = 0.8f + (knockbackCounter % 5) * 0.1f; // 0.8~1.2 범위
+        speedMultiplier = forceVariation;
+        
+        float knockbackForce = baseKnockbackForce * speedMultiplier;
+        Vector2 knockbackImpulse = knockbackDirection * knockbackForce;
+        honmunRb->AddImpulse(knockbackImpulse);
+        
+        char forceMsg[100];
+        sprintf_s(forceMsg, "Honmun knockback force: %.1f (multiplier: %.2f)\n", knockbackForce, speedMultiplier);
+        OutputDebugStringA(forceMsg);
+        
+        OutputDebugStringA("Natural knockback applied to Honmun by HonmunKnockbackTest!\n");
     }
     else
     {

@@ -16,24 +16,51 @@ HonmunCollisionBase::~HonmunCollisionBase()
 
 void HonmunCollisionBase::Awake()
 {
-    // Get component references
-    honmun = dynamic_cast<Honmun*>(gameObject);
-    transform = gameObject->GetComponent<Transform>();
-    rigidbody = gameObject->GetComponent<Rigidbody>();
-    spriteRenderer = gameObject->GetComponent<SpriteRenderer>();
+    // 안전한 gameObject 접근 체크
+    if (!gameObject) {
+        OutputDebugStringA("CRITICAL ERROR: gameObject is null in HonmunCollisionBase::Awake\n");
+        return;
+    }
     
-    // Initialize properties
-    if (honmun)
-    {
-        honmunType = honmun->GetHonmunType();
-        health = honmun->GetHP();
-        currentSize = honmun->GetSize();
+    try {
+        // Get component references with safety checks
+        honmun = dynamic_cast<Honmun*>(gameObject);
+        transform = gameObject->GetComponent<Transform>();
+        rigidbody = gameObject->GetComponent<Rigidbody>();
+        spriteRenderer = gameObject->GetComponent<SpriteRenderer>();
         
-        // 디버그: 혼문 충돌 스크립트 초기화 확인
-        char debugMsg[100];
-        sprintf_s(debugMsg, "HonmunCollisionBase Awake: Type %d, Name: %s\n", 
-                 static_cast<int>(honmunType), gameObject->name.c_str());
-        OutputDebugStringA(debugMsg);
+        // Initialize properties with safety checks
+        if (honmun)
+        {
+            honmunType = honmun->GetHonmunType();
+            health = honmun->GetHP();
+            currentSize = honmun->GetSize();
+            
+            // 안전한 이름 접근 with 디버그 로그
+            std::string safeName = "UNKNOWN";
+            try {
+                if (!gameObject->name.empty()) {
+                    safeName = gameObject->name;
+                }
+            } catch (...) {
+                OutputDebugStringA("WARNING: Exception accessing gameObject->name in Awake\n");
+                safeName = "CORRUPTED_NAME";
+            }
+            
+            char debugMsg[150];
+            sprintf_s(debugMsg, "HonmunCollisionBase Awake: Type %d, Name: %s\n", 
+                     static_cast<int>(honmunType), safeName.c_str());
+            OutputDebugStringA(debugMsg);
+        } else {
+            OutputDebugStringA("ERROR: Failed to cast gameObject to Honmun in Awake\n");
+        }
+        
+    } catch (...) {
+        OutputDebugStringA("EXCEPTION: Critical error in HonmunCollisionBase::Awake\n");
+        // 기본값으로 초기화
+        honmunType = HonmunType::A;
+        health = 3;
+        currentSize = 1.0f;
     }
 }
 

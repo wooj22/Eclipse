@@ -132,17 +132,22 @@ void HonmunCollisionEffects::AbsorbNearbyEnemies(HonmunCollisionBase* script, co
 
 void HonmunCollisionEffects::BounceAway(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, const ContactInfo& contact)
 {
-    // 물리 기반 튕김 (Rigidbody 사용)
+    // 물리 기반 튕김 (Rigidbody 사용) - 연쇄반응을 위한 차등 속도
     auto* rb1 = script->GetRigidbody();
     auto* rb2 = otherScript->GetRigidbody();
     
     if (rb1 && rb2)
     {
         Vector2 direction = (script->GetTransform()->GetPosition() - otherScript->GetTransform()->GetPosition()).Normalized();
-        float bounceForce = 200.0f;
         
-        rb1->AddForce(direction * bounceForce);
-        rb2->AddForce(direction * -bounceForce);
+        // 연쇄반응을 위해 서로 다른 힘 적용 (만날 수 있도록)
+        float bounceForce1 = 180.0f; // 첫 번째 객체는 조금 약하게
+        float bounceForce2 = 220.0f; // 두 번째 객체는 조금 강하게
+        
+        rb1->AddForce(direction * bounceForce1);
+        rb2->AddForce(direction * -bounceForce2);
+        
+        OutputDebugStringA("Differential bounce applied for chain reactions!\n");
     }
 }
 
@@ -153,10 +158,12 @@ void HonmunCollisionEffects::BounceAwayKinematic(HonmunCollisionBase* script, Ho
     Vector2 pos2 = otherScript->GetTransform()->GetPosition();
     
     Vector2 direction = (pos1 - pos2).Normalized();
-    float pushDistance = 20.0f; // 연쇄 작용을 위해 거리 단축 (30→20)
+    // 연쇄반응을 위해 차등 거리 적용
+    float pushDistance1 = 15.0f; // 첫 번째 객체는 가까이
+    float pushDistance2 = 25.0f; // 두 번째 객체는 멀리
     
-    script->GetTransform()->SetPosition(pos1 + direction * pushDistance);
-    otherScript->GetTransform()->SetPosition(pos2 - direction * pushDistance);
+    script->GetTransform()->SetPosition(pos1 + direction * pushDistance1);
+    otherScript->GetTransform()->SetPosition(pos2 - direction * pushDistance2);
     
     OutputDebugStringA("Kinematic bounce applied!\n");
 }
@@ -266,10 +273,14 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
         sprintf_s(typeDebugMsg, "Creating fragment with original type: %d\n", static_cast<int>(originalType));
         OutputDebugStringA(typeDebugMsg);
         
-        // Scene에서 직접 생성하는 방법 시도
+        // Scene에서 안전한 객체 생성
         auto* currentScene = SceneManager::Get().GetCurrentScene();
-        auto* fragmentHonmun = currentScene->CreateObject<Honmun>(spawnPos);
+        if (!currentScene) {
+            OutputDebugStringA("CRITICAL ERROR: CurrentScene is null during fragment creation\n");
+            continue;
+        }
         
+        auto* fragmentHonmun = currentScene->CreateObject<Honmun>(spawnPos);
         if (!fragmentHonmun) {
             char errorMsg[100];
             sprintf_s(errorMsg, "ERROR: Failed to create fragment %d\n", i+1);
@@ -277,24 +288,30 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
             continue;
         }
         
-        // B 분열 조각은 소문자 'b' 타입으로 설정
-        HonmunType fragmentType = (originalType == HonmunType::B) ? HonmunType::b : originalType;
-        
-        // 이름 설정 (플레이어 공격 감지용)
-        char fragmentName[50];
-        sprintf_s(fragmentName, "Honmun_b_Fragment_%d", i+1);
-        fragmentHonmun->name = fragmentName;
-        
-        fragmentHonmun->SetHonmunType(fragmentType);
-        
-        char successMsg[100];
-        sprintf_s(successMsg, "SUCCESS: Fragment %d created and type set to %d (b-type)\n", i+1, static_cast<int>(fragmentType));
-        OutputDebugStringA(successMsg);
-        
-        auto* fragmentScript = fragmentHonmun->GetComponent<HonmunCollisionBase>();
-        if (!fragmentScript) {
-            fragmentScript = fragmentHonmun->AddComponent<HonmunCollisionBase>();
-        }
+        try {
+            // B 분열 조각은 소문자 'b' 타입으로 설정
+            HonmunType fragmentType = (originalType == HonmunType::B) ? HonmunType::b : originalType;
+            
+            // 이름 설정 (플레이어 공격 감지용)
+            char fragmentName[50];
+            sprintf_s(fragmentName, "Honmun_b_Fragment_%d", i+1);
+            fragmentHonmun->name = fragmentName;
+            
+            fragmentHonmun->SetHonmunType(fragmentType);
+            
+            char successMsg[100];
+            sprintf_s(successMsg, "SUCCESS: Fragment %d created and type set to %d (b-type)\n", i+1, static_cast<int>(fragmentType));
+            OutputDebugStringA(successMsg);
+            
+            auto* fragmentScript = fragmentHonmun->GetComponent<HonmunCollisionBase>();
+            if (!fragmentScript) {
+                fragmentScript = fragmentHonmun->AddComponent<HonmunCollisionBase>();
+                if (!fragmentScript) {
+                    OutputDebugStringA("ERROR: Failed to add collision script to fragment\n");
+                    fragmentHonmun->SetActive(false);
+                    continue;
+                }
+            }
         // b 조각 가시성 개선: 크기 1.3배 증가
         float enhancedBSize = newSize * 1.3f;
         fragmentScript->SetCurrentSize(enhancedBSize);
@@ -349,16 +366,24 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
         // 드래곤볼 스타일: b 조각들 간의 연쇄 충돌 활성화 (향후 구현)
         // fragmentScript->SetCanChainCollide(true); // b+b 연쇄 충돌 허용 - TODO: 구현 필요
         
-        // 혼문 관리 시스템에 추가
-        auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
-        if (aronScene) {
-            aronScene->AddHonmunToManager(fragmentHonmun);
+            // 혼문 관리 시스템에 안전하게 추가
+            auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+            if (aronScene) {
+                aronScene->AddHonmunToManager(fragmentHonmun);
+            }
+            
+            char debugMsg[150];
+            sprintf_s(debugMsg, "Fragment %d: pos(%.1f,%.1f), size %.2f, speed x%.1f, added to manager\n", 
+                     i+1, spawnPos.x, spawnPos.y, newSize, speedMultiplier);
+            OutputDebugStringA(debugMsg);
+            
+        } catch (...) {
+            OutputDebugStringA("EXCEPTION: Error configuring fragment, cleaning up...\n");
+            if (fragmentHonmun) {
+                fragmentHonmun->SetActive(false);
+            }
+            continue;
         }
-        
-        char debugMsg[150];
-        sprintf_s(debugMsg, "Fragment %d: pos(%.1f,%.1f), size %.2f, speed x%.1f, added to manager\n", 
-                 i+1, spawnPos.x, spawnPos.y, newSize, speedMultiplier);
-        OutputDebugStringA(debugMsg);
     }
     
     // 연쇄 충돌 최적화: 2차 분해 제거하고 b+b 연쇄 충돌에 집중

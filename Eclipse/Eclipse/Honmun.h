@@ -9,12 +9,12 @@
 
 enum class HonmunType
 {
-	A,
-	A2,  // 2A (A+A 합체 결과)
-	B,
-	b,   // B 분열 조각
-	C,
-	D
+	A,    // 0
+	B,    // 1 ← B를 1번으로 이동!
+	C,    // 2 
+	D,    // 3
+	A2,   // 4 (2A - A+A 합체 결과)
+	b     // 5 (B 분열 조각)
 };
 
 class HonmunFSM;

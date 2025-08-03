@@ -8,16 +8,52 @@ void HonmunCollisionTypes::ProcessCollision(HonmunCollisionBase* script1, Honmun
 {
     OutputDebugStringA("=== ProcessCollision STARTED ===\n");
     
+    // Enhanced safety checks with comprehensive validation
+    if (!script1 || !script2) {
+        OutputDebugStringA("ERROR: Null script detected in ProcessCollision\n");
+        return;
+    }
+    
+    // Check if objects are still valid before processing
+    if (script1->IsMarkedForDestroy() || script2->IsMarkedForDestroy()) {
+        OutputDebugStringA("WARNING: One or both objects already marked for destruction\n");
+        return;
+    }
+    
+    // Validate game objects and components
+    if (!script1->gameObject || !script2->gameObject ||
+        !script1->GetHonmun() || !script2->GetHonmun() ||
+        !script1->GetTransform() || !script2->GetTransform()) {
+        OutputDebugStringA("ERROR: Invalid game objects or components detected\n");
+        return;
+    }
+    
     if (!ShouldProcessCollision(script1, script2)) 
     {
         OutputDebugStringA("ShouldProcessCollision returned false, exiting\n");
         return;
     }
 
-    HonmunType type1 = script1->GetHonmunType();
-    HonmunType type2 = script2->GetHonmunType();
-    int hp1 = script1->GetHealth();
-    int hp2 = script2->GetHealth();
+    // Safe type and health access with additional validation
+    HonmunType type1, type2;
+    int hp1, hp2;
+    
+    try {
+        type1 = script1->GetHonmunType();
+        type2 = script2->GetHonmunType();
+        hp1 = script1->GetHealth();
+        hp2 = script2->GetHealth();
+        
+        // Validate enum values are within range
+        if (static_cast<int>(type1) < 0 || static_cast<int>(type1) > 5 ||
+            static_cast<int>(type2) < 0 || static_cast<int>(type2) > 5) {
+            OutputDebugStringA("ERROR: Invalid HonmunType enum values detected\n");
+            return;
+        }
+    } catch (...) {
+        OutputDebugStringA("ERROR: Exception while accessing type/health data\n");
+        return;
+    }
     
     char debugMsg[200];
     sprintf_s(debugMsg, "ProcessCollision: Type1=%d(HP=%d), Type2=%d(HP=%d)\n", 
@@ -102,10 +138,15 @@ void HonmunCollisionTypes::HandleIgnisReaction(HonmunCollisionBase* script, Honm
     float originalSize = script->GetCurrentSize();
     float mergedSize = originalSize * 1.1f; // 10% 증가
     
-    // 중간지점에 새로운 2A 생성
+    // 중간지점에 새로운 2A 생성 (안전한 객체 생성)
     auto* merged2A = currentScene->CreateObject<Honmun>(mergePoint);
-    if (merged2A)
+    if (!merged2A)
     {
+        OutputDebugStringA("CRITICAL ERROR: Failed to create merged 2A object!\n");
+        return;
+    }
+    
+    try {
         merged2A->name = "Honmun_A2_Merged";
         merged2A->SetHonmunType(HonmunType::A2); // 명확하게 A2 타입으로
         merged2A->SetSize(mergedSize);
@@ -113,10 +154,16 @@ void HonmunCollisionTypes::HandleIgnisReaction(HonmunCollisionBase* script, Honm
         // 2A의 핵심: HP가 1
         merged2A->SetHP(1);
         
-        // 충돌 스크립트 강제 설정
+        // 충돌 스크립트 안전한 설정
         auto* merged2AScript = merged2A->GetComponent<HonmunCollisionBase>();
         if (!merged2AScript) {
             merged2AScript = merged2A->AddComponent<HonmunCollisionBase>();
+            if (!merged2AScript) {
+                OutputDebugStringA("CRITICAL ERROR: Failed to add collision script to 2A!\n");
+                // 생성된 객체 정리
+                merged2A->SetActive(false);
+                return;
+            }
         }
         merged2AScript->SetCurrentSize(mergedSize);
         merged2AScript->SetHealth(1); // 2A는 HP 1
@@ -151,27 +198,71 @@ void HonmunCollisionTypes::HandleIgnisReaction(HonmunCollisionBase* script, Honm
                  static_cast<int>(merged2AScript->GetHonmunType()));
         OutputDebugStringA(typeDebugMsg);
         
-        // 혼문 관리 시스템에 추가
+        // 혼문 관리 시스템에 안전하게 추가 (프레임 지연)
         auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
         if (aronScene) {
-            aronScene->AddHonmunToManager(merged2A);
-            OutputDebugStringA("A2 added to HonmunManager\n");
+            // 다음 프레임에 추가하도록 지연 (초기화 완료 보장)
+            try {
+                aronScene->AddHonmunToManager(merged2A);
+                OutputDebugStringA("A2 added to HonmunManager successfully\n");
+            } catch (...) {
+                OutputDebugStringA("EXCEPTION: Failed to add A2 to manager\n");
+                // 실패 시 A2 객체 정리
+                if (merged2A) {
+                    merged2A->SetActive(false);
+                }
+                return;
+            }
+        } else {
+            OutputDebugStringA("WARNING: Failed to cast to Aron_Scene for A2 manager addition\n");
         }
-    }
-    else
-    {
-        OutputDebugStringA("ERROR: Failed to create merged 2A!\n");
+        
+        OutputDebugStringA("SUCCESS: New 2A created and configured successfully!\n");
+        
+    } catch (...) {
+        OutputDebugStringA("EXCEPTION: Error configuring merged 2A object, cleaning up...\n");
+        if (merged2A) {
+            merged2A->SetActive(false);
+        }
+        return;
     }
     
-    // 원본 두 A 모두 파괴 (관리 시스템에서도 제거)
-    OutputDebugStringA("Destroying both original A objects...\n");
-    if (aronScene) {
-        aronScene->RemoveHonmunFromManager(script->GetHonmun());
-        aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
-        OutputDebugStringA("Original A objects removed from HonmunManager\n");
+    // 원본 두 A 모두 안전하게 파괴 (지연된 파괴)
+    OutputDebugStringA("Safely destroying both original A objects...\n");
+    try {
+        // 먼저 충돌 처리 비활성화
+        script->SetProcessingReaction(true);
+        otherScript->SetProcessingReaction(true);
+        
+        // 관리자에서 먼저 제거
+        if (aronScene) {
+            try {
+                if (script->GetHonmun()) {
+                    aronScene->RemoveHonmunFromManager(script->GetHonmun());
+                }
+                if (otherScript->GetHonmun()) {
+                    aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
+                }
+                OutputDebugStringA("Original A objects removed from HonmunManager\n");
+            } catch (...) {
+                OutputDebugStringA("EXCEPTION: Error removing from manager\n");
+            }
+        }
+        
+        // 마크 후 안전하게 파괴 (다음 프레임에 실제 파괴)
+        if (!script->IsMarkedForDestroy()) {
+            script->DestroyThis();
+            OutputDebugStringA("First A object marked for destruction\n");
+        }
+        if (!otherScript->IsMarkedForDestroy()) {
+            otherScript->DestroyThis();
+            OutputDebugStringA("Second A object marked for destruction\n");
+        }
+        
+        OutputDebugStringA("Original A objects marked for destruction safely\n");
+    } catch (...) {
+        OutputDebugStringA("EXCEPTION: Error during A object destruction, continuing...\n");
     }
-    script->DestroyThis();
-    otherScript->DestroyThis();
     
     OutputDebugStringA("=== A + A TRUE MERGE COMPLETED ===\n");
 }
@@ -671,25 +762,52 @@ void HonmunCollisionTypes::HandleDMixedCollision(HonmunCollisionBase* script, Ho
 void HonmunCollisionTypes::HandleDestruction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, 
                                            bool destroyScript, bool destroyOther, Aron_Scene* aronScene)
 {
-    if (destroyScript)
-    {
-        if (aronScene && script->GetHonmun()) {
-            aronScene->RemoveHonmunFromManager(script->GetHonmun());
-        }
-        if (!script->IsMarkedForDestroy()) {
+    OutputDebugStringA("=== HandleDestruction STARTED ===\n");
+    
+    try {
+        if (destroyScript && script && !script->IsMarkedForDestroy())
+        {
+            OutputDebugStringA("Safely destroying first script object...\n");
+            
+            // 1. 관리자에서 제거
+            if (aronScene && script->GetHonmun()) {
+                aronScene->RemoveHonmunFromManager(script->GetHonmun());
+            }
+            
+            // 2. 충돌 관리자에서 제거
+            if (script->GetCollisionManager()) {
+                script->GetCollisionManager()->UnregisterHonmun(script);
+            }
+            
+            // 3. 파괴 마크
             script->DestroyThis();
+            OutputDebugStringA("First script object marked for destruction\n");
         }
+        
+        if (destroyOther && otherScript && !otherScript->IsMarkedForDestroy())
+        {
+            OutputDebugStringA("Safely destroying second script object...\n");
+            
+            // 1. 관리자에서 제거
+            if (aronScene && otherScript->GetHonmun()) {
+                aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
+            }
+            
+            // 2. 충돌 관리자에서 제거
+            if (otherScript->GetCollisionManager()) {
+                otherScript->GetCollisionManager()->UnregisterHonmun(otherScript);
+            }
+            
+            // 3. 파괴 마크
+            otherScript->DestroyThis();
+            OutputDebugStringA("Second script object marked for destruction\n");
+        }
+        
+    } catch (...) {
+        OutputDebugStringA("EXCEPTION in HandleDestruction: Continuing safely...\n");
     }
     
-    if (destroyOther)
-    {
-        if (aronScene && otherScript->GetHonmun()) {
-            aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
-        }
-        if (!otherScript->IsMarkedForDestroy()) {
-            otherScript->DestroyThis();
-        }
-    }
+    OutputDebugStringA("=== HandleDestruction COMPLETED ===\n");
 }
 
 bool HonmunCollisionTypes::ShouldProcessCollision(HonmunCollisionBase* script1, HonmunCollisionBase* script2)

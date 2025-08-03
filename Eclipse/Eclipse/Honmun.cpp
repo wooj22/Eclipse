@@ -77,6 +77,22 @@ void Honmun::Destroyed()
 
 void Honmun::SetHonmunType(HonmunType type)
 {
+	// 안전한 타입 변경 추적을 위한 디버그 로그
+	std::string safeName = "UNKNOWN";
+	try {
+		if (!name.empty()) {
+			safeName = name;
+		}
+	} catch (...) {
+		OutputDebugStringA("WARNING: Exception accessing name in SetHonmunType\n");
+		safeName = "CORRUPTED_NAME";
+	}
+	
+	char debugMsg[150];
+	sprintf_s(debugMsg, "SetHonmunType called: %s changing from %d to %d\n", 
+		safeName.c_str(), static_cast<int>(honmunType), static_cast<int>(type));
+	OutputDebugStringA(debugMsg);
+	
 	honmunType = type;
 
 	// 타입별 기본 체력 설정 (HP가 1이면 2A 상태이므로 유지)
@@ -87,20 +103,20 @@ void Honmun::SetHonmunType(HonmunType type)
 		case HonmunType::A:
 			hp = 3; // A타입: 3 HP
 			break;
-		case HonmunType::A2:
-			hp = 1; // A2타입: 1 HP (2A)
-			break;
 		case HonmunType::B:
 			hp = 2; // B타입: 2 HP
-			break;
-		case HonmunType::b:
-			hp = 1; // b타입: 1 HP (B 분열 조각)
 			break;
 		case HonmunType::C:
 			hp = 3; // C타입: 3 HP로 수정
 			break;
 		case HonmunType::D:
 			hp = 1; // D타입: 1 HP
+			break;
+		case HonmunType::A2:
+			hp = 1; // A2타입: 1 HP (2A)
+			break;
+		case HonmunType::b:
+			hp = 1; // b타입: 1 HP (B 분열 조각)
 			break;
 		default:
 			hp = 3;
@@ -157,11 +173,11 @@ std::string Honmun::GetTexturePath()
 	switch (honmunType)
 	{
 	case HonmunType::A: return "../Resource/Aron/Honmun_a.png";
-	case HonmunType::A2: return "../Resource/Aron/Honmun_a.png"; // A2도 A 텍스처 사용
 	case HonmunType::B: return "../Resource/Aron/Honmun_b.png";
-	case HonmunType::b: return "../Resource/Aron/Honmun_b.png"; // 소문자 b도 B 텍스처 사용
 	case HonmunType::C: return "../Resource/Aron/Honmun_c.png";
 	case HonmunType::D: return "../Resource/Aron/Honmun_d.png";
+	case HonmunType::A2: return "../Resource/Aron/Honmun_a.png"; // A2도 A 텍스처 사용
+	case HonmunType::b: return "../Resource/Aron/Honmun_b.png"; // 소문자 b도 B 텍스처 사용
 	default: return "../Resource/Aron/Honmun_a.png";
 	}
 }
@@ -171,11 +187,11 @@ std::string Honmun::GetSpriteName()
 	switch (honmunType)
 	{
 	case HonmunType::A: return "Honmun_A_0";  // 첫 번째 프레임 사용
-	case HonmunType::A2: return "Honmun_A2_0"; // A2 전용 스프라이트
 	case HonmunType::B: return "Honmun_B_0";  // 첫 번째 프레임 사용
-	case HonmunType::b: return "Honmun_b_0";  // 소문자 b 전용 스프라이트
 	case HonmunType::C: return "Honmun_C_0";  // 첫 번째 프레임 사용
 	case HonmunType::D: return "Honmun_D_0";  // 첫 번째 프레임 사용
+	case HonmunType::A2: return "Honmun_A2_0"; // A2 전용 스프라이트
+	case HonmunType::b: return "Honmun_b_0";  // 소문자 b 전용 스프라이트
 	default: return "Honmun_A_0";
 	}
 }
@@ -202,17 +218,9 @@ void Honmun::SetupColliderForType()
 		collider->radius = 35.0f; // 고정 크기로 변경
 		collider->offset.y = -11.0f; // A타입은 살짝 아래로
 		break;
-	case HonmunType::A2:
-		collider->radius = 38.0f; // A2는 조금 더 크게 (10% 증가)
-		collider->offset.y = -11.0f; // A와 동일한 위치
-		break;
 	case HonmunType::B:
 		collider->radius = 34.0f; // 고정 크기로 변경
 		collider->offset.y = -23.0f; // B타입은 더 아래로
-		break;
-	case HonmunType::b:
-		collider->radius = 30.0f; // 소문자 b 가시성 개선 (25% 증가)
-		collider->offset.y = -20.0f; // 약간 위로 올려서 더 잘 보이게
 		break;
 	case HonmunType::C:
 		collider->radius = 30.0f; // 고정 크기로 변경
@@ -221,6 +229,14 @@ void Honmun::SetupColliderForType()
 	case HonmunType::D:
 		collider->radius = 26.0f; // 고정 크기로 변경
 		collider->offset.y = -2.0f; // D타입 위치 조정
+		break;
+	case HonmunType::A2:
+		collider->radius = 38.0f; // A2는 조금 더 크게 (10% 증가)
+		collider->offset.y = -11.0f; // A와 동일한 위치
+		break;
+	case HonmunType::b:
+		collider->radius = 30.0f; // 소문자 b 가시성 개선 (25% 증가)
+		collider->offset.y = -20.0f; // 약간 위로 올려서 더 잘 보이게
 		break;
 	default:
 		collider->radius = 35.0f; // 기본값도 고정 크기
@@ -281,6 +297,8 @@ std::string Honmun::GetSpriteSheetPath()
 	case HonmunType::B: return "../Resource/Aron/Data/SpriteSheet/Honmun_B_sprites.json";
 	case HonmunType::C: return "../Resource/Aron/Data/SpriteSheet/Honmun_C_sprites.json";
 	case HonmunType::D: return "../Resource/Aron/Data/SpriteSheet/Honmun_D_sprites.json";
+	case HonmunType::A2: return "../Resource/Aron/Data/SpriteSheet/Honmun_A_sprites.json"; // A2는 A 사용
+	case HonmunType::b: return "../Resource/Aron/Data/SpriteSheet/Honmun_B_sprites.json"; // b는 B 사용
 	default: return "../Resource/Aron/Data/SpriteSheet/Honmun_A_sprites.json";
 	}
 }
@@ -293,6 +311,8 @@ std::string Honmun::GetAnimationClipPath()
 	case HonmunType::B: return "../Resource/Aron/Data/AnimationClip/Honmun_B_Idle_AniClip.json";
 	case HonmunType::C: return "../Resource/Aron/Data/AnimationClip/Honmun_C_Idle_AniClip.json";
 	case HonmunType::D: return "../Resource/Aron/Data/AnimationClip/Honmun_D_Idle_AniClip.json";
+	case HonmunType::A2: return "../Resource/Aron/Data/AnimationClip/Honmun_A_Idle_AniClip.json"; // A2는 A 사용
+	case HonmunType::b: return "../Resource/Aron/Data/AnimationClip/Honmun_B_Idle_AniClip.json"; // b는 B 사용
 	default: return "../Resource/Aron/Data/AnimationClip/Honmun_A_Idle_AniClip.json";
 	}
 }

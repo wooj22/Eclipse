@@ -506,7 +506,7 @@ void Aron_Scene::Update()
 
 void Aron_Scene::Exit()
 {
-	OutputDebugStringA("�� ��������� ��");
+	OutputDebugStringA("Aron_Scene Exit called\n");
 	// game object -> destroy()
 	__super::Exit();
 }
@@ -1374,45 +1374,61 @@ void Aron_Scene::SpawnNewHonmun()
 	float spawnX = xDis(gen);
 	float spawnY = yDis(gen);
 	
-	// 새 혼문 생성
+	// 새 혼문 안전한 생성
 	auto* newHonmun = CreateObject<Honmun>();
-	newHonmun->SetPosition(spawnX, spawnY);
+	if (!newHonmun) {
+		OutputDebugStringA("CRITICAL ERROR: Failed to create new Honmun object\n");
+		return;
+	}
 	
-	// 랜덤 타입 설정
+	// 랜덤 타입 설정 (스코프 문제 해결을 위해 try 블록 밖으로 이동)
 	HonmunType types[] = { HonmunType::A, HonmunType::B, HonmunType::C, HonmunType::D };
 	HonmunType randomType = types[typeDis(gen)];
-	newHonmun->SetHonmunType(randomType);
 	
-	// 이름 설정
-	static int spawnCounter = 0;
-	char honmunName[50];
-	sprintf_s(honmunName, "Honmun_Auto_%d", ++spawnCounter);
-	newHonmun->name = honmunName;
-	
-	// 물리 설정
-	auto* rb = newHonmun->GetComponent<Rigidbody>();
-	if (rb) {
-		rb->isKinematic = false;
-		rb->useGravity = false;
+	try {
+		newHonmun->SetPosition(spawnX, spawnY);
+		newHonmun->SetHonmunType(randomType);
+		
+		// 이름 설정
+		static int spawnCounter = 0;
+		char honmunName[50];
+		sprintf_s(honmunName, "Honmun_Auto_%d", ++spawnCounter);
+		newHonmun->name = honmunName;
+		
+		// 물리 설정
+		auto* rb = newHonmun->GetComponent<Rigidbody>();
+		if (rb) {
+			rb->isKinematic = false;
+			rb->useGravity = false;
+		}
+		
+		auto* collider = newHonmun->GetComponent<CircleCollider>();
+		if (collider) {
+			collider->isTrigger = true;
+		}
+		
+		// 관리 리스트에 안전하게 추가
+		AddHonmunToManager(newHonmun);
+		
+		char debugMsg[100];
+		sprintf_s(debugMsg, "Spawned new Honmun: %s at (%.1f, %.1f), Type: %d\n", 
+			honmunName, spawnX, spawnY, static_cast<int>(randomType));
+		OutputDebugStringA(debugMsg);
+		
+	} catch (...) {
+		OutputDebugStringA("EXCEPTION: Error setting up Honmun, destroying...\n");
+		if (newHonmun) {
+			newHonmun->SetActive(false);
+		}
 	}
-	
-	auto* collider = newHonmun->GetComponent<CircleCollider>();
-	if (collider) {
-		collider->isTrigger = true;
-	}
-	
-	// 관리 리스트에 추가
-	AddHonmunToManager(newHonmun);
-	
-	char debugMsg[100];
-	sprintf_s(debugMsg, "Spawned new Honmun: %s at (%.1f, %.1f), Type: %d\n", 
-		honmunName, spawnX, spawnY, static_cast<int>(randomType));
-	OutputDebugStringA(debugMsg);
 }
 
 void Aron_Scene::AddHonmunToManager(Honmun* honmun)
 {
-	if (!honmun) return;
+	if (!honmun) {
+		OutputDebugStringA("ERROR: AddHonmunToManager called with null honmun\n");
+		return;
+	}
 	
 	// 동시 수정 방지
 	if (honmunManager.isUpdating) {
@@ -1420,18 +1436,32 @@ void Aron_Scene::AddHonmunToManager(Honmun* honmun)
 		return;
 	}
 	
+	// 안전한 이름 접근 with try-catch
+	std::string safeName = "UNKNOWN";
+	try {
+		if (!honmun->name.empty()) {
+			safeName = honmun->name;
+		}
+	} catch (...) {
+		OutputDebugStringA("WARNING: Exception accessing honmun->name\n");
+		safeName = "CORRUPTED_NAME";
+	}
+	
 	honmunManager.activeHonmuns.push_back(honmun);
 	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
 	
 	char debugMsg[150];
 	sprintf_s(debugMsg, "AddHonmunToManager: %s added, current count: %d\n", 
-		honmun->name.c_str(), honmunManager.currentCount);
+		safeName.c_str(), honmunManager.currentCount);
 	OutputDebugStringA(debugMsg);
 }
 
 void Aron_Scene::RemoveHonmunFromManager(Honmun* honmun)
 {
-	if (!honmun) return;
+	if (!honmun) {
+		OutputDebugStringA("ERROR: RemoveHonmunFromManager called with null honmun\n");
+		return;
+	}
 	
 	// 동시 수정 방지: 업데이트 중이면 잠시 대기
 	if (honmunManager.isUpdating) {
@@ -1439,18 +1469,37 @@ void Aron_Scene::RemoveHonmunFromManager(Honmun* honmun)
 		return;
 	}
 	
-	// 모든 인스턴스 제거 (중복이 있을 수 있음)
-	honmunManager.activeHonmuns.erase(
-		std::remove(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun),
-		honmunManager.activeHonmuns.end()
-	);
+	// 안전한 이름 접근 with try-catch
+	std::string safeName = "UNKNOWN";
+	try {
+		if (!honmun->name.empty()) {
+			safeName = honmun->name;
+		}
+	} catch (...) {
+		OutputDebugStringA("WARNING: Exception accessing honmun->name in removal\n");
+		safeName = "CORRUPTED_NAME";
+	}
 	
-	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
-	
-	char debugMsg[150];
-	sprintf_s(debugMsg, "RemoveHonmunFromManager: %s removed, current count: %d\n", 
-		honmun->name.c_str(), honmunManager.currentCount);
-	OutputDebugStringA(debugMsg);
+	// 안전한 벡터 조작
+	try {
+		// 모든 인스턴스 제거 (중복이 있을 수 있음)
+		honmunManager.activeHonmuns.erase(
+			std::remove(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun),
+			honmunManager.activeHonmuns.end()
+		);
+		
+		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+		
+		char debugMsg[150];
+		sprintf_s(debugMsg, "RemoveHonmunFromManager: %s removed, current count: %d\n", 
+			safeName.c_str(), honmunManager.currentCount);
+		OutputDebugStringA(debugMsg);
+		
+	} catch (...) {
+		OutputDebugStringA("EXCEPTION: Error during honmun removal from manager\n");
+		// 안전하게 카운트 재계산
+		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	}
 }
 
 bool Aron_Scene::IsOutOfBounds(Honmun* honmun)
