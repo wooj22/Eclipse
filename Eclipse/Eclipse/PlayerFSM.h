@@ -50,6 +50,8 @@ private:
 
 	float speedDownRate = 1.0; 
 
+	bool isInvincible = false;	// dash 무적 상태 
+
 	// move
 	float inputX, inputY; // x : 왼쪽 -1 
 	bool isGround;
@@ -99,6 +101,7 @@ public:
 	float maxAttackDistance = 300.0f;       // 공격 시, 최대 이동 거리
 	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
 
+
 public:
 	// getter
 	bool GetIsGround() const { return isGround; }
@@ -113,6 +116,7 @@ public:
 	float GetJumpForce() const { return jumpForce; }
 	float GetInputX() const { return inputX; }
 	float GetCurSpeed() const { return curSpeed; }
+	float GetWalkSpeed() const { return walkSpeed; }
 
 	// TODO : 매개변수로 감속율 받는 함수 (우정)
 	// 감속률만 받도록.  쿨타임 후, 원래 속도 복원 
@@ -128,6 +132,8 @@ public:
 	void SetisBulletFliping(bool isBulletTime) { isBulletFliping = isBulletTime; }
 	bool GetisBulletFlipX() const { return isBulletFlipX; } // true 왼쪽 
 	void SetisBulletFlipX(bool isBulletX) { isBulletFlipX = isBulletX; }
+	void SetInvincible(bool value) { isInvincible = value; } // 무적 상태 여부 
+	bool GetIsInvincible() const { return isInvincible; }
 
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 	AnimatorController* GetAnimatorController() const { return animatorController; }

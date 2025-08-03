@@ -13,6 +13,7 @@
 #include "GameManager.h"
 #include "PlayUI.h"
 #include "Chat.h"
+#include "Dash_State.h"
 
 
 // 컴포넌트 활성화 시점
@@ -55,7 +56,7 @@ void PlayerFSM::Start()
 	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
 	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
 	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	// GameManager::Get().LevelUpSkill(SkillType::Dash);
+	GameManager::Get().LevelUpSkill(SkillType::Dash);
 }
 
 void PlayerFSM::Update()
@@ -140,18 +141,23 @@ void PlayerFSM::FlipXSetting()
 
 void PlayerFSM::SpeedSetting()
 {
+	// Dash 상태일 땐 curSpeed 계산 X
+	if (movementFSM && movementFSM->IsInState<Dash_State>()) return;
+
 	if (isA || isD)
 	{
-		float moveBonus = GetMoveSpeedBonus(); // 스킬 해금에 따른 추가 이동 속도
-		if (!isShift)
-			curSpeed = (walkSpeed + moveBonus) * speedDownRate;
-		else
-			curSpeed = (dashSpeed + moveBonus) * speedDownRate;
+		curSpeed = (walkSpeed + GetMoveSpeedBonus()) * speedDownRate;
+
+		//float moveBonus = GetMoveSpeedBonus(); // 스킬 해금에 따른 추가 이동 속도
+		//if (!isShift)
+		//	curSpeed = (walkSpeed + moveBonus) * speedDownRate;
+		//else
+		//	curSpeed = (dashSpeed + moveBonus) * speedDownRate;
 	}
 	else curSpeed = 0;
 
-	//std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
-	//OutputDebugStringA(debugStr.c_str());
+	std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
+	OutputDebugStringA(debugStr.c_str());
 }
 
 
