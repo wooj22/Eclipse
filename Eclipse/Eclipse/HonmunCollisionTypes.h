@@ -32,7 +32,8 @@ private:
     void ApplyPenetration(HonmunCollisionBase* script1, HonmunCollisionBase* script2);
     
     // 기획서 기반 새로운 헬퍼 메소드들
-    int GetDestructionScore(HonmunType type);
+    int GetDestructionScore(HonmunType type, int hp);
+    int GetMixedCollisionScore(HonmunType type1, int hp1, HonmunType type2, int hp2);
     void ApplyPhysicalEffect(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, HonmunType type1, HonmunType type2);
     void HandleDMixedCollision(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, class Aron_Scene* aronScene);
     void HandleDestruction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, 

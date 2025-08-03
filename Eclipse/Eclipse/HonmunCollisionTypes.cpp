@@ -578,49 +578,41 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
     int newHp1 = hp1;
     int newHp2 = hp2;
     
-    // 기획서 규칙에 따른 혼합 충돌 처리
-    if ((type1 == HonmunType::A && type2 == HonmunType::B) || 
-        (type1 == HonmunType::B && type2 == HonmunType::A) ||
-        (type1 == HonmunType::A2 && type2 == HonmunType::B) ||
-        (type1 == HonmunType::B && type2 == HonmunType::A2) ||
-        (type1 == HonmunType::A && type2 == HonmunType::C) ||
-        (type1 == HonmunType::C && type2 == HonmunType::A) ||
-        (type1 == HonmunType::A2 && type2 == HonmunType::C) ||
-        (type1 == HonmunType::C && type2 == HonmunType::A2) ||
-        (type1 == HonmunType::A && type2 == HonmunType::b) ||
-        (type1 == HonmunType::b && type2 == HonmunType::A) ||
-        (type1 == HonmunType::A2 && type2 == HonmunType::b) ||
-        (type1 == HonmunType::b && type2 == HonmunType::A2) ||
-        (type1 == HonmunType::B && type2 == HonmunType::C) ||
-        (type1 == HonmunType::C && type2 == HonmunType::B) ||
-        (type1 == HonmunType::C && type2 == HonmunType::b) ||
-        (type1 == HonmunType::b && type2 == HonmunType::C))
+    // 기획서 정밀한 혼합 충돌 점수 테이블 적용
+    scoreToAdd = GetMixedCollisionScore(type1, hp1, type2, hp2);
+    if (scoreToAdd != 0)
     {
-        // 기획서: 충돌 시 1점, 피격 시 체력 -1
         shouldAddScore = true;
-        scoreToAdd = 1;
-        newHp1 = hp1 - 1;
+        newHp1 = hp1 - 1;  // 기본적으로 체력 -1
         newHp2 = hp2 - 1;
         
-        OutputDebugStringA("Mixed collision: +1 point, both HP-1\n");
+        char mixedMsg[100];
+        sprintf_s(mixedMsg, "Mixed collision: +%d points (기획서 테이블 기준)\n", scoreToAdd);
+        OutputDebugStringA(mixedMsg);
     }
     
-    // 점수 및 체력 변화 적용
+    // 점수 및 체력 변화 적용 (중복 방지)
+    bool scoreAlreadyApplied = false;
     if (shouldAddScore && aronScene)
     {
         aronScene->AddScore(scoreToAdd);
+        scoreAlreadyApplied = true;
+        
+        char scoreMsg[100];
+        sprintf_s(scoreMsg, "Mixed collision score: +%d points\n", scoreToAdd);
+        OutputDebugStringA(scoreMsg);
     }
     
     // 체력 변화 적용 및 파괴 체크
     if (newHp1 <= 0)
     {
         shouldDestroyScript = true;
-        if (aronScene)
+        if (aronScene && !scoreAlreadyApplied)  // 중복 점수 방지
         {
-            int destroyScore = GetDestructionScore(type1);
+            int destroyScore = GetDestructionScore(type1, hp1);  // 원래 체력으로 계산
             aronScene->AddScore(destroyScore);
             char scoreMsg[100];
-            sprintf_s(scoreMsg, "Destruction bonus: +%d points for type %d\n", destroyScore, static_cast<int>(type1));
+            sprintf_s(scoreMsg, "Destruction bonus: +%d points for type %d (original HP:%d)\n", destroyScore, static_cast<int>(type1), hp1);
             OutputDebugStringA(scoreMsg);
         }
     }
@@ -632,12 +624,12 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
     if (newHp2 <= 0)
     {
         shouldDestroyOther = true;
-        if (aronScene)
+        if (aronScene && !scoreAlreadyApplied)  // 중복 점수 방지
         {
-            int destroyScore = GetDestructionScore(type2);
+            int destroyScore = GetDestructionScore(type2, hp2);  // 원래 체력으로 계산
             aronScene->AddScore(destroyScore);
             char scoreMsg[100];
-            sprintf_s(scoreMsg, "Destruction bonus: +%d points for type %d\n", destroyScore, static_cast<int>(type2));
+            sprintf_s(scoreMsg, "Destruction bonus: +%d points for type %d (original HP:%d)\n", destroyScore, static_cast<int>(type2), hp2);
             OutputDebugStringA(scoreMsg);
         }
     }
@@ -656,18 +648,87 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
     }
 }
 
-int HonmunCollisionTypes::GetDestructionScore(HonmunType type)
+int HonmunCollisionTypes::GetDestructionScore(HonmunType type, int hp)
 {
-    // 기획서의 "파괴 시 점수를 획득하는 경우"
+    // 기획서의 체력별 파괴 점수 (기획서 테이블 기준)
     switch (type)
     {
-    case HonmunType::A: return 1;
-    case HonmunType::A2: return 3; // 2A = 3점
-    case HonmunType::B: return 1;
-    case HonmunType::b: return 1;
-    case HonmunType::C: return 1;
+    case HonmunType::A:
+        if (hp == 3) return 0;      // A(체력3) 파괴 시 0점
+        else if (hp == 2) return 0; // A(체력2) 파괴 시 0점  
+        else if (hp == 1) return 2; // A(체력1) 파괴 시 2점
+        break;
+    case HonmunType::A2: return 4;  // 2A(체력1) 파괴 시 4점
+    case HonmunType::B:
+        if (hp == 3) return 0;      // B(체력3) 파괴 시 0점
+        else if (hp == 2) return 0; // B(체력2) 파괴 시 0점
+        else if (hp == 1) return 3; // B(체력1) 파괴 시 3점
+        break;
+    case HonmunType::b: return 3;   // b(체력1) 파괴 시 3점
+    case HonmunType::C:
+        if (hp == 3) return 0;      // C(체력3) 파괴 시 0점
+        else if (hp == 2) return 0; // C(체력2) 파괴 시 0점
+        else if (hp == 1) return 2; // C(체력1) 파괴 시 2점
+        break;
+    case HonmunType::D: return -2;  // D(체력1) 파괴 시 -2점
     default: return 0;
     }
+    return 0;
+}
+
+int HonmunCollisionTypes::GetMixedCollisionScore(HonmunType type1, int hp1, HonmunType type2, int hp2)
+{
+    // 기획서 A 관련 혼합 충돌 테이블 정확히 적용
+    if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3))
+    {
+        // A(체력3) 관련 충돌
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -1;
+    }
+    else if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2))
+    {
+        // A(체력2) 관련 충돌
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -1;
+    }
+    else if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1))
+    {
+        // A(체력1) 관련 충돌
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 2;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 2;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 3;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 3;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -2;
+    }
+    else if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2))
+    {
+        // 2A(체력1) 관련 충돌
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 4;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 4;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 5;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 5;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 4;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 4;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 5;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -2;
+    }
+    
+    return 0; // 해당 없는 경우
 }
 
 void HonmunCollisionTypes::ApplyPhysicalEffect(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, HonmunType type1, HonmunType type2)
