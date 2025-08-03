@@ -69,16 +69,40 @@ void HonmunCollisionBase::Update()
         }
     }
     
-    // Handle physics transition for split fragments - 충돌 테스트용으로 비활성화
+    // Handle physics transition for split fragments - 포켓볼 스타일 퍼짐 후 정착
     if (needsPhysicsTransition)
     {
         splitPhysicsTimer += Time::GetDeltaTime();
-        if (splitPhysicsTimer >= 0.1f) // 0.1초 후 물리 전환
+        
+        // 연쇄 충돌 최적화: 빠른 정착으로 연쇄 충돌 촉진
+        if (rigidbody && splitPhysicsTimer > 0.2f) // 0.2초 후부터 감속 시작 (연쇄 충돌용)
+        {
+            Vector2 currentVel = rigidbody->velocity;
+            float decelerationRate = 0.85f; // 매 프레임 15% 감속 (더 빠른 정착)
+            rigidbody->velocity = currentVel * decelerationRate;
+            
+            // 속도가 충분히 느려지면 정착 (연쇄 충돌을 위해 빠르게)
+            if (currentVel.Magnitude() < 30.0f) // 임계값 증가 (더 빠른 정착)
+            {
+                rigidbody->useGravity = false;   // 중력 비활성화 유지
+                rigidbody->isKinematic = true;   // 키네마틱 모드로 전환 (충돌 감지 가능)
+                rigidbody->velocity = Vector2(0, 0); // 속도 완전 정지
+                
+                OutputDebugStringA("Fragment settled quickly for CHAIN COLLISION\n");
+                needsPhysicsTransition = false;
+                splitPhysicsTimer = 0.0f;
+            }
+        }
+        
+        // 최대 1초 후 강제 정착 (연쇄 충돌을 위해 빠르게)
+        if (splitPhysicsTimer >= 1.0f)
         {
             if (rigidbody)
             {
-                rigidbody->useGravity = false; // 충돌 테스트용으로 중력 비활성화
-                rigidbody->isKinematic = true; // 키네마틱 모드 유지 (충돌 테스트용)
+                rigidbody->useGravity = false;
+                rigidbody->isKinematic = true;
+                rigidbody->velocity = Vector2(0, 0);
+                OutputDebugStringA("Fragment force-settled after 1 second for CHAIN COLLISION\n");
             }
             needsPhysicsTransition = false;
             splitPhysicsTimer = 0.0f;
@@ -98,6 +122,13 @@ void HonmunCollisionBase::Update()
 
 void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
+    // Early safety checks before any processing
+    if (markedForDestroy)
+    {
+        OutputDebugStringA("OnTriggerEnter: This object is marked for destruction, ignoring collision\n");
+        return;
+    }
+    
     // 모든 충돌 시도를 디버그로 기록
     char allDebugMsg[200];
     sprintf_s(allDebugMsg, "*** TRIGGER DETECTED *** %s collides with %s\n", 
@@ -111,7 +142,13 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
         return;
     }
     
-    // Get other collision script
+    // Get other collision script with additional safety checks
+    if (!other || !other->gameObject)
+    {
+        OutputDebugStringA("Other collider or gameObject is null!\n");
+        return;
+    }
+    
     auto* otherHonmun = dynamic_cast<Honmun*>(other->gameObject);
     if (!otherHonmun) 
     {
@@ -126,10 +163,24 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
         return;
     }
     
+    // Check if other object is marked for destruction
+    if (otherScript->IsMarkedForDestroy())
+    {
+        OutputDebugStringA("Other object is marked for destruction, ignoring collision\n");
+        return;
+    }
+    
     // Prevent processing if either is already processing
     if (isProcessingReaction || otherScript->IsProcessingReaction()) 
     {
         OutputDebugStringA("Collision already processing, skipping\n");
+        return;
+    }
+    
+    // Additional component validity checks
+    if (!honmun || !otherHonmun)
+    {
+        OutputDebugStringA("One or both Honmun objects are null, aborting collision\n");
         return;
     }
     
@@ -139,7 +190,7 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
               static_cast<int>(honmunType), static_cast<int>(otherScript->GetHonmunType()));
     OutputDebugStringA(debugMsg);
     
-    // Set processing flag BEFORE calling ProcessCollision (but after the check)
+    // Set processing flag BEFORE calling ProcessCollision (but after all checks)
     isProcessingReaction = true;
     otherScript->SetProcessingReaction(true);
     
@@ -155,9 +206,12 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
         OutputDebugStringA("No collision types handler!\n");
     }
     
-    // Set cooldown
-    reactionCooldown = 0.1f;
-    otherScript->reactionCooldown = 0.1f;
+    // Set cooldown (only if objects are still valid)
+    if (!markedForDestroy && !otherScript->IsMarkedForDestroy())
+    {
+        reactionCooldown = 0.1f;
+        otherScript->reactionCooldown = 0.1f;
+    }
 }
 
 void HonmunCollisionBase::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
@@ -180,7 +234,15 @@ void HonmunCollisionBase::SetHonmunType(HonmunType type)
 
 void HonmunCollisionBase::DestroyThis()
 {
+    if (markedForDestroy) return; // 이미 파괴 표시됨
+    
     markedForDestroy = true;
+    
+    char debugMsg[100];
+    sprintf_s(debugMsg, "DestroyThis called for %s\n", 
+              gameObject ? gameObject->name.c_str() : "null");
+    OutputDebugStringA(debugMsg);
+    
     if (honmun)
     {
         honmun->Destroy();

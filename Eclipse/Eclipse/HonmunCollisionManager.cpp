@@ -9,14 +9,29 @@ std::vector<HonmunCollisionBase*> HonmunCollisionManager::GetNearbyHonmuns(Honmu
 {
     std::vector<HonmunCollisionBase*> nearbyHonmuns;
     
-    if (!script || !script->GetTransform()) return nearbyHonmuns;
+    if (!script || !script->GetTransform()) {
+        OutputDebugStringA("GetNearbyHonmuns: Invalid script or transform\n");
+        return nearbyHonmuns;
+    }
+    
+    // 동시 수정 중이면 빈 벡터 반환
+    if (isUpdating) {
+        OutputDebugStringA("GetNearbyHonmuns: Registry is updating, returning empty list\n");
+        return nearbyHonmuns;
+    }
     
     Vector2 centerPos = script->GetTransform()->GetPosition();
     
-    // 등록된 모든 혼문들 검사
-    for (auto* honmun : registeredHonmuns)
+    // 안전한 복사본 생성으로 iterator 무효화 방지
+    std::vector<HonmunCollisionBase*> registeredCopy = registeredHonmuns;
+    
+    // 복사본을 안전하게 순회
+    for (auto* honmun : registeredCopy)
     {
         if (!IsValidHonmun(honmun) || honmun == script) continue;
+        
+        // transform 유효성 재검사
+        if (!honmun->GetTransform()) continue;
         
         Vector2 honmunPos = honmun->GetTransform()->GetPosition();
         float distance = CalculateDistance(centerPos, honmunPos);
@@ -26,6 +41,11 @@ std::vector<HonmunCollisionBase*> HonmunCollisionManager::GetNearbyHonmuns(Honmu
             nearbyHonmuns.push_back(honmun);
         }
     }
+    
+    char debugMsg[100];
+    sprintf_s(debugMsg, "GetNearbyHonmuns: Found %zu nearby objects within %.1f radius\n", 
+             nearbyHonmuns.size(), radius);
+    OutputDebugStringA(debugMsg);
     
     return nearbyHonmuns;
 }
@@ -96,6 +116,12 @@ void HonmunCollisionManager::RegisterHonmun(HonmunCollisionBase* script)
 {
     if (!script) return;
     
+    // 동시 수정 중이면 스킵
+    if (isUpdating) {
+        OutputDebugStringA("RegisterHonmun: Registry is updating, skipping registration\n");
+        return;
+    }
+    
     // 중복 등록 방지
     auto it = std::find(registeredHonmuns.begin(), registeredHonmuns.end(), script);
     if (it == registeredHonmuns.end())
@@ -115,12 +141,34 @@ void HonmunCollisionManager::UnregisterHonmun(HonmunCollisionBase* script)
 
 void HonmunCollisionManager::CleanupDestroyedObjects()
 {
+    // 동시 수정 중이면 스킵
+    if (isUpdating) {
+        OutputDebugStringA("CleanupDestroyedObjects: Registry is updating, skipping cleanup\n");
+        return;
+    }
+    
+    // 안전한 정리를 위해 플래그 설정
+    isUpdating = true;
+    
+    auto originalSize = registeredHonmuns.size();
+    
     // 유효하지 않은 객체들 제거
     registeredHonmuns.erase(
         std::remove_if(registeredHonmuns.begin(), registeredHonmuns.end(),
             [this](HonmunCollisionBase* script) { return !IsValidHonmun(script); }),
         registeredHonmuns.end()
     );
+    
+    auto newSize = registeredHonmuns.size();
+    if (newSize < originalSize) {
+        char debugMsg[100];
+        sprintf_s(debugMsg, "CleanupDestroyedObjects: Cleaned %zu invalid objects, remaining: %zu\n", 
+                 originalSize - newSize, newSize);
+        OutputDebugStringA(debugMsg);
+    }
+    
+    // 플래그 해제
+    isUpdating = false;
 }
 
 bool HonmunCollisionManager::IsOutOfBounds(const Vector2& position)
@@ -142,15 +190,32 @@ Vector2 HonmunCollisionManager::GetCameraBounds()
 
 void HonmunCollisionManager::RemoveFromRegistry(HonmunCollisionBase* script)
 {
-    auto it = std::find(registeredHonmuns.begin(), registeredHonmuns.end(), script);
-    if (it != registeredHonmuns.end())
-    {
-        registeredHonmuns.erase(it);
-        
+    // 동시 수정 중이면 스킵
+    if (isUpdating) {
+        OutputDebugStringA("RemoveFromRegistry: Registry is updating, skipping removal\n");
+        return;
+    }
+    
+    // 안전한 제거를 위해 플래그 설정
+    isUpdating = true;
+    
+    // 안전한 제거: erase-remove idiom 사용
+    auto originalSize = registeredHonmuns.size();
+    registeredHonmuns.erase(
+        std::remove(registeredHonmuns.begin(), registeredHonmuns.end(), script),
+        registeredHonmuns.end()
+    );
+    
+    auto newSize = registeredHonmuns.size();
+    if (newSize < originalSize) {
         char debugMsg[100];
-        sprintf_s(debugMsg, "Honmun unregistered - Remaining count: %zu\n", registeredHonmuns.size());
+        sprintf_s(debugMsg, "Honmun unregistered - Remaining count: %zu (removed %zu instances)\n", 
+                 newSize, originalSize - newSize);
         OutputDebugStringA(debugMsg);
     }
+    
+    // 플래그 해제
+    isUpdating = false;
 }
 
 bool HonmunCollisionManager::IsValidHonmun(HonmunCollisionBase* script)

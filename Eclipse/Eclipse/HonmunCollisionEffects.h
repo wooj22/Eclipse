@@ -26,6 +26,9 @@ public:
     void BounceOppositeDirections(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
     void PushLeftRight(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
     void PenetrateWithoutOverlap(HonmunCollisionBase* script, HonmunCollisionBase* otherScript);
+    
+    // Dragon Ball/Pokeball style chain reaction effects
+    void ScheduleSecondaryFragmentation(const Vector2& centerPoint, int secondaryCount, float secondarySize, float secondarySpeed);
 
 private:
     // Helper methods

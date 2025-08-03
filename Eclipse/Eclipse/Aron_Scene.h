@@ -81,7 +81,7 @@ private:
 	
 	// 웨이브 시스템
 	struct WaveSpawnData {
-		float spawnY = 800.0f;          // 카메라 위 스폰 위치
+		float spawnY = 1200.0f;         // 카메라 훨씬 위 스폰 위치 (더 넓게)
 		float groundY = -350.0f;        // 바닥 위치 (1층 위쪽) - 충돌 테스트용
 		float floor2Y = -180.0f;        // 2층 위치
 		int totalSpawnCount = 20;       // 총 스폰할 혼문 수
@@ -89,7 +89,7 @@ private:
 		float spawnInterval = 1.0f;     // 스폰 간격 (초)
 		float lastSpawnTime = 0.0f;     // 마지막 스폰 시간
 		bool waveActive = false;        // 웨이브 활성 상태
-		int currentWave = 1;            // 현재 웨이브 번호 (1 또는 2)
+		int currentWave = 1;            // 현재 웨이브 번호 (1, 2, 3)
 		std::vector<Honmun*> spawnedHonmuns; // 스폰된 혼문들
 	} waveData;
 	
@@ -97,11 +97,12 @@ private:
 	struct HonmunManagerData {
 		int targetCount = 20;           // 목표 혼문 수 (항상 20개 유지)
 		int currentCount = 0;           // 현재 화면의 혼문 수
-		float mapBoundaryX = 1280.0f;   // 맵 X 경계 (화면 밖)
-		float mapBoundaryY = 720.0f;    // 맵 Y 경계 (화면 밖)
+		float mapBoundaryX = 1280.0f;   // 맵 X 경계 (고정 크기)
+		float mapBoundaryY = 720.0f;    // 맵 Y 경계 (고정 크기)
 		float respawnInterval = 0.5f;   // 혼문 보충 간격 (초)
 		float lastRespawnTime = 0.0f;   // 마지막 보충 시간
 		std::vector<Honmun*> activeHonmuns; // 활성 혼문 리스트
+		bool isUpdating = false;        // 업데이트 중 플래그 (동시 수정 방지)
 	} honmunManager;
 	
 	// collision detection function
@@ -118,13 +119,17 @@ public:
 	// 웨이브 시스템 함수들
 	void StartWave1();
 	void StartWave2();
+	void StartWave3();
 	void UpdateWaveSystem();
 	void SpawnHonmun();
 	void SpawnHonmunWave2();  // 웨이브 2용 스폰 (A, B, C 포함)
+	void SpawnHonmunWave3();  // 웨이브 3용 스폰 (A, B, C, D 포함)
 	bool IsHonmunOnGround(Honmun* honmun);
 	void CheckHonmunsReachFloor1();
 	HonmunType GetRandomHonmunType();
+	HonmunType GetRandomHonmunTypeWave1();  // 웨이브 1용 (A, B 만)
 	HonmunType GetRandomHonmunTypeWave2();  // 웨이브 2용 (A, B, C 포함)
+	HonmunType GetRandomHonmunTypeWave3();  // 웨이브 3용 (A, B, C, D 포함)
 	void ResetScene();  // 씬 완전 초기화
 	
 	// 혼문 관리 시스템 함수들

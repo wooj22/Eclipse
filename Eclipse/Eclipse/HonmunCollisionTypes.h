@@ -30,4 +30,11 @@ private:
     void ApplyOppositeForces(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force);
     void ApplyLeftRightPush(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force);
     void ApplyPenetration(HonmunCollisionBase* script1, HonmunCollisionBase* script2);
+    
+    // 기획서 기반 새로운 헬퍼 메소드들
+    int GetDestructionScore(HonmunType type);
+    void ApplyPhysicalEffect(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, HonmunType type1, HonmunType type2);
+    void HandleDMixedCollision(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, class Aron_Scene* aronScene);
+    void HandleDestruction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, 
+                          bool destroyScript, bool destroyOther, class Aron_Scene* aronScene);
 };

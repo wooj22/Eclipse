@@ -18,16 +18,12 @@ void Aron_Scene::Awake()
 	cam->AddComponent<Transform>();
 	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
 	
-	// boundary condition (Moon_Scene과 동일)
+	// boundary condition (고정 맵 크기)
 	Rect mapRect;
 	mapRect.size = { 2560, 1920 };
 	
-	// camera target을 일단 주석처리 (수동 카메라 이동을 위해)
-	// camCompo->SetTarget(player->transform);
-	// camCompo->SetTargetTraceSpeed(200.0f);
-	// camCompo->SetTargetTraceLimitX(30.0f);
-	// camCompo->SetTargetTraceLimitY(100.0f);
-	// camCompo->SetMapCondition(mapRect);
+	// camera target 설정 (넓은 맵 탐험을 위해 플레이어 추적)
+	// 플레이어 생성 후 SetTarget 호출 필요 - Start()에서 처리
 
 	// create gameobject
 	// title sample
@@ -52,7 +48,7 @@ void Aron_Scene::Awake()
 	debug_text->rectTransform->SetSize(600, 50);
 	debug_text->screenTextRenderer->SetFontSize(20);
 	debug_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-	debug_text->screenTextRenderer->SetText(L"SPACE: Wave 1 | 2: Wave 2 | WASD: Camera | C: Reset Cam | Q/E: Select | R: Reset Scene | 3: Restart");
+	debug_text->screenTextRenderer->SetText(L"Q: Wave 1 | E: Wave 2 | T: Wave 3 | Ctrl+UHJK: Camera | C: Reset Cam | SPACE: Alpha | ZX: Select | R: Reset");
 
 	// [ \ud63c\ubb38 enemies ] - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 A, B \uc544\uc774\ud15c \uc5ec\ub7ec \uac1c \uc0dd\uc131
 	// A \ud0c0\uc785 \ud63c\ubb38 4\uac1c
@@ -203,12 +199,12 @@ void Aron_Scene::Awake()
 	moon_ground_sr->layer = 0;
 
 	ground_col = ground->AddComponent<BoxCollider>();
-	ground_col->size = { 1110.0f, 30.0f };
+	ground_col->size = { 2000.0f, 30.0f }; // 충돌 연구를 위해 더욱 넓게
 
 	// [ wall_r ] - Moon_Scene과 동일
 	wall_r = CreateObject<GameObject>();
 	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(550.0f, 0.0f);
+	wall_r->AddComponent<Transform>()->SetPosition(1200.0f, 0.0f); // 충돌 연구를 위해 더욱 멀리
 
 	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
 	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
@@ -219,7 +215,7 @@ void Aron_Scene::Awake()
 	// [ wall_l ] - Moon_Scene과 동일
 	wall_l = CreateObject<GameObject>();
 	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-550.0f, 0.0f);
+	wall_l->AddComponent<Transform>()->SetPosition(-1200.0f, 0.0f); // 충돌 연구를 위해 더욱 멀리
 
 	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
 	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
@@ -230,7 +226,7 @@ void Aron_Scene::Awake()
 	// [ Platform1 ] - Moon_Scene과 동일
 	platform1 = CreateObject<GameObject>();
 	platform1->name = "Ground";
-	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -200.0f);
+	platform1->AddComponent<Transform>()->SetPosition(-600.0f, -200.0f); // 충돌 연구를 위해 더 넓게
 
 	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
 	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
@@ -242,7 +238,7 @@ void Aron_Scene::Awake()
 	// [ Platform2 ] - Moon_Scene과 동일
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
-	platform2->AddComponent<Transform>()->SetPosition(200.0f, 0.0f);
+	platform2->AddComponent<Transform>()->SetPosition(500.0f, 0.0f); // 충돌 연구를 위해 더 넓게
 
 	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
 	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
@@ -331,6 +327,26 @@ void Aron_Scene::Start()
 {
 	// game object -> SceneStart()
 	__super::Start();
+	
+	// Moon Scene과 동일한 카메라 타겟 설정
+	if (cam && player)
+	{
+		auto* camCompo = cam->GetComponent<Camera>();
+		if (camCompo)
+		{
+			camCompo->SetTarget(player->transform);
+			camCompo->SetTargetTraceSpeed(200.0f);
+			camCompo->SetTargetTraceLimitX(30.0f);
+			camCompo->SetTargetTraceLimitY(100.0f);
+			
+			// 확장된 맵 크기 설정
+			Rect mapRect;
+			mapRect.size = { 3200, 2400 }; // 충돌 연구를 위해 더 넓게
+			camCompo->SetMapCondition(mapRect);
+			
+			OutputDebugStringA("Camera target set to player (Moon Scene style)\n");
+		}
+	}
 }
 
 void Aron_Scene::Update()
@@ -356,23 +372,41 @@ void Aron_Scene::Update()
 	// 혼문 관리 시스템 업데이트
 	UpdateHonmunManager();
 
-	// 마우스 클릭 공격 처리
+	// 마우스 클릭 공격 처리 (안전한 null 체크 추가)
 	if (Input::GetMouseButtonDown(0)) // 왼쪽 마우스 버튼
 	{
-		if (player && playerAttackArea)
+		OutputDebugStringA("Mouse left click detected\n");
+		
+		if (player && player->IsActive())
 		{
 			// 플레이어 공격 활성화
 			auto* playerFSM = player->GetComponent<PlayerFSM>();
 			if (playerFSM)
 			{
 				// MovementFSM을 통한 공격 상태 전환
-				auto* movementFSM = playerFSM->GetMovementFSM();
-				if (movementFSM)
-				{
-					movementFSM->ChangeState(std::make_unique<Attack_State>());
-					OutputDebugStringA("Mouse click - Player attack triggered!\n");
+				try {
+					auto* movementFSM = playerFSM->GetMovementFSM();
+					if (movementFSM)
+					{
+						movementFSM->ChangeState(std::make_unique<Attack_State>());
+						OutputDebugStringA("Mouse click - Player attack triggered!\n");
+					}
+					else
+					{
+						OutputDebugStringA("MovementFSM is null\n");
+					}
+				} catch (...) {
+					OutputDebugStringA("Exception in mouse click attack handling\n");
 				}
 			}
+			else
+			{
+				OutputDebugStringA("PlayerFSM is null\n");
+			}
+		}
+		else
+		{
+			OutputDebugStringA("Player is null or inactive\n");
 		}
 	}
 	
@@ -402,14 +436,30 @@ void Aron_Scene::Update()
 		}
 	}
 	
+	// 웨이브 3 시작 (T키)
+	if (Input::GetKeyDown('T'))
+	{
+		if (!waveData.waveActive)
+		{
+			StartWave3();
+		}
+		else
+		{
+			OutputDebugStringA("Wave already active! Press R to reset first.\n");
+		}
+	}
+	
 	// R키로 씬 완전 초기화
 	if (Input::GetKeyDown('R'))
 	{
 		ResetScene();
 	}
 	
-	// 카메라 이동 (WASD 키)
-	HandleCameraMovement();
+	// 카메라 수동 조작 (Ctrl 키를 누르고 있을 때만)
+	if (Input::GetKey(VK_CONTROL))
+	{
+		HandleCameraMovement();
+	}
 
 	// scene change
 	if (Input::GetKeyDown('1'))
@@ -463,24 +513,112 @@ void Aron_Scene::Exit()
 
 void Aron_Scene::CheckCollisionAndChangeColor()
 {
-	// �����̽��ٸ� ������ ��� ȥ���� �������ϰ� �����
+	// 스페이스바로 활성 혼문들의 투명도 변경 (최대한 안전한 벡터 순회)
 	if (Input::GetKeyDown(VK_SPACE))
 	{
-		if (honmun_a) honmun_a->SetAlpha(0.5f);
-		if (honmun_b) honmun_b->SetAlpha(0.5f);
-		// 웨이브 1 테스트: C, D 주석처리
-		// if (honmun_c) honmun_c->SetAlpha(0.5f);
-		// if (honmun_d) honmun_d->SetAlpha(0.5f);
+		OutputDebugStringA("Space pressed - setting alpha to 0.5f for active Honmuns\n");
+		
+		try {
+			// 먼저 honmunManager 업데이트가 진행 중인지 확인
+			if (honmunManager.isUpdating) {
+				OutputDebugStringA("HonmunManager is updating, skipping alpha change\n");
+				return;
+			}
+			
+			// 안전한 복사본 생성 후 순회
+			std::vector<Honmun*> allHonmunsCopy;
+			std::vector<Honmun*> activeHonmunsCopy;
+			
+			try {
+				allHonmunsCopy = allHonmuns;
+				activeHonmunsCopy = honmunManager.activeHonmuns;
+			} catch (...) {
+				OutputDebugStringA("Failed to copy vectors, skipping alpha change\n");
+				return;
+			}
+			
+			// allHonmuns 벡터 순회
+			for (auto* honmun : allHonmunsCopy)
+			{
+				try {
+					if (honmun && honmun->IsActive())
+					{
+						honmun->SetAlpha(0.5f);
+					}
+				} catch (...) {
+					OutputDebugStringA("Exception while setting alpha on allHonmuns item\n");
+				}
+			}
+			
+			// 혼문 관리 시스템의 활성 혼문들도 처리
+			for (auto* honmun : activeHonmunsCopy)
+			{
+				try {
+					if (honmun && honmun->IsActive())
+					{
+						honmun->SetAlpha(0.5f);
+					}
+				} catch (...) {
+					OutputDebugStringA("Exception while setting alpha on activeHonmuns item\n");
+				}
+			}
+		} catch (...) {
+			OutputDebugStringA("Exception in Space key down processing\n");
+		}
 	}
 
-	// �����̽��ٸ� ���� ���� �������� ����
+	// 스페이스바 해제 시 투명도 복원
 	if (Input::GetKeyUp(VK_SPACE))
 	{
-		if (honmun_a) honmun_a->ResetAlpha();
-		if (honmun_b) honmun_b->ResetAlpha();
-		// 웨이브 1 테스트: C, D 주석처리
-		// if (honmun_c) honmun_c->ResetAlpha();
-		// if (honmun_d) honmun_d->ResetAlpha();
+		OutputDebugStringA("Space released - resetting alpha for active Honmuns\n");
+		
+		try {
+			// 먼저 honmunManager 업데이트가 진행 중인지 확인
+			if (honmunManager.isUpdating) {
+				OutputDebugStringA("HonmunManager is updating, skipping alpha reset\n");
+				return;
+			}
+			
+			// 안전한 복사본 생성 후 순회
+			std::vector<Honmun*> allHonmunsCopy;
+			std::vector<Honmun*> activeHonmunsCopy;
+			
+			try {
+				allHonmunsCopy = allHonmuns;
+				activeHonmunsCopy = honmunManager.activeHonmuns;
+			} catch (...) {
+				OutputDebugStringA("Failed to copy vectors, skipping alpha reset\n");
+				return;
+			}
+			
+			// allHonmuns 벡터 순회
+			for (auto* honmun : allHonmunsCopy)
+			{
+				try {
+					if (honmun && honmun->IsActive())
+					{
+						honmun->ResetAlpha();
+					}
+				} catch (...) {
+					OutputDebugStringA("Exception while resetting alpha on allHonmuns item\n");
+				}
+			}
+			
+			// 혼문 관리 시스템의 활성 혼문들도 처리
+			for (auto* honmun : activeHonmunsCopy)
+			{
+				try {
+					if (honmun && honmun->IsActive())
+					{
+						honmun->ResetAlpha();
+					}
+				} catch (...) {
+					OutputDebugStringA("Exception while resetting alpha on activeHonmuns item\n");
+				}
+			}
+		} catch (...) {
+			OutputDebugStringA("Exception in Space key up processing\n");
+		}
 	}
 }
 
@@ -488,13 +626,14 @@ void Aron_Scene::HandleHonmunMovement()
 {
 	float moveSpeed = 3.0f; // 키네마틱 이동 속도
 	
-	// Q/E 키로 오브젝트 선택 (벡터가 비어있지 않을 때만)
-	if (Input::GetKeyDown('Q') && !allHonmuns.empty())
+	// Z/X 키로 오브젝트 선택 (Q는 웨이브 시작과 충돌하므로 변경)
+	if (Input::GetKeyDown('Z') && !allHonmuns.empty())
 	{
 		selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
 		// 유효하지 않은 오브젝트는 건너뛰기
 		int startIndex = selectedHonmunIndex;
-		while (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive())
+		while (selectedHonmunIndex < allHonmuns.size() && 
+			   (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive()))
 		{
 			selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
 			if (selectedHonmunIndex == startIndex) break; // 무한루프 방지
@@ -503,7 +642,7 @@ void Aron_Scene::HandleHonmunMovement()
 		sprintf_s(debugMsg, "Selected Honmun index: %d\n", selectedHonmunIndex);
 		OutputDebugStringA(debugMsg);
 	}
-	if (Input::GetKeyDown('E') && !allHonmuns.empty())
+	if (Input::GetKeyDown('X') && !allHonmuns.empty())
 	{
 		selectedHonmunIndex = (selectedHonmunIndex + 1) % allHonmuns.size();
 		// 유효하지 않은 오브젝트는 건너뛰기
@@ -518,9 +657,10 @@ void Aron_Scene::HandleHonmunMovement()
 		OutputDebugStringA(debugMsg);
 	}
 	
-	// 선택된 오브젝트 이동 (화살표 키) - 벡터가 비어있지 않고 유효한 인덱스일 때만
+	// 선택된 오브젝트 이동 (화살표 키) - 안전한 경계 체크 추가
 	if (!allHonmuns.empty() && 
 		selectedHonmunIndex < allHonmuns.size() && 
+		selectedHonmunIndex >= 0 &&
 		allHonmuns[selectedHonmunIndex] && 
 		allHonmuns[selectedHonmunIndex]->IsActive())
 	{
@@ -533,6 +673,11 @@ void Aron_Scene::HandleHonmunMovement()
 			if (Input::GetKey(VK_UP)) transform->SetPosition(currentPos.x, currentPos.y + moveSpeed);
 			if (Input::GetKey(VK_DOWN)) transform->SetPosition(currentPos.x, currentPos.y - moveSpeed);
 		}
+	}
+	else if (!allHonmuns.empty())
+	{
+		// 인덱스가 유효하지 않으면 초기화
+		selectedHonmunIndex = 0;
 	}
 	
 	// 웨이브 1 테스트: C, D 주석처리
@@ -592,7 +737,7 @@ void Aron_Scene::UpdateScoreUI()
 		}
 		else
 		{
-			swprintf_s(scoreText, L"Score: %d | Press SPACE(Wave1) or 2(Wave2)", currentScore);
+			swprintf_s(scoreText, L"Score: %d | Press Q(Wave1) E(Wave2) T(Wave3)", currentScore);
 		}
 		score_text->screenTextRenderer->SetText(scoreText);
 	}
@@ -613,25 +758,49 @@ void Aron_Scene::StartWave1()
 	waveData.spawnInterval = 1.0f;  // 스폰 간격 초기화
 	waveData.spawnedHonmuns.clear();
 	
-	// 기존 테스트용 혼문들 완전 제거
-	for (auto* honmun : allHonmuns)
+	// 기존 테스트용 혼문들 안전하게 제거
+	OutputDebugStringA("Clearing existing test Honmuns safely...\n");
+	
+	// 안전한 복사본 생성
+	std::vector<Honmun*> allHonmunsCopy;
+	try {
+		allHonmunsCopy = allHonmuns;
+	}
+	catch (...) {
+		OutputDebugStringA("ERROR: Failed to copy allHonmuns vector, skipping cleanup\n");
+		allHonmuns.clear();
+		selectedHonmunIndex = 0;
+		return;
+	}
+	
+	OutputDebugStringA("Processing existing Honmuns for cleanup...\n");
+	for (auto* honmun : allHonmunsCopy)
 	{
-		if (honmun && honmun->IsActive())
-		{
-			// 스크립트의 DestroyThis 호출로 완전 파괴
-			// auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			// if (script)
-			// {
-			//	script->DestroyThis();
-			// }
-			// else
-			// {
-				honmun->SetActive(false);
-			// }
+		if (honmun) {
+			try {
+				if (honmun->IsActive()) {
+					honmun->SetActive(false);
+					OutputDebugStringA("Deactivated test Honmun\n");
+				}
+			}
+			catch (...) {
+				OutputDebugStringA("ERROR: Exception while deactivating Honmun\n");
+			}
 		}
 	}
+	
+	// 벡터 안전하게 정리
 	allHonmuns.clear();
 	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
+	
+	// HonmunManager도 안전하게 초기화
+	if (!honmunManager.isUpdating) {
+		honmunManager.activeHonmuns.clear();
+		honmunManager.currentCount = 0;
+		OutputDebugStringA("HonmunManager cleared for Wave 1\n");
+	}
+	
+	OutputDebugStringA("Test Honmuns cleanup completed\n");
 	
 	// 웨이브 1 설정
 	waveData.currentWave = 1;
@@ -657,28 +826,109 @@ void Aron_Scene::StartWave2()
 	waveData.spawnInterval = 0.8f;  // 웨이브 2는 조금 더 빠른 스폰
 	waveData.spawnedHonmuns.clear();
 	
-	// 기존 테스트용 혼문들 완전 제거
-	for (auto* honmun : allHonmuns)
+	// 기존 테스트용 혼문들 안전하게 제거 (Wave 2)
+	OutputDebugStringA("Clearing existing test Honmuns for Wave 2...\n");
+	
+	// 안전한 복사본 생성
+	std::vector<Honmun*> allHonmunsCopy;
+	try {
+		allHonmunsCopy = allHonmuns;
+	}
+	catch (...) {
+		OutputDebugStringA("ERROR: Failed to copy allHonmuns vector in Wave 2, skipping cleanup\n");
+		allHonmuns.clear();
+		selectedHonmunIndex = 0;
+		return;
+	}
+	
+	for (auto* honmun : allHonmunsCopy)
 	{
-		if (honmun && honmun->IsActive())
-		{
-			// auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			// if (script)
-			// {
-			//	script->DestroyThis();
-			// }
-			// else
-			// {
-				honmun->SetActive(false);
-			// }
+		if (honmun) {
+			try {
+				if (honmun->IsActive()) {
+					honmun->SetActive(false);
+				}
+			}
+			catch (...) {
+				OutputDebugStringA("ERROR: Exception while deactivating Honmun in Wave 2\n");
+			}
 		}
 	}
 	allHonmuns.clear();
 	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
 	
+	// HonmunManager도 안전하게 초기화
+	if (!honmunManager.isUpdating) {
+		honmunManager.activeHonmuns.clear();
+		honmunManager.currentCount = 0;
+		OutputDebugStringA("HonmunManager cleared for Wave 2\n");
+	}
+	
 	// 웨이브 2 설정
 	waveData.currentWave = 2;
 	waveData.totalSpawnCount = 25;  // 웨이브 2: 25마리 (더 많음)
+	
+	// 점수 초기화 (선택사항)
+	currentScore = 0;
+	UpdateScoreUI();
+}
+
+void Aron_Scene::StartWave3()
+{
+	OutputDebugStringA("Wave 3 started!\n");
+	
+	// GameManager 웨이브 정보 업데이트
+	GameManager::Get().waveCount = 3;
+	GameManager::Get().isWave = true;
+	
+	// 웨이브 시스템 완전 초기화
+	waveData.waveActive = true;
+	waveData.currentSpawnIndex = 0;
+	waveData.lastSpawnTime = 0.0f;
+	waveData.spawnInterval = 0.6f;  // 웨이브 3는 가장 빠른 스폰
+	waveData.spawnedHonmuns.clear();
+	
+	// 기존 테스트용 혼문들 안전하게 제거 (Wave 3)
+	OutputDebugStringA("Clearing existing test Honmuns for Wave 3...\n");
+	
+	// 안전한 복사본 생성
+	std::vector<Honmun*> allHonmunsCopy;
+	try {
+		allHonmunsCopy = allHonmuns;
+	}
+	catch (...) {
+		OutputDebugStringA("ERROR: Failed to copy allHonmuns vector in Wave 3, skipping cleanup\n");
+		allHonmuns.clear();
+		selectedHonmunIndex = 0;
+		return;
+	}
+	
+	for (auto* honmun : allHonmunsCopy)
+	{
+		if (honmun) {
+			try {
+				if (honmun->IsActive()) {
+					honmun->SetActive(false);
+				}
+			}
+			catch (...) {
+				OutputDebugStringA("ERROR: Exception while deactivating Honmun in Wave 3\n");
+			}
+		}
+	}
+	allHonmuns.clear();
+	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
+	
+	// HonmunManager도 안전하게 초기화
+	if (!honmunManager.isUpdating) {
+		honmunManager.activeHonmuns.clear();
+		honmunManager.currentCount = 0;
+		OutputDebugStringA("HonmunManager cleared for Wave 3\n");
+	}
+	
+	// 웨이브 3 설정
+	waveData.currentWave = 3;
+	waveData.totalSpawnCount = 30;  // 웨이브 3: 30마리 (가장 많음)
 	
 	// 점수 초기화 (선택사항)
 	currentScore = 0;
@@ -707,6 +957,10 @@ void Aron_Scene::UpdateWaveSystem()
 			{
 				SpawnHonmunWave2();  // 웨이브 2: A, B, C 포함
 			}
+			else if (waveData.currentWave == 3)
+			{
+				SpawnHonmunWave3();  // 웨이브 3: A, B, C, D 포함
+			}
 			
 			waveData.lastSpawnTime = currentTime;
 			waveData.currentSpawnIndex++;
@@ -729,13 +983,13 @@ void Aron_Scene::SpawnHonmun()
 	// 랜덤 X 위치 (카메라 영역 내)
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	static std::uniform_real_distribution<float> xDis(-400.0f, 400.0f);
+	static std::uniform_real_distribution<float> xDis(-1000.0f, 1000.0f);
 	
 	float spawnX = xDis(gen);
 	
-	// 새로운 혼문 생성
+	// 새로운 혼문 생성 (Wave 1은 A, B만)
 	auto* newHonmun = CreateObject<Honmun>();
-	newHonmun->SetHonmunType(GetRandomHonmunType());
+	newHonmun->SetHonmunType(GetRandomHonmunTypeWave1());
 	newHonmun->SetPosition(spawnX, waveData.spawnY);
 	
 	// 중력과 물리 활성화
@@ -777,6 +1031,15 @@ HonmunType Aron_Scene::GetRandomHonmunType()
 	return (dis(gen) == 0) ? HonmunType::A : HonmunType::B;
 }
 
+HonmunType Aron_Scene::GetRandomHonmunTypeWave1()
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<int> dis(0, 1); // 0 = A, 1 = B
+	
+	return (dis(gen) == 0) ? HonmunType::A : HonmunType::B;
+}
+
 HonmunType Aron_Scene::GetRandomHonmunTypeWave2()
 {
 	static std::random_device rd;
@@ -789,12 +1052,25 @@ HonmunType Aron_Scene::GetRandomHonmunTypeWave2()
 	else return HonmunType::C;
 }
 
+HonmunType Aron_Scene::GetRandomHonmunTypeWave3()
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<int> dis(0, 3); // 0 = A, 1 = B, 2 = C, 3 = D
+	
+	int choice = dis(gen);
+	if (choice == 0) return HonmunType::A;
+	else if (choice == 1) return HonmunType::B;
+	else if (choice == 2) return HonmunType::C;
+	else return HonmunType::D;
+}
+
 void Aron_Scene::SpawnHonmunWave2()
 {
 	// 랜덤 X 위치 (카메라 영역 내)
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	static std::uniform_real_distribution<float> xDis(-400.0f, 400.0f);
+	static std::uniform_real_distribution<float> xDis(-1000.0f, 1000.0f);
 	
 	float spawnX = xDis(gen);
 	
@@ -821,17 +1097,52 @@ void Aron_Scene::SpawnHonmunWave2()
 	OutputDebugStringA(debugMsg);
 }
 
+void Aron_Scene::SpawnHonmunWave3()
+{
+	// 랜덤 X 위치 (카메라 영역 내)
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_real_distribution<float> xDis(-1000.0f, 1000.0f);
+	
+	float spawnX = xDis(gen);
+	
+	// 새로운 혼문 생성 (Wave 3는 A, B, C, D 타입 포함)
+	auto* newHonmun = CreateObject<Honmun>();
+	newHonmun->SetHonmunType(GetRandomHonmunTypeWave3());
+	newHonmun->SetPosition(spawnX, waveData.spawnY);
+	
+	// 중력과 물리 활성화
+	auto* rb = newHonmun->GetComponent<Rigidbody>();
+	if (rb)
+	{
+		rb->useGravity = true;      // 중력 활성화
+		rb->isKinematic = false;    // 물리 시뮬레이션 활성화
+	}
+	
+	// 리스트에 추가
+	waveData.spawnedHonmuns.push_back(newHonmun);
+	allHonmuns.push_back(newHonmun);
+	
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Wave 3: Spawned Honmun %d/%d at (%.2f, %.2f)\n", 
+		waveData.currentSpawnIndex + 1, waveData.totalSpawnCount, spawnX, waveData.spawnY);
+	OutputDebugStringA(debugMsg);
+}
+
 void Aron_Scene::CheckHonmunsReachFloor1()
 {
 	if (!waveData.waveActive) return;
 	
-	// 스폰된 혼문들을 체크
-	for (auto it = waveData.spawnedHonmuns.begin(); it != waveData.spawnedHonmuns.end();)
+	// 안전한 벡터 복사를 통한 순회 (iterator 무효화 방지)
+	std::vector<Honmun*> spawnedHonmunsCopy = waveData.spawnedHonmuns;
+	std::vector<Honmun*> toRemove;
+	
+	// 1단계: 제거할 혼문들 식별
+	for (auto* honmun : spawnedHonmunsCopy)
 	{
-		auto* honmun = *it;
 		if (!honmun || !honmun->IsActive())
 		{
-			it = waveData.spawnedHonmuns.erase(it);
+			toRemove.push_back(honmun);
 			continue;
 		}
 		
@@ -843,20 +1154,20 @@ void Aron_Scene::CheckHonmunsReachFloor1()
 			if (pos.y <= -390.0f) // 바닥 근처
 			{
 				OutputDebugStringA("Honmun reached floor 1, destroying!\n");
-				
-				// 혼문 파괴
-				// auto* honmunScript = honmun->GetComponent<HonmunCollisionScript>();
-				// if (honmunScript)
-				// {
-				//	honmunScript->DestroyThis();
-				// }
 				honmun->SetActive(false);
-				
-				it = waveData.spawnedHonmuns.erase(it);
-				continue;
+				toRemove.push_back(honmun);
 			}
 		}
-		++it;
+	}
+	
+	// 2단계: 안전하게 제거
+	for (auto* honmun : toRemove)
+	{
+		// 벡터에서 제거 (erase-remove idiom 사용)
+		waveData.spawnedHonmuns.erase(
+			std::remove(waveData.spawnedHonmuns.begin(), waveData.spawnedHonmuns.end(), honmun),
+			waveData.spawnedHonmuns.end()
+		);
 	}
 }
 
@@ -973,48 +1284,91 @@ void Aron_Scene::UpdateHonmunManager()
 		}
 	}
 	
-	// 디버그 UI 업데이트
+	// 디버그 UI 업데이트 (안전한 null 체크)
 	if (debug_text && debug_text->screenTextRenderer)
 	{
-		wchar_t debugInfo[200];
-		swprintf_s(debugInfo, L"Honmuns: %d/%d | Camera: UHJK | Wave: Q/E | Reset: R", 
-			honmunManager.currentCount, honmunManager.targetCount);
-		debug_text->screenTextRenderer->SetText(debugInfo);
+		try {
+			wchar_t debugInfo[300];
+			swprintf_s(debugInfo, L"Honmuns: %d/%d | Area: 1800x720 | Camera: UHJK | Wave: Q/E | Reset: R", 
+				honmunManager.currentCount, honmunManager.targetCount);
+			debug_text->screenTextRenderer->SetText(debugInfo);
+		} catch (...) {
+			OutputDebugStringA("Exception in debug UI update\n");
+		}
 	}
 }
 
 void Aron_Scene::CheckAndRemoveOutOfBounds()
 {
-	for (auto it = honmunManager.activeHonmuns.begin(); it != honmunManager.activeHonmuns.end();)
+	// 동시 수정 방지: 업데이트 플래그 설정
+	if (honmunManager.isUpdating) {
+		OutputDebugStringA("CheckAndRemoveOutOfBounds: Already updating, skipping\n");
+		return;
+	}
+	
+	try {
+		honmunManager.isUpdating = true;
+	
+	// 안전한 2단계 제거: 먼저 제거할 객체들을 수집, 그 다음 제거
+	std::vector<Honmun*> toRemove;
+	
+	// 1단계: 제거할 객체들 수집 (벡터를 복사해서 안전하게 순회)
+	std::vector<Honmun*> activeHonmunsCopy = honmunManager.activeHonmuns;
+	
+	for (Honmun* honmun : activeHonmunsCopy)
 	{
-		Honmun* honmun = *it;
 		if (!honmun || IsOutOfBounds(honmun))
 		{
-			if (honmun)
+			toRemove.push_back(honmun);
+		}
+	}
+	
+	// 2단계: 수집된 객체들을 안전하게 제거
+	for (Honmun* honmun : toRemove)
+	{
+		if (honmun)
+		{
+			char debugMsg[100];
+			sprintf_s(debugMsg, "Removing out-of-bounds Honmun: %s\n", honmun->name.c_str());
+			OutputDebugStringA(debugMsg);
+			
+			// 안전하게 리스트에서 제거
+			auto it = std::find(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun);
+			if (it != honmunManager.activeHonmuns.end())
 			{
-				char debugMsg[100];
-				sprintf_s(debugMsg, "Removing out-of-bounds Honmun: %s\n", honmun->name.c_str());
-				OutputDebugStringA(debugMsg);
-				
-				// 리스트에서 제거
-				honmun->Destroy();
+				honmunManager.activeHonmuns.erase(it);
 			}
-			it = honmunManager.activeHonmuns.erase(it);
+			
+			// 그 다음 객체 파괴
+			honmun->Destroy();
 		}
 		else
 		{
-			++it;
+			// null 객체도 리스트에서 제거
+			auto it = std::find(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun);
+			if (it != honmunManager.activeHonmuns.end())
+			{
+				honmunManager.activeHonmuns.erase(it);
+			}
 		}
+	}
+	
+		// 카운트 업데이트 및 플래그 해제
+		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+		honmunManager.isUpdating = false;
+	} catch (...) {
+		OutputDebugStringA("Exception in CheckAndRemoveOutOfBounds, resetting flags\n");
+		honmunManager.isUpdating = false;
 	}
 }
 
 void Aron_Scene::SpawnNewHonmun()
 {
-	// 랜덤 위치 생성 (화면 가장자리)
+	// 랜덤 위치 생성 (더욱 넓어진 충돌 연구 영역)
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	static std::uniform_real_distribution<float> xDis(-600.0f, 600.0f);
-	static std::uniform_real_distribution<float> yDis(400.0f, 600.0f); // 화면 위쪽에서 스폰
+	static std::uniform_real_distribution<float> xDis(-1500.0f, 1500.0f); // 충돌 연구를 위해 더욱 넓게
+	static std::uniform_real_distribution<float> yDis(600.0f, 1200.0f); // 화면 위쪽 높은 위치
 	static std::uniform_int_distribution<int> typeDis(0, 3); // A, B, C, D 타입
 	
 	float spawnX = xDis(gen);
@@ -1058,21 +1412,45 @@ void Aron_Scene::SpawnNewHonmun()
 
 void Aron_Scene::AddHonmunToManager(Honmun* honmun)
 {
-	if (honmun)
-	{
-		honmunManager.activeHonmuns.push_back(honmun);
-		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	if (!honmun) return;
+	
+	// 동시 수정 방지
+	if (honmunManager.isUpdating) {
+		OutputDebugStringA("AddHonmunToManager: Manager is updating, skipping addition\n");
+		return;
 	}
+	
+	honmunManager.activeHonmuns.push_back(honmun);
+	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	
+	char debugMsg[150];
+	sprintf_s(debugMsg, "AddHonmunToManager: %s added, current count: %d\n", 
+		honmun->name.c_str(), honmunManager.currentCount);
+	OutputDebugStringA(debugMsg);
 }
 
 void Aron_Scene::RemoveHonmunFromManager(Honmun* honmun)
 {
-	auto it = std::find(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun);
-	if (it != honmunManager.activeHonmuns.end())
-	{
-		honmunManager.activeHonmuns.erase(it);
-		honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	if (!honmun) return;
+	
+	// 동시 수정 방지: 업데이트 중이면 잠시 대기
+	if (honmunManager.isUpdating) {
+		OutputDebugStringA("RemoveHonmunFromManager: Manager is updating, skipping removal\n");
+		return;
 	}
+	
+	// 모든 인스턴스 제거 (중복이 있을 수 있음)
+	honmunManager.activeHonmuns.erase(
+		std::remove(honmunManager.activeHonmuns.begin(), honmunManager.activeHonmuns.end(), honmun),
+		honmunManager.activeHonmuns.end()
+	);
+	
+	honmunManager.currentCount = static_cast<int>(honmunManager.activeHonmuns.size());
+	
+	char debugMsg[150];
+	sprintf_s(debugMsg, "RemoveHonmunFromManager: %s removed, current count: %d\n", 
+		honmun->name.c_str(), honmunManager.currentCount);
+	OutputDebugStringA(debugMsg);
 }
 
 bool Aron_Scene::IsOutOfBounds(Honmun* honmun)
@@ -1084,9 +1462,11 @@ bool Aron_Scene::IsOutOfBounds(Honmun* honmun)
 	
 	Vector2 pos = transform->GetPosition();
 	
-	// 맵 경계를 벗어났는지 확인
-	bool outOfBounds = (abs(pos.x) > honmunManager.mapBoundaryX || 
-	                   abs(pos.y) > honmunManager.mapBoundaryY);
+	// 맵 경계를 벗어났는지 확인 (확장된 범위)
+	float expandedBoundaryX = 1600.0f; // 충돌 연구를 위해 확장
+	float expandedBoundaryY = 1500.0f; // 충돌 연구를 위해 확장
+	bool outOfBounds = (abs(pos.x) > expandedBoundaryX || 
+	                   abs(pos.y) > expandedBoundaryY);
 	
 	if (outOfBounds)
 	{

@@ -29,6 +29,7 @@ public:
 
 private:
     std::vector<HonmunCollisionBase*> registeredHonmuns;
+    bool isUpdating = false;  // 동시 수정 방지 플래그
     
     // Helper methods
     void RemoveFromRegistry(HonmunCollisionBase* script);

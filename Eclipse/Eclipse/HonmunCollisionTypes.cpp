@@ -16,13 +16,22 @@ void HonmunCollisionTypes::ProcessCollision(HonmunCollisionBase* script1, Honmun
 
     HonmunType type1 = script1->GetHonmunType();
     HonmunType type2 = script2->GetHonmunType();
+    int hp1 = script1->GetHealth();
+    int hp2 = script2->GetHealth();
     
-    char debugMsg[150];
-    sprintf_s(debugMsg, "ProcessCollision: Type1=%d, Type2=%d\n", 
-             static_cast<int>(type1), static_cast<int>(type2));
+    char debugMsg[200];
+    sprintf_s(debugMsg, "ProcessCollision: Type1=%d(HP=%d), Type2=%d(HP=%d)\n", 
+             static_cast<int>(type1), hp1, static_cast<int>(type2), hp2);
     OutputDebugStringA(debugMsg);
 
-    // Same type collisions
+    // 기획서 기반 충돌 처리: 체력 1 상호작용X 체크
+    if (hp1 == 1 && hp2 == 1)
+    {
+        OutputDebugStringA("Both HP=1, no interaction\n");
+        return;
+    }
+
+    // Same type collisions (동일속성 충돌)
     if (type1 == type2)
     {
         OutputDebugStringA("Same type collision detected\n");
@@ -66,14 +75,14 @@ void HonmunCollisionTypes::ProcessCollision(HonmunCollisionBase* script1, Honmun
 
 void HonmunCollisionTypes::HandleIgnisReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript)
 {
-    // A + A = 진짜 합체 (중간지점에 새로운 2A 생성)
+    // A + A = 기획서 기반: 합쳐짐. 합쳐진 2A는 HP 1, 충돌 시 0점
     
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    OutputDebugStringA("=== A + A TRUE MERGE STARTED ===\n");
+    OutputDebugStringA("=== A + A MERGE (기획서 기반) STARTED ===\n");
     
-    // A+A 충돌은 점수 변화 없음 (0점)
+    // 기획서: A+A 충돌은 점수 변화 없음 (0점)
     OutputDebugStringA("A+A collision: no score change (0 points)\n");
     
     // 합체 지점 계산 (두 A의 중간지점)
@@ -198,23 +207,58 @@ void HonmunCollisionTypes::Handle2AReaction(HonmunCollisionBase* script, HonmunC
 
 void HonmunCollisionTypes::HandleSmallBReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript)
 {
-    // b + b = 둘 다 HP 1이므로 둘 다 소멸, 2점 획득
+    // b + b = 드래곤볼/포켓볼 스타일 연쇄 분해 충돌 + 둘 다 소멸, 2점 획득
     
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    OutputDebugStringA("=== b + b COLLISION STARTED ===\n");
-    OutputDebugStringA("b + b collision - both destroyed for 2 points!\n");
+    OutputDebugStringA("=== b + b CHAIN COLLISION STARTED (Dragon Ball style) ===\n");
+    OutputDebugStringA("b + b collision - chain reaction breakup + both destroyed for 2 points!\n");
+    
+    // 연쇄 충돌 지점 계산
+    Vector2 chainCollisionPoint;
+    if (script->GetTransform() && otherScript->GetTransform())
+    {
+        Vector2 pos1 = script->GetTransform()->GetPosition();
+        Vector2 pos2 = otherScript->GetTransform()->GetPosition();
+        chainCollisionPoint = Vector2((pos1.x + pos2.x) * 0.5f, (pos1.y + pos2.y) * 0.5f);
+        
+        char posDebugMsg[100];
+        sprintf_s(posDebugMsg, "b+b chain collision point: (%.1f, %.1f)\n", chainCollisionPoint.x, chainCollisionPoint.y);
+        OutputDebugStringA(posDebugMsg);
+    }
+    
+    // 드래곤볼 스타일 연쇄 분해: 작은 조각들도 더 작은 파편으로 산산조각
+    if (script->GetCollisionEffects())
+    {
+        float smallFragmentSize = script->GetCurrentSize() * 0.5f; // 50% 더 작게
+        
+        OutputDebugStringA("Creating micro-fragments from b+b chain collision...\n");
+        // 2개의 b가 6개의 micro-fragment로 분해 (더 화려한 효과)
+        script->GetCollisionEffects()->CreateSplitFragments(script, chainCollisionPoint, 6, smallFragmentSize, 1.5f); // 50% 더 빠르게
+        
+        char debugMsg[150];
+        sprintf_s(debugMsg, "b+b chain split: 6 micro-fragments created, Size %.2f (50%% smaller), Speed increased by 50%%\n", 
+                 smallFragmentSize);
+        OutputDebugStringA(debugMsg);
+        
+        // 추가 시각 효과: 강한 충격파 (포켓볼 스타일)
+        ApplyCollisionForce(script, otherScript, 400.0f); // 일반보다 강한 충격
+    }
+    else
+    {
+        OutputDebugStringA("ERROR: script->GetCollisionEffects() is null for b+b chain collision!\n");
+    }
     
     // b+b 충돌: 둘 다 소멸하므로 2점 (b=1점 × 2개)
     if (aronScene) 
     {
         aronScene->AddScore(2); // b × 2 = 1점 × 2 = 2점
-        OutputDebugStringA("b+b destruction: +2 points (1pt × 2)\n");
+        OutputDebugStringA("b+b chain destruction: +2 points (1pt × 2) + spectacular breakup effect\n");
     }
     
     // 둘 다 즉시 파괴 (HP 1 + HP 1 = 소멸)
-    OutputDebugStringA("Destroying both b objects...\n");
+    OutputDebugStringA("Destroying both b objects after chain reaction...\n");
     if (aronScene) {
         aronScene->RemoveHonmunFromManager(script->GetHonmun());
         aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
@@ -222,20 +266,20 @@ void HonmunCollisionTypes::HandleSmallBReaction(HonmunCollisionBase* script, Hon
     script->DestroyThis();
     otherScript->DestroyThis();
     
-    OutputDebugStringA("=== b + b COLLISION COMPLETED ===\n");
+    OutputDebugStringA("=== b + b CHAIN COLLISION COMPLETED (Dragon Ball effect applied) ===\n");
 }
 
 void HonmunCollisionTypes::HandleUmbraReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript)
 {
-    // B + B = 4개로 분열 (30% 크기 감소, 20% 낙하속도 증가)
+    // B + B = 기획서 기반: 분열됨. 분열된 b는 HP 1, 크기 30%감소, 낙하속도 20%증가, 충돌 시 0점
     
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    OutputDebugStringA("=== B + B COLLISION STARTED ===\n");
-    OutputDebugStringA("B + B collision - splitting into 4 pieces with 30% size decrease, 20% speed increase!\n");
+    OutputDebugStringA("=== B + B SPLIT (기획서 기반) STARTED ===\n");
+    OutputDebugStringA("B + B collision - splitting into 4 pieces (b type) with 30% size decrease, 20% speed increase!\n");
     
-    // B+B 충돌은 점수 변화 없음 (0점)
+    // 기획서: B+B 충돌은 점수 변화 없음 (0점)
     OutputDebugStringA("B+B collision: no score change (0 points)\n");
     
     // 충돌 지점 계산
@@ -286,30 +330,30 @@ void HonmunCollisionTypes::HandleUmbraReaction(HonmunCollisionBase* script, Honm
 
 void HonmunCollisionTypes::HandleDarknessReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript)
 {
-    // C + C = 카메라 시점 내 적들을 충돌지점으로 끌어당기고 파괴됨 (밀리는거리의 1/3)
+    // C + C = 기획서 기반: 체력과 상관없이 파괴, C+C 충돌 시 3점 (기획서 C+C 표기 변경에 따라)
     
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    OutputDebugStringA("=== C + C COLLISION STARTED ===\n");
-    OutputDebugStringA("C + C collision - attracting camera-view enemies and destroying!\n");
+    OutputDebugStringA("=== C + C DESTRUCTION (기획서 기반) STARTED ===\n");
+    OutputDebugStringA("C + C collision - immediate destruction regardless of HP!\n");
     
     // 충돌 지점 계산
     Vector2 attractionPoint;
     if (script->GetTransform() && otherScript->GetTransform())
     {
         Vector2 pos1 = script->GetTransform()->GetPosition();
-        Vector2 pos2 = otherScript->GetTransform()->GetPosition();
+        Vector2 pos2 = script->GetTransform()->GetPosition();
         attractionPoint = Vector2((pos1.x + pos2.x) * 0.5f, (pos1.y + pos2.y) * 0.5f);
     }
     
-    // C+C 충돌 점수 부여 (1점)
+    // 기획서: C+C 충돌 점수 3점 (체력 무관 즉시 파괴)
     if (aronScene)
     {
-        aronScene->AddScore(1); // C+C 충돌 (1점)
+        aronScene->AddScore(3); // 기획서의 C+C 충돌 점수
         
         char debugMsg[50];
-        sprintf_s(debugMsg, "C+C attraction: +1 point\n");
+        sprintf_s(debugMsg, "C+C destruction: +3 points\n");
         OutputDebugStringA(debugMsg);
     }
     
@@ -324,122 +368,350 @@ void HonmunCollisionTypes::HandleDarknessReaction(HonmunCollisionBase* script, H
         OutputDebugStringA(debugMsg);
     }
     
-    // 원본 C 객체들 파괴
-    OutputDebugStringA("Destroying both C objects...\n");
+    // 원본 C 객체들 안전하게 파괴 (Manager에서 먼저 제거 후 파괴)
+    OutputDebugStringA("Destroying both C objects safely...\n");
+    
+    // 1단계: Manager에서 제거
     if (aronScene) {
-        aronScene->RemoveHonmunFromManager(script->GetHonmun());
-        aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
+        if (script->GetHonmun()) {
+            aronScene->RemoveHonmunFromManager(script->GetHonmun());
+        }
+        if (otherScript->GetHonmun()) {
+            aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
+        }
+        OutputDebugStringA("C objects removed from HonmunManager\n");
     }
-    script->DestroyThis();
-    otherScript->DestroyThis();
+    
+    // 2단계: CollisionManager에서 안전하게 해제 (각 객체의 manager를 사용)
+    if (script->GetCollisionManager()) {
+        script->GetCollisionManager()->UnregisterHonmun(script);
+    }
+    if (otherScript->GetCollisionManager()) {
+        otherScript->GetCollisionManager()->UnregisterHonmun(otherScript);
+    }
+    
+    // 3단계: 파괴 마킹 (실제 파괴는 엔진에서 안전하게 처리)
+    if (!script->IsMarkedForDestroy()) {
+        script->DestroyThis();
+        OutputDebugStringA("First C object marked for destruction\n");
+    }
+    if (!otherScript->IsMarkedForDestroy()) {
+        otherScript->DestroyThis();
+        OutputDebugStringA("Second C object marked for destruction\n");
+    }
     
     OutputDebugStringA("=== C + C COLLISION COMPLETED ===\n");
 }
 
 void HonmunCollisionTypes::HandleLunaReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript)
 {
-    // D + D 충돌 = 즉시 파괴 (체력 감소 없이)
+    // D + D 충돌 = 기획서에는 명시되지 않음, 기존 로직 유지
+    
+    OutputDebugStringA("=== D + D COLLISION STARTED ===\n");
+    
+    // Null pointer safety checks before any processing
+    if (!script || !otherScript || !script->GetHonmun() || !otherScript->GetHonmun())
+    {
+        OutputDebugStringA("ERROR: Null pointer detected in D+D collision, aborting\n");
+        return;
+    }
     
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
     OutputDebugStringA("D + D collision - immediate destruction!\n");
     
-    // D+D 충돌은 점수 변화 없음 (0점)
+    // D+D 충돌은 점수 변화 없음 (0점) - 기획서에 명시되지 않아 기존 로직 유지
     OutputDebugStringA("D+D collision: no score change (0 points)\n");
     
-    // D+D 파괴 시 강한 충격파 효과
-    ApplyCollisionForce(script, otherScript, 250.0f); // 매우 강한 충격
-    
-    // 둘 다 즉시 파괴 (체력 감소 없이)
-    if (aronScene) {
-        aronScene->RemoveHonmunFromManager(script->GetHonmun());
-        aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
+    // D+D 파괴 시 강한 충격파 효과 (객체가 유효할 때만)
+    if (script->GetTransform() && otherScript->GetTransform())
+    {
+        ApplyCollisionForce(script, otherScript, 250.0f); // 매우 강한 충격
+        OutputDebugStringA("D+D collision force applied\n");
     }
-    script->DestroyThis();
-    otherScript->DestroyThis();
+    
+    // 안전한 순서로 파괴: 관리자에서 제거 → 마크 → 실제 파괴
+    Honmun* honmun1 = script->GetHonmun();
+    Honmun* honmun2 = otherScript->GetHonmun();
+    
+    OutputDebugStringA("Removing D objects from manager...\n");
+    if (aronScene && honmun1 && honmun2) {
+        aronScene->RemoveHonmunFromManager(honmun1);
+        aronScene->RemoveHonmunFromManager(honmun2);
+        OutputDebugStringA("D objects removed from manager\n");
+    }
+    
+    // 마크 후 안전하게 파괴
+    OutputDebugStringA("Marking D objects for destruction...\n");
+    if (script && !script->IsMarkedForDestroy()) {
+        script->DestroyThis();
+        OutputDebugStringA("First D object marked for destruction\n");
+    }
+    if (otherScript && !otherScript->IsMarkedForDestroy()) {
+        otherScript->DestroyThis();
+        OutputDebugStringA("Second D object marked for destruction\n");
+    }
+    
+    OutputDebugStringA("=== D + D COLLISION COMPLETED ===\n");
 }
 
 void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript)
 {
-    // 서로 다른 타입 간의 충돌 처리
+    // 서로 다른 타입 간의 충돌 처리 - 기획서 기반
     HonmunType type1 = script->GetHonmunType();
     HonmunType type2 = otherScript->GetHonmunType();
+    int hp1 = script->GetHealth();
+    int hp2 = otherScript->GetHealth();
     
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    // D와의 충도은 모두 즉시 파괴 (체력 감소 없이)
+    char debugMsg[150];
+    sprintf_s(debugMsg, "Mixed collision: %d(HP%d) vs %d(HP%d)\n", 
+             static_cast<int>(type1), hp1, static_cast<int>(type2), hp2);
+    OutputDebugStringA(debugMsg);
+    
+    // D와의 충돌 처리
     if (type1 == HonmunType::D || type2 == HonmunType::D)
     {
-        OutputDebugStringA("Mixed collision with D - immediate destruction!\n");
-        
-        // D와의 모든 충돌은 점수 변화 없음 (0점)
-        OutputDebugStringA("D mixed collision: no score change (0 points)\n");
-        
-        // 즉시 파괴 (체력 감소 없이)
-        if (aronScene) {
-            aronScene->RemoveHonmunFromManager(script->GetHonmun());
-            aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
-        }
-        script->DestroyThis();
-        otherScript->DestroyThis();
+        HandleDMixedCollision(script, otherScript, aronScene);
         return;
     }
     
-    // A + B / B + A = 충돌 진행방향과 반대방향으로 서로 튕겨냄
+    // 기획서의 점수 시스템 적용
+    bool shouldAddScore = false;
+    int scoreToAdd = 0;
+    bool shouldDestroyScript = false;
+    bool shouldDestroyOther = false;
+    int newHp1 = hp1;
+    int newHp2 = hp2;
+    
+    // 기획서 규칙에 따른 혼합 충돌 처리
     if ((type1 == HonmunType::A && type2 == HonmunType::B) || 
-        (type1 == HonmunType::B && type2 == HonmunType::A))
+        (type1 == HonmunType::B && type2 == HonmunType::A) ||
+        (type1 == HonmunType::A2 && type2 == HonmunType::B) ||
+        (type1 == HonmunType::B && type2 == HonmunType::A2) ||
+        (type1 == HonmunType::A && type2 == HonmunType::C) ||
+        (type1 == HonmunType::C && type2 == HonmunType::A) ||
+        (type1 == HonmunType::A2 && type2 == HonmunType::C) ||
+        (type1 == HonmunType::C && type2 == HonmunType::A2) ||
+        (type1 == HonmunType::A && type2 == HonmunType::b) ||
+        (type1 == HonmunType::b && type2 == HonmunType::A) ||
+        (type1 == HonmunType::A2 && type2 == HonmunType::b) ||
+        (type1 == HonmunType::b && type2 == HonmunType::A2) ||
+        (type1 == HonmunType::B && type2 == HonmunType::C) ||
+        (type1 == HonmunType::C && type2 == HonmunType::B) ||
+        (type1 == HonmunType::C && type2 == HonmunType::b) ||
+        (type1 == HonmunType::b && type2 == HonmunType::C))
     {
-        OutputDebugStringA("A + B collision - bouncing in opposite directions!\n");
+        // 기획서: 충돌 시 1점, 피격 시 체력 -1
+        shouldAddScore = true;
+        scoreToAdd = 1;
+        newHp1 = hp1 - 1;
+        newHp2 = hp2 - 1;
         
-        // 튕김 효과: 서로 반대 방향으로 밀려남
-        ApplyOppositeForces(script, otherScript, 500.0f); // 매우 강한 밀림 효과로 증가
-        
-        if (aronScene) 
+        OutputDebugStringA("Mixed collision: +1 point, both HP-1\n");
+    }
+    
+    // 점수 및 체력 변화 적용
+    if (shouldAddScore && aronScene)
+    {
+        aronScene->AddScore(scoreToAdd);
+    }
+    
+    // 체력 변화 적용 및 파괴 체크
+    if (newHp1 <= 0)
+    {
+        shouldDestroyScript = true;
+        if (aronScene)
         {
-            aronScene->AddScore(1);
-            OutputDebugStringA("A+B bounce: +1 point\n");
+            int destroyScore = GetDestructionScore(type1);
+            aronScene->AddScore(destroyScore);
+            char scoreMsg[100];
+            sprintf_s(scoreMsg, "Destruction bonus: +%d points for type %d\n", destroyScore, static_cast<int>(type1));
+            OutputDebugStringA(scoreMsg);
         }
     }
-    // A + C / C + A = 충돌방향과 관계없이 좌, 우로 밀어냄
+    else
+    {
+        script->SetHealth(newHp1);
+    }
+    
+    if (newHp2 <= 0)
+    {
+        shouldDestroyOther = true;
+        if (aronScene)
+        {
+            int destroyScore = GetDestructionScore(type2);
+            aronScene->AddScore(destroyScore);
+            char scoreMsg[100];
+            sprintf_s(scoreMsg, "Destruction bonus: +%d points for type %d\n", destroyScore, static_cast<int>(type2));
+            OutputDebugStringA(scoreMsg);
+        }
+    }
+    else
+    {
+        otherScript->SetHealth(newHp2);
+    }
+    
+    // 물리 효과 적용
+    ApplyPhysicalEffect(script, otherScript, type1, type2);
+    
+    // 파괴 처리
+    if (shouldDestroyScript || shouldDestroyOther)
+    {
+        HandleDestruction(script, otherScript, shouldDestroyScript, shouldDestroyOther, aronScene);
+    }
+}
+
+int HonmunCollisionTypes::GetDestructionScore(HonmunType type)
+{
+    // 기획서의 "파괴 시 점수를 획득하는 경우"
+    switch (type)
+    {
+    case HonmunType::A: return 1;
+    case HonmunType::A2: return 3; // 2A = 3점
+    case HonmunType::B: return 1;
+    case HonmunType::b: return 1;
+    case HonmunType::C: return 1;
+    default: return 0;
+    }
+}
+
+void HonmunCollisionTypes::ApplyPhysicalEffect(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, HonmunType type1, HonmunType type2)
+{
+    // A + B = 반대방향 튕김
+    if ((type1 == HonmunType::A && type2 == HonmunType::B) || 
+        (type1 == HonmunType::B && type2 == HonmunType::A) ||
+        (type1 == HonmunType::A2 && type2 == HonmunType::B) ||
+        (type1 == HonmunType::B && type2 == HonmunType::A2))
+    {
+        ApplyOppositeForces(script, otherScript, 500.0f);
+        OutputDebugStringA("Applied opposite bounce effect\n");
+    }
+    // A + C = 좌우 밀림
     else if ((type1 == HonmunType::A && type2 == HonmunType::C) || 
-             (type1 == HonmunType::C && type2 == HonmunType::A))
+             (type1 == HonmunType::C && type2 == HonmunType::A) ||
+             (type1 == HonmunType::A2 && type2 == HonmunType::C) ||
+             (type1 == HonmunType::C && type2 == HonmunType::A2))
     {
-        OutputDebugStringA("A + C collision - pushing left/right!\n");
+        ApplyLeftRightPush(script, otherScript, 250.0f);
+        OutputDebugStringA("Applied left-right push effect\n");
+    }
+    // B + C = 관통
+    else if ((type1 == HonmunType::B && type2 == HonmunType::C) || 
+             (type1 == HonmunType::C && type2 == HonmunType::B) ||
+             (type1 == HonmunType::b && type2 == HonmunType::C) ||
+             (type1 == HonmunType::C && type2 == HonmunType::b))
+    {
+        ApplyPenetration(script, otherScript);
+        OutputDebugStringA("Applied penetration effect\n");
+    }
+}
+
+void HonmunCollisionTypes::HandleDMixedCollision(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, Aron_Scene* aronScene)
+{
+    OutputDebugStringA("=== MIXED COLLISION WITH D STARTED ===\n");
+    
+    // Null pointer safety checks
+    if (!script || !otherScript || !script->GetHonmun() || !otherScript->GetHonmun())
+    {
+        OutputDebugStringA("ERROR: Null pointer detected in D mixed collision, aborting\n");
+        return;
+    }
+    
+    HonmunType type1 = script->GetHonmunType();
+    HonmunType type2 = otherScript->GetHonmunType();
+    int hp1 = script->GetHealth();
+    int hp2 = otherScript->GetHealth();
+    
+    // 기획서: D와의 충돌 시 -1점 상실 (HP1인 경우 -2점)
+    if (aronScene)
+    {
+        int scoreLoss = 0;
         
-        // 좌우 밀림 효과
-        ApplyLeftRightPush(script, otherScript, 250.0f); // 강한 좌우 밀림으로 증가
-        
-        if (aronScene) 
+        // D가 아닌 쪽의 HP에 따라 점수 상실
+        if (type1 == HonmunType::D)
         {
-            aronScene->AddScore(1);
-            OutputDebugStringA("A+C push: +1 point\n");
+            scoreLoss = (hp2 == 1) ? -2 : -1;
+        }
+        else
+        {
+            scoreLoss = (hp1 == 1) ? -2 : -1;
+        }
+        
+        aronScene->AddScore(scoreLoss);
+        char scoreMsg[100];
+        sprintf_s(scoreMsg, "D collision penalty: %d points\n", scoreLoss);
+        OutputDebugStringA(scoreMsg);
+    }
+    
+    OutputDebugStringA("Mixed collision with D - immediate destruction!\n");
+    
+    // 안전한 순서로 파괴
+    Honmun* honmun1 = script->GetHonmun();
+    Honmun* honmun2 = otherScript->GetHonmun();
+    
+    if (aronScene && honmun1 && honmun2) {
+        aronScene->RemoveHonmunFromManager(honmun1);
+        aronScene->RemoveHonmunFromManager(honmun2);
+    }
+    
+    if (script && !script->IsMarkedForDestroy()) {
+        script->DestroyThis();
+    }
+    if (otherScript && !otherScript->IsMarkedForDestroy()) {
+        otherScript->DestroyThis();
+    }
+    
+    OutputDebugStringA("=== MIXED COLLISION WITH D COMPLETED ===\n");
+}
+
+void HonmunCollisionTypes::HandleDestruction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript, 
+                                           bool destroyScript, bool destroyOther, Aron_Scene* aronScene)
+{
+    if (destroyScript)
+    {
+        if (aronScene && script->GetHonmun()) {
+            aronScene->RemoveHonmunFromManager(script->GetHonmun());
+        }
+        if (!script->IsMarkedForDestroy()) {
+            script->DestroyThis();
         }
     }
-    // B + C / C + B = 서로 관통하지만 겹쳐지지는 않음
-    else if ((type1 == HonmunType::B && type2 == HonmunType::C) || 
-             (type1 == HonmunType::C && type2 == HonmunType::B))
+    
+    if (destroyOther)
     {
-        OutputDebugStringA("B + C collision - penetrating without overlap!\n");
-        
-        // 관통 효과 (약간의 분리만)
-        ApplyPenetration(script, otherScript);
-        
-        if (aronScene) 
-        {
-            aronScene->AddScore(1);
-            OutputDebugStringA("B+C penetration: +1 point\n");
+        if (aronScene && otherScript->GetHonmun()) {
+            aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
+        }
+        if (!otherScript->IsMarkedForDestroy()) {
+            otherScript->DestroyThis();
         }
     }
 }
 
 bool HonmunCollisionTypes::ShouldProcessCollision(HonmunCollisionBase* script1, HonmunCollisionBase* script2)
 {
-    // Only check for null - processing prevention is handled in OnTriggerEnter
+    // Check for null pointers
     if (!script1 || !script2)
     {
         OutputDebugStringA("ShouldProcessCollision: One or both scripts are null\n");
+        return false;
+    }
+    
+    // Check if objects are already marked for destruction
+    if (script1->IsMarkedForDestroy() || script2->IsMarkedForDestroy())
+    {
+        OutputDebugStringA("ShouldProcessCollision: One or both objects already marked for destruction\n");
+        return false;
+    }
+    
+    // Check if Honmun objects are valid
+    if (!script1->GetHonmun() || !script2->GetHonmun())
+    {
+        OutputDebugStringA("ShouldProcessCollision: One or both Honmun objects are null\n");
         return false;
     }
     

@@ -88,6 +88,7 @@ public:
 	void SetCurrentSize(float size) { currentSize = size; }
 	void SetSplitFragment(bool isFragment) { isSplitFragment = isFragment; }
 	void SetProcessingReaction(bool processing) { isProcessingReaction = processing; }
+	void SetNeedsPhysicsTransition(bool needs) { needsPhysicsTransition = needs; }
 	
 	// Status checks
 	bool IsMarkedForDestroy() const { return markedForDestroy; }

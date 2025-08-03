@@ -230,17 +230,31 @@ void HonmunCollisionEffects::ApplyPhysicsTransition(HonmunCollisionBase* script)
 
 void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, const Vector2& collisionPoint, int count, float newSize, float speedMultiplier)
 {
-    // B+B 분열: 4개 조각 생성
+    // B+B 분열: 연쇄 충돌을 위한 최적화된 분산 시스템
+    int enhancedCount = count; // 4개로 제한 (너무 많으면 연쇄 충돌 어려움)
     char startMsg[100];
-    sprintf_s(startMsg, "=== Creating %d split fragments ===\n", count);
+    sprintf_s(startMsg, "=== Creating %d fragments optimized for CHAIN COLLISION ===\n", enhancedCount);
     OutputDebugStringA(startMsg);
     
-    for (int i = 0; i < count; i++)
+    // 1차 분해: 주요 조각들 (더 큰 크기)
+    for (int i = 0; i < enhancedCount; i++)
     {
-        // 방사형으로 퍼지는 방향 계산
-        float angle = (2.0f * 3.14159f * i) / count; // 360도를 count로 나눔
+        // 방사형으로 퍼지는 방향 계산 (더 세밀한 각도로)
+        float angle = (2.0f * 3.14159f * i) / enhancedCount; // 더 많은 조각으로 나눔
         Vector2 direction(cos(angle), sin(angle));
-        Vector2 spawnPos = collisionPoint + direction * 60.0f; // 충돌 지점에서 60픽셀 떨어진 곳에 생성
+        
+        // 연쇄 충돌 최적화: 더 넓은 범위로 분산
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        static std::uniform_real_distribution<float> distanceDis(150.0f, 300.0f); // 연쇄 충돌을 위해 훨씬 넓게
+        float randomDistance = distanceDis(gen);
+        
+        // 각 조각마다 다른 거리로 배치 (연쇄 충돌 최적화)
+        if (i % 2 == 0) { // 짝수 인덱스는 더 멀리
+            randomDistance *= 1.5f; // 50% 더 멀리 배치
+        }
+        
+        Vector2 spawnPos = collisionPoint + direction * randomDistance;
         
         // Scene::CreateObject 방식으로 변경하여 올바른 타입으로 생성
         HonmunType originalType = script->GetHonmunType();
@@ -280,6 +294,9 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
         fragmentScript->SetCurrentSize(newSize);
         fragmentScript->SetHealth(1); // b 조각들은 HP 1
         fragmentScript->SetSplitFragment(true);
+        
+        // 분열 조각 물리 전환 설정 (1초 후 키네마틱 모드로 전환하여 충돌 가능)
+        fragmentScript->SetNeedsPhysicsTransition(true);
         fragmentScript->SetHonmunType(fragmentType); // 스크립트에도 올바른 타입 설정
         
         // 크기 적용
@@ -288,14 +305,45 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
             fragmentScript->GetHonmun()->SetSize(newSize);
         }
         
-        // 충돌 테스트용: 키네마틱 모드 유지
+        // 포켓볼/드래곤볼 스타일: 폭발적인 방사형 퍼짐 물리 설정
         auto* rigidbody = fragmentScript->GetRigidbody();
         if (rigidbody)
         {
-            rigidbody->useGravity = false; // 충돌 테스트용으로 중력 비활성화
-            rigidbody->isKinematic = true;  // 키네마틱 모드 유지
-            rigidbody->velocity = Vector2(0, 0); // 속도 초기화
+            rigidbody->useGravity = false;   // 중력 비활성화
+            rigidbody->isKinematic = false;  // 물리 시뮬레이션 활성화 (퍼지기 위해)
+            
+            // 연쇄 충돌 최적화: 적당한 속도로 퍼지기
+            float baseSpeed = 200.0f * speedMultiplier; // 연쇄 충돌을 위해 속도 조정
+            float layerMultiplier = 1.0f;
+            
+            // 각 조각마다 다른 속도로 배치 (연쇄 충돌 최적화)
+            if (i < enhancedCount / 3) {
+                layerMultiplier = 2.0f; // 최고속 계층 (2배)
+            } else if (i < (enhancedCount * 2) / 3) {
+                layerMultiplier = 1.5f; // 중간속 계층 (1.5배)
+            } else {
+                layerMultiplier = 1.0f; // 기본속 계층 (1.0배)
+            }
+            
+            float scatterSpeed = baseSpeed * layerMultiplier;
+            Vector2 scatterVelocity = direction * scatterSpeed;
+            
+            // 포켓볼 스타일: 더 강한 랜덤 변화 (더 자연스러운 폭발)
+            static std::random_device rd;
+            static std::mt19937 gen(rd());
+            static std::uniform_real_distribution<float> randomFactor(0.7f, 1.4f); // 더 넓은 범위
+            scatterVelocity = scatterVelocity * randomFactor(gen);
+            
+            rigidbody->velocity = scatterVelocity;
+            
+            char velocityMsg[150];
+            sprintf_s(velocityMsg, "Fragment %d velocity: (%.1f, %.1f), speed: %.1f, layer: %.1fx\n", 
+                     i+1, scatterVelocity.x, scatterVelocity.y, scatterSpeed, layerMultiplier);
+            OutputDebugStringA(velocityMsg);
         }
+        
+        // 드래곤볼 스타일: b 조각들 간의 연쇄 충돌 활성화 (향후 구현)
+        // fragmentScript->SetCanChainCollide(true); // b+b 연쇄 충돌 허용 - TODO: 구현 필요
         
         // 혼문 관리 시스템에 추가
         auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
@@ -309,29 +357,49 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
         OutputDebugStringA(debugMsg);
     }
     
-    char finalMsg[100];
-    sprintf_s(finalMsg, "=== TOTAL %d fragments created successfully ===\n", count);
+    // 연쇄 충돌 최적화: 2차 분해 제거하고 b+b 연쇄 충돌에 집중
+    // ScheduleSecondaryFragmentation 제거 - 자연스러운 b+b 연쇄 충돌로 대체
+    
+    char finalMsg[150];
+    sprintf_s(finalMsg, "=== %d b-fragments created for CHAIN COLLISION (optimized) ===\n", enhancedCount);
     OutputDebugStringA(finalMsg);
 }
 
 void HonmunCollisionEffects::AttractAndDestroyEnemies(HonmunCollisionBase* script, const Vector2& attractionPoint, float pullRatio)
 {
     // C+C 효과: 카메라 시야 내 적들을 끌어당기기
-    if (!script->GetCollisionManager()) return;
+    if (!script->GetCollisionManager()) {
+        OutputDebugStringA("C+C attraction: No collision manager, skipping\n");
+        return;
+    }
     
-    auto nearbyHonmuns = script->GetCollisionManager()->GetNearbyHonmuns(script, 500.0f); // 큰 반경으로 검색
+    // 안전한 방식으로 주변 혼문들 가져오기
+    auto nearbyHonmuns = script->GetCollisionManager()->GetNearbyHonmuns(script, 500.0f);
+    
+    // 안전성 체크: 벡터 복사로 안전한 순회
+    std::vector<HonmunCollisionBase*> safeNearbyList = nearbyHonmuns;
     
     int attractedCount = 0;
-    for (auto* nearbyScript : nearbyHonmuns)
+    for (auto* nearbyScript : safeNearbyList)
     {
-        if (nearbyScript != script)
-        {
+        // 유효성 검사 강화
+        if (!nearbyScript || nearbyScript == script || 
+            nearbyScript->IsMarkedForDestroy() || 
+            !nearbyScript->GetTransform()) {
+            continue;
+        }
+        
+        try {
             Vector2 currentPos = nearbyScript->GetTransform()->GetPosition();
             Vector2 toAttraction = attractionPoint - currentPos;
             Vector2 newPos = currentPos + toAttraction * pullRatio; // 1/3 거리만큼 당김
             
             nearbyScript->GetTransform()->SetPosition(newPos.x, newPos.y);
             attractedCount++;
+        }
+        catch (...) {
+            OutputDebugStringA("C+C attraction: Exception caught during position update\n");
+            continue;
         }
     }
     
@@ -419,4 +487,19 @@ void HonmunCollisionEffects::PenetrateWithoutOverlap(HonmunCollisionBase* script
     }
     
     OutputDebugStringA("B+C penetrate: Objects penetrated without overlap!\n");
+}
+
+void HonmunCollisionEffects::ScheduleSecondaryFragmentation(const Vector2& centerPoint, int secondaryCount, float secondarySize, float secondarySpeed)
+{
+    // 드래곤볼 스타일 2차 분해: 0.5초 후 추가 조각들이 폭발
+    // 실제 타이머 구현은 HonmunCollisionBase::Update()에서 처리
+    
+    char scheduleMsg[150];
+    sprintf_s(scheduleMsg, "Secondary fragmentation scheduled: %d fragments at (%.1f, %.1f) in 0.5s\n", 
+             secondaryCount, centerPoint.x, centerPoint.y);
+    OutputDebugStringA(scheduleMsg);
+    
+    // 2차 분해는 기존 조각들 중 일부가 더 작은 조각으로 분해되는 연쇄 효과
+    // 이는 b 조각들 간의 충돌로 자연스럽게 발생하도록 설계됨
+    OutputDebugStringA("Dragon Ball chain reaction: secondary fragments will trigger from b+b collisions\n");
 }
