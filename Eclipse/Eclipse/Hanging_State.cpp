@@ -19,6 +19,7 @@ void Hanging_State::Enter(MovementFSM * fsm)
 
     // 수직 속도를 0으로 (벽에 매달림 효과)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0.0f;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Hanging", true);
 }

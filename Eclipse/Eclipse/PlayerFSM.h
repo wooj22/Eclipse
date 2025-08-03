@@ -1,4 +1,6 @@
 #pragma once
+#include<map>
+
 #include "../Direct2D_EngineLib/Script.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/ICollider.h"
@@ -6,6 +8,16 @@
 // FSM 
 #include "MovementFSM.h"
 #include "ActionFSM.h"
+
+#include "GameManager.h"
+
+enum class JumpPhase
+{
+	None,       // 공중에 안뜬 상태
+	NormalJump,
+	DoubleJump,
+	WallJump
+};
 
 class Transform;
 class SpriteRenderer;
@@ -20,6 +32,10 @@ private:
 	// FSM 
 	std::unique_ptr<MovementFSM> movementFSM;
 	std::unique_ptr<ActionFSM> actionFSM;
+
+private:
+	// Jump - skill 
+	std::map<JumpPhase, bool> canAttackAfterJump;
 
 public:
 	MovementFSM* GetMovementFSM() { return movementFSM.get(); }
@@ -71,6 +87,9 @@ public:
 	bool canDoubleJump = false;             // 다시 땅 밟기 전까지 더블점프는 한번만 가능 
 	bool isHolding = false;
 
+	bool canAttack_Unlock = true;          // 기본 공격 횟수 (해금 이후 공격 횟수는 각 State에서 관리)
+	int airAttackCount = 0;
+
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
@@ -78,6 +97,14 @@ public:
 	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
 
 	Vector2 MouseWorldPos;					// 실시간 마우스 월드 좌표 
+
+	//void ResetAirAttack() { airAttackCount = 0; }
+	//// void AddAirAttack() { ++airAttackCount; }
+	//bool CanAirAttack() const
+	//{
+	//	int maxCount = GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra) ? 3 : 1;
+	//	return airAttackCount < maxCount;
+	//}
 
 public:
 	// getter
@@ -139,6 +166,51 @@ public:
 
 public:
 	float GetSpeed() { return curSpeed; }
+
+	// skill - jump 
+	void OnGround()
+	{
+		canAttackAfterJump[JumpPhase::NormalJump] = true;
+		canAttackAfterJump[JumpPhase::DoubleJump] = true;
+		canAttackAfterJump[JumpPhase::WallJump] = true;
+	}
+	void OnJump(JumpPhase jumpType)
+	{
+		// 점프 시 공격 가능 여부를 설정
+		if (!GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra))
+		{
+			if (jumpType == JumpPhase::NormalJump)
+				canAttackAfterJump[jumpType] = true;
+			else
+				canAttackAfterJump[jumpType] = false;
+		}
+		else
+		{
+			canAttackAfterJump[jumpType] = true;
+		}
+	}
+
+	bool CanAttack()
+	{
+		for (auto it = canAttackAfterJump.begin(); it != canAttackAfterJump.end(); ++it)
+		{
+			if (it->second)
+				return true;
+		}
+		return false;
+	}
+
+	void UseAttack()
+	{
+		for (auto it = canAttackAfterJump.begin(); it != canAttackAfterJump.end(); ++it)
+		{
+			if (it->second)
+			{
+				it->second = false;
+				break; // 한 번만 비활성화
+			}
+		}
+	}
 
 private:
 	void InputCheak();

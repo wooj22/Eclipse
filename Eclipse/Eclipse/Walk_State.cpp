@@ -28,6 +28,7 @@ void Walk_State::Update(MovementFSM* fsm)
     // [ Jump ]
     if (fsm->GetPlayerFSM()->GetIsSpace() && fsm->GetPlayerFSM()->GetIsGround())
     {
+        fsm->GetPlayerFSM()->OnJump(JumpPhase::NormalJump);
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Jump_State>());
     }
 

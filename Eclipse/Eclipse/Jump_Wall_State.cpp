@@ -23,6 +23,7 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
     fsm->GetPlayerFSM()->timer = 0.0f;
+    fsm->GetPlayerFSM()->OnJump(JumpPhase::WallJump);
 
     elapsedTime = 0.0f;  // 시간
     wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
@@ -64,6 +65,8 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
             fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-doubleJumpXPower, wallJumpForce));
             // canDoubleJump = false;
         }
+
+        fsm->GetPlayerFSM()->OnJump(JumpPhase::DoubleJump);
     }
     
 
@@ -89,13 +92,22 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
 
         // [ BulletTime ]
-        if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
-
+        if ( fsm->GetPlayerFSM()->CanAttack() &&
+            (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold))
+        {
+            // fsm->GetPlayerFSM()->UseAttack();
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+        }
     }
     else
     {
         // [ Attack ]
-        if (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+        if ( fsm->GetPlayerFSM()->CanAttack() &&
+            (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold))
+        {
+            // fsm->GetPlayerFSM()->UseAttack();
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+        }
 
         // 초기화
         fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;

@@ -21,13 +21,17 @@ void Jump_State::Enter(MovementFSM* fsm)
     OutputDebugStringA("[Jump_State] Player의 Jump_State 진입 \n");
 
     // 초기화 
-    fsm->GetPlayerFSM()->canDoubleJump = true;
+    // fsm->GetPlayerFSM()->canDoubleJump = true;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
     fsm->GetPlayerFSM()->timer = 0.0f;
+    fsm->GetPlayerFSM()->OnJump(JumpPhase::NormalJump);
 
     // 첫번째 Jump 실행 
+    fsm->GetPlayerFSM()->GetRigidbody()->useGravity = false;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
     fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
+    fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
 
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Jump", true);
@@ -57,6 +61,8 @@ void Jump_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, fsm->GetPlayerFSM()->GetJumpForce()));
         fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
         fsm->GetPlayerFSM()->canDoubleJump = false;
+
+        fsm->GetPlayerFSM()->OnJump(JumpPhase::DoubleJump);
     }
 
     // [ Hanging ]
@@ -82,13 +88,22 @@ void Jump_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
 
         // [ BulletTime ]
-        if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
-
+        if (fsm->GetPlayerFSM()->CanAttack() &&
+            fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold)
+        {
+            // fsm->GetPlayerFSM()->UseAttack();  // 공격 기회 사용
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+        }
     }
     else
     {
         // [ Attack ]
-        if (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+        if (fsm->GetPlayerFSM()->CanAttack() &&
+            fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold)
+        {
+            // fsm->GetPlayerFSM()->UseAttack();  // 공격 기회 사용
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+        }
 
         // 초기화
         fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
