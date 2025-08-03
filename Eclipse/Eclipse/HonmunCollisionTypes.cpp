@@ -662,9 +662,9 @@ int HonmunCollisionTypes::GetDestructionScore(HonmunType type, int hp)
     case HonmunType::B:
         if (hp == 3) return 0;      // B(체력3) 파괴 시 0점
         else if (hp == 2) return 0; // B(체력2) 파괴 시 0점
-        else if (hp == 1) return 3; // B(체력1) 파괴 시 3점
+        else if (hp == 1) return 2; // B(체력1) 파괴 시 2점 (기획서 수정)
         break;
-    case HonmunType::b: return 3;   // b(체력1) 파괴 시 3점
+    case HonmunType::b: return 2;   // b(체력1) 파괴 시 2점 (기획서 수정)
     case HonmunType::C:
         if (hp == 3) return 0;      // C(체력3) 파괴 시 0점
         else if (hp == 2) return 0; // C(체력2) 파괴 시 0점
@@ -725,6 +725,58 @@ int HonmunCollisionTypes::GetMixedCollisionScore(HonmunType type1, int hp1, Honm
         if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 4;
         if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 4;
         if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 5;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -2;
+    }
+    else if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3))
+    {
+        // B(체력3) 관련 충돌 (기획서 B 테이블 추가)
+        if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2)) return 4;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -1;
+    }
+    else if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2))
+    {
+        // B(체력2) 관련 충돌
+        if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2)) return 4;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -1;
+    }
+    else if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1))
+    {
+        // B(체력1) 관련 충돌
+        if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3)) return 2;
+        if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2)) return 2;
+        if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1)) return 3;
+        if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2)) return 5;
+        if ((type1 == HonmunType::b) || (type2 == HonmunType::b)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 3;
+        if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -2;
+    }
+    else if ((type1 == HonmunType::b) || (type2 == HonmunType::b))
+    {
+        // b(체력1) 관련 충돌 (B(체력1)과 동일한 패턴)
+        if ((type1 == HonmunType::A && hp1 == 3) || (type2 == HonmunType::A && hp2 == 3)) return 2;
+        if ((type1 == HonmunType::A && hp1 == 2) || (type2 == HonmunType::A && hp2 == 2)) return 2;
+        if ((type1 == HonmunType::A && hp1 == 1) || (type2 == HonmunType::A && hp2 == 1)) return 3;
+        if ((type1 == HonmunType::A2) || (type2 == HonmunType::A2)) return 5;
+        if ((type1 == HonmunType::B && hp1 == 3) || (type2 == HonmunType::B && hp2 == 3)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 2) || (type2 == HonmunType::B && hp2 == 2)) return 1;
+        if ((type1 == HonmunType::B && hp1 == 1) || (type2 == HonmunType::B && hp2 == 1)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 3) || (type2 == HonmunType::C && hp2 == 3)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 2) || (type2 == HonmunType::C && hp2 == 2)) return 2;
+        if ((type1 == HonmunType::C && hp1 == 1) || (type2 == HonmunType::C && hp2 == 1)) return 3;
         if ((type1 == HonmunType::D) || (type2 == HonmunType::D)) return -2;
     }
     

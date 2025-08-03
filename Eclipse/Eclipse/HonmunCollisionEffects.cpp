@@ -312,9 +312,8 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
                     continue;
                 }
             }
-        // b 조각 가시성 개선: 크기 1.3배 증가
-        float enhancedBSize = newSize * 1.3f;
-        fragmentScript->SetCurrentSize(enhancedBSize);
+        // 기획서 정확한 크기 30% 감소 적용
+        fragmentScript->SetCurrentSize(newSize);  // 정확히 30% 감소된 크기
         fragmentScript->SetHealth(1); // b 조각들은 HP 1
         fragmentScript->SetSplitFragment(true);
         
@@ -322,11 +321,20 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
         fragmentScript->SetNeedsPhysicsTransition(true);
         fragmentScript->SetHonmunType(fragmentType); // 스크립트에도 올바른 타입 설정
         
-        // 크기 적용 (가시성 개선을 위해 증가된 크기)
+        // 기획서 크기 30% 감소 적용 (정확한 크기)
         if (fragmentScript->GetHonmun())
         {
-            fragmentScript->GetHonmun()->SetSize(enhancedBSize);
+            fragmentScript->GetHonmun()->SetSize(newSize);
+            
+            char sizeMsg[100];
+            float originalSize = script->GetCurrentSize();
+            sprintf_s(sizeMsg, "b fragment size: %.2f (30%% smaller than original %.2f)\n", 
+                     newSize, originalSize);
+            OutputDebugStringA(sizeMsg);
         }
+        
+        // b 조각 가시성 개선: 색상이나 이펙트로 구분 (크기는 기획서대로 30% 감소 유지)
+        // TODO: 향후 색상 변경이나 반짝임 효과로 가시성 개선 가능
         
         // 포켓볼/드래곤볼 스타일: 폭발적인 방사형 퍼짐 물리 설정
         auto* rigidbody = fragmentScript->GetRigidbody();
