@@ -12,14 +12,14 @@ class HonBController : public Script
 private:
 	// hon stat
 	int hp = 3;
-	float descentSpeed = 80;
-	float collisionSpeed = 150;
+	float descentSpeed = 80;		// 하강 speed
+	float collisionSpeed = 150;		// 충돌 밀림 speed
 	float size = 1;
 	float pushBackTime = 5.0f;		// 충돌시 pushBackTime 시간동안 이동
 
 	// controll
-	Vector2 direction = Vector2::down;
-	bool isPlayerCollision = false;
+	Vector2 direction = Vector2::zero;
+	bool isCollisionMoving = false;	// 충돌로 밀려지는 상태
 	float pushBackDeltaTime;
 
 	// player 

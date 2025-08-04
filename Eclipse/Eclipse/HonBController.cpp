@@ -8,6 +8,7 @@
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Camera.h"
 #include "HonB.h"
+#include "HonAController.h"
 
 // script component cycle
 void HonBController::Awake()
@@ -27,20 +28,23 @@ void HonBController::Start()
 
 void HonBController::Update()
 {
-	if (isPlayerCollision)
+	if (isCollisionMoving)
 	{
+		// collision move
 		pushBackDeltaTime += Time::GetDeltaTime();
 		tr->Translate(direction * collisionSpeed * Time::GetDeltaTime());
 
+		// move end
 		if (pushBackDeltaTime >= pushBackTime)
 		{
-			isPlayerCollision = false;
+			isCollisionMoving = false;
 			pushBackDeltaTime = 0;
 		}
 	}
 	else
 	{
-		tr->Translate(direction * descentSpeed * Time::GetDeltaTime());
+		// descent move
+		tr->Translate(Vector2::down * descentSpeed * Time::GetDeltaTime());
 	}
 }
 
@@ -53,10 +57,14 @@ void HonBController::OnDestroy()
 void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	// player collision
-	if (!isPlayerCollision && other->gameObject->name == "Player")
+	if (other->gameObject->name == "PlayerAttackArea")
 	{
+		// collision move start (reset)
+		isCollisionMoving = true;
+		pushBackDeltaTime = 0;
+
+		// direction
 		direction = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-		isPlayerCollision = true;
 	}
 
 	// hon collision
@@ -64,7 +72,12 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		// other gameobject
 		GameObject* otherGameObject = other->gameObject;
+		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
+
+		// collision move start (reset)
+		isCollisionMoving = true;
+		pushBackDeltaTime = 0;
 
 		// collider off
 		collider->SetEnabled(false);
@@ -83,7 +96,6 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			HonBController* controller = newHonB->GetComponent<HonBController>();
 			controller->SetSize(size);
 			controller->SetDescentSpeed(descentSpeed * 1.2);
-			controller->SetDirection(Vector2::down);
 		}
 		else if (honType == "HonC")
 		{
@@ -93,6 +105,9 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 
 		}
+		
+		// collider on
+		collider->SetEnabled(true);
 	}
 }
 

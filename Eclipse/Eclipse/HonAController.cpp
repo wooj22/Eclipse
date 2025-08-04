@@ -8,6 +8,7 @@
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Camera.h"
 #include "HonA.h"
+#include "HonBController.h"
 
 // script component cycle
 void HonAController::Awake()
@@ -27,20 +28,23 @@ void HonAController::Start()
 
 void HonAController::Update()
 {
-	if (isPlayerCollision)
+	if (isCollisionMoving)
 	{
+		// collision move
 		pushBackDeltaTime += Time::GetDeltaTime();
 		tr->Translate(direction * collisionSpeed * Time::GetDeltaTime());
 
+		// move end
 		if (pushBackDeltaTime >= pushBackTime)
 		{
-			isPlayerCollision = false;
+			isCollisionMoving = false;
 			pushBackDeltaTime = 0;
 		}
 	}
 	else
 	{
-		tr->Translate(direction * descentSpeed * Time::GetDeltaTime());
+		// descent move
+		tr->Translate(Vector2::down * descentSpeed * Time::GetDeltaTime());
 	}
 }
 
@@ -53,10 +57,14 @@ void HonAController::OnDestroy()
 void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	// player collision
-	if (!isPlayerCollision && other->gameObject->name == "Player")
+	if (other->gameObject->name == "PlayerAttackArea")
 	{
+		// collision move start (reset)
+		isCollisionMoving = true;
+		pushBackDeltaTime = 0;
+
+		// direction
 		direction = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-		isPlayerCollision = true;
 	}
 
 	// hon collision
@@ -64,7 +72,12 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		// other gameobject
 		GameObject* otherGameObject = other->gameObject;
+		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
+
+		// collision move start (reset)
+		isCollisionMoving = true;
+		pushBackDeltaTime = 0;
 
 		// collider off
 		collider->SetEnabled(false);
@@ -80,19 +93,21 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				if(!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
 				SetSize(size * 1.5);
 				SetDescentSpeed(descentSpeed * 0.6);
-				SetDirection(Vector2::down);
 			}
 			else
 			{
 				otherController->SetSize(otherController->GetSize() * 1.5);
-				otherController->SetDirection(Vector2::down);
 				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
 		}
 		else if (honType == "HonB")
 		{
+			// controller
+			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 
+			direction = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
+			
 		}
 		else if (honType == "HonC")
 		{
@@ -102,6 +117,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 
 		}
+
+		// collider on
+		collider->SetEnabled(true);
 	}
 }
 
