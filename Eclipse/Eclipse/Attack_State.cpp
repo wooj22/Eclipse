@@ -15,6 +15,14 @@ void Attack_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Attack_State] Player의 Attack_State 진입 \n");
 
+    // 초기화 : 스킬 해금 레벨에 따라 보정
+    float skillBonus = fsm->GetPlayerFSM()->GetAttackRangeBonus();
+    baseMaxDistance = fsm->GetPlayerFSM()->maxAttackDistance + skillBonus;
+    desiredTime = fsm->GetPlayerFSM()->attackDesiredTime;
+
+    std::string dbg = "[Attack_State] Attack MaxDist: " + std::to_string(baseMaxDistance) + "\n";
+    OutputDebugStringA(dbg.c_str());
+
     // 애니메이션 재생 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", true);
 
@@ -23,7 +31,7 @@ void Attack_State::Enter(MovementFSM* fsm)
     Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
-    float actualDistance = (((toMouse.Magnitude()) < (maxDistance)) ? (toMouse.Magnitude()) : (maxDistance)); // sts::min 
+    float actualDistance = (((toMouse.Magnitude()) < (baseMaxDistance)) ? (toMouse.Magnitude()) : (baseMaxDistance)); // sts::min 
     direction = toMouse.Normalized();
     targetPos = startPos + direction * actualDistance;
 
@@ -40,7 +48,7 @@ void Attack_State::Enter(MovementFSM* fsm)
     // playerAttack_Parent 회전 : ( 원본 이미지가 위쪽 방향 기준 -> 시계방향 -90도 회전 적용 )
     fsm->GetPlayerFSM()->GetPlayerAttackParent()->GetComponent<Transform>()->SetRotation(angleDeg - 90.0f);
 
-    // 활성화
+    // 공격 범위 활성화
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(true);
 }
 
@@ -84,6 +92,8 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
 
 void Attack_State::Exit(MovementFSM* fsm)
 {
+    fsm->GetPlayerFSM()->UseAttack(); // 공격 차감 
+
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);

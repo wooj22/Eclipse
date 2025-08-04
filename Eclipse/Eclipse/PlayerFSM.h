@@ -1,4 +1,6 @@
 #pragma once
+#include<map>
+
 #include "../Direct2D_EngineLib/Script.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/ICollider.h"
@@ -7,12 +9,21 @@
 #include "MovementFSM.h"
 #include "ActionFSM.h"
 
+#include "GameManager.h"
+
+enum class JumpPhase
+{
+	None,       // 공중에 안뜬 상태
+	NormalJump,
+	DoubleJump,
+	WallJump
+};
+
 class Transform;
 class SpriteRenderer;
 class AnimatorController;
 class WorldTextRenderer;
 class Rigidbody;
-// class BoxCollider;
 class PlayerAttackArea;
 
 class PlayerFSM : public Script
@@ -22,6 +33,10 @@ private:
 	std::unique_ptr<MovementFSM> movementFSM;
 	std::unique_ptr<ActionFSM> actionFSM;
 
+private:
+	// Jump - skill 
+	std::map<JumpPhase, bool> canAttackAfterJump;
+
 public:
 	MovementFSM* GetMovementFSM() { return movementFSM.get(); }
 	ActionFSM* GetActionFSM() { return actionFSM.get(); }
@@ -29,16 +44,16 @@ public:
 private:
 	// stat
 	float curSpeed = 0;
-	float walkSpeed = 280.f;
-	float dashSpeed = 450.f;
+	float walkSpeed = 280.0f;
+	float dashSpeed = 450.0f;
 	float jumpForce = 700.0f;
 
-	float speedDownRate = 1.0;
+	float speedDownRate = 1.0; 
 
-	// int lastWallDir = 0;  // -1: 왼쪽, 1: 오른쪽, 0: 없음
+	bool isInvincible = false;	// dash 무적 상태 
 
 	// move
-	float inputX, inputY;
+	float inputX, inputY; // x : 왼쪽 -1 
 	bool isGround;
 	bool lastFlipX = false;
 	bool isBulletFliping = false;
@@ -46,6 +61,7 @@ private:
 
 	bool isWallLeft = false;
 	bool isWallRight = false;
+	bool isWall = false;
 
 
 	// key
@@ -61,23 +77,30 @@ private:
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
 	AnimatorController* animatorController = nullptr;
-	// BoxCollider* boxCollider = nullptr;
 
 	PlayerAttackArea* playerAttackArea = nullptr;
 	GameObject* playerAttackParent = nullptr;
 
 public:
-	// [ FSM 변수 ]
-	// GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 해주기 
+	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 
 	float holdTime = 0.0f;
 	float timer = 0.0f;
+
+	bool canDoubleJump = false;             // 다시 땅 밟기 전까지 더블점프는 한번만 가능 
 	bool isHolding = false;
+
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
-	const float defaultGravity = 100.0f;   // 기본 중력 
+	const float defaultGravity = 100.0f;    // 기본 중력 
 	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
-	Vector2 MouseWorldPos;
+
+	Vector2 MouseWorldPos;					// 실시간 마우스 월드 좌표 
+
+	// attack 
+	float maxAttackDistance = 300.0f;       // 공격 시, 최대 이동 거리
+	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
+
 
 public:
 	// getter
@@ -93,13 +116,14 @@ public:
 	float GetJumpForce() const { return jumpForce; }
 	float GetInputX() const { return inputX; }
 	float GetCurSpeed() const { return curSpeed; }
+	float GetWalkSpeed() const { return walkSpeed; }
+	// float GetSpeed() const { return walkSpeed + GetMoveSpeedBonus(); }
 
 	// TODO : 매개변수로 감속율 받는 함수 (우정)
-	// 감속률만 받도록 
-	// 쿨타임 후, 원래 속도 복원 
+	// 감속률만 받도록.  쿨타임 후, 원래 속도 복원 
 	void SetSpeedDownRate(float speed) { speedDownRate = speed; }
 
-
+	bool GetIsWall() const { return isWall; }
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }
 
@@ -109,6 +133,8 @@ public:
 	void SetisBulletFliping(bool isBulletTime) { isBulletFliping = isBulletTime; }
 	bool GetisBulletFlipX() const { return isBulletFlipX; } // true 왼쪽 
 	void SetisBulletFlipX(bool isBulletX) { isBulletFlipX = isBulletX; }
+	void SetInvincible(bool value) { isInvincible = value; } // 무적 상태 여부 
+	bool GetIsInvincible() const { return isInvincible; }
 
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 	AnimatorController* GetAnimatorController() const { return animatorController; }
@@ -117,10 +143,6 @@ public:
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
 	GameObject* GetPlayerAttackParent() const { return playerAttackParent; }
-
-	// BoxCollider* GetBoxCollider() const { return boxCollider; }
-
-	// void SetLastWallDir(int dir) { lastWallDir = dir; }
 
 
 public:
@@ -143,10 +165,37 @@ public:
 	void OnCollisionExit(ICollider* other, const ContactInfo& contact)  override;
 
 
-public:
-	float GetSpeed() { return curSpeed; }
+
+public: 
+	// [ skill ]
+	bool canAttack_Unlock = true;          // 기본 공격 횟수 (해금 이후 공격 횟수는 각 State에서 관리)
+	int airAttackCount = 0;
+
+	// dash 
+	float dashCooldown = 2.0f;         // 대시 쿨타임 (2초)
+	float dashCooldownTimer = 0.0f;    // 대시 쿨타임 타이머
+
+	// jump 
+	void OnGround();
+	void OnJump(JumpPhase jumpType);
+	bool CanAttack();
+	void UseAttack();
+
+	// speed 
+	float GetMoveSpeedBonus() const;
+
+	// attack 
+	float GetAttackRangeBonus() const;
+
+	// dash 
+	void UpdateDashCooldown(); 
+	bool CanDash() const;
+	void ResetDashCooldown();
 
 private:
-	void InputCheak();
+	// [ FSM setting ] 
+	void InputSetting();
+	void SpeedSetting();
+	void FlipXSetting();
 };
 
