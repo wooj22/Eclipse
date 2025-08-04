@@ -1,7 +1,8 @@
 #pragma once
 #include "../Direct2D_EngineLib/Singleton.h"
 #include <unordered_map>
-#include <string>
+#include <string>  
+#include <vector>  
 
 class PlayUI;
 
@@ -37,22 +38,34 @@ struct SkillInfo {
 	bool unlocked = false;  // 해금 여부
 	int unlockLevel = 0;    // 해금된 레벨 (혹은 조건 레벨)
 	int maxLevel = 1;		// 스킬 최대 레벨 (기본 1)
+	std::wstring skillname = L"";				// 스킬 이름
+	std::wstring skillDesc = L"";				// 스킬 설명
+	std::vector<float>skillValue;				// 스킬값
 
 	// 선행 조건: optional
 	SkillType prerequisiteSkill = SkillType::COUNT; // 기본값 = 없음
 	int requiredLevel = 0; // 위 스킬이 이 레벨 이상일 때만 해금 가능
+	std::vector<int> skillCost;
 
 	SkillInfo(
 		bool unlocked = false,
 		int unlockLevel = 0,
 		int maxLevel = 1,
 		SkillType prerequisiteSkill = SkillType::COUNT,
-		int requiredLevel = 0)
+		int requiredLevel = 0,
+		std::wstring name = L"",
+		std::wstring descriptions = L"",
+		const std::vector<float>& values = {},
+		const std::vector<int>& cost = {})
 		: unlocked(unlocked),
 		unlockLevel(unlockLevel),
 		maxLevel(maxLevel),
 		prerequisiteSkill(prerequisiteSkill),
-		requiredLevel(requiredLevel)
+		requiredLevel(requiredLevel),
+		skillname(name),
+		skillDesc(descriptions),
+		skillValue(values),
+		skillCost(cost)
 	{
 	}
 };

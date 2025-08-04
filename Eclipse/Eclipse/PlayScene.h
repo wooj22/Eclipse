@@ -8,6 +8,7 @@
 #include "EclipseApp.h"
 #include "NPC.h"
 #include "Player_Test.h"
+#include "SkillWindowButton.h"
 
 class PlayScene : public Scene
 {
