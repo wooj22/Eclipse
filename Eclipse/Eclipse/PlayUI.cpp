@@ -280,11 +280,11 @@ void PlayUI::ClickChatButton() {
 	GameManager::Get().waveCount++;
 	if (GameManager::Get().waveCount == 5)
 	{
-		SceneManager::Get().ChangeScene(EclipseApp::END);//TODOMO: 추후 크레딧으로 변경
+		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
-	if (GameManager::Get().waveCount > 3) waveTimer = 2;
-	else waveTimer = 2;// TODOMO : 테스트로 6초 71초로 변경 필요
+	if (GameManager::Get().waveCount > 3) waveTimer = 81;
+	else waveTimer = 71;
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
 	StartWaveInfo(GameManager::Get().waveCount);
