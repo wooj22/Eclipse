@@ -114,7 +114,10 @@ void Moon_Scene::Awake()
 	camCompo->SetTargetTraceLimitY(100.0f);
 	camCompo->SetMapCondition(mapRect);
 
-	npc = CreateObject<NPC>();
+
+	// [ UI ] 
+
+	/*npc = CreateObject<NPC>();
 
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
@@ -145,7 +148,7 @@ void Moon_Scene::Awake()
 	playUI->skillbutton8 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp);
 	playUI->skillbutton9 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash);
 	playUI->skillHon_Image = CreateObject<UI_Image>();
-	playUI->skillHon_Text = CreateObject<UI_Text>();
+	playUI->skillHon_Text = CreateObject<UI_Text>();*/
 
 }
 
