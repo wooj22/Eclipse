@@ -17,7 +17,6 @@ private:
 	int prevLevel = -1;			// 이전 레벨
 	SkillType skillName;		// 스킬 이름
 	float colorPositionX = 0;
-	RenderMode preRenderMode;
 	bool isEnterButton = false;
 	float glowtimer = 0;
 	float glowspeed = 3.0f;
