@@ -2,6 +2,7 @@
 #include "RenderSystem.h"
 #include "Texture2D.h"
 #include "Sprite.h"
+#include "AudioClip.h"
 
 /// ResourceManager Init
 HRESULT ResourceManager::Init()
@@ -248,4 +249,26 @@ shared_ptr<Sprite> ResourceManager::CreateSprite(shared_ptr<Texture2D> texture, 
     shared_ptr<Sprite> newSprite = make_shared<Sprite>(texture, spriteName, rect, pivotPoint);
     map_sprite[spriteName] = newSprite;
     return newSprite;
+}
+
+/// Create AudioClip
+shared_ptr<AudioClip> ResourceManager::CreateAudioClip(string filePath)
+{
+    string key = filePath;
+    auto it = map_AudioClip.find(key);
+
+    // map에 weak_ptr이 있을 경우
+    if (it != map_AudioClip.end())
+    {
+        // 1) 인스턴스가 살아있다면 shared_ptr return
+        if (!it->second.expired()) return it->second.lock();
+
+        // 인스턴스가 소멸된상태라면 weak_ptr을 제거하고 새 리소스 생성
+        else map_AudioClip.erase(it);
+    }
+
+    // 2) Create new resource
+    shared_ptr<AudioClip> newAudioClip = make_shared<AudioClip>(filePath);
+    map_AudioClip[filePath] = newAudioClip;
+    return newAudioClip;
 }

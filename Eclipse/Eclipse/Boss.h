@@ -8,8 +8,8 @@
 
 // audio test
 #include "../Direct2D_EngineLib/AudioSystem.h"
-#include "../Direct2D_EngineLib/AudioClip.h"
 #include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 
 /* 보스 웨이브에 등장하는 Boss GameObject 선언 클래스 */
 
@@ -26,8 +26,8 @@ public:
 	// audio test
 	AudioSource* bgmSource = nullptr;
 	AudioSource* sfxSource = nullptr;
-	AudioClip* bgmClip = nullptr;
-	AudioClip* sfxClip = nullptr;
+	shared_ptr<AudioClip> bgmClip = nullptr;
+	shared_ptr<AudioClip> sfxClip = nullptr;
 
 	Boss()
 	{
@@ -61,8 +61,8 @@ public:
 		bgmSource = AddComponent<AudioSource>();
 		sfxSource = AddComponent<AudioSource>();
 
-		bgmClip = new AudioClip("../Resource/Audio/Sample/BGM_Stage1.wav");
-		sfxClip = new AudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+		bgmClip = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/BGM_Stage1.wav");
+		sfxClip = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
 	
 		AudioSystem::Get().SetBGMVolume(0.5);
 
@@ -70,11 +70,11 @@ public:
 		bgmSource->SetVolume(1);
 		bgmSource->SetClip(bgmClip);
 		bgmSource->SetLoop(true);
-		//bgmSource->Play();
+		bgmSource->Play();
 
 		sfxSource->SetClip(sfxClip);
 		sfxSource->SetLoop(true);
-		//sfxSource->Play();
+		sfxSource->Play();
 	}
 
 	void Update() override

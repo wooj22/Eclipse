@@ -52,9 +52,6 @@
     <Filter Include="소스 파일\05. StaticSystem">
       <UniqueIdentifier>{b3ca52cb-692b-4fc1-81e7-47a6f5ef9577}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\06. Manager">
-      <UniqueIdentifier>{6fc29779-f922-4737-883e-2359d27b9600}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\07. Graphics">
       <UniqueIdentifier>{a37cca4b-2cee-4c2f-a40c-e7e8bbbb49c6}</UniqueIdentifier>
     </Filter>
@@ -99,9 +96,6 @@
     </Filter>
     <Filter Include="헤더 파일\05. StaticSystem">
       <UniqueIdentifier>{5f869c07-4bf5-4858-9010-4cee6d424cfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\06. Manager">
-      <UniqueIdentifier>{2ea9d40c-19d7-45f1-8b54-466e3bb652e6}</UniqueIdentifier>
     </Filter>
     <Filter Include="헤더 파일\07. Graphics">
       <UniqueIdentifier>{e7a54647-da74-45b8-a0ad-eae862e571bf}</UniqueIdentifier>
@@ -169,6 +163,12 @@
     <Filter Include="헤더 파일\10. Audio">
       <UniqueIdentifier>{31dff612-afc3-4352-9599-857edce00862}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\06. ResourceManager">
+      <UniqueIdentifier>{2ea9d40c-19d7-45f1-8b54-466e3bb652e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06. ResourceManager">
+      <UniqueIdentifier>{6fc29779-f922-4737-883e-2359d27b9600}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -235,7 +235,7 @@
       <Filter>헤더 파일\04. ComponentSystem</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>헤더 파일\06. Manager</Filter>
+      <Filter>헤더 파일\06. ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Texture2D.h">
       <Filter>헤더 파일\07. Graphics</Filter>
@@ -393,7 +393,7 @@
       <Filter>소스 파일\04. ComponentSystem</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>소스 파일\06. Manager</Filter>
+      <Filter>소스 파일\06. ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
       <Filter>소스 파일\07. Graphics</Filter>
