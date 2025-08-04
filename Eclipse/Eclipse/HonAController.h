@@ -12,7 +12,8 @@ class HonAController : public Script
 private:
 	// hon stat
 	int hp = 3;
-	float speed = 150;
+	float speed = 80;
+	float collisionSpeed = 150;
 	float size = 1;
 	float pushBackTime = 5.0f;		// 충돌시 pushBackTime 시간동안 이동
 
@@ -49,5 +50,8 @@ public:
 
 	void SetSize(float s){ size = s;  tr->SetScale(size, size); }
 	float GetSize() { return size; }
+
+	void SetSpeed(float s) { speed = s; }
+	float GetSpeed() { return speed; }
 };
 

@@ -30,13 +30,17 @@ void HonAController::Update()
 	if (isPlayerCollision)
 	{
 		pushBackDeltaTime += Time::GetDeltaTime();
-		tr->Translate(direction * speed * Time::GetDeltaTime());
+		tr->Translate(direction * collisionSpeed * Time::GetDeltaTime());
 
 		if (pushBackDeltaTime >= pushBackTime)
 		{
 			isPlayerCollision = false;
 			pushBackDeltaTime = 0;
 		}
+	}
+	else
+	{
+		tr->Translate(Vector2::down * speed * Time::GetDeltaTime());
 	}
 }
 
@@ -76,12 +80,14 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			{
 				if(!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
 				SetSize(size * 1.5);
-				SetDirection(Vector2::zero);
+				SetSpeed(speed * 0.6);
+				SetDirection(Vector2::down);
 			}
 			else
 			{
 				otherController->SetSize(otherController->GetSize() * 1.5);
-				otherController->SetDirection(Vector2::zero);
+				otherController->SetDirection(Vector2::down);
+				otherController->SetSpeed(otherController->GetSpeed() * 0.6);
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
 		}
