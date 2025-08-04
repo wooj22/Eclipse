@@ -40,8 +40,8 @@ void Woo_Scene::Awake()
 	// hon
 	honA1 = CreateObject<HonA>({ -200,-500 });
 	honA2 = CreateObject<HonA>({ -500,-300 });
-	honB1 = CreateObject<HonB>({ 200,-500 });
-	honB2 = CreateObject<HonB>({ 500,-300 });
+	honB1 = CreateObject<HonB>({ 0,-500 });
+	honB2 = CreateObject<HonB>({ 200,-300 });
 
 	// map sample
 	map_woo = CreateObject<Map_Woo>({ 0, -900 });

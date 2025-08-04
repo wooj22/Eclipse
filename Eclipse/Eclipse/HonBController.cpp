@@ -84,7 +84,8 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		if (honType == "HonA")
 		{
-			
+			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
+			direction = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
 		}
 		else if (honType == "HonB")
 		{
