@@ -63,6 +63,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+
+		// hp
+		hp--;
 	}
 
 	// [hon collision]
@@ -78,10 +81,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 			// collision move start (reset)
 			isCollisionMoving = true;
-			collisionMovingDelta = 0;
-
-			// collider off
-			collider->SetEnabled(false);
+			collisionMovingDelta = 0;;
 
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
@@ -98,6 +98,8 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 				otherController->SetDirection(Vector2::left);
 			}
+
+			hp--;
 		}
 		// 2. 연쇄반응 C-C
 		else if (honType == "HonC")
@@ -105,9 +107,6 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// collision move start (reset)
 			isCollisionMoving = true;
 			collisionMovingDelta = 0;
-
-			// collider off
-			collider->SetEnabled(false);
 
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();
@@ -134,8 +133,8 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			if (!other->gameObject->IsDestroyed()) other->gameObject->Destroy();
 			gameObject->Destroy();
 		}
-
-		// collider on
-		collider->SetEnabled(true);
 	}
+
+	// HP Cheak
+	if (hp <= 0) gameObject->Destroy();
 }

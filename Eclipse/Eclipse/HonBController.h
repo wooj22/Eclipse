@@ -23,7 +23,7 @@ private:
 	
 	// data
 	float collisionMovingTime = 3.0f;		// 충돌 밀림 지속시간
-	float pullMovingTime = 1.0f;			// Hon C 끌어당김 지속시간
+	float pullMovingTime = 0.7f;			// Hon C 끌어당김 지속시간
 
 	// controll
 	Vector2 moveDirection = Vector2::zero;	    // colliison move dir
@@ -63,6 +63,9 @@ public:
 
 	void SetDescentSpeed(float s) { descentSpeed = s; }
 	float GetDescentSpeed() { return descentSpeed; }
+
+	void SetHp(int h) { hp = h; }
+	int GetHp() { return hp; }
 
 	// HonC 끌어당기는 함수
 	void HonC_PullMe(Vector2 pos);

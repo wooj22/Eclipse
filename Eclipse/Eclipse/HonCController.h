@@ -6,7 +6,7 @@
 // ¿¬¼â¹ÝÀÀ
 // 1. A : ÁÂ¿ì·Î Æ¨±è
 // 2. B : ¹«½Ã
-// 3. C : View¾ÈÀÇ ¸ðµç È¥À» ²ø¾î´ç±è
+// 3. C : View¾ÈÀÇ ¸ðµç È¥À» ²ø¾î´ç±â°í »èÁ¦
 // 4. D : ÆÄ±«
 
 class Transform;
@@ -60,5 +60,8 @@ public:
 
 	void SetDescentSpeed(float s) { descentSpeed = s; }
 	float GetDescentSpeed() { return descentSpeed; }
+
+	void SetHp(int h) { hp = h; }
+	int GetHp() { return hp; }
 };
 

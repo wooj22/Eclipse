@@ -59,6 +59,9 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+
+		// hp
+		hp--;
 	}
 
 	// [hon collision]
@@ -77,6 +80,9 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		otherGameObject->Destroy();
 		this->gameObject->Destroy();
 	}
+
+	// HP Cheak
+	if (hp <= 0) gameObject->Destroy();
 }
 
 /*------------- Functions -------------*/
