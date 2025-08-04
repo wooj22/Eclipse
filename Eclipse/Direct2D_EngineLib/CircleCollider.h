@@ -28,9 +28,6 @@ public:
     Vector2 offset = Vector2::zero;
     float radius = 1.0f;
 
-    // Flatform :: normal.y == 1일때만 충돌 인식
-    bool isFlatform = false;
-
 public:
     // component cycle
     CircleCollider() { colliderType = ColliderType::Circle; }

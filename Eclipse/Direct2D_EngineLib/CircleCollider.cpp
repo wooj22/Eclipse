@@ -179,6 +179,14 @@ bool CircleCollider::CheckBoxCollision(BoxCollider* other, ContactInfo& contact)
         contact.depth = scaledRadius - distance;
     }
 
+    // ÇÃ·§Æû Ã³¸®
+    if (other->isFlatform)
+    {
+        Vector2 platformNormal = -contact.normal;
+        if (platformNormal != Vector2(0, -1))
+            return false;
+    }
+
     return true;
 }
 

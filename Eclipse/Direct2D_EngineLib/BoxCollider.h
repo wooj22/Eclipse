@@ -14,6 +14,9 @@
 * 각 콜라이더에서 충돌 체크 연산시 두 콜라이더가 충돌한 경우에는
 * 충돌 지점(point)과 법선벡터(normal)를 구해 map에 콜라이더와 함께 저장한다.
 * FinalizeCollision시점에서 OnCollision 충돌이 경우, 해당 ContectInfo를 함께 전달하여 normal에 따라 이동 시도를 제한한다.
+*
+* BoxCollider는 isFlatform을 지원한다.
+* isFlatform = true라면 해당 콜라이더는 normal (0,-1)충돌만 인식한다.
 */
 
 class Transform;
