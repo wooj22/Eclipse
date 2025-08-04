@@ -6,6 +6,8 @@
 #include "Aron_Scene.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/SceneManager.h"
+#include "../Direct2D_EngineLib/Input.h"
+#include "../Direct2D_EngineLib/Camera.h"
 
 HonmunCollisionBase::HonmunCollisionBase()
 {
@@ -284,12 +286,33 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
         {
             if (rigidbody && transform)
             {
-                // 플레이어 공격 시 속도 5로 천천히 밀려나도록 설정
+                // 플레이어 공격 시 마우스 방향 기반 넉백
                 Vector2 honmunPos = transform->GetPosition();
                 Vector2 attackPos = other->gameObject->GetComponent<Transform>()->GetPosition();
                 
-                // 공격 방향 = 혼문 위치 - 공격 위치 (플레이어가 공격한 방향)
-                Vector2 knockbackDir = (honmunPos - attackPos).Normalized();
+                // 마우스 월드 좌표 계산
+                Vector2 mouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
+                
+                // 플레이어 위치 찾기 (Aron_Scene에서 Player 가져오기)
+                Vector2 playerPos = attackPos; // 기본값
+                
+                auto* currentScene = SceneManager::Get().GetCurrentScene();
+                auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+                if (aronScene && aronScene->GetPlayer()) {
+                    auto* playerTransform = aronScene->GetPlayer()->GetComponent<Transform>();
+                    if (playerTransform) {
+                        playerPos = playerTransform->GetPosition();
+                    }
+                }
+                
+                // 넉백 방향 = 플레이어에서 마우스로의 방향
+                Vector2 knockbackDir = (mouseWorldPos - playerPos).Normalized();
+                
+                // 디버그: 방향 계산 로그
+                char dirDebugMsg[200];
+                sprintf_s(dirDebugMsg, "🎯 Knockback Direction: Player(%.1f,%.1f) → Mouse(%.1f,%.1f) = Dir(%.2f,%.2f)\n", 
+                         playerPos.x, playerPos.y, mouseWorldPos.x, mouseWorldPos.y, knockbackDir.x, knockbackDir.y);
+                OutputDebugStringA(dirDebugMsg);
                 
                 // 넉백 속도를 10으로 설정
                 float knockbackSpeed = 10.0f; // 속도 10으로 수정

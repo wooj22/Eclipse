@@ -303,8 +303,8 @@ void HonmunCollisionTypes::HandleSmallBReaction(HonmunCollisionBase* script, Hon
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    OutputDebugStringA("=== b + b CHAIN COLLISION STARTED (Dragon Ball style) ===\n");
-    OutputDebugStringA("b + b collision - chain reaction breakup + both destroyed for 2 points!\n");
+    OutputDebugStringA("=== b + b COLLISION STARTED ===\n");
+    OutputDebugStringA("b + b collision - both destroyed immediately for 2 points!\n");
     
     // 연쇄 충돌 지점 계산
     Vector2 chainCollisionPoint;
@@ -319,37 +319,18 @@ void HonmunCollisionTypes::HandleSmallBReaction(HonmunCollisionBase* script, Hon
         OutputDebugStringA(posDebugMsg);
     }
     
-    // 드래곤볼 스타일 연쇄 분해: 작은 조각들도 더 작은 파편으로 산산조각
-    if (script->GetCollisionEffects())
-    {
-        float smallFragmentSize = script->GetCurrentSize() * 0.5f; // 50% 더 작게
-        
-        OutputDebugStringA("Creating micro-fragments from b+b chain collision...\n");
-        // 2개의 b가 6개의 micro-fragment로 분해 (더 화려한 효과)
-        script->GetCollisionEffects()->CreateSplitFragments(script, chainCollisionPoint, 6, smallFragmentSize, 1.5f); // 50% 더 빠르게
-        
-        char debugMsg[150];
-        sprintf_s(debugMsg, "b+b chain split: 6 micro-fragments created, Size %.2f (50%% smaller), Speed increased by 50%%\n", 
-                 smallFragmentSize);
-        OutputDebugStringA(debugMsg);
-        
-        // 추가 시각 효과: 강한 충격파 (포켓볼 스타일)
-        ApplyCollisionForce(script, otherScript, 400.0f); // 일반보다 강한 충격
-    }
-    else
-    {
-        OutputDebugStringA("ERROR: script->GetCollisionEffects() is null for b+b chain collision!\n");
-    }
+    // b+b 충돌: 조각 생성 없이 둘 다 즉시 파괴 (기획서 기준)
+    OutputDebugStringA("b+b collision: Both destroyed immediately, no fragments created\n");
     
     // b+b 충돌: 둘 다 소멸하므로 2점 (b=1점 × 2개)
     if (aronScene) 
     {
         aronScene->AddScore(2); // b × 2 = 1점 × 2 = 2점
-        OutputDebugStringA("b+b chain destruction: +2 points (1pt × 2) + spectacular breakup effect\n");
+        OutputDebugStringA("b+b destruction: +2 points (1pt × 2), both b destroyed\n");
     }
     
     // 둘 다 즉시 파괴 (HP 1 + HP 1 = 소멸)
-    OutputDebugStringA("Destroying both b objects after chain reaction...\n");
+    OutputDebugStringA("Destroying both b objects after collision...\n");
     if (aronScene) {
         aronScene->RemoveHonmunFromManager(script->GetHonmun());
         aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
@@ -1101,7 +1082,11 @@ void HonmunCollisionTypes::ApplyOppositeForces(HonmunCollisionBase* script1, Hon
 
 void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force)
 {
+<<<<<<< HEAD
     // 각 혼문이 원래 움직여온 방향으로 되돌려보냄 - 키네마틱 모드 유지 버전
+=======
+    // 충돌 방향에 따라 좌우로 밀어냄 - 키네마틱 모드 유지 버전
+>>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
     auto* transform1 = script1->GetTransform();
     auto* transform2 = script2->GetTransform();
     
@@ -1138,7 +1123,13 @@ void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, Honm
     transform1->SetPosition(newPos1.x, newPos1.y);
     transform2->SetPosition(newPos2.x, newPos2.y);
     
+<<<<<<< HEAD
     // 위치 고정을 위해 물리 상태 초기화 (드리프트 방지)
+=======
+    // 위치 고정을 위해 물리 상태 초기화
+    auto* rigidbody1 = script1->GetRigidbody();
+    auto* rigidbody2 = script2->GetRigidbody();
+>>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
     if (rigidbody1) {
         rigidbody1->velocity = Vector2(0, 0);
         rigidbody1->isKinematic = true;

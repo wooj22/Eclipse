@@ -107,6 +107,9 @@ public:
 	int GetSoulCount() const { return soulCount; }
 	void SetSoulCount(int count) { soulCount = count; }
 	
+	// 플레이어 접근자
+	Player* GetPlayer() const { return player; }
+	
 	// 웨이브 시스템 함수들
 	void StartWave1();
 	void StartWave2();

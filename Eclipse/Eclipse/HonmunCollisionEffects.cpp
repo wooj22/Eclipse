@@ -369,7 +369,9 @@ void HonmunCollisionEffects::CreateSplitFragments(HonmunCollisionBase* script, c
             if (fragmentType == HonmunType::b)
             {
                 fragmentScript->SetPersistentVelocity(scatterVelocity);
-                OutputDebugStringA("b fragment persistent velocity initialized for sustained motion\n");
+                // 연쇄 충돌 방지를 위한 초기 쿨타임 설정 (0.2초)
+                fragmentScript->SetReactionCooldown(0.2f);
+                OutputDebugStringA("b fragment: persistent velocity + collision cooldown initialized\n");
             }
             
             char velocityMsg[150];
