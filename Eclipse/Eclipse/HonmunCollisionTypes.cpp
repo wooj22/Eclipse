@@ -1101,7 +1101,7 @@ void HonmunCollisionTypes::ApplyOppositeForces(HonmunCollisionBase* script1, Hon
 
 void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force)
 {
-    // 충돌방향과 관계없이 좌, 우로 밀어냄 - 키네마틱 모드 유지 버전
+    // 각 혼문이 원래 움직여온 방향으로 되돌려보냄 - 키네마틱 모드 유지 버전
     auto* transform1 = script1->GetTransform();
     auto* transform2 = script2->GetTransform();
     
@@ -1110,19 +1110,53 @@ void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, Honm
     Vector2 pos1 = transform1->GetPosition();
     Vector2 pos2 = transform2->GetPosition();
     
-    // 좌우 방향 벡터 (왼쪽과 오른쪽)
-    Vector2 leftDirection(-1.0f, 0.0f);
-    Vector2 rightDirection(1.0f, 0.0f);
+    // 각 혼문의 이동 방향을 속도로부터 계산 (원래 움직이던 방향으로 되돌림)
+    auto* rigidbody1 = script1->GetRigidbody();
+    auto* rigidbody2 = script2->GetRigidbody();
     
-    // 키네마틱 모드에서 즉시 위치 변경
+    Vector2 direction1, direction2;
+    
+    // 각 혼문이 원래 움직이던 방향으로 되돌려보냄
+    if (rigidbody1 && rigidbody1->velocity.Magnitude() > 0.1f) {
+        direction1 = rigidbody1->velocity.Normalized();
+    } else {
+        // 속도가 없으면 위치 기반으로 방향 결정 (왼쪽에 있으면 왼쪽으로)
+        direction1 = (pos1.x < pos2.x) ? Vector2(-1.0f, 0.0f) : Vector2(1.0f, 0.0f);
+    }
+    
+    if (rigidbody2 && rigidbody2->velocity.Magnitude() > 0.1f) {
+        direction2 = rigidbody2->velocity.Normalized();
+    } else {
+        // 속도가 없으면 위치 기반으로 방향 결정 (오른쪽에 있으면 오른쪽으로)
+        direction2 = (pos2.x > pos1.x) ? Vector2(1.0f, 0.0f) : Vector2(-1.0f, 0.0f);
+    }
+    
+    // 각자 원래 움직이던 방향으로 밀어냄
     float displacement = force * 0.5f;
-    Vector2 newPos1 = pos1 + leftDirection * displacement;
-    Vector2 newPos2 = pos2 + rightDirection * displacement;
+    Vector2 newPos1 = pos1 + direction1 * displacement;
+    Vector2 newPos2 = pos2 + direction2 * displacement;
     transform1->SetPosition(newPos1.x, newPos1.y);
     transform2->SetPosition(newPos2.x, newPos2.y);
     
-    char debugMsg[100];
-    sprintf_s(debugMsg, "Applied kinematic left-right push: %.1f\n", force);
+    // 위치 고정을 위해 물리 상태 초기화 (드리프트 방지)
+    if (rigidbody1) {
+        rigidbody1->velocity = Vector2(0, 0);
+        rigidbody1->isKinematic = true;
+        rigidbody1->useGravity = false;
+    }
+    if (rigidbody2) {
+        rigidbody2->velocity = Vector2(0, 0);
+        rigidbody2->isKinematic = true;
+        rigidbody2->useGravity = false;
+    }
+    
+    // 물리 전환 상태 초기화 (드리프트 방지)
+    script1->SetNeedsPhysicsTransition(false);
+    script2->SetNeedsPhysicsTransition(false);
+    
+    char debugMsg[300];
+    sprintf_s(debugMsg, "A+C 충돌: obj1(%.1f,%.1f)→dir(%.1f,%.1f) obj2(%.1f,%.1f)→dir(%.1f,%.1f), force:%.1f\n", 
+             pos1.x, pos1.y, direction1.x, direction1.y, pos2.x, pos2.y, direction2.x, direction2.y, force);
     OutputDebugStringA(debugMsg);
 }
 
