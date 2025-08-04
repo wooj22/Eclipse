@@ -5,6 +5,7 @@
 #include "Attack_State.h"
 #include "BulletTime_State.h"
 #include "Hanging_State.h"
+#include "Dash_State.h"
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
@@ -15,6 +16,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+
 
 
 void Fall_State::Enter(MovementFSM* fsm)
@@ -60,6 +62,13 @@ void Fall_State::Update(MovementFSM* fsm)
             fsm->ChangeState(std::make_unique<Hanging_State>());
             return;
         }
+    }
+
+    // [ Dash ]
+    if (fsm->GetPlayerFSM()->GetisShift() && GameManager::Get().CheckUnlock(SkillType::Dash) && fsm->GetPlayerFSM()->CanDash())
+    {
+        fsm->ChangeState(std::make_unique<Dash_State>());
+        return;
     }
 }
 

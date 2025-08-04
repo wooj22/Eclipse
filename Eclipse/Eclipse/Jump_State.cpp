@@ -5,6 +5,7 @@
 #include "Jump_Wall_State.h"
 #include "BulletTime_State.h"
 #include "Attack_State.h"
+#include "Dash_State.h"
 
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
@@ -14,6 +15,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+
 
 
 void Jump_State::Enter(MovementFSM* fsm)
@@ -116,6 +118,13 @@ void Jump_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
     }
+
+    // [ Dash ]
+    if (fsm->GetPlayerFSM()->GetisShift() && GameManager::Get().CheckUnlock(SkillType::Dash) && fsm->GetPlayerFSM()->CanDash())
+    {
+        fsm->ChangeState(std::make_unique<Dash_State>());
+        return;
+    }
 }
 
 void Jump_State::FixedUpdate(MovementFSM* fsm)
@@ -148,6 +157,7 @@ void Jump_State::FixedUpdate(MovementFSM* fsm)
         // 입력이 없으면 감속
         fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
     }
+
 }
 
 void Jump_State::Exit(MovementFSM* fsm)
