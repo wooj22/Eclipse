@@ -76,7 +76,7 @@ bool GameManager::CanUnlock(SkillType skill)
 	return true; // 조건 만족
 }
 
-bool GameManager::LevelUpSkill(SkillType skill)
+bool GameManager::LevelUpSkill(SkillType skill, bool check )
 {
 	auto& info = skillTree[skill];
 
@@ -96,8 +96,15 @@ bool GameManager::LevelUpSkill(SkillType skill)
 	if (info.unlockLevel >= info.maxLevel)
 		return false;
 
-	honCount -= info.skillCost[info.unlockLevel];
-	info.unlockLevel++;
+	// 혼 부족
+	if (info.skillCost[info.unlockLevel] > honCount)
+		return false; 
+
+	if (!check)
+	{
+		honCount -= info.skillCost[info.unlockLevel];
+		info.unlockLevel++;
+	}
 	return true;
 }
 

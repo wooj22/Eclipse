@@ -98,6 +98,6 @@ public:
 	void ReSetData();
 	bool CanUnlock(SkillType skill);
 	bool CheckUnlock(SkillType skill) { return skillTree[skill].unlocked; }
-	bool LevelUpSkill(SkillType skill);
+	bool LevelUpSkill(SkillType skill, bool check = false);
 	void AllSkillUnlock();
 };
