@@ -18,6 +18,8 @@ private:
 
 	// controll
 	Vector2 direction = Vector2::zero;
+	Vector2 descentDirection = Vector2::down;
+	Vector2 pullDirection = Vector2::zero;
 	bool isCollisionMoving = false;	// 충돌로 밀려지는 상태
 	float pushBackDeltaTime;
 

@@ -38,7 +38,7 @@ void HonBController::Update()
 	else
 	{
 		// descent move
-		tr->Translate(Vector2::down * descentSpeed * Time::GetDeltaTime());
+		tr->Translate(descentDirection * descentSpeed * Time::GetDeltaTime());
 	}
 }
 
