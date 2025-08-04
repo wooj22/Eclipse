@@ -228,18 +228,6 @@
     <ClCompile Include="BossController.cpp">
       <Filter>03. Script\Woo\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Aron_Scene_Clean.cpp">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Aron_Scene_Defensive.cpp">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Aron_Scene_New.cpp">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="CRITICAL_CRASH_FIX.cpp">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
     <ClCompile Include="HonmunCFSM.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
@@ -268,6 +256,12 @@
       <Filter>헤더 파일</Filter>
     </ClCompile>
     <ClCompile Include="PlayerAttackScript.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Dash_State.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillWindowButton.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -443,6 +437,12 @@
     <ClInclude Include="playerAttackArea.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Dash_State.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillWindowButton.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fmod.dll">
@@ -453,6 +453,18 @@
     </None>
     <None Include="WAVE_SYSTEM_CRITICAL_ANALYSIS.md">
       <Filter>헤더 파일</Filter>
+    </None>
+    <None Include="Aron_Scene_Clean.cpp">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="Aron_Scene_Defensive.cpp">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="Aron_Scene_New.cpp">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="CRITICAL_CRASH_FIX.cpp">
+      <Filter>소스 파일</Filter>
     </None>
   </ItemGroup>
 </Project>
