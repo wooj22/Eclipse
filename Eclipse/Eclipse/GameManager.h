@@ -34,13 +34,11 @@ namespace std {
 	};
 }
 
+//UI 스킬 해금 정보
 struct SkillInfo {
 	bool unlocked = false;  // 해금 여부
 	int unlockLevel = 0;    // 해금된 레벨 (혹은 조건 레벨)
 	int maxLevel = 1;		// 스킬 최대 레벨 (기본 1)
-	std::wstring skillname = L"";				// 스킬 이름
-	std::wstring skillDesc = L"";				// 스킬 설명
-	std::vector<float>skillValue;				// 스킬값
 
 	// 선행 조건: optional
 	SkillType prerequisiteSkill = SkillType::COUNT; // 기본값 = 없음
@@ -53,19 +51,29 @@ struct SkillInfo {
 		int maxLevel = 1,
 		SkillType prerequisiteSkill = SkillType::COUNT,
 		int requiredLevel = 0,
-		std::wstring name = L"",
-		std::wstring descriptions = L"",
-		const std::vector<float>& values = {},
 		const std::vector<int>& cost = {})
 		: unlocked(unlocked),
 		unlockLevel(unlockLevel),
 		maxLevel(maxLevel),
 		prerequisiteSkill(prerequisiteSkill),
 		requiredLevel(requiredLevel),
-		skillname(name),
-		skillDesc(descriptions),
-		skillValue(values),
 		skillCost(cost)
+	{
+	}
+};
+
+//UI 스킬 설명 정보
+struct SkillText {
+	std::wstring skillname = L"";				// 스킬 이름
+	std::wstring skillDesc = L"";				// 스킬 설명
+
+	SkillText(
+		
+		std::wstring name = L"",
+		std::wstring descriptions = L"")
+		: 
+		skillname(name),
+		skillDesc(descriptions)
 	{
 	}
 };
@@ -79,6 +87,8 @@ public:
 	int waveCount;
 	bool isWave;
 	std::unordered_map<SkillType, SkillInfo> skillTree;
+	std::unordered_map<SkillType, std::vector<float>> skillValue;
+	std::unordered_map<SkillType, SkillText> skillText;
 
 	GameManager() = default;
 	~GameManager() = default;

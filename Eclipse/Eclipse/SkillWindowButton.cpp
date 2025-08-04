@@ -26,8 +26,9 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 
 void SkillWindowButton::SceneStart()
 {
-
 	const auto& skillInfo = GameManager::Get().skillTree[skillName];
+	const auto& skillvalue = GameManager::Get().skillValue[skillName];
+	const auto& skilltext = GameManager::Get().skillText[skillName];
 
 	//이미지 및 폰트 크기에따라 미세 조정 필요
 	skillLevel_Text->rectTransform->SetPosition(0,-50); 
@@ -51,16 +52,21 @@ void SkillWindowButton::SceneStart()
 	skillColor2_Text->rectTransform->SetPosition(colorPositionX, -10);
 	skillColor3_Text->rectTransform->SetPosition(colorPositionX, -10);
 
-	skillName_Text->screenTextRenderer->SetText(skillInfo.skillname);
-	skillDesc_Text->screenTextRenderer->SetText(skillInfo.skillDesc);
+	skillName_Text->screenTextRenderer->SetText(skilltext.skillname);
+	skillDesc_Text->screenTextRenderer->SetText(skilltext.skillDesc);
 
 
-	if (skillInfo.maxLevel > 1)
+	if (skillName == SkillType::SkillCooldownDown)
 	{
-		skillColor1_Text->screenTextRenderer->SetText(ToWString(skillInfo.skillValue[0]));
-		skillColor2_Text->screenTextRenderer->SetText(ToWString(skillInfo.skillValue[1]));
-		if (skillInfo.skillValue.size() >= 3)
-			skillColor3_Text->screenTextRenderer->SetText(ToWString(skillInfo.skillValue[2]));
+		skillColor1_Text->screenTextRenderer->SetText(ToWString(skillvalue[0]));
+		skillColor2_Text->screenTextRenderer->SetText(ToWString(skillvalue[1]));
+		skillColor3_Text->SetActive(false);
+	}
+	else if (skillInfo.maxLevel > 1)
+	{
+		skillColor1_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[0]-1)*100))));
+		skillColor2_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[1]-1)*100))));
+		skillColor3_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[2] - 1) * 100))));
 	}
 	else
 	{
