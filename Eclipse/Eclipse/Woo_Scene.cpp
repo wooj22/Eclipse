@@ -37,6 +37,10 @@ void Woo_Scene::Awake()
 	// boss
 	boss = CreateObject<Boss>();
 
+	// hon
+	honA1 = CreateObject<HonA>({ -200,-600 });
+	honA2 = CreateObject<HonA>({ -500,-400 });
+
 	// map sample
 	map_woo = CreateObject<Map_Woo>({ 0, -900 });
 	ground1 = CreateObject<Map_Woo>({ 100, -700 });

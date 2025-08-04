@@ -8,6 +8,7 @@
 #include "Player_Woo.h"
 #include "Map_Woo.h"
 #include "Boss.h"
+#include "HonA.h"
 
 #include "Player.h"
 #include "playerAttackArea.h"
@@ -18,13 +19,18 @@ class Woo_Scene : public Scene
 private:
 	GameObject* cam;
 	UI_Text* title_text;
-	
-	Boss* boss;
 	GameObject* map;
 	Map_Woo* map_woo;
 	Map_Woo* ground1;
 	Map_Woo* ground2;
 	Map_Woo* ground3;
+	
+	// Boss
+	Boss* boss;
+
+	// Hon
+	HonA* honA1;
+	HonA* honA2;
 
 	// player sample
 	//Player_Woo* player;
@@ -36,6 +42,7 @@ private:
 	// button new event test
 	//UI_Button* button;
 
+	/* 선민이 오브젝트 */
 	GameObject* wall_r;
 	GameObject* wall_l;
 
