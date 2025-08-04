@@ -113,6 +113,40 @@ void Moon_Scene::Awake()
 	camCompo->SetTargetTraceLimitX(30.0f);
 	camCompo->SetTargetTraceLimitY(100.0f);
 	camCompo->SetMapCondition(mapRect);
+
+	npc = CreateObject<NPC>();
+
+	playUI = CreateObject<PlayUI>();
+	GameManager::Get().g_playUI = playUI;
+	playUI->timer_Text = CreateObject<UI_Text>();
+	playUI->stop_Button = CreateObject<UI_Button>();
+	playUI->quest_Image = CreateObject<UI_Image>();
+	playUI->quest_Text = CreateObject<UI_Text>();
+	playUI->chat_Image = CreateObject<UI_Image>();
+	playUI->chat_Text = CreateObject<UI_Text>();
+	playUI->chat_Button = CreateObject<UI_Button>();
+	playUI->hon_Image = CreateObject<UI_Image>();
+	playUI->hon_Text = CreateObject<UI_Text>();
+	playUI->skill1_Image = CreateObject<UI_Image>();
+	playUI->skill1_Text = CreateObject<UI_Text>();
+	playUI->skill2_Image = CreateObject<UI_Image>();
+	playUI->skill2_Text = CreateObject<UI_Text>();
+	playUI->waveInfo_Text = CreateObject<UI_Text>();
+	playUI->tooltip_Image = CreateObject<UI_Image>();
+
+	playUI->skillWindow_Image = CreateObject<UI_Image>();
+	playUI->skillbutton1 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp);
+	playUI->skillbutton2 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump);
+	playUI->skillbutton3 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump);
+	playUI->skillbutton4 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown);
+	playUI->skillbutton5 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra);
+	playUI->skillbutton6 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall);
+	playUI->skillbutton7 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp);
+	playUI->skillbutton8 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp);
+	playUI->skillbutton9 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash);
+	playUI->skillHon_Image = CreateObject<UI_Image>();
+	playUI->skillHon_Text = CreateObject<UI_Text>();
+
 }
 
 void Moon_Scene::Start()
