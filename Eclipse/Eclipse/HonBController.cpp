@@ -126,6 +126,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 
 /*------------- Functions -------------*/
+// C-C
 void HonBController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();

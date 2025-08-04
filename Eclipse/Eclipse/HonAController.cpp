@@ -140,7 +140,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 
 /*------------- Functions -------------*/
-// 3. ¿¬¼â¹ÝÀÀ C-C
+// C-C
 void HonAController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();

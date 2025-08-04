@@ -86,6 +86,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 }
 
 /*------------- Functions -------------*/
+// C-C
 void HonDController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();
