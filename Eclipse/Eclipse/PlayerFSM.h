@@ -196,13 +196,13 @@ public:
 	bool isAbsorbSkillActive = false;
 	float absorbCooldown = 5.0f;		// 쿨타임 
 	float absorbCooldownTimer = 0.0f;
-	float absorbRange = 200.0f;			// 흡수 범위 
+	float absorbRange = 300.0f;			// 흡수 범위 
 	bool hasAbsorbedSoul = false;       // 저장 여부
 
 	// E 방출 
 	bool isReleaseSkillAvailable = false;
-	float releaseEffectRange = 150.0f;
-	// float releaseDamage = 100.0f;
+	float releaseEffectRange = 400.0f;
+	// float releaseDamage = 3.0f; // 혼 점수제에 따른 데미지 
 
 	void UpdateSkillCooldowns();
 	bool CanUseAbsorb() const;

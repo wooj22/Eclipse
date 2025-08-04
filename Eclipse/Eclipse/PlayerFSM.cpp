@@ -276,7 +276,7 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 	}
 }
 
-void PlayerFSM::TryUseRelease() // [ 방출 ] : 콜라이더 켜주기? 
+void PlayerFSM::TryUseRelease() // [ 방출 ] 
 {
 	if (!CanUseRelease())
 	{
@@ -284,11 +284,29 @@ void PlayerFSM::TryUseRelease() // [ 방출 ] : 콜라이더 켜주기?
 		return;
 	}
 
-	// PerformReleaseEffect(); // 범위 이펙트, 데미지 
+	// 1. Honmun 탐색 및 제거 : 일단 냅다 다 삭제할게유! 추후 점수제로 변경 필요 
+	int removedCount = 0;
+	for (auto* obj : GameObject::FindAll("Honmun"))
+	{
+		if (!obj) continue;
+
+		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
+		if (dist <= releaseEffectRange)
+		{
+			obj->Destroy(); // 혼 제거
+			removedCount++;
+		}
+	}
+
+	// 2. 상태 리셋
 	hasAbsorbedSoul = false;
 	isReleaseSkillAvailable = false;
 
-	OutputDebugStringA("[Skill] E 방출 성공 - 효과 발동\n");
+	// 3. 이펙트 발동 
+	// PerformReleaseEffect(); // 범위 이펙트, 데미지 
+
+	std::string debugStr = "[Skill] E 방출 성공 - " + std::to_string(removedCount) + "개 혼 제거됨\n";
+	OutputDebugStringA(debugStr.c_str());
 }
 
 GameObject* PlayerFSM::FindNearestSoulInRange(float range)
