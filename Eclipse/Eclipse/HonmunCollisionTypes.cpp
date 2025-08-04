@@ -856,7 +856,7 @@ void HonmunCollisionTypes::ApplyPhysicalEffect(HonmunCollisionBase* script, Honm
         (type1 == HonmunType::A2 && type2 == HonmunType::B) ||
         (type1 == HonmunType::B && type2 == HonmunType::A2))
     {
-        ApplyOppositeForces(script, otherScript, 500.0f);
+        ApplyOppositeForces(script, otherScript, 150.0f); // 500→150으로 감소 (적당히 보이는 속도)
         OutputDebugStringA("Applied opposite bounce effect\n");
     }
     // A + C = 좌우 밀림
@@ -1082,15 +1082,7 @@ void HonmunCollisionTypes::ApplyOppositeForces(HonmunCollisionBase* script1, Hon
 
 void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
     // 각 혼문이 원래 움직여온 방향으로 되돌려보냄 - 키네마틱 모드 유지 버전
-=======
-    // 충돌 방향에 따라 좌우로 밀어냄 - 키네마틱 모드 유지 버전
->>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
-=======
-    // 충돌 방향에 따라 좌우로 밀어냄 - 키네마틱 모드 유지 버전
->>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
     auto* transform1 = script1->GetTransform();
     auto* transform2 = script2->GetTransform();
     
@@ -1099,65 +1091,59 @@ void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, Honm
     Vector2 pos1 = transform1->GetPosition();
     Vector2 pos2 = transform2->GetPosition();
     
-    // 각 혼문의 이동 방향을 속도로부터 계산 (원래 움직이던 방향으로 되돌림)
-    auto* rigidbody1 = script1->GetRigidbody();
-    auto* rigidbody2 = script2->GetRigidbody();
-    
+    // 충돌 지점에서 좌우로 밀어냄 (위치 기반)
     Vector2 direction1, direction2;
     
-    // 각 혼문이 원래 움직이던 방향으로 되돌려보냄
-    if (rigidbody1 && rigidbody1->velocity.Magnitude() > 0.1f) {
-        direction1 = rigidbody1->velocity.Normalized();
+    // 현재 위치를 기준으로 왼쪽에 있는 것은 왼쪽으로, 오른쪽에 있는 것은 오른쪽으로
+    if (pos1.x < pos2.x) {
+        // pos1이 왼쪽에 있음 → 왼쪽으로 밀어냄
+        direction1 = Vector2(-1.0f, 0.0f);
+        direction2 = Vector2(1.0f, 0.0f);
     } else {
-        // 속도가 없으면 위치 기반으로 방향 결정 (왼쪽에 있으면 왼쪽으로)
-        direction1 = (pos1.x < pos2.x) ? Vector2(-1.0f, 0.0f) : Vector2(1.0f, 0.0f);
+        // pos1이 오른쪽에 있음 → 오른쪽으로 밀어냄
+        direction1 = Vector2(1.0f, 0.0f);
+        direction2 = Vector2(-1.0f, 0.0f);
     }
     
-    if (rigidbody2 && rigidbody2->velocity.Magnitude() > 0.1f) {
-        direction2 = rigidbody2->velocity.Normalized();
-    } else {
-        // 속도가 없으면 위치 기반으로 방향 결정 (오른쪽에 있으면 오른쪽으로)
-        direction2 = (pos2.x > pos1.x) ? Vector2(1.0f, 0.0f) : Vector2(-1.0f, 0.0f);
-    }
-    
-    // 각자 원래 움직이던 방향으로 밀어냄
+    // 충돌 지점에서 좌우로 밀어냄
     float displacement = force * 0.5f;
     Vector2 newPos1 = pos1 + direction1 * displacement;
     Vector2 newPos2 = pos2 + direction2 * displacement;
     transform1->SetPosition(newPos1.x, newPos1.y);
     transform2->SetPosition(newPos2.x, newPos2.y);
     
-<<<<<<< HEAD
-<<<<<<< HEAD
-    // 위치 고정을 위해 물리 상태 초기화 (드리프트 방지)
-=======
-    // 위치 고정을 위해 물리 상태 초기화
+    // 위치 고정을 위해 물리 상태 완전 초기화 (드리프트 방지)
     auto* rigidbody1 = script1->GetRigidbody();
     auto* rigidbody2 = script2->GetRigidbody();
->>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
-=======
-    // 위치 고정을 위해 물리 상태 초기화
-    auto* rigidbody1 = script1->GetRigidbody();
-    auto* rigidbody2 = script2->GetRigidbody();
->>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
     if (rigidbody1) {
         rigidbody1->velocity = Vector2(0, 0);
         rigidbody1->isKinematic = true;
         rigidbody1->useGravity = false;
+        rigidbody1->drag = 100.0f; // 매우 높은 드래그로 강제 정지
     }
     if (rigidbody2) {
         rigidbody2->velocity = Vector2(0, 0);
         rigidbody2->isKinematic = true;
         rigidbody2->useGravity = false;
+        rigidbody2->drag = 100.0f; // 매우 높은 드래그로 강제 정지
     }
     
-    // 물리 전환 상태 초기화 (드리프트 방지)
+    // 물리 전환 상태 완전 초기화 (드리프트 방지)
     script1->SetNeedsPhysicsTransition(false);
     script2->SetNeedsPhysicsTransition(false);
     
+    // 지속 속도도 초기화 (b 조각들의 지속 운동 방지)
+    script1->SetPersistentVelocity(Vector2(0, 0));
+    script2->SetPersistentVelocity(Vector2(0, 0));
+    
+    // A+C 충돌 후 완전 정지 상태로 설정 (자동 낙하 방지)
+    script1->SetPushedAndStopped(true);
+    script2->SetPushedAndStopped(true);
+    
     char debugMsg[300];
-    sprintf_s(debugMsg, "A+C 충돌: obj1(%.1f,%.1f)→dir(%.1f,%.1f) obj2(%.1f,%.1f)→dir(%.1f,%.1f), force:%.1f\n", 
-             pos1.x, pos1.y, direction1.x, direction1.y, pos2.x, pos2.y, direction2.x, direction2.y, force);
+    sprintf_s(debugMsg, "A+C 충돌: 충돌지점에서 좌우밀림 obj1(%.1f,%.1f)→%s obj2(%.1f,%.1f)→%s, force:%.1f\n", 
+             pos1.x, pos1.y, (direction1.x < 0) ? "LEFT" : "RIGHT", 
+             pos2.x, pos2.y, (direction2.x < 0) ? "LEFT" : "RIGHT", force);
     OutputDebugStringA(debugMsg);
 }
 

@@ -51,6 +51,9 @@ protected:
 	bool isBeingKnockedBack = false;  // 넉백 중인지 여부
 	Vector2 knockbackDirection;       // 넉백 방향
 	float knockbackRemainingTime = 0.0f;  // 넉백 남은 시간
+	
+	// A+C 충돌 후 완전 정지 시스템
+	bool isPushedAndStopped = false;  // A+C 충돌로 밀린 후 정지 상태
 
 	// Helper classes
 	HonmunCollisionTypes* collisionTypes = nullptr;
@@ -107,6 +110,7 @@ public:
 	void SetPersistentVelocity(const Vector2& velocity) { persistentVelocity = velocity; }
 	void SetNeedsPhysicsTransition(bool needs) { needsPhysicsTransition = needs; }
 	void SetReactionCooldown(float cooldown) { reactionCooldown = cooldown; }
+	void SetPushedAndStopped(bool stopped) { isPushedAndStopped = stopped; }
 	
 	// Status checks
 	bool IsMarkedForDestroy() const { return markedForDestroy; }

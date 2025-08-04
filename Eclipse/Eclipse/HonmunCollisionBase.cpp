@@ -107,8 +107,8 @@ void HonmunCollisionBase::Update()
         }
     }
     
-    // 키네마틱 모드에서 수동 낙하 시스템
-    if (rigidbody && transform && !markedForDestroy)
+    // 키네마틱 모드에서 수동 낙하 시스템 (A+C 충돌 후 정지 상태가 아닐 때만)
+    if (rigidbody && transform && !markedForDestroy && !isPushedAndStopped)
     {
         // 키네마틱 모드 유지하되 충돌 감지를 위해 특별 설정
         rigidbody->isKinematic = false; // 트리거 충돌 감지를 위해 키네마틱 해제

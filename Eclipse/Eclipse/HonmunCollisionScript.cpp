@@ -78,8 +78,64 @@ void HonmunCollisionScript::OnTriggerEnter(ICollider* other, const ContactInfo& 
 		Vector2 dir = other->gameObject->transform->GetWorldPosition() - this->gameObject->transform->GetWorldPosition();
 		dir = dir.Normalized();
 
-		// TODO :: 플레이어 -> 혼 방향으로 일정거리 이동하기
-		// 혼 체력 깎기
+		// 혼문 체력 1 감소
+		health--;
+		
+		// 디버그 출력
+		char debugMsg[100];
+		sprintf_s(debugMsg, "Player hit Honmun! Honmun health: %d -> %d\n", health + 1, health);
+		OutputDebugStringA(debugMsg);
+		
+		// 체력이 0이 되면 파괴
+		if (health <= 0)
+		{
+			OutputDebugStringA("Honmun destroyed by player!\n");
+			
+			// 점수 시스템을 위한 현재 씬 가져오기
+			auto* currentScene = SceneManager::Get().GetCurrentScene();
+			auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+			
+			// 혼문 타입별 점수 부여
+			if (aronScene)
+			{
+				int points = 0;
+				switch (honmunType)
+				{
+				case HonmunType::A:
+					// 2A인지 확인
+					points = (currentSize > 15.0f) ? 3 : 1;
+					break;
+				case HonmunType::B:
+					points = 1;
+					break;
+				case HonmunType::C:
+					points = 0; // C는 플레이어가 파괴해도 점수 없음
+					break;
+				case HonmunType::D:
+					points = -1; // D는 플레이어가 파괴하면 -1점
+					break;
+				}
+				
+				if (points != 0)
+				{
+					aronScene->AddScore(points);
+					sprintf_s(debugMsg, "Player destroyed Honmun type %d, points: %d\n", (int)honmunType, points);
+					OutputDebugStringA(debugMsg);
+				}
+			}
+			
+			DestroyThis();
+			return;
+		}
+		
+		// 플레이어를 밀어내는 효과 (선택사항)
+		// 혼문이 플레이어 반대 방향으로 밀려남
+		if (rigidbody && rigidbody->isKinematic)
+		{
+			float pushSpeed = 300.0f;
+			currentVelocity = -dir * pushSpeed;
+			reactionCooldown = 0.5f; // 짧은 쿨다운
+		}
 	}
 
 	if (other->gameObject->name == "Honmun")
@@ -918,27 +974,102 @@ void HonmunCollisionScript::CreateSplitObjects(int count)
 
 void HonmunCollisionScript::AbsorbNearbyEnemies(const Vector2& collisionPoint)
 {
-	auto nearbyHonmuns = GetNearbyHonmuns(100.0f); // 100 �ȼ� �ݰ�
-
-	for (auto* honmunScript : nearbyHonmuns)
+	// 플레이어 점프 거리 정도의 범위 설정 (약 300~400 픽셀)
+	float attractionRadius = 350.0f;
+	
+	OutputDebugStringA("C+C Absorption effect activated!\n");
+	
+	// 현재 씬 가져오기
+	auto* currentScene = SceneManager::Get().GetCurrentScene();
+	auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+	if (!aronScene) return;
+	
+	// 모든 활성 혼문들을 검사
+	auto& honmunManager = aronScene->honmunManager;
+	std::vector<Honmun*> honmunsToDestroy;
+	
+	for (auto* honmun : honmunManager.activeHonmuns)
 	{
-		if (honmunScript == this) continue;
-
-		// ī�޶� ���� ���� �ִ��� Ȯ��
-		if (honmunScript->IsInCameraView())
+		if (!honmun || !honmun->IsActive()) continue;
+		
+		auto* honmunScript = honmun->GetComponent<HonmunCollisionScript>();
+		if (!honmunScript || honmunScript == this || honmunScript == otherScript) continue;
+		
+		// 거리 계산
+		Vector2 honmunPos = honmun->transform->GetPosition();
+		float distance = (collisionPoint - honmunPos).Magnitude();
+		
+		// 범위 내에 있는 혼문들 처리
+		if (distance <= attractionRadius)
 		{
-			// �浹�������� �������
-			Vector2 direction = collisionPoint - honmunScript->transform->GetPosition();
-			direction = direction.Normalized();
-
-			// �и��� �Ÿ��� 1/3��ŭ �̵�
-			Vector2 pullForce = direction * (pushDistance / 3.0f);
-			honmunScript->rigidbody->AddImpulse(pullForce);
-
-			// ���� �ð� �� �ı� (���� ȿ��)
-			honmunScript->reactionCooldown = 1.0f; // 1�� �� �ı��ǵ��� ����
+			// 디버그 출력
+			char debugMsg[200];
+			sprintf_s(debugMsg, "Honmun in range! Type: %d, Distance: %.2f\n", 
+				(int)honmunScript->honmunType, distance);
+			OutputDebugStringA(debugMsg);
+			
+			// 충돌 지점으로 끌어당기기
+			Vector2 direction = (collisionPoint - honmunPos).Normalized();
+			float pullSpeed = 800.0f; // 강한 끌어당김
+			
+			// 키네마틱 모드로 이동
+			if (honmunScript->rigidbody)
+			{
+				honmunScript->rigidbody->isKinematic = true;
+				honmunScript->currentVelocity = direction * pullSpeed;
+			}
+			
+			// 파괴 예약 (1초 후)
+			honmunScript->reactionCooldown = 1.0f;
+			honmunsToDestroy.push_back(honmun);
 		}
 	}
+	
+	// 끌어당긴 혼문들 파괴 처리
+	for (auto* honmun : honmunsToDestroy)
+	{
+		auto* script = honmun->GetComponent<HonmunCollisionScript>();
+		if (script)
+		{
+			// 점수 부여 (타입별로)
+			if (aronScene)
+			{
+				int points = 0;
+				switch (script->honmunType)
+				{
+				case HonmunType::A:
+					points = (script->currentSize > 15.0f) ? 3 : 1;
+					break;
+				case HonmunType::B:
+					points = 1;
+					break;
+				case HonmunType::C:
+					points = 0; // C끼리는 이미 점수를 받았으므로
+					break;
+				case HonmunType::D:
+					points = -1;
+					break;
+				}
+				
+				if (points != 0)
+				{
+					aronScene->AddScore(points);
+					char debugMsg[100];
+					sprintf_s(debugMsg, "Absorbed Honmun type %d destroyed, points: %d\n", 
+						(int)script->honmunType, points);
+					OutputDebugStringA(debugMsg);
+				}
+			}
+			
+			// 즉시 파괴
+			script->health = 0;
+			script->DestroyThis();
+		}
+	}
+	
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Total Honmuns absorbed: %d\n", (int)honmunsToDestroy.size());
+	OutputDebugStringA(debugMsg);
 }
 
 void HonmunCollisionScript::DestroyThis()

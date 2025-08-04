@@ -71,7 +71,7 @@ private:
 	void SplitIntoTwo();                                                        // 분열
 	void CreateSplitObjects(int count);                                         // 다중 분열
 	void CreateSplitObjectsWithCollision(int count, HonmunCollisionScript* otherScript); // 충돌 기반 분열
-	void AbsorbNearbyEnemies(const Vector2& collisionPoint);                    // ����
+	void AbsorbNearbyEnemies(const Vector2& collisionPoint, HonmunCollisionScript* otherScript = nullptr);                    // ����
 	void BounceAway(HonmunCollisionScript* otherScript, const ContactInfo& contact);  // ƨ��
 	void BounceAwayKinematic(HonmunCollisionScript* otherScript);  // \ud0a4\ub124\ub9c8\ud2f1 \ud295\uae40
 	void PushSideways(HonmunCollisionScript* otherScript);                      // �и�
