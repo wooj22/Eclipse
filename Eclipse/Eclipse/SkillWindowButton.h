@@ -6,6 +6,7 @@
 #include"../Direct2D_EngineLib/Input.h"
 #include"../Direct2D_EngineLib/SceneManager.h"
 #include"../Direct2D_EngineLib/Scene.h"
+#include"../Direct2D_EngineLib/Time.h"
 #include"GameManager.h"
 
 
@@ -16,6 +17,10 @@ private:
 	int prevLevel = -1;			// 이전 레벨
 	SkillType skillName;		// 스킬 이름
 	float colorPositionX = 0;
+	RenderMode preRenderMode;
+	bool isEnterButton = false;
+	float glowtimer = 0;
+	float glowspeed = 3.0f;
 
 public:
 	UI_Button* skillIcon_Button;	// 스킬 아이콘 버튼
@@ -37,5 +42,7 @@ public:
 	float GetWidthSize(D2D1_SIZE_F image, D2D1_SIZE_F text);
 	std::wstring ToWString(float value);
 	void OnClickSkillButton();
+	void OnPointEnterButton();
+	void OnPointExitButton();
 };
 
