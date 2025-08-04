@@ -17,18 +17,22 @@
 
 void Idle_State::Enter(MovementFSM* fsm)
 {
-    OutputDebugStringA("[Idle_State] PlayerÀÇ Idle_State ÁøÀÔ \n");
+    OutputDebugStringA("[Idle_State] Playerï¿½ï¿½ Idle_State ï¿½ï¿½ï¿½ï¿½ \n");
 
-    // ÃÊ±âÈ­ 
+    // ï¿½Ê±ï¿½È­ 
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
     // fsm->GetPlayerFSM()->timer = 0.0f;
 
-    fsm->GetPlayerFSM()->OnGround();  // ¸ðµç °ø°Ý ±âÈ¸ ¸®¼Â
+    fsm->GetPlayerFSM()->OnGround();  // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ ï¿½ï¿½ï¿½ï¿½
 
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // ¿òÁ÷ÀÓÀÌ ÀÖ¾ú´Ù¸é Á¤Áö 
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+    
+    // ì¤‘ë ¥ í™œì„±í™” (í•˜ëŠ˜ì—ì„œ ë–¨ì–´ì§€ë„ë¡)
+    fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
+    fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity; 
 
-    // ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+    // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Idle", true);
 }
 
@@ -36,7 +40,7 @@ void Idle_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
-    // DubleJump ÃÊ±âÈ­
+    // DubleJump ï¿½Ê±ï¿½È­
     if (fsm->GetPlayerFSM()->GetIsGround() && !fsm->GetPlayerFSM()->canDoubleJump)
     {
         fsm->GetPlayerFSM()->canDoubleJump = true;
@@ -70,7 +74,7 @@ void Idle_State::Update(MovementFSM* fsm)
         // [ Attack ]
         if (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
 
-        // ÃÊ±âÈ­
+        // ï¿½Ê±ï¿½È­
         fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
     }
 
