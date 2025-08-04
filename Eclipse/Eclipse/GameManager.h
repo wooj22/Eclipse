@@ -96,6 +96,7 @@ public:
 	void Init() { g_playUI = nullptr; ReSetData(); }
 	void UnInit();
 	void ReSetData();
+	void SkillReset();
 	bool CanUnlock(SkillType skill);
 	bool CheckUnlock(SkillType skill) { return skillTree[skill].unlocked; }
 	bool LevelUpSkill(SkillType skill, bool check = false);
