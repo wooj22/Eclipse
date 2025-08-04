@@ -8,11 +8,12 @@ class TitleUI : public GameObject
 {
 public:
 	UI_Image* backgroundImage;
-	//UI_Text* titleText;
-	UI_Button* playButton;
-	UI_Button* optionsButton;
-	UI_Button* creditButton;
-	UI_Button* endButton;
+	UI_Button* play_Button;
+	UI_Button* options_Button;
+	UI_Button* credit_Button;
+	UI_Button* end_Button;
+	UI_Image* underscore_Image;
+	std::vector<UI_Button*> menuButtons;
 
 public:
 	// game object cycle
@@ -30,6 +31,8 @@ public:
 
 	// Scene¿« Exit, GameObject Delete
 	void Destroyed() override;
+	void OnPointEnterButton(UI_Button* parent);
+	void OnPointExitButton();
 };
 
 
