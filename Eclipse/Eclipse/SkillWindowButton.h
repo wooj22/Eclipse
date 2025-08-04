@@ -12,7 +12,8 @@
 class SkillWindowButton : public GameObject
 {
 private: 
-	int maxSkillLevel = 1;	// 스킬 최대 레벨
+	int maxSkillLevel = 1;		// 스킬 최대 레벨
+	int prevLevel = -1;			// 이전 레벨
 	SkillType skillName;		// 스킬 이름
 	float colorPositionX = 0;
 

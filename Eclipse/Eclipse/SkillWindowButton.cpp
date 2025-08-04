@@ -76,7 +76,33 @@ void SkillWindowButton::SceneStart()
 
 void SkillWindowButton::Update()
 {
-	skillLevel_Text->screenTextRenderer->SetText(to_wstring(GameManager::Get().skillTree[skillName].unlockLevel)+L"/"+to_wstring(maxSkillLevel));
+	const auto& info = GameManager::Get().skillTree[skillName];
+
+	if (info.unlockLevel != prevLevel)
+	{
+		prevLevel = info.unlockLevel;
+
+		// 텍스트 갱신
+		skillLevel_Text->screenTextRenderer->SetText(
+			to_wstring(info.unlockLevel) + L"/" + to_wstring(maxSkillLevel));
+
+
+		// 먼저 전부 초기화 (FloralWhite)
+		if (prevLevel >= 1)
+			skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+		if (prevLevel >= 2)
+			skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+		if (prevLevel >= 3)
+			skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+
+		// 현재 레벨 칸만 빨간색
+		if (prevLevel == 1)
+			skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+		else if (prevLevel == 2)
+			skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+		else if (prevLevel == 3)
+			skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+	}
 }
 
 float SkillWindowButton::GetWidthSize(D2D1_SIZE_F size1, D2D1_SIZE_F size2)
@@ -99,27 +125,5 @@ std::wstring SkillWindowButton::ToWString(float value)
 }
 void SkillWindowButton::OnClickSkillButton()
 {
-	auto& gameManager = GameManager::Get();
-	auto& skillInfo = gameManager.skillTree[skillName];
-
-	if (gameManager.LevelUpSkill(skillName) && skillInfo.maxLevel > 1)
-	{
-		int level = skillInfo.unlockLevel;
-
-		// 먼저 전부 초기화 (FloralWhite)
-		if (level >= 1)
-			skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-		if (level >= 2)
-			skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-		if (level >= 3)
-			skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-
-		// 현재 레벨 칸만 빨간색
-		if (level == 1)
-			skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-		else if (level == 2)
-			skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-		else if (level == 3)
-			skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-	}
+	GameManager::Get().LevelUpSkill(skillName);
 }
