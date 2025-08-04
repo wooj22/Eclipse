@@ -7,7 +7,7 @@
 // 1. A : 충돌 반대 방향으로 튕김
 // 2. B : 각 오브젝트가 2개로 분리 (크기 -30%, 하강속도 +20%)
 // 3. C : 무시
-// 4. D : 파괴
+// 4. D : 파괴 
 
 class Transform;
 class CircleCollider;

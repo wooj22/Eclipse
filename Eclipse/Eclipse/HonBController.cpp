@@ -82,6 +82,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
+		// 1. ø¨º‚π›¿¿ B-A
 		if (honType == "HonA")
 		{
 			// collision move start (reset)
@@ -94,6 +95,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
 		}
+		// 2. ø¨º‚π›¿¿ B-B
 		else if (honType == "HonB")
 		{
 			// collision move start (reset)
@@ -107,7 +109,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			SetDescentSpeed(descentSpeed * 1.2);
 			SetDirection(Vector2::down);
 
-			GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(100,0));
+			GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(150,150));
 			HonBController* controller = newHonB->GetComponent<HonBController>();
 			controller->SetSize(size);
 			controller->SetDescentSpeed(descentSpeed * 1.2);
