@@ -143,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Aron_Scene.cpp" />
+    <None Include="Aron_Scene_Clean.cpp" />
+    <None Include="Aron_Scene_Defensive.cpp" />
+    <None Include="Aron_Scene_New.cpp" />
     <ClCompile Include="Attack_State.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossController.cpp" />
@@ -150,6 +153,7 @@
     <ClCompile Include="BulletController.cpp" />
     <ClCompile Include="BulletTime_State.cpp" />
     <ClCompile Include="Chat.cpp" />
+    <None Include="CRITICAL_CRASH_FIX.cpp" />
     <ClCompile Include="EclipseApp.cpp" />
     <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="Fall_State.cpp" />
@@ -158,14 +162,24 @@
     <ClCompile Include="Honmun.cpp" />
     <ClCompile Include="HonmunAFSM.cpp" />
     <ClCompile Include="HonmunBFSM.cpp" />
+    <ClCompile Include="HonmunCFSM.cpp" />
+    <ClCompile Include="HonmunCollisionBase.cpp" />
+    <ClCompile Include="HonmunCollisionEffects.cpp" />
+    <ClCompile Include="HonmunCollisionManager.cpp" />
+    <ClCompile Include="HonmunCollisionManager_Safe.cpp" />
     <ClCompile Include="HonmunCollisionScript.cpp" />
+    <ClCompile Include="HonmunCollisionTypes.cpp" />
+    <ClCompile Include="HonmunFSM.cpp" />
+    <ClCompile Include="HonmunKnockbackTest.cpp" />
     <ClCompile Include="Idle_State.cpp" />
     <ClCompile Include="Jump_State.cpp" />
     <ClCompile Include="Jump_Wall_State.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Map_Woo.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Moon_Scene.cpp" />
     <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="PlayerAttackScript.cpp" />
     <ClCompile Include="PlayerController_Woo.cpp" />
     <ClCompile Include="PlayerFSM.cpp" />
     <ClCompile Include="Player_Test.cpp" />
@@ -197,18 +211,32 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Hanging_State.h" />
     <ClInclude Include="Honmun.h" />
+    <ClInclude Include="HonmunAAnimatorController.h" />
     <ClInclude Include="HonmunAFSM.h" />
+    <ClInclude Include="HonmunBAnimatorController.h" />
     <ClInclude Include="HonmunBFSM.h" />
+    <ClInclude Include="HonmunCAnimatorController.h" />
+    <ClInclude Include="HonmunCFSM.h" />
+    <ClInclude Include="HonmunCollisionBase.h" />
+    <ClInclude Include="HonmunCollisionEffects.h" />
+    <ClInclude Include="HonmunCollisionManager.h" />
     <ClInclude Include="HonmunCollisionScript.h" />
+    <ClInclude Include="HonmunCollisionTypes.h" />
+    <ClInclude Include="HonmunDAnimatorController.h" />
+    <ClInclude Include="HonmunFSM.h" />
+    <ClInclude Include="HonmunKnockbackTest.h" />
     <ClInclude Include="Idle_State.h" />
     <ClInclude Include="Jump_State.h" />
     <ClInclude Include="Jump_Wall_State.h" />
+    <ClInclude Include="Map_Woo.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="Moon_Scene.h" />
     <ClInclude Include="MovementFSM.h" />
     <ClInclude Include="MovementStateBase.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAnimatorController.h" />
+    <ClInclude Include="playerAttackArea.h" />
     <ClInclude Include="PlayerController_Woo.h" />
     <ClInclude Include="PlayerFSM.h" />
     <ClInclude Include="PlayerStateBase.h" />
@@ -223,6 +251,11 @@
     <ClInclude Include="Walk_State.h" />
     <ClInclude Include="Woo_Scene.h" />
     <ClInclude Include="Yunmo_Scene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.dll" />
+    <None Include="fmodL.dll" />
+    <None Include="WAVE_SYSTEM_CRITICAL_ANALYSIS.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
