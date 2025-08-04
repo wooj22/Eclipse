@@ -65,7 +65,7 @@ private:
 
 
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton; // moon_dev
+	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE; // moon_dev
 
 public:
 	// key
@@ -191,6 +191,26 @@ public:
 	void UpdateDashCooldown(); 
 	bool CanDash() const;
 	void ResetDashCooldown();
+
+	// Q 흡수 
+	bool isAbsorbSkillActive = false;
+	float absorbCooldown = 5.0f;		// 쿨타임 
+	float absorbCooldownTimer = 0.0f;
+	float absorbRange = 200.0f;			// 흡수 범위 
+	bool hasAbsorbedSoul = false;       // 저장 여부
+
+	// E 방출 
+	bool isReleaseSkillAvailable = false;
+	float releaseEffectRange = 150.0f;
+	// float releaseDamage = 100.0f;
+
+	void UpdateSkillCooldowns();
+	bool CanUseAbsorb() const;
+	bool CanUseRelease() const;
+
+	void TryUseAbsorb();
+	void TryUseRelease();
+	GameObject* FindNearestSoulInRange(float range);
 
 private:
 	// [ FSM setting ] 
