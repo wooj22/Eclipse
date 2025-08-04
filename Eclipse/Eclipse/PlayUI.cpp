@@ -121,7 +121,7 @@ void PlayUI::SceneStart()
 	skillHon_Text->rectTransform->SetParent(skillWindow_Image->rectTransform);
 
 	skillWindow_Image->SetActive(false);
-	skillWindow_Image->rectTransform->SetSize(1920, 1080);
+	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
 	skillWindow_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowImageTexture, "SkillWindow");
 
@@ -136,15 +136,15 @@ void PlayUI::SceneStart()
 	skillHon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
 
-	skillButtons[0]->rectTransform->SetPosition(0, 0);
-	skillButtons[1]->rectTransform->SetPosition(0, 200);
-	skillButtons[2]->rectTransform->SetPosition(0, 400);
-	skillButtons[3]->rectTransform->SetPosition(-300, 0);
-	skillButtons[4]->rectTransform->SetPosition(-450, 200);
-	skillButtons[5]->rectTransform->SetPosition(-600, 400);
-	skillButtons[6]->rectTransform->SetPosition(300, 0);
-	skillButtons[7]->rectTransform->SetPosition(450, 200);
-	skillButtons[8]->rectTransform->SetPosition(600,400);
+	skillButtons[0]->rectTransform->SetPosition(-50, -50);
+	skillButtons[1]->rectTransform->SetPosition(-50, 100);
+	skillButtons[2]->rectTransform->SetPosition(-50, 250);
+	skillButtons[3]->rectTransform->SetPosition(-450, -200);
+	skillButtons[4]->rectTransform->SetPosition(-450, -50);
+	skillButtons[5]->rectTransform->SetPosition(-450, 100);
+	skillButtons[6]->rectTransform->SetPosition(300, -200);
+	skillButtons[7]->rectTransform->SetPosition(300, -50);
+	skillButtons[8]->rectTransform->SetPosition(300,100);
 
 	skillHon_Image->rectTransform->SetPosition(-100,-250);
 	skillHon_Text->rectTransform->SetPosition(200,-250);
