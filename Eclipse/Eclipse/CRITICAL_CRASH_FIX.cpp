@@ -1,3 +1,23 @@
+#include <vector>
+#include <unordered_map>
+#include <memory>
+#include <functional>
+#include <random>
+#include <mutex>
+#include <algorithm>
+#include <iterator>
+#include <cmath>
+#include <cstdio>
+#include <string>
+#include <windows.h>
+
+// 프로젝트 헤더들
+#include "Aron_Scene.h"
+#include "GameManager.h"
+#include "HonmunCollisionBase.h"
+#include "Honmun.h"
+#include "GameObject.h"
+
 // 🚨 크래시 수정: 안전한 객체 파괴 시스템
 
 // === 문제 ===
