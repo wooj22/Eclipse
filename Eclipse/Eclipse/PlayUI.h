@@ -48,7 +48,6 @@ public:
 	UI_Text* skill1_Text;			// 스킬1 텍스트
 
 	UI_Image* skill2_Image;			// 스킬2 이미지
-	UI_Text* skill2_Text;			// 스킬2 텍스트
 
 	UI_Text* waveInfo_Text;			// 웨이브 정보 텍스트
 
@@ -58,15 +57,7 @@ public:
 	UI_Text* tooltipEx_Text;		// 툴팁 설명 텍스트
 
 	UI_Image* skillWindow_Image;	// 스킬 창 이미지
-	SkillWindowButton* skillbutton1;
-	SkillWindowButton* skillbutton2;
-	SkillWindowButton* skillbutton3;
-	SkillWindowButton* skillbutton4;
-	SkillWindowButton* skillbutton5;
-	SkillWindowButton* skillbutton6;
-	SkillWindowButton* skillbutton7;
-	SkillWindowButton* skillbutton8;
-	SkillWindowButton* skillbutton9;
+	std::vector<SkillWindowButton*> skillButtons;
 	UI_Image* skillHon_Image;		// 스킬창 혼 이미지
 	UI_Text* skillHon_Text;			// 스킬창 혼 개수 텍스트
 
@@ -97,4 +88,6 @@ public:
 
 	void ClickChatButton();
 	void StartWaveInfo(int waveNumber);
+	void AllSkillButtonRenderMod();
+	void SkillReSetButtonRenderMod();
 };
