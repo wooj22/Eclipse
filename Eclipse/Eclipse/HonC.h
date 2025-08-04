@@ -6,6 +6,8 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "HonCController.h"
 
+/* Darkness ¾îµÒÀÇ È¥ */
+
 class HonC : public GameObject
 {
 public:

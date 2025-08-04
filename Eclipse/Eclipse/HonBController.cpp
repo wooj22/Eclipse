@@ -92,22 +92,8 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			controller->SetSize(size);
 			controller->SetDescentSpeed(descentSpeed * 1.2);
 		}
-		else if (honType == "HonC")
-		{
-
-		}
 		
 		// collider on
 		collider->SetEnabled(true);
 	}
-}
-
-void HonBController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
-{
-
-}
-
-void HonBController::OnTriggerExit(ICollider* other, const ContactInfo& contact)
-{
-
 }

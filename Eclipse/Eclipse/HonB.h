@@ -6,6 +6,8 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "HonBController.h"
 
+/* Umbra 그림자의 혼 */
+
 class HonB: public GameObject
 {
 public:

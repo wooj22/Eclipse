@@ -6,6 +6,8 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "HonDController.h"
 
+/* Luna ´ÞºûÀÇ È¥ */
+
 class HonD : public GameObject
 {
 public:

@@ -3,7 +3,6 @@
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "HonA.h"
 #include "HonBController.h"
 
 // script component cycle
@@ -100,22 +99,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			direction = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
 		}
-		else if (honType == "HonC")
-		{
 
-		}
 
 		// collider on
 		collider->SetEnabled(true);
 	}
-}
-
-void HonAController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
-{
-
-}
-
-void HonAController::OnTriggerExit(ICollider* other, const ContactInfo& contact)
-{
-
 }

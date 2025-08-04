@@ -6,6 +6,8 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "HonAController.h"
 
+/* Ignis ∫“¿« »•*/
+
 class HonA : public GameObject
 {
 public:
