@@ -34,7 +34,7 @@ private:
 	UI_Image* child;*/
 
 	// button new event test
-	UI_Button* button;
+	//UI_Button* button;
 
 	GameObject* wall_r;
 	GameObject* wall_l;

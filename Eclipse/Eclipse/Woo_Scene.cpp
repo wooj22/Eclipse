@@ -16,7 +16,7 @@ void Woo_Scene::Awake()
 	title_text->rectTransform->SetSize(500, 100);
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
-	title_text->screenTextRenderer->SetText(L"Engine Test Scene");
+	title_text->screenTextRenderer->SetText(L"Woo Scene");
 	//title_text->screenTextRenderer->SetAlpha(0.5);
 
 	// background sample
@@ -27,7 +27,7 @@ void Woo_Scene::Awake()
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "MapBackground");
 	sr->sprite = new_sprite;
 	sr->layer = -1;
-	map->transform->Scaleing(2, 2);
+	map->transform->Scaleing(2.5, 2.5);
 	map->transform->SetPosition(0, -500);
 
 	// player sample
@@ -59,7 +59,7 @@ void Woo_Scene::Awake()
 
 	child->imageRenderer->SetAlpha(0.1);*/
 
-	button = CreateObject<UI_Button>();
+	//button = CreateObject<UI_Button>();
 
 	// [ player ] 
 	player = CreateObject<Player>();
@@ -80,7 +80,7 @@ void Woo_Scene::Awake()
 	// [ wall_r ]
 	wall_r = CreateObject<GameObject>();
 	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(550.0f, 0.0f);;
+	wall_r->AddComponent<Transform>()->SetPosition(850.0f, -500.0f);;
 
 	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
 	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
@@ -92,7 +92,7 @@ void Woo_Scene::Awake()
 	// [ wall_l ]
 	wall_l = CreateObject<GameObject>();
 	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-550.0f, 0.0f);;
+	wall_l->AddComponent<Transform>()->SetPosition(-850.0f, -500.0f);;
 
 	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
 	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
