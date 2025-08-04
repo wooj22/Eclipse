@@ -106,7 +106,6 @@ public:
 	void SetProcessingReaction(bool processing) { isProcessingReaction = processing; }
 	void SetPersistentVelocity(const Vector2& velocity) { persistentVelocity = velocity; }
 	void SetNeedsPhysicsTransition(bool needs) { needsPhysicsTransition = needs; }
-	void SetReactionCooldown(float cooldown) { reactionCooldown = cooldown; }
 	
 	// Status checks
 	bool IsMarkedForDestroy() const { return markedForDestroy; }
