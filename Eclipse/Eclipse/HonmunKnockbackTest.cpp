@@ -69,8 +69,25 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
                 OutputDebugStringA(posMsg);
             }
             
-            // 연쇄반응을 위한 향상된 넉백 방향 계산 (실제 플레이어 위치 기준)
-            Vector2 basicDirection = (targetPos - playerPos).Normalized(); // 플레이어 기준 방향
+            // 플레이어의 실제 이동 방향을 기준으로 혼문 넉백 방향 계산
+            Vector2 basicDirection;
+            
+            // GameObject::Find로 Player 객체를 찾아서 velocity 확인
+            Rigidbody* playerRigidbody = nullptr;
+            auto* playerObject = GameObject::Find("Player");
+            if (playerObject) {
+                playerRigidbody = playerObject->GetComponent<Rigidbody>();
+            }
+            
+            if (playerRigidbody && playerRigidbody->velocity.Magnitude() > 0.1f) {
+                // 플레이어가 이동 중이면 플레이어의 이동 방향 사용
+                basicDirection = playerRigidbody->velocity.Normalized();
+                OutputDebugStringA("GameObject - Using player velocity direction for knockback\n");
+            } else {
+                // 플레이어가 정지 상태면 위치 기반 방향 사용
+                basicDirection = (targetPos - playerPos).Normalized();
+                OutputDebugStringA("GameObject - Using position-based direction for knockback\n");
+            }
             
             // 약간의 변화를 주어 연쇄반응 유도
             static int gameObjKnockbackCounter = 0;
@@ -87,7 +104,7 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
             knockbackDirection = knockbackDirection.Normalized();
             
             char dirMsg[100];
-            sprintf_s(dirMsg, "GameObject enhanced knockback (variation: %.2f)\n", angleVariation);
+            sprintf_s(dirMsg, "GameObject forward knockback (variation: %.2f)\n", angleVariation);
             OutputDebugStringA(dirMsg);
             
             rigidbody->isKinematic = false;
@@ -145,8 +162,25 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
         OutputDebugStringA(posMsg);
     }
     
-    // 연쇄반응을 위한 향상된 넉백 방향 계산 (실제 플레이어 위치 기준)
-    Vector2 basicDirection = (honmunPos - playerPos).Normalized(); // 플레이어 기준 방향
+    // 플레이어의 실제 이동 방향을 기준으로 혼문 넉백 방향 계산
+    Vector2 basicDirection;
+    
+    // GameObject::Find로 Player 객체를 찾아서 velocity 확인
+    Rigidbody* playerRigidbody = nullptr;
+    auto* playerObject = GameObject::Find("Player");
+    if (playerObject) {
+        playerRigidbody = playerObject->GetComponent<Rigidbody>();
+    }
+    
+    if (playerRigidbody && playerRigidbody->velocity.Magnitude() > 0.1f) {
+        // 플레이어가 이동 중이면 플레이어의 이동 방향 사용
+        basicDirection = playerRigidbody->velocity.Normalized();
+        OutputDebugStringA("Honmun - Using player velocity direction for knockback\n");
+    } else {
+        // 플레이어가 정지 상태면 위치 기반 방향 사용
+        basicDirection = (honmunPos - playerPos).Normalized();
+        OutputDebugStringA("Honmun - Using position-based direction for knockback\n");
+    }
     
     // 약간의 변화를 주어 연쇄반응 유도 (너무 평행하게 날아가지 않도록)
     static int knockbackCounter = 0;
@@ -163,7 +197,7 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
     knockbackDirection = knockbackDirection.Normalized();
     
     char dirMsg[100];
-    sprintf_s(dirMsg, "Enhanced knockback direction applied (variation: %.2f)\n", angleVariation);
+    sprintf_s(dirMsg, "Forward knockback applied (variation: %.2f)\n", angleVariation);
     OutputDebugStringA(dirMsg);
     
     // 안전한 Rigidbody 접근 (양우정님 가이드)
@@ -173,7 +207,6 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
         // 물리 모드로 전환하고 넉백 적용
         honmunRb->isKinematic = false;
         honmunRb->useGravity = false;
-        
         // 연쇄반응을 위한 넉백 강도 조절
         float baseKnockbackForce = 1500.0f;
         float speedMultiplier = 1.0f;
@@ -190,7 +223,7 @@ void HonmunKnockbackTest::OnTriggerEnter(ICollider* other, const ContactInfo& co
         sprintf_s(forceMsg, "Honmun knockback force: %.1f (multiplier: %.2f)\n", knockbackForce, speedMultiplier);
         OutputDebugStringA(forceMsg);
         
-        OutputDebugStringA("Natural knockback applied to Honmun by HonmunKnockbackTest!\n");
+        OutputDebugStringA("Forward knockback applied to Honmun by HonmunKnockbackTest!\n");
     }
     else
     {

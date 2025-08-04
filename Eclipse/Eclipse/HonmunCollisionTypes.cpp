@@ -451,10 +451,10 @@ void HonmunCollisionTypes::HandleDarknessReaction(HonmunCollisionBase* script, H
     // 주변 적들 끌어당기기 (밀리는 거리의 1/3)
     if (script->GetCollisionEffects())
     {
-        script->GetCollisionEffects()->AttractAndDestroyEnemies(script, attractionPoint, 1.0f/3.0f); // 1/3 거리만큼 당김
+        script->GetCollisionEffects()->AttractAndDestroyEnemies(script, attractionPoint, 10.0f); // 밀리는 속도 10으로 복원
         
         char debugMsg[100];
-        sprintf_s(debugMsg, "C+C attraction: Pulling enemies to (%.1f, %.1f) by 1/3 distance\n", 
+        sprintf_s(debugMsg, "C+C attraction: Pulling enemies to (%.1f, %.1f) with speed 10\n", 
                  attractionPoint.x, attractionPoint.y);
         OutputDebugStringA(debugMsg);
     }
@@ -983,29 +983,35 @@ void HonmunCollisionTypes::ApplyCollisionForce(HonmunCollisionBase* script, Honm
 
 void HonmunCollisionTypes::ApplyOppositeForces(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force)
 {
-    // 서로 반대 방향으로 튕겨냄 - 키네마틱 모드 유지 버전
+    // A+B 충돌: 서로 반대 방향으로 자연스럽게 튕겨냄
     auto* transform1 = script1->GetTransform();
     auto* transform2 = script2->GetTransform();
+    auto* rigidbody1 = script1->GetRigidbody();
+    auto* rigidbody2 = script2->GetRigidbody();
     
-    if (!transform1 || !transform2) return;
+    if (!transform1 || !transform2 || !rigidbody1 || !rigidbody2) return;
     
     Vector2 pos1 = transform1->GetPosition();
     Vector2 pos2 = transform2->GetPosition();
     
-    // 충돌 방향 벡터
+    // 충돌 방향 벡터 계산
     Vector2 direction = (pos1 - pos2).Normalized();
     
-    // 키네마틱 모드에서 즉시 위치 변경으로 분리
-    float displacement = force * 0.4f; // 이동 거리
+    // 반대 방향으로 속도 적용 (자연스러운 튕김)
+    Vector2 bounce1 = direction * force;        // script1은 멀어지는 방향
+    Vector2 bounce2 = -direction * force;       // script2는 반대 방향
     
-    // 즉시 위치 분리
-    Vector2 newPos1 = pos1 + direction * displacement;
-    Vector2 newPos2 = pos2 - direction * displacement;
-    transform1->SetPosition(newPos1.x, newPos1.y);
-    transform2->SetPosition(newPos2.x, newPos2.y);
+    // 위쪽으로 약간 띄우기 (더 역동적인 효과)
+    bounce1.y += force * 0.3f;
+    bounce2.y += force * 0.3f;
     
-    char debugMsg[100];
-    sprintf_s(debugMsg, "Applied kinematic opposite bounce: %.1f\n", force);
+    // rigidbody에 속도 적용
+    rigidbody1->velocity = bounce1;
+    rigidbody2->velocity = bounce2;
+    
+    char debugMsg[150];
+    sprintf_s(debugMsg, "A+B Bounce: obj1(%.1f,%.1f) obj2(%.1f,%.1f)\n", 
+             bounce1.x, bounce1.y, bounce2.x, bounce2.y);
     OutputDebugStringA(debugMsg);
 }
 

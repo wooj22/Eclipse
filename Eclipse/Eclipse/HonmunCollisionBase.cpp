@@ -2,7 +2,10 @@
 #include "HonmunCollisionTypes.h"
 #include "HonmunCollisionEffects.h"
 #include "HonmunCollisionManager.h"
+#include "PlayerFSM.h"
+#include "Aron_Scene.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "../Direct2D_EngineLib/SceneManager.h"
 
 HonmunCollisionBase::HonmunCollisionBase()
 {
@@ -96,6 +99,44 @@ void HonmunCollisionBase::Update()
         }
     }
     
+    // 키네마틱 모드에서 수동 낙하 시스템
+    if (rigidbody && transform && !markedForDestroy)
+    {
+        // 키네마틱 모드 유지 (중력 없이 동작)
+        rigidbody->isKinematic = true;
+        rigidbody->useGravity = false;
+        
+        // 타입별 낙하속도로 수동 낙하 (기획서: A,B,C(1) D(2))
+        float fallingSpeed = GetFallingSpeedByType();
+        Vector2 currentPos = transform->GetPosition();
+        
+        // 매 프레임 아래로 이동
+        float deltaTime = Time::GetDeltaTime();
+        currentPos.y -= fallingSpeed * 50.0f * deltaTime; // 50.0f는 속도 배율
+        
+        transform->SetPosition(currentPos.x, currentPos.y);
+    }
+    
+    // 플레이어 공격 넉백 처리 (속도 5)
+    if (isBeingKnockedBack && knockbackRemainingTime > 0.0f)
+    {
+        float deltaTime = Time::GetDeltaTime();
+        knockbackRemainingTime -= deltaTime;
+        
+        // 속도 10으로 넉백 방향으로 이동
+        Vector2 currentPos = transform->GetPosition();
+        float knockbackSpeed = 10.0f;
+        currentPos += knockbackDirection * knockbackSpeed * deltaTime * 50.0f; // 50.0f는 속도 배율
+        
+        transform->SetPosition(currentPos.x, currentPos.y);
+        
+        // 넉백 시간 종료
+        if (knockbackRemainingTime <= 0.0f)
+        {
+            isBeingKnockedBack = false;
+        }
+    }
+    
     // Handle physics transition for split fragments - 포켓볼 스타일 퍼짐 후 정착
     if (needsPhysicsTransition)
     {
@@ -136,13 +177,16 @@ void HonmunCollisionBase::Update()
         }
     }
     
-    // 타입별 마찰력 적용 및 b 조각 지속 운동
-    ApplyTypeSpecificFriction();
-    
-    // b 조각들은 지속적인 운동량 유지
-    if (honmunType == HonmunType::b && isSplitFragment)
+    // 타입별 마찰력 적용 및 b 조각 지속 운동 (성능 최적화)
+    if (!markedForDestroy)
     {
-        MaintainFragmentMomentum();
+        ApplyTypeSpecificFriction();
+        
+        // b 조각들은 지속적인 운동량 유지
+        if (honmunType == HonmunType::b && isSplitFragment)
+        {
+            MaintainFragmentMomentum();
+        }
     }
 }
 
@@ -151,92 +195,107 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
     // Early safety checks before any processing
     if (markedForDestroy)
     {
-        OutputDebugStringA("OnTriggerEnter: This object is marked for destruction, ignoring collision\n");
-        return;
+        return; // 빠른 종료 - 디버그 메시지 제거로 성능 향상
     }
     
-    // 모든 충돌 시도를 디버그로 기록
-    char allDebugMsg[200];
-    sprintf_s(allDebugMsg, "*** TRIGGER DETECTED *** %s collides with %s\n", 
-              gameObject ? gameObject->name.c_str() : "null",
-              other->gameObject ? other->gameObject->name.c_str() : "null");
-    OutputDebugStringA(allDebugMsg);
-    
-    if (!collisionManager) 
+    // 필수 충돌만 로그 (성능 최적화)
+    if (other->gameObject && other->gameObject->name == "PlayerAttackArea")
     {
-        OutputDebugStringA("No collision manager!\n");
-        return;
+        OutputDebugStringA("*** PLAYER ATTACK HIT ***\n");
     }
     
-    // Get other collision script with additional safety checks
-    if (!other || !other->gameObject)
+    if (!collisionManager || !other || !other->gameObject) 
     {
-        OutputDebugStringA("Other collider or gameObject is null!\n");
-        return;
+        return; // 빠른 종료 - 성능 최적화
     }
     
     auto* otherHonmun = dynamic_cast<Honmun*>(other->gameObject);
     if (!otherHonmun) 
     {
-        OutputDebugStringA("Other object is not Honmun!\n");
+        
+        // 플레이어와 충돌 시 관통 + 이동속도 20% 감소 2초간
+        if (other->gameObject && other->gameObject->tag == "Player") 
+        {
+            // 플레이어에게 속도 디버프 적용 (최적화된 버전)
+            auto scripts = other->gameObject->GetComponents<Script>();
+            for (auto* script : scripts) 
+            {
+                if (auto* playerFSM = dynamic_cast<PlayerFSM*>(script)) 
+                {
+                    playerFSM->SetSpeedDownRate(0.8f); // 20% 감소
+                    break;
+                }
+            }
+        }
+        // 플레이어 공격 영역과의 충돌 감지 (최적화)
+        else if (other->gameObject && other->gameObject->name == "PlayerAttackArea")
+        {
+            if (rigidbody && transform)
+            {
+                // 플레이어 공격 시 속도 5로 천천히 밀려나도록 설정
+                Vector2 honmunPos = transform->GetPosition();
+                Vector2 attackPos = other->gameObject->GetComponent<Transform>()->GetPosition();
+                
+                // 공격 방향 = 혼문 위치 - 공격 위치 (플레이어가 공격한 방향)
+                Vector2 knockbackDir = (honmunPos - attackPos).Normalized();
+                
+                // 넉백 속도를 10으로 설정
+                float knockbackSpeed = 10.0f; // 속도 10으로 수정
+                Vector2 knockbackVelocity = knockbackDir * knockbackSpeed;
+                
+                // 키네마틱 모드에서 velocity 대신 수동으로 이동 처리 필요
+                // (매 프레임 Update에서 처리하도록 knockback 상태 설정)
+                isBeingKnockedBack = true;
+                knockbackDirection = knockbackDir;
+                knockbackRemainingTime = 2.0f; // 2초간 밀려남
+            }
+        }
+        // 가장 긴 콜라이더(실제 바닥)와 충돌 시에만 혼문 제거 + 혼의 개수 감소
+        else if (other->gameObject && other->gameObject->name == "Ground")
+        {
+            auto* boxCollider = other->gameObject->GetComponent<BoxCollider>();
+            if (boxCollider && boxCollider->size.x > 1500.0f) // 진짜 바닥만
+            {
+                // 아론 씬에서 혼의 개수 감소
+                auto* currentScene = SceneManager::Get().GetCurrentScene();
+                auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+                if (aronScene)
+                {
+                    aronScene->DecreaseSoulCount();
+                }
+                DestroyThis();
+            }
+        }
         return;
     }
     
     HonmunCollisionBase* otherScript = otherHonmun->GetComponent<HonmunCollisionBase>();
-    if (!otherScript) 
+    if (!otherScript || otherScript->IsMarkedForDestroy() || !honmun || !otherHonmun) 
     {
-        OutputDebugStringA("Other Honmun has no collision script!\n");
-        return;
+        return; // 빠른 안전성 체크
     }
     
-    // Check if other object is marked for destruction
-    if (otherScript->IsMarkedForDestroy())
-    {
-        OutputDebugStringA("Other object is marked for destruction, ignoring collision\n");
-        return;
-    }
-    
-    // Allow chain reactions - only prevent same pair collision within short time
+    // 연쇄 반응 허용 - 짧은 쿨타임으로 같은 쌍 충돌만 방지
     if (reactionCooldown > 0.0f || otherScript->reactionCooldown > 0.0f) 
     {
-        OutputDebugStringA("Collision cooldown active, skipping\n");
         return;
     }
     
-    // Additional component validity checks
-    if (!honmun || !otherHonmun)
-    {
-        OutputDebugStringA("One or both Honmun objects are null, aborting collision\n");
-        return;
-    }
-    
-    // 키네마틱 모드에서 충돌 처리 디버그 메시지
-    char debugMsg[100];
-    sprintf_s(debugMsg, "SUCCESS! Honmun collision: Type %d vs Type %d\n", 
-              static_cast<int>(honmunType), static_cast<int>(otherScript->GetHonmunType()));
-    OutputDebugStringA(debugMsg);
-    
-    // Set processing flag BEFORE calling ProcessCollision (but after all checks)
+    // 충돌 처리 플래그 설정
     isProcessingReaction = true;
     otherScript->SetProcessingReaction(true);
     
-    // Delegate to collision types handler
+    // 충돌 타입 핸들러로 위임
     if (collisionTypes)
     {
-        OutputDebugStringA("Calling collisionTypes->ProcessCollision...\n");
         collisionTypes->ProcessCollision(this, otherScript, contact);
-        OutputDebugStringA("Returned from collisionTypes->ProcessCollision\n");
-    }
-    else
-    {
-        OutputDebugStringA("No collision types handler!\n");
     }
     
-    // Set cooldown (only if objects are still valid)
+    // 쿨타임 설정 (객체가 여전히 유효한 경우만)
     if (!markedForDestroy && !otherScript->IsMarkedForDestroy())
     {
-        reactionCooldown = 0.05f;  // 연쇄 반응을 위해 쿨타임 단축
-        otherScript->reactionCooldown = 0.05f;
+        reactionCooldown = 0.03f;  // 더 빠른 연쇄 반응
+        otherScript->reactionCooldown = 0.03f;
     }
 }
 
@@ -359,5 +418,23 @@ float HonmunCollisionBase::GetFrictionByType(HonmunType type)
     case HonmunType::C:  return 0.93f;  // C: 높은 마찰력
     case HonmunType::D:  return 0.91f;  // D: 가장 높은 마찰력 (빨리 멈춤)
     default: return 0.95f;  // 기본값
+    }
+}
+
+float HonmunCollisionBase::GetFallingSpeedByType()
+{
+    // 키네마틱 모드용 낙하속도 (기획서: A,B,C(1) D(2))
+    switch (honmunType)
+    {
+    case HonmunType::A:
+    case HonmunType::B:
+    case HonmunType::C:
+    case HonmunType::A2:
+    case HonmunType::b:
+        return 1.0f; // A, B, C 타입: 속도 1
+    case HonmunType::D:
+        return 2.0f; // D 타입: 속도 2
+    default:
+        return 1.0f; // 기본값
     }
 }

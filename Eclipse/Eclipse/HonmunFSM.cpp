@@ -28,10 +28,28 @@ void HonmunIdleState::Update(HonmunFSM* fsm)
     
     if (transform)
     {
-        // 화면 높이를 1080으로 가정 (15초에 떨어지도록)
-        float screenHeight = 1080.0f;
-        float fallTime = 15.0f;
-        float fallSpeed = screenHeight / fallTime; // 72 pixels/second
+        // 타입별 낙하 속도 적용
+        float baseFallSpeed = 72.0f; // 기본 속도 (pixels/second)
+        float fallSpeed = baseFallSpeed;
+        float screenHeight = 1080.0f; // 화면 높이
+        
+        // 타입별 속도 배율 적용
+        switch (fsm->GetHonmunType())
+        {
+        case HonmunType::A:
+        case HonmunType::B:
+        case HonmunType::C:
+        case HonmunType::A2:
+        case HonmunType::b:
+            fallSpeed = baseFallSpeed * 1.0f; // 1배 속도
+            break;
+        case HonmunType::D:
+            fallSpeed = baseFallSpeed * 2.0f; // 2배 속도
+            break;
+        default:
+            fallSpeed = baseFallSpeed * 1.0f;
+            break;
+        }
         
         // 좌우 자연스러운 이동 (사인 파 패턴)
         float horizontalSpeed = 30.0f;
@@ -182,15 +200,15 @@ void HonmunFSM::UpdateManualAnimation()
                 // 새 스프라이트 생성 및 적용
                 spriteRenderer->sprite = ResourceManager::Get().CreateSprite(texture, spriteName, frameRect, pivotPoint);
                 
-                // 디버그 출력 (첫 번째와 마지막 프레임에서만)
-                if (currentFrame == 0 || currentFrame == maxFrames - 1)
-                {
-                    char debugMsg[100];
-                    sprintf_s(debugMsg, "Type %d frame %d updated (%.1f,%.1f,%.1f,%.1f)\n", 
-                             static_cast<int>(honmunType), currentFrame, 
-                             frameRect.left, frameRect.top, frameRect.right, frameRect.bottom);
-                    OutputDebugStringA(debugMsg);
-                }
+                // TEMP FIX: 애니메이션 로그 스팸 방지를 위해 비활성화
+                // if (currentFrame == 0 || currentFrame == maxFrames - 1)
+                // {
+                //     char debugMsg[100];
+                //     sprintf_s(debugMsg, "Type %d frame %d updated (%.1f,%.1f,%.1f,%.1f)\n", 
+                //              static_cast<int>(honmunType), currentFrame, 
+                //              frameRect.left, frameRect.top, frameRect.right, frameRect.bottom);
+                //     OutputDebugStringA(debugMsg);
+                // }
             }
         }
     }

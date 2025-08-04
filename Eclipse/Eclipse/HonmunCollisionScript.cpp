@@ -395,7 +395,8 @@ void HonmunCollisionScript::HandleUmbraReaction(HonmunCollisionScript* otherScri
 		OutputDebugStringA("Both original B objects still have health, splitting with bounce!\n");
 		
 		// \ucda9\ub3bc \ud6c4 \uac15\ud55c \ubc00\ub824\ub0a8 \ud6a8\uacfc (\uc54c\uae4c\uae30 \ucef4\uc149)
-		BounceAwayKinematic(otherScript);
+		// BB 충돌 보정 제거로 충돌 감지 개선
+		// BounceAwayKinematic(otherScript);
 		
 		// \ubd84\ud574: \ucd1d 4\uac1c \uc0dd\uc131 (\uae30\uc874 2\uac1c\ub294 \ud30c\uad34\ub418\uace0 \uc0c8\ub85c 4\uac1c \uc0dd\uc131)
 		CreateSplitObjectsWithCollision(4, otherScript);

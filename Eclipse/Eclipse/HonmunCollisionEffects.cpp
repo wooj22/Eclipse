@@ -436,7 +436,12 @@ void HonmunCollisionEffects::AttractAndDestroyEnemies(HonmunCollisionBase* scrip
         try {
             Vector2 currentPos = nearbyScript->GetTransform()->GetPosition();
             Vector2 toAttraction = attractionPoint - currentPos;
-            Vector2 newPos = currentPos + toAttraction * pullRatio; // 1/3 거리만큼 당김
+            float attractionDistance = toAttraction.Magnitude();
+            Vector2 attractionDir = toAttraction.Normalized();
+            
+            // 기획서: 속도 10으로 끌어당기기 (거리는 길게 유지)
+            float attractionSpeed = pullRatio; // pullRatio = 10.0f (속도)
+            Vector2 newPos = currentPos + attractionDir * attractionSpeed; // 속도 10으로 이동
             
             nearbyScript->GetTransform()->SetPosition(newPos.x, newPos.y);
             attractedCount++;
@@ -448,8 +453,8 @@ void HonmunCollisionEffects::AttractAndDestroyEnemies(HonmunCollisionBase* scrip
     }
     
     char debugMsg[100];
-    sprintf_s(debugMsg, "C+C attraction: %d enemies pulled by %.1f%% distance\n", 
-             attractedCount, pullRatio * 100.0f);
+    sprintf_s(debugMsg, "C+C attraction: %d enemies pulled with speed 10\n", 
+             attractedCount);
     OutputDebugStringA(debugMsg);
 }
 

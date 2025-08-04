@@ -46,6 +46,11 @@ protected:
 	// 타입별 마찰력 및 운동 관련
 	Vector2 persistentVelocity;  // b 조각용 지속 속도
 	float fragmentMomentumDecay = 0.98f;  // b 조각 운동량 감소율
+	
+	// 플레이어 공격 넉백 시스템
+	bool isBeingKnockedBack = false;  // 넉백 중인지 여부
+	Vector2 knockbackDirection;       // 넉백 방향
+	float knockbackRemainingTime = 0.0f;  // 넉백 남은 시간
 
 	// Helper classes
 	HonmunCollisionTypes* collisionTypes = nullptr;
@@ -110,4 +115,5 @@ private:
 	void ApplyTypeSpecificFriction();
 	void MaintainFragmentMomentum();
 	float GetFrictionByType(HonmunType type);
+	float GetFallingSpeedByType(); // 키네마틱 모드용 낙하속도
 };

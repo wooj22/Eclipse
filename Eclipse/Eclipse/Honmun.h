@@ -80,4 +80,10 @@ private:
 	
 	// 애니메이션 시스템 설정
 	void SetupAnimationSystem();
+	
+	// 타입별 낙하 속도 설정
+	void SetFallingSpeedByType();
+	
+	// 타입에 따른 이름 업데이트
+	void UpdateNameByType();
 };
