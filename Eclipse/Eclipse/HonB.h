@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
+#include "HonBController.h"
 
 class HonB: public GameObject
 {
@@ -13,7 +14,7 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
-	//HonAController* controller;
+	HonBController* controller;
 
 	HonB() : GameObject("HonB", "Hon")		// name, tag
 	{
@@ -21,7 +22,7 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
-		//controller = AddComponent<HonAController>();
+		controller = AddComponent<HonBController>();
 
 		// renderer set
 		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/HonB.png");

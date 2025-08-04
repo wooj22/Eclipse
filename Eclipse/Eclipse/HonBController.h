@@ -7,7 +7,7 @@ class SpriteRenderer;
 class Rigidbody;
 class CircleCollider;
 
-class HonAController : public Script
+class HonBController : public Script
 {
 private:
 	// hon stat
@@ -45,13 +45,13 @@ public:
 
 public:
 	// func
-	void SetDirection(Vector2 dir){ direction = dir; }
+	void SetDirection(Vector2 dir) { direction = dir; }
 	Vector2 Getdirection() { return direction; }
 
-	void SetSize(float s){ size = s;  tr->SetScale(size, size); }
+	void SetSize(float s) { size = s;  gameObject->transform->SetScale(size, size); }
 	float GetSize() { return size; }
 
 	void SetDescentSpeed(float s) { descentSpeed = s; }
-	float GetSDescentpeed() { return descentSpeed; }
+	float GetDescentSpeed() { return descentSpeed; }
 };
 

@@ -1,4 +1,4 @@
-#include "HonAController.h"
+#include "HonBController.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
@@ -7,10 +7,10 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Camera.h"
-#include "HonA.h"
+#include "HonB.h"
 
 // script component cycle
-void HonAController::Awake()
+void HonBController::Awake()
 {
 	tr = gameObject->transform;
 	sr = gameObject->GetComponent<SpriteRenderer>();
@@ -20,12 +20,12 @@ void HonAController::Awake()
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
 }
 
-void HonAController::Start()
+void HonBController::Start()
 {
 	tr->SetScale(size, size);
 }
 
-void HonAController::Update()
+void HonBController::Update()
 {
 	if (isPlayerCollision)
 	{
@@ -44,13 +44,13 @@ void HonAController::Update()
 	}
 }
 
-void HonAController::OnDestroy()
+void HonBController::OnDestroy()
 {
 
 }
 
 // trigger event
-void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
+void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	// player collision
 	if (!isPlayerCollision && other->gameObject->name == "Player")
@@ -71,28 +71,19 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		if (honType == "HonA")
 		{
-			// controller
-			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
-
-			// Size를 기준으로 합체 주체 결정
-			if (size >= otherController->GetSize())
-			{
-				if(!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
-				SetSize(size * 1.5);
-				SetDescentSpeed(descentSpeed * 0.6);
-				SetDirection(Vector2::down);
-			}
-			else
-			{
-				otherController->SetSize(otherController->GetSize() * 1.5);
-				otherController->SetDirection(Vector2::down);
-				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
-				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
-			}
+			
 		}
 		else if (honType == "HonB")
 		{
+			SetSize(size * 0.7);
+			SetDescentSpeed(descentSpeed * 1.2);
+			SetDirection(Vector2::down);
 
+			GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(100,0));
+			HonBController* controller = newHonB->GetComponent<HonBController>();
+			controller->SetSize(size);
+			controller->SetDescentSpeed(descentSpeed * 1.2);
+			controller->SetDirection(Vector2::down);
 		}
 		else if (honType == "HonC")
 		{
@@ -105,12 +96,12 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	}
 }
 
-void HonAController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
+void HonBController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 
 }
 
-void HonAController::OnTriggerExit(ICollider* other, const ContactInfo& contact)
+void HonBController::OnTriggerExit(ICollider* other, const ContactInfo& contact)
 {
 
 }
