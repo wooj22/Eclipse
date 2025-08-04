@@ -109,7 +109,6 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// collider off
 			collider->SetEnabled(false);
 
-			// TODO :: 주체 정하기
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();
 
@@ -132,6 +131,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				}
 			}
 
+			if (!other->gameObject->IsDestroyed()) other->gameObject->Destroy();
 			gameObject->Destroy();
 		}
 
