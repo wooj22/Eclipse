@@ -32,7 +32,8 @@ void Dash_State::Enter(MovementFSM* fsm)
     if (inputX == 0)
     {
         bool flipX = fsm->GetPlayerFSM()->GetLastFlipX();
-        inputX = flipX ? -1 : 1;  // true: 왼쪽 → -1, false: 오른쪽 → +1
+        // inputX = flipX ? -1 : 1;  // true: 왼쪽 → -1, false: 오른쪽 → +1
+        inputX = flipX ? 1 : -1;  
     }
 
     // 애니메이션

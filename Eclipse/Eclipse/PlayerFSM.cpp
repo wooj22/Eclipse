@@ -136,7 +136,8 @@ void PlayerFSM::FlipXSetting()
 	{
 		if (abs(rigidbody->velocity.x) > 0.01f)   // 정지 상태가 아닐 때만 방향 반영
 		{
-			spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
+			// spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
+			spriteRenderer->flipX = rigidbody->velocity.x > 0.0f;  // 왼쪽으로 이동 중이면 flip
 			lastFlipX = spriteRenderer->flipX;
 		}
 		else   spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지

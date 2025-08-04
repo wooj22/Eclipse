@@ -127,7 +127,7 @@ public:
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }
 
-	bool GetLastFlipX() const { return lastFlipX; } // true 哭率 -> true 坷弗率 (府家胶 规氢 函版凳)
+	bool GetLastFlipX() const { return lastFlipX; } // true 哭率 -> true 坷弗率, false 哭率 (府家胶 规氢 函版凳)
 	void SetLastFlipX(bool isFlipX) { lastFlipX = isFlipX; } // true 哭率 
 	bool GetisBulletFliping() const { return isBulletFliping; }
 	void SetisBulletFliping(bool isBulletTime) { isBulletFliping = isBulletTime; }
