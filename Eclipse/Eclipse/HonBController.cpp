@@ -22,14 +22,26 @@ void HonBController::Start()
 
 void HonBController::Update()
 {
-	if (isCollisionMoving)
+	if (isPullMoving)
+	{
+		// pulling move
+		pullMovingDelta += Time::GetDeltaTime();
+		tr->Translate(pullDirection * collisionSpeed * 2 * Time::GetDeltaTime());
+
+		// end pulling
+		if (pullMovingDelta >= pullMovingTime) {
+			isPullMoving = false;
+			pullMovingDelta = 0;
+		}
+	}
+	else if (isCollisionMoving)
 	{
 		// collision move
 		pushBackDeltaTime += Time::GetDeltaTime();
-		tr->Translate(direction * collisionSpeed * Time::GetDeltaTime());
+		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
 		// move end
-		if (pushBackDeltaTime >= pushBackTime)
+		if (pushBackDeltaTime >= collisionMovingTime)
 		{
 			isCollisionMoving = false;
 			pushBackDeltaTime = 0;
@@ -58,7 +70,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		pushBackDeltaTime = 0;
 
 		// direction
-		direction = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
 	// hon collision
@@ -79,7 +91,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (honType == "HonA")
 		{
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
-			direction = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
+			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
 		}
 		else if (honType == "HonB")
 		{
@@ -96,4 +108,10 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		// collider on
 		collider->SetEnabled(true);
 	}
+}
+
+void HonBController::HonC_PullMe(Vector2 pos)
+{
+	pullDirection = (pos - tr->GetWorldPosition()).Normalized();
+	isPullMoving = true;
 }

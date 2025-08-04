@@ -1,10 +1,13 @@
 #include "HonCController.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/Transform.h"
+#include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "../Direct2D_EngineLib/Camera.h"
 #include "HonAController.h"
 #include "HonBController.h"
+#include "HonDController.h"
 
 // script component cycle
 void HonCController::Awake()
@@ -25,14 +28,14 @@ void HonCController::Update()
 	if (isCollisionMoving)
 	{
 		// collision move
-		pushBackDeltaTime += Time::GetDeltaTime();
-		tr->Translate(direction * collisionSpeed * Time::GetDeltaTime());
+		collisionMovingDelta += Time::GetDeltaTime();
+		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
 		// move end
-		if (pushBackDeltaTime >= pushBackTime)
+		if (collisionMovingDelta >= collisionMovingTime)
 		{
 			isCollisionMoving = false;
-			pushBackDeltaTime = 0;
+			collisionMovingDelta = 0;
 		}
 	}
 	else
@@ -55,10 +58,10 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		// collision move start (reset)
 		isCollisionMoving = true;
-		pushBackDeltaTime = 0;
+		collisionMovingDelta = 0;
 
 		// direction
-		direction = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
 	// hon collision
@@ -71,7 +74,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		// collision move start (reset)
 		isCollisionMoving = true;
-		pushBackDeltaTime = 0;
+		collisionMovingDelta = 0;
 
 		// collider off
 		collider->SetEnabled(false);
@@ -83,20 +86,43 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			float otherX = otherGameObject->transform->GetWorldPosition().x;
 			
 			if (thisX <= otherX) {
-				direction = Vector2::left;
+				moveDirection = Vector2::left;
 				HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 				otherController->SetDirection(Vector2::right);
 			}
 			else
 			{
-				direction = Vector2::right;
+				moveDirection = Vector2::right;
 				HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 				otherController->SetDirection(Vector2::left);
 			}
 		}
 		else if (honType == "HonC")
 		{
+			// TODO :: 주체 정하기
+			// pull position
+			Vector2 pullingPos = tr->GetWorldPosition();
 
+			// hon pulling call
+			vector<GameObject*> HonList = GameObject::FindAllWithTag("Hon");
+			for (GameObject* ob : HonList)
+			{
+				if (ob->name != "HonC")
+				{
+					SpriteRenderer* sr = ob->GetComponent<SpriteRenderer>();
+					if (Camera::GetMainCamera()->IsInView(ob->transform->GetWorldPosition(), sr->boundSize))
+					{
+						if (ob->name == "HonA")
+							ob->GetComponent<HonAController>()->HonC_PullMe(pullingPos);
+						else if(ob->name == "HonB")
+							ob->GetComponent<HonBController>()->HonC_PullMe(pullingPos);
+						else if (ob->name == "HonD") 
+							ob->GetComponent<HonDController>()->HonC_PullMe(pullingPos);
+					}
+				}
+			}
+
+			gameObject->Destroy();
 		}
 
 		// collider on

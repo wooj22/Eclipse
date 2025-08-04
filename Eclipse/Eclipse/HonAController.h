@@ -9,18 +9,25 @@ class HonAController : public Script
 {
 private:
 	// hon stat
-	int hp = 3;
-	float descentSpeed = 80;		// 하강 speed
-	float collisionSpeed = 150;		// 충돌 밀림 speed
-	float size = 1;
-	float pushBackTime = 3.0f;		// 충돌시 pushBackTime 시간동안 이동
+	int hp = 3;								// HP
+	float size = 1;							// Scale
+	float descentSpeed = 80;				// 하강 speed
+	float collisionSpeed = 150;				// 충돌 밀림 speed
+	float collisionMovingTime = 3.0f;		// 충돌 밀림 지속시간
+	float pullMovingTime = 1.0f;			// Hon C 끌어당김 지속시간
 
 	// controll
-	Vector2 direction = Vector2::zero;
-	Vector2 descentDirection = Vector2::down;
-	Vector2 pullDirection = Vector2::zero;
-	bool isCollisionMoving = false;	// 충돌로 밀려지는 상태
-	float pushBackDeltaTime;
+	Vector2 moveDirection = Vector2::zero;		// colliison move dir
+	Vector2 descentDirection = Vector2::down;	// 하강 dir
+	Vector2 pullDirection = Vector2::zero;		// Hon C 끌어당김 dir
+
+	// flag
+	bool isCollisionMoving = false;				// 충돌로 밀려지고 있는 상태
+	bool isPullMoving = false;				    // C에게 당겨지고 있는 상태
+
+	// delta
+	float collisionMovingDelta;				
+	float pullMovingDelta;
 
 	// player 
 	Transform* playerTr;
@@ -41,8 +48,8 @@ public:
 
 public:
 	// func
-	void SetDirection(Vector2 dir){ direction = dir; }
-	Vector2 Getdirection() { return direction; }
+	void SetDirection(Vector2 dir){ moveDirection = dir; }
+	Vector2 Getdirection() { return moveDirection; }
 
 	void SetSize(float s){ size = s;  tr->SetScale(size, size); }
 	float GetSize() { return size; }
@@ -51,5 +58,8 @@ public:
 	float GetSDescentpeed() { return descentSpeed; }
 
 	void SetCollisionState(bool b) { isCollisionMoving = b; }
+
+	// HonC 끌어당기는 함수
+	void HonC_PullMe(Vector2 pos);
 };
 

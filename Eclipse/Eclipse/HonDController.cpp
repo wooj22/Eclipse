@@ -14,17 +14,29 @@ void HonDController::Awake()
 
 void HonDController::Update()
 {
-	if (isCollisionMoving)
+	if (isPullMoving)
+	{
+		// pulling move
+		pullMovingDelta += Time::GetDeltaTime();
+		tr->Translate(pullDirection * collisionSpeed * 2 * Time::GetDeltaTime());
+
+		// end pulling
+		if (pullMovingDelta >= pullMovingTime) {
+			isPullMoving = false;
+			pullMovingDelta = 0;
+		}
+	}
+	else if (isCollisionMoving)
 	{
 		// collision move
-		pushBackDeltaTime += Time::GetDeltaTime();
-		tr->Translate(direction * collisionSpeed * Time::GetDeltaTime());
+		collisionMovingDelta += Time::GetDeltaTime();
+		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
 		// move end
-		if (pushBackDeltaTime >= pushBackTime)
+		if (collisionMovingDelta >= collisionMovingTime)
 		{
 			isCollisionMoving = false;
-			pushBackDeltaTime = 0;
+			collisionMovingDelta = 0;
 		}
 	}
 	else
@@ -43,10 +55,10 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		// collision move start (reset)
 		isCollisionMoving = true;
-		pushBackDeltaTime = 0;
+		collisionMovingDelta = 0;
 
 		// direction
-		direction = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
 	// hon collision
@@ -59,10 +71,16 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		// collision move start (reset)
 		isCollisionMoving = true;
-		pushBackDeltaTime = 0;
+		collisionMovingDelta = 0;
 
 		// destroy
 		otherGameObject->Destroy();
 		this->gameObject->Destroy();
 	}
+}
+
+void HonDController::HonC_PullMe(Vector2 pos)
+{
+	pullDirection = (pos - tr->GetWorldPosition()).Normalized();
+	isPullMoving = true;
 }
