@@ -1,0 +1,187 @@
+{
+    "texture": "Y_Player_Attack.png",
+    "textureWidth": 2045,
+    "textureHeight": 2000,
+    "sprites": [
+        {
+            "name": "Y_Player_Attack_0",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_1",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_2",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_3",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_4",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_5",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_6",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_7",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_8",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_9",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_10",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_11",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_12",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_13",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_14",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_15",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_16",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_17",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_18",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Attack_19",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}

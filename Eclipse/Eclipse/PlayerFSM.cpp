@@ -65,6 +65,12 @@ void PlayerFSM::Update()
 {
 	InputSetting(); // input 키값 확인
 
+	// [ Q E 스킬 ]
+	UpdateSkillCooldowns(); 
+	if (isQ) { TryUseAbsorb(); }
+	if (isE) { TryUseRelease(); }
+
+
 	movementFSM->Update();
 
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
@@ -82,10 +88,6 @@ void PlayerFSM::Update()
 	//	std::string name = typeid(*currentState).name();  // 상태 이름 확인
 	//	OutputDebugStringA(("현재 상태: " + name + "\n").c_str());
 	//}
-
-
-	// [ animation ]
-	// animatorController->SetFloat("Dash", dashSpeed);
 
 
 	// [ mo_dev ] 
@@ -114,10 +116,11 @@ void PlayerFSM::InputSetting()
 	inputX = Input::GetAxisHorizontal();
 	inputY = Input::GetAxisVertical();
 
-	// isW = Input::GetKey('W');
 	isA = Input::GetKey('A');
 	isD = Input::GetKey('D');
 	isS = Input::GetKey('S');
+	isQ = Input::GetKeyDown('Q');
+	isE = Input::GetKeyDown('E');
 	isShift = Input::GetKey(VK_SHIFT);
 	isSpace = Input::GetKeyDown(VK_SPACE);
 
@@ -133,7 +136,8 @@ void PlayerFSM::FlipXSetting()
 	{
 		if (abs(rigidbody->velocity.x) > 0.01f)   // 정지 상태가 아닐 때만 방향 반영
 		{
-			spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
+			// spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
+			spriteRenderer->flipX = rigidbody->velocity.x > 0.0f;  // 오른쪽으로 이동 중이면 flip
 			lastFlipX = spriteRenderer->flipX;
 		}
 		else   spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
@@ -172,7 +176,7 @@ void PlayerFSM::OnGround()
 
 void PlayerFSM::OnJump(JumpPhase jumpType)
 {
-	// 점프 시 공격 가능 여부를 설정
+	// 점프 시 공격 가능 여부 설정
 	if (!GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra))
 	{
 		if (jumpType == JumpPhase::NormalJump)	canAttackAfterJump[jumpType] = true;
@@ -206,7 +210,6 @@ void PlayerFSM::UseAttack()
 }
 
 // dash
-
 void PlayerFSM::UpdateDashCooldown() // Dash 쿨타임 업데이트
 {
 	if (dashCooldownTimer > 0.0f)
@@ -249,6 +252,94 @@ float PlayerFSM::GetAttackRangeBonus() const
 	case 3: return 150.0f;  // 1.5f;
 	default: return 0.0f;
 	}
+}
+
+// Q E skill 
+void PlayerFSM::TryUseAbsorb() // [ 흡수 ] 
+{
+	if (!CanUseAbsorb()){ OutputDebugStringA("[Skill] Q 흡수 실패 - 쿨타임 또는 이미 보유\n"); return; }
+
+	GameObject* soul = FindNearestSoulInRange(absorbRange); // 범위 내의 혼 찾기 
+	//std::string debugStr = "[PlayerFSM] Absorb Hunmon's tag = " + soul->tag + "\n";
+	//OutputDebugStringA(debugStr.c_str());
+
+	if (soul)
+	{
+		soul->Destroy(); // 흡수(제거)
+		hasAbsorbedSoul = true;
+		isReleaseSkillAvailable = true;
+		absorbCooldownTimer = absorbCooldown;
+		OutputDebugStringA("[Skill] Q 흡수 성공 - 영혼 저장됨\n");
+	}
+	else
+	{
+		OutputDebugStringA("[Skill] Q 흡수 실패 - 범위 내 영혼 없음\n");
+	}
+}
+
+void PlayerFSM::TryUseRelease() // [ 방출 ] 
+{
+	if (!CanUseRelease())
+	{
+		OutputDebugStringA("[Skill] E 방출 실패 - 저장된 영혼 없음\n");
+		return;
+	}
+
+	// 1. Honmun 탐색 및 제거 : 일단 냅다 다 삭제할게유! 추후 점수제로 변경 필요 
+	int removedCount = 0;
+	for (auto* obj : GameObject::FindAll("Honmun"))
+	{
+		if (!obj) continue;
+
+		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
+		if (dist <= releaseEffectRange)
+		{
+			obj->Destroy(); // 혼 제거
+			removedCount++;
+		}
+	}
+
+	// 2. 상태 리셋
+	hasAbsorbedSoul = false;
+	isReleaseSkillAvailable = false;
+
+	// 3. 이펙트 발동 
+	// PerformReleaseEffect(); // 범위 이펙트, 데미지 
+
+	std::string debugStr = "[Skill] E 방출 성공 - " + std::to_string(removedCount) + "개 혼 제거됨\n";
+	OutputDebugStringA(debugStr.c_str());
+}
+
+GameObject* PlayerFSM::FindNearestSoulInRange(float range)
+{
+	GameObject* closestSoul = nullptr;
+	float closestDist = FLT_MAX;
+
+	for (auto* obj : GameObject::FindAll("Honmun"))
+	{
+		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
+		if (dist < range && dist < closestDist)
+		{
+			closestSoul = obj;
+			closestDist = dist;
+		}
+	}
+	return closestSoul;
+}
+
+void PlayerFSM::UpdateSkillCooldowns()
+{
+	if (absorbCooldownTimer > 0.0f) absorbCooldownTimer -= Time::GetDeltaTime();
+}
+
+bool PlayerFSM::CanUseAbsorb() const
+{
+	return absorbCooldownTimer <= 0.0f && !hasAbsorbedSoul;
+}
+
+bool PlayerFSM::CanUseRelease() const
+{
+	return hasAbsorbedSoul;
 }
 
 // *-------------- [ Collider ] --------------*

@@ -65,7 +65,7 @@ private:
 
 
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton; // moon_dev
+	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE; // moon_dev
 
 public:
 	// key
@@ -127,7 +127,7 @@ public:
 	bool GetIsWallLeft() const { return isWallLeft; }
 	bool GetIsWallRight() const { return isWallRight; }
 
-	bool GetLastFlipX() const { return lastFlipX; } // true 왼쪽 
+	bool GetLastFlipX() const { return lastFlipX; } // true 왼쪽 -> true 오른쪽, false 왼쪽 (리소스 방향 변경됨)
 	void SetLastFlipX(bool isFlipX) { lastFlipX = isFlipX; } // true 왼쪽 
 	bool GetisBulletFliping() const { return isBulletFliping; }
 	void SetisBulletFliping(bool isBulletTime) { isBulletFliping = isBulletTime; }
@@ -191,6 +191,26 @@ public:
 	void UpdateDashCooldown(); 
 	bool CanDash() const;
 	void ResetDashCooldown();
+
+	// Q 흡수 
+	bool isAbsorbSkillActive = false;
+	float absorbCooldown = 5.0f;		// 쿨타임 
+	float absorbCooldownTimer = 0.0f;
+	float absorbRange = 300.0f;			// 흡수 범위 
+	bool hasAbsorbedSoul = false;       // 저장 여부
+
+	// E 방출 
+	bool isReleaseSkillAvailable = false;
+	float releaseEffectRange = 400.0f;
+	// float releaseDamage = 3.0f; // 혼 점수제에 따른 데미지 
+
+	void UpdateSkillCooldowns();
+	bool CanUseAbsorb() const;
+	bool CanUseRelease() const;
+
+	void TryUseAbsorb();
+	void TryUseRelease();
+	GameObject* FindNearestSoulInRange(float range);
 
 private:
 	// [ FSM setting ] 

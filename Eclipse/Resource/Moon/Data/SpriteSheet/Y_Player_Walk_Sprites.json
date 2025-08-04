@@ -1,0 +1,187 @@
+{
+    "texture": "Y_Player_Walk.png",
+    "textureWidth": 2045,
+    "textureHeight": 2000,
+    "sprites": [
+        {
+            "name": "Y_Player_Walk_0",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_1",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_2",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_3",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_4",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_5",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_6",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_7",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_8",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_9",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_10",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_11",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_12",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_13",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_14",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_15",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_16",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_17",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_18",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Y_Player_Walk_19",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}

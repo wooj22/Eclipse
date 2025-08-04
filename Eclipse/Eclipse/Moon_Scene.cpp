@@ -39,7 +39,7 @@ void Moon_Scene::Awake()
 	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
 	playerAttackArea = CreateObject<PlayerAttackArea>();
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
-	playerAttackArea->SetActive(false);
+	// playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 	// [ ground ]
@@ -114,7 +114,10 @@ void Moon_Scene::Awake()
 	camCompo->SetTargetTraceLimitY(100.0f);
 	camCompo->SetMapCondition(mapRect);
 
-	npc = CreateObject<NPC>();
+
+	// [ UI ] 
+
+	/*npc = CreateObject<NPC>();
 
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
@@ -145,7 +148,7 @@ void Moon_Scene::Awake()
 	playUI->skillbutton8 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp);
 	playUI->skillbutton9 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash);
 	playUI->skillHon_Image = CreateObject<UI_Image>();
-	playUI->skillHon_Text = CreateObject<UI_Text>();
+	playUI->skillHon_Text = CreateObject<UI_Text>();*/
 
 }
 

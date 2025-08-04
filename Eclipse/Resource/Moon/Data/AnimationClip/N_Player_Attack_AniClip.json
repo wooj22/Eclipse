@@ -1,0 +1,89 @@
+{
+    "clipName": "N_Player_Attack",
+    "loop": false,
+    "texturePath": "Assets/02. Sprite/Player/N_Player_Attack.png",
+    "duration": 0.35,
+    "frames": [
+        {
+            "sprite": "N_Player_Attack_0",
+            "time": 0.015
+        },
+        {
+            "sprite": "N_Player_Attack_1",
+            "time": 0.030
+        },
+        {
+            "sprite": "N_Player_Attack_2",
+            "time": 0.045
+        },
+        {
+            "sprite": "N_Player_Attack_3",
+            "time": 0.060
+        },
+        {
+            "sprite": "N_Player_Attack_4",
+            "time": 0.075
+        },
+        {
+            "sprite": "N_Player_Attack_5",
+            "time": 0.09
+        },
+        {
+            "sprite": "N_Player_Attack_6",
+            "time": 0.105
+        },
+        {
+            "sprite": "N_Player_Attack_7",
+            "time": 0.120
+        },
+        {
+            "sprite": "N_Player_Attack_8",
+            "time": 0.135
+        },
+        {
+            "sprite": "N_Player_Attack_9",
+            "time": 0.150
+        },
+        {
+            "sprite": "N_Player_Attack_10",
+            "time": 0.165
+        },
+        {
+            "sprite": "N_Player_Attack_11",
+            "time": 0.180
+        },
+        {
+            "sprite": "N_Player_Attack_12",
+            "time": 0.195
+        },
+        {
+            "sprite": "N_Player_Attack_13",
+            "time": 0.21
+        },
+        {
+            "sprite": "N_Player_Attack_14",
+            "time": 0.225
+        },
+        {
+            "sprite": "N_Player_Attack_15",
+            "time": 0.240
+        },
+        {
+            "sprite": "N_Player_Attack_16",
+            "time": 0.255
+        },
+        {
+            "sprite": "N_Player_Attack_17",
+            "time": 0.270
+        },
+        {
+            "sprite": "N_Player_Attack_18",
+            "time": 0.285
+        },
+        {
+            "sprite": "N_Player_Attack_19",
+            "time": 0.300
+        }
+    ],
+    "events": []
+}

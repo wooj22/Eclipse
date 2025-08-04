@@ -10,12 +10,42 @@
 class PlayerIdleClip : public AnimationClip
 {
 public:
-    PlayerIdleClip()
+    PlayerIdleClip() // ³¹Àå Ãâ·Â 
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Idle.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Idle_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Idle_AniClip.json");
+        name = "N_Player_Idle";
+        loop = true;
+        duration = 1.6f;
+
+        const std::string basePath = "../Resource/Moon/Texture/N_Player_Idle/";
+        const int frameCount = 20;
+        const float frameTime = duration / frameCount;
+
+        for (int i = 0; i < frameCount; ++i)
+        {
+            // Idle_00.png, Idle_01.png, ...
+            char filename[256];
+            sprintf_s(filename, "%sIdle_%02d.png", basePath.c_str(), i);
+
+            auto texture = ResourceManager::Get().CreateTexture2D(filename);
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "Idle_" + std::to_string(i));
+
+            AnimationFrame frame;
+            frame.sprite = sprite;
+            frame.time = i * frameTime;
+
+            frames.push_back(frame);
+        }
     }
+    //PlayerIdleClip()
+    //{
+    //    //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Idle.png");
+    //    //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Idle_Sprites.json");
+    //    //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Idle_AniClip.json");
+
+    //    auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Idle.png");
+    //    LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/_N_Player_Idle_Sprites.json");
+    //    LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/_N_Player_Idle_AniClip.json");
+    //}
     ~PlayerIdleClip() override {}
 };
 
@@ -24,9 +54,13 @@ class PlayerWalkClip : public AnimationClip
 public:
     PlayerWalkClip()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Walk.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Walk_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Walk_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Walk.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Walk_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Walk_AniClip.json");
+
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Walk.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Walk_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Walk_AniClip.json");
     }
     ~PlayerWalkClip() override {}
 };
@@ -36,9 +70,13 @@ class PlayerJumpClip : public AnimationClip
 public:
     PlayerJumpClip()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Jump.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Jump_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Jump_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Jump.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Jump_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Jump_AniClip.json");
+
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Jump.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Jump_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Jump_AniClip.json");
     }
     ~PlayerJumpClip() override {}
 };
@@ -48,9 +86,13 @@ class PlayerHangingClip : public AnimationClip
 public:
     PlayerHangingClip()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Hanging.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Hanging_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Hanging_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Hanging.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Hanging_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Hanging_AniClip.json");
+
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Jump.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Jump_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Jump_AniClip.json");
     }
     ~PlayerHangingClip() override {}
 };
@@ -60,9 +102,13 @@ class PlayerAttackClip : public AnimationClip
 public:
     PlayerAttackClip()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Attack.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Attack_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Attack_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Attack.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Attack_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Attack_AniClip.json");
+
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Attack.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Attack_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Attack_AniClip.json");
     }
     ~PlayerAttackClip() override {}
 };
@@ -103,12 +149,11 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        if (controller->GetBool("Samurai_Walk") == true)         controller->PlayAnimation("Samurai_Walk");
-        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
-        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
-        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
-        // else if (controller->GetBool("Samurai_Fall") == true)  controller->PlayAnimation("Samurai_Jump");
+        if (controller->GetBool("N_Player_Walk") == true)         controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
     }
     void Exit() override {}
 };
@@ -122,12 +167,11 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
-        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
-        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
-        // else if (controller->GetBool("Samurai_Fall") == true)  controller->PlayAnimation("Samurai_Jump");
+        if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
     }
     void Exit() override {}
 };
@@ -141,12 +185,12 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-        else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
-        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
-        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
-        // else if (controller->GetBool("Samurai_Fall") == true)  controller->PlayAnimation("Samurai_Jump");
+        if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+        // else if (controller->GetBool("N_Player_Fall") == true)  controller->PlayAnimation("N_Player_Jump");
     }
     void Exit() override {}
 };
@@ -160,12 +204,12 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
-        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
-        else if (controller->GetBool("Samurai_Attack") == true)  controller->PlayAnimation("Samurai_Attack");
-        // else if (controller->GetBool("Samurai_Fall") == true)  controller->PlayAnimation("Samurai_Jump");
+        if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+        // else if (controller->GetBool("N_Player_Fall") == true)  controller->PlayAnimation("N_Player_Jump");
     }
     void Exit() override {}
 };
@@ -217,12 +261,12 @@ public:
     void Update(float dt) override
     {
         // [ tansition ]
-        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
-        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-        else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
-        else if (controller->GetBool("Samurai_Hanging") == true) controller->PlayAnimation("Samurai_Hanging");
-        // else if (controller->GetBool("Samurai_Fall") == true)  controller->PlayAnimation("Samurai_Fall");
+        if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        // else if (controller->GetBool("N_Player_Fall") == true)  controller->PlayAnimation("N_Player_Fall");
     }
     void Exit() override {}
 };

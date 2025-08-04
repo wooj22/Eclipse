@@ -23,7 +23,7 @@ void Walk_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->isHolding = false;
     fsm->GetPlayerFSM()->timer = 0.0f;
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Walk", true);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Walk", true);
 }
 
 void Walk_State::Update(MovementFSM* fsm)
@@ -77,5 +77,5 @@ void Walk_State::FixedUpdate(MovementFSM* fsm)
 
 void Walk_State::Exit(MovementFSM* fsm)
 {
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Walk", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Walk", false);
 }

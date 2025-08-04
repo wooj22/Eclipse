@@ -6,9 +6,9 @@
 
 #include "Player.h"
 #include "playerAttackArea.h"
+#include "NPC.h"
 
 #include "PlayUI.h"
-#include "NPC.h"
 #include "SkillWindowButton.h"
 
 class Moon_Scene : public Scene
@@ -29,8 +29,9 @@ private:
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
 
 
-	NPC* npc;
-	PlayUI* playUI;
+	// [ UI ]
+	 NPC* npc;
+	 PlayUI* playUI;
 
 	// component 
 	BoxCollider* ground_col;
