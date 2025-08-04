@@ -1,6 +1,6 @@
 {
     "clipName": "Y_Player_Idle",
-    "loop": false,
+    "loop": true,
     "texturePath": "Assets/02. Sprite/Player/Y_Player_Idle.png",
     "duration": 1.6666667461395264,
     "frames": [

@@ -12,9 +12,13 @@ class PlayerIdleClip : public AnimationClip
 public:
     PlayerIdleClip()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Idle.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Idle_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Idle_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Idle.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Idle_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Idle_AniClip.json");
+
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Idle.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Idle_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Idle_AniClip.json");
     }
     ~PlayerIdleClip() override {}
 };
