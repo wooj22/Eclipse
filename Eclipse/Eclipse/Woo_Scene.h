@@ -10,6 +10,7 @@
 #include "Boss.h"
 #include "HonA.h"
 #include "HonB.h"
+#include "HonC.h"
 #include "HonD.h"
 
 #include "Player.h"
@@ -35,7 +36,8 @@ private:
 	HonA* honA2;
 	HonB* honB1;
 	HonB* honB2;
-
+	HonC* honC1;
+	HonC* honC2;
 	HonD* honD1;
 	HonD* honD2;
 
