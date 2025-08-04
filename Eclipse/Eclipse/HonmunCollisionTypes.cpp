@@ -60,10 +60,10 @@ void HonmunCollisionTypes::ProcessCollision(HonmunCollisionBase* script1, Honmun
              static_cast<int>(type1), hp1, static_cast<int>(type2), hp2);
     OutputDebugStringA(debugMsg);
 
-    // 기획서 기반 충돌 처리: 체력 1 상호작용X 체크
-    if (hp1 == 1 && hp2 == 1)
+    // 기획서 기반 충돌 처리: 체력 1 상호작용X 체크 (b+b는 예외)
+    if (hp1 == 1 && hp2 == 1 && !(type1 == HonmunType::b && type2 == HonmunType::b))
     {
-        OutputDebugStringA("Both HP=1, no interaction\n");
+        OutputDebugStringA("Both HP=1, no interaction (except b+b)\n");
         return;
     }
 
@@ -884,7 +884,7 @@ void HonmunCollisionTypes::ApplyPhysicalEffect(HonmunCollisionBase* script, Honm
              (type1 == HonmunType::A2 && type2 == HonmunType::C) ||
              (type1 == HonmunType::C && type2 == HonmunType::A2))
     {
-        ApplyLeftRightPush(script, otherScript, 250.0f);
+        ApplyLeftRightPush(script, otherScript, 2100.0f); // 플레이어 점프(700) × 3
         OutputDebugStringA("Applied left-right push effect\n");
     }
     // B + C = 관통
