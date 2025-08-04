@@ -1,6 +1,10 @@
 #include "Jump_State.h"
 #include "Walk_State.h"
 #include "Idle_State.h"
+#include "Attack_State.h"
+#include "Dash_State.h"
+#include "BulletTime_State.h"
+
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
@@ -8,8 +12,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "BulletTime_State.h"
-#include "Attack_State.h"
+
 
 void Walk_State::Enter(MovementFSM* fsm)
 {
@@ -28,6 +31,7 @@ void Walk_State::Update(MovementFSM* fsm)
     // [ Jump ]
     if (fsm->GetPlayerFSM()->GetIsSpace() && fsm->GetPlayerFSM()->GetIsGround())
     {
+        fsm->GetPlayerFSM()->OnJump(JumpPhase::NormalJump);
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Jump_State>());
     }
 
@@ -55,6 +59,13 @@ void Walk_State::Update(MovementFSM* fsm)
 
         // ÃÊ±âÈ­
         fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
+    }
+
+    // [ Dash ]
+    if (fsm->GetPlayerFSM()->GetisShift() && GameManager::Get().CheckUnlock(SkillType::Dash) && fsm->GetPlayerFSM()->CanDash())
+    {
+        fsm->ChangeState(std::make_unique<Dash_State>());
+        return;
     }
 }
 

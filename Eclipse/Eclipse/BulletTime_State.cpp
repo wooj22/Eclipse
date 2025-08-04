@@ -67,7 +67,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
 
 
 
-    // ----- [ 플레이어-마우스 위치 디버그 선 그리기 ] : 전체 거리 -----
+    // ----- [ 플레이어-마우스 위치 디버그 선 그리기 ] : 전체 거리 ----- 
     // 
     //D2D1_POINT_2F start = { playerPos.x, playerPos.y };     // 플레이어 월드 위치 
     //D2D1_POINT_2F end = { mousePos.x,  mousePos.y };        // 마우스 월드 위치 -> 실제 이동하는 거리 만큼 
@@ -82,10 +82,13 @@ void BulletTime_State::Update(MovementFSM* fsm)
 
     // ----- [ 플레이어-마우스 위치 디버그 선 그리기 ] : 실제 이동하는 거리 -----
     // 
+    float baseMaxDist = fsm->GetPlayerFSM()->maxAttackDistance;
+    float bonus = fsm->GetPlayerFSM()->GetAttackRangeBonus(); // 해금 레벨에 따른 거리 증가 
+    float maxDistance = baseMaxDist + bonus;
+
     Vector2 toMouse = mousePos - playerPos;
     Vector2 direction = toMouse.Normalized();
-    
-    float actualDistance = (toMouse.Magnitude() < 300.0f) ? toMouse.Magnitude() : 300.0f;
+    float actualDistance = ((toMouse.Magnitude()) < (maxDistance)) ? (toMouse.Magnitude()) : (maxDistance);
 
     Vector2 limitedTargetPos = playerPos + direction * actualDistance;
 
@@ -94,7 +97,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
 
     // 월드 → 스크린 변환
     const auto& screenMatrix = Transform::renderMatrix * Camera::GetMainInverseMatrix() * Transform::unityMatrix;
-
+    
     // 디버그 선 그리기
     RenderSystem::Get().DebugDrawLine(start, end, screenMatrix, 2.0f);
 }

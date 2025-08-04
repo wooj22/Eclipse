@@ -1,15 +1,19 @@
 #include "Idle_State.h"
 #include "Walk_State.h"
 #include "Jump_State.h"
+#include "Attack_State.h"
+#include "BulletTime_State.h"
+#include "Fall_State.h"
+#include "Dash_State.h"
+
 #include "MovementFSM.h" 
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
-#include "Attack_State.h"
-#include "BulletTime_State.h"
+
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "Fall_State.h"
+
 
 void Idle_State::Enter(MovementFSM* fsm)
 {
@@ -18,7 +22,9 @@ void Idle_State::Enter(MovementFSM* fsm)
     // 초기화 
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
-    fsm->GetPlayerFSM()->timer = 0.0f;
+    // fsm->GetPlayerFSM()->timer = 0.0f;
+
+    fsm->GetPlayerFSM()->OnGround();  // 모든 공격 기회 리셋
 
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // 움직임이 있었다면 정지 
 
@@ -30,9 +36,16 @@ void Idle_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
+    // DubleJump 초기화
+    if (fsm->GetPlayerFSM()->GetIsGround() && !fsm->GetPlayerFSM()->canDoubleJump)
+    {
+        fsm->GetPlayerFSM()->canDoubleJump = true;
+    }
+
     // [ Jump ]
     if (fsm->GetPlayerFSM()->GetIsSpace() && fsm->GetPlayerFSM()->GetIsGround())
     {
+        fsm->GetPlayerFSM()->OnJump(JumpPhase::NormalJump);
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Jump_State>());
     }
 
@@ -41,7 +54,6 @@ void Idle_State::Update(MovementFSM* fsm)
     {
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Walk_State>());
     }
-
 
     // [ Attack / Bullet ]
     if (fsm->GetPlayerFSM()->GetIsGround() && Input::GetKey(VK_LBUTTON))
@@ -52,7 +64,6 @@ void Idle_State::Update(MovementFSM* fsm)
 
         // [ BulletTime ]
         if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
-
     }
     else
     {
@@ -68,6 +79,13 @@ void Idle_State::Update(MovementFSM* fsm)
     if (!fsm->GetPlayerFSM()->GetIsGround())
     {
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>());
+    }
+
+    // [ Dash ]
+    if (fsm->GetPlayerFSM()->GetisShift() && GameManager::Get().CheckUnlock(SkillType::Dash) && fsm->GetPlayerFSM()->CanDash())
+    {
+        fsm->ChangeState(std::make_unique<Dash_State>());
+        return;
     }
 }
 
