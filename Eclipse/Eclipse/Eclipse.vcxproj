@@ -146,6 +146,7 @@
     <ClCompile Include="BulletController.cpp" />
     <ClCompile Include="BulletTime_State.cpp" />
     <ClCompile Include="Chat.cpp" />
+    <ClCompile Include="Dash_State.cpp" />
     <ClCompile Include="EclipseApp.cpp" />
     <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="Fall_State.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PlayUI.cpp" />
     <ClCompile Include="Quest.cpp" />
+    <ClCompile Include="SkillWindowButton.cpp" />
     <ClCompile Include="TitleUI.cpp" />
     <ClCompile Include="Walk_State.cpp" />
     <ClCompile Include="Woo_Scene.cpp" />
@@ -186,6 +188,7 @@
     <ClInclude Include="BulletController.h" />
     <ClInclude Include="BulletTime_State.h" />
     <ClInclude Include="Chat.h" />
+    <ClInclude Include="Dash_State.h" />
     <ClInclude Include="EclipseApp.h" />
     <ClInclude Include="EndScene.h" />
     <ClInclude Include="Fall_State.h" />
@@ -205,6 +208,8 @@
     <ClInclude Include="MovementStateBase.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAnimatorController.h" />
+    <ClInclude Include="playerAttackArea.h" />
     <ClInclude Include="PlayerController_Woo.h" />
     <ClInclude Include="PlayerFSM.h" />
     <ClInclude Include="PlayerStateBase.h" />
@@ -214,6 +219,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PlayUI.h" />
     <ClInclude Include="Quest.h" />
+    <ClInclude Include="SkillWindowButton.h" />
     <ClInclude Include="StateBase.h" />
     <ClInclude Include="TitleUI.h" />
     <ClInclude Include="Walk_State.h" />
