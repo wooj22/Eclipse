@@ -2,6 +2,13 @@
 #include "../Direct2D_EngineLib/Script.h"
 #include "../Direct2D_EngineLib/Vector2.h"
 
+/* [C] Darkness 어둠의 혼 컨트롤러 Script */
+// 연쇄반응
+// 1. A : 좌우로 튕김
+// 2. B : 무시
+// 3. C : View안의 모든 혼을 끌어당김
+// 4. D : 파괴
+
 class Transform;
 class CircleCollider;
 
@@ -13,15 +20,17 @@ private:
 	float size = 1;
 	float descentSpeed = 80;				// 하강 speed
 	float collisionSpeed = 150;				// 충돌 밀림 speed
-	float collisionMovingTime = 5.0f;		// 충돌 밀림 지속시간
+
+	// data								    // TODO :: 충돌 CC 빼고 다른 C들도 당기기
+	float collisionMovingTime = 3.0f;		// 충돌 밀림 지속시간
 
 	// controll
 	Vector2 moveDirection = Vector2::zero;
 	Vector2 descentDirection = Vector2::down;
 	Vector2 pullDirection = Vector2::zero;
+	bool isCollisionMoving = false;
 
-	// flag, delta
-	bool isCollisionMoving = false;			
+	// delta			
 	float collisionMovingDelta;
 
 	// player 
@@ -42,7 +51,7 @@ public:
 	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
 
 public:
-	// func
+	// get & set
 	void SetDirection(Vector2 dir) { moveDirection = dir; }
 	Vector2 Getdirection() { return moveDirection; }
 

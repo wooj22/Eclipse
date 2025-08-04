@@ -6,7 +6,7 @@
 #include "HonB.h"
 #include "HonAController.h"
 
-// script component cycle
+/*------------- Cycle  -------------*/
 void HonBController::Awake()
 {
 	tr = gameObject->transform;
@@ -59,10 +59,11 @@ void HonBController::OnDestroy()
 
 }
 
-// trigger event
+
+/*------------- Trigger Event -------------*/
 void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
-	// player collision
+	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// collision move start (reset)
@@ -73,7 +74,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
-	// hon collision
+	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
 		// other gameobject
@@ -81,20 +82,27 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
-		// collision move start (reset)
-		isCollisionMoving = true;
-		pushBackDeltaTime = 0;
-
-		// collider off
-		collider->SetEnabled(false);
-
 		if (honType == "HonA")
 		{
+			// collision move start (reset)
+			isCollisionMoving = true;
+			pushBackDeltaTime = 0;
+
+			// collider off
+			collider->SetEnabled(false);
+
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
 		}
 		else if (honType == "HonB")
 		{
+			// collision move start (reset)
+			isCollisionMoving = true;
+			pushBackDeltaTime = 0;
+
+			// collider off
+			collider->SetEnabled(false);
+
 			SetSize(size * 0.7);
 			SetDescentSpeed(descentSpeed * 1.2);
 			SetDirection(Vector2::down);
@@ -110,6 +118,8 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	}
 }
 
+
+/*------------- Functions -------------*/
 void HonBController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();

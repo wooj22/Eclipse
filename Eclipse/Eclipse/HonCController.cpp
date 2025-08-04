@@ -9,7 +9,7 @@
 #include "HonBController.h"
 #include "HonDController.h"
 
-// script component cycle
+/*------------- Cycle  -------------*/
 void HonCController::Awake()
 {
 	tr = gameObject->transform;
@@ -50,10 +50,11 @@ void HonCController::OnDestroy()
 
 }
 
-// trigger event
+
+/*------------- Trigger Event -------------*/
 void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
-	// player collision
+	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// collision move start (reset)
@@ -64,7 +65,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
-	// hon collision
+	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
 		// other gameobject
@@ -72,15 +73,16 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
-		// collision move start (reset)
-		isCollisionMoving = true;
-		collisionMovingDelta = 0;
-
-		// collider off
-		collider->SetEnabled(false);
-
+		// 1. 연쇄반응 C-A
 		if (honType == "HonA")
 		{
+			// collision move start (reset)
+			isCollisionMoving = true;
+			collisionMovingDelta = 0;
+
+			// collider off
+			collider->SetEnabled(false);
+
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
 			float otherX = otherGameObject->transform->GetWorldPosition().x;
@@ -97,8 +99,16 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherController->SetDirection(Vector2::left);
 			}
 		}
+		// 2. 연쇄반응 C-C
 		else if (honType == "HonC")
 		{
+			// collision move start (reset)
+			isCollisionMoving = true;
+			collisionMovingDelta = 0;
+
+			// collider off
+			collider->SetEnabled(false);
+
 			// TODO :: 주체 정하기
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();

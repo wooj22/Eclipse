@@ -2,6 +2,13 @@
 #include "../Direct2D_EngineLib/Script.h"
 #include "../Direct2D_EngineLib/Vector2.h"
 
+/* [D] Luna 달빛의 혼 컨트롤러 Script */
+// 연쇄반응
+// 1. A : 파괴
+// 2. B : 파괴
+// 3. C : 파괴
+// 4. D : 파괴
+
 class Transform;
 class SpriteRenderer;
 class Rigidbody;
@@ -13,6 +20,8 @@ private:
 	// hon stat
 	float descentSpeed = 80;				// 하강 speed
 	float collisionSpeed = 150;				// 충돌 밀림 speed
+
+	// data
 	float collisionMovingTime = 3.0f;		// 충돌 밀림 지속시간
 	float pullMovingTime = 1.0f;			// Hon C 끌어당김 지속시간
 
@@ -20,8 +29,6 @@ private:
 	Vector2 moveDirection = Vector2::zero;		// colliison move dir		
 	Vector2 descentDirection = Vector2::down;	// 하강 dir
 	Vector2 pullDirection = Vector2::zero;		// Hon C 끌어당김 dir
-
-	// flag
 	bool isCollisionMoving = false;				// 충돌로 밀려지고 있는 상태
 	bool isPullMoving = false;				    // C에게 당겨지고 있는 상태
 
@@ -45,7 +52,7 @@ public:
 	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
 
 public:
-	// func
+	// get & set
 	void SetDirection(Vector2 dir) { moveDirection = dir; }
 	Vector2 Getdirection() { return moveDirection; }
 

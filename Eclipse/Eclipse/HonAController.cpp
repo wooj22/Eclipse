@@ -5,7 +5,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "HonBController.h"
 
-// script component cycle
+/*------------- Cycle  -------------*/
 void HonAController::Awake()
 {
 	tr = gameObject->transform;
@@ -58,10 +58,11 @@ void HonAController::OnDestroy()
 
 }
 
-// trigger event
+
+/*------------- Trigger Event -------------*/
 void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
-	// player collision
+	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// collision move start (reset)
@@ -72,7 +73,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
-	// hon collision
+	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
 		// other gameobject
@@ -80,15 +81,16 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
-		// collision move start (reset)
-		isCollisionMoving = true;
-		collisionMovingDelta = 0;
-
-		// collider off
-		collider->SetEnabled(false);
-
+		// 1. 연쇄반응 A-A
 		if (honType == "HonA")
 		{
+			// collision move start (reset)
+			isCollisionMoving = true;
+			collisionMovingDelta = 0;
+
+			// collider off
+			collider->SetEnabled(false);
+
 			// controller
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 
@@ -96,20 +98,41 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			if (size >= otherController->GetSize())
 			{
 				if(!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
-				SetSize(size * 1.5);
+				SetSize(size * 1.4);
+				SetDirection(moveDirection);
 				SetDescentSpeed(descentSpeed * 0.6);
 			}
 			else
 			{
 				otherController->SetSize(otherController->GetSize() * 1.5);
+				otherController->SetDirection(otherController->Getdirection());
 				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
 		}
+		// 2. 연쇄반응 A-B
 		else if (honType == "HonB")
 		{
+			// collision move start (reset)
+			isCollisionMoving = true;
+			collisionMovingDelta = 0;
+
+			// collider off
+			collider->SetEnabled(false);
+
 			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
+		}
+		else if (honType == "HonC")
+		{
+			// collision move start (reset)
+			isCollisionMoving = true;
+			collisionMovingDelta = 0;
+
+			// collider off
+			collider->SetEnabled(false);
+
+			// 로직은 C쪽에서 처리
 		}
 
 
@@ -118,6 +141,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	}
 }
 
+
+/*------------- Functions -------------*/
+// 3. 연쇄반응 C-C
 void HonAController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();

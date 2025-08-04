@@ -4,7 +4,7 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Time.h"
 
-// script component cycle
+/*------------- Cycle  -------------*/
 void HonDController::Awake()
 {
 	tr = gameObject->transform;
@@ -47,10 +47,10 @@ void HonDController::Update()
 }
 
 
-// trigger event
+/*------------- Trigger Event -------------*/
 void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
-	// player collision
+	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// collision move start (reset)
@@ -61,7 +61,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
-	// hon collision
+	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
 		// other gameobject
@@ -79,6 +79,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	}
 }
 
+/*------------- Functions -------------*/
 void HonDController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();
