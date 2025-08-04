@@ -43,6 +43,9 @@ void Woo_Scene::Awake()
 	honB1 = CreateObject<HonB>({ 0,-500 });
 	honB2 = CreateObject<HonB>({ 200,-300 });
 
+	honD1 = CreateObject<HonD>({ 0,-700 });
+	honD2 = CreateObject<HonD>({ 0,100 });
+
 	// map sample
 	map_woo = CreateObject<Map_Woo>({ 0, -900 });
 	ground1 = CreateObject<Map_Woo>({ 100, -700 });

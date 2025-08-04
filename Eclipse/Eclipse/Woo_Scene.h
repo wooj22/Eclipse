@@ -10,6 +10,7 @@
 #include "Boss.h"
 #include "HonA.h"
 #include "HonB.h"
+#include "HonD.h"
 
 #include "Player.h"
 #include "playerAttackArea.h"
@@ -35,6 +36,8 @@ private:
 	HonB* honB1;
 	HonB* honB2;
 
+	HonD* honD1;
+	HonD* honD2;
 
 	// player sample
 	//Player_Woo* player;
