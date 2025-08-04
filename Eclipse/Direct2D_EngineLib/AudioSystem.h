@@ -6,6 +6,7 @@ using namespace std;
 
 /* AudioSystem의 역할
 * 1. FMOD 시스템 초기화 및 업데이트
+* 2. masterGroup, bgmGroup, sfxGroup 기본 채널 그룹 제공
 */
 
 class AudioSource;

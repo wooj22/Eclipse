@@ -19,7 +19,7 @@ void AudioSource::OnDestroy_Inner()
     AudioSystem::Get().Unregist(this);
 }
 
-void AudioSource::SetClip(AudioClip* newClip)
+void AudioSource::SetClip(shared_ptr<AudioClip> newClip)
 {
     clip = newClip;
 }

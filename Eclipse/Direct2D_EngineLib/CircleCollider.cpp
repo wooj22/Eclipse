@@ -179,6 +179,14 @@ bool CircleCollider::CheckBoxCollision(BoxCollider* other, ContactInfo& contact)
         contact.depth = scaledRadius - distance;
     }
 
+    // 플랫폼 처리
+    if (other->isFlatform)
+    {
+        Vector2 platformNormal = -contact.normal;
+        if (platformNormal != Vector2(0, -1))
+            return false;
+    }
+
     return true;
 }
 
@@ -219,25 +227,14 @@ void CircleCollider::OnCollisionEnter(ICollider* other, ContactInfo& contact)
     Rigidbody* rb = gameObject->GetComponent<Rigidbody>();
     if (rb)
     {
-        if (isFlatformerCharacter)
+        // 충돌 보정
+        rb->CorrectPosition(contact);
+
+        // ground
+        if (contact.normal.y > 0)
         {
-            // up collision 보정 x, ground
-            if (contact.normal.y > 0)
-            {
-                rb->CorrectPosition(contact);
-                rb->groundContactCount++;
-                rb->isGrounded = true;
-            }
-        }
-        else
-        {
-            // ground
-            rb->CorrectPosition(contact);
-            if (contact.normal.y > 0)
-            {
-                rb->groundContactCount++;
-                rb->isGrounded = true;
-            }
+            rb->groundContactCount++;
+            rb->isGrounded = true;
         }
 
         // script

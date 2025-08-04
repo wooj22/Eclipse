@@ -67,7 +67,6 @@ public:
 
 		collider->offset = { 0.0f, -5.0f };
 		collider->size = { 50.0f, 70.0f };
-		collider->isFlatformerCharacter = true; 
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;

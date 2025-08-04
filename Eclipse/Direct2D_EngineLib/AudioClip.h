@@ -3,7 +3,7 @@
 #include <fmod.hpp>
 
 // mp3, wav 등의 sound파일 리소스 asset
-// TODO :: Resource Manager 관리
+// Resource Manager를 통해서 생성해야합니다.
 
 class AudioClip
 {

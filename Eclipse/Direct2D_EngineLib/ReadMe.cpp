@@ -293,6 +293,15 @@ class ImageRenderer;
 /*-------------------------------------------------------------------*/
 /*--------------------------   Sound    ----------------------------*/
 /*-----------------------------------------------------------------*/
+// Sound는 FMOD라이브러리를 활용해 구현하였습니다. 
+// 엔진라이브러리 폴더의 Extern 폴더에 FMOD inc폴더와 lib가 모두 있어야 실행됩니다.
 class AudioSystem;		// componet system
 class AudioSource;		// component
-class AudioCilp;		// asset
+class AudioClip;		// asset
+
+// AudioSystem에서 FMOD 시스템을 생성하고 전체 오디오가 잘 재생되도록 시스템을 매 프레임 update해줍니다.
+// AudioSystem에 기본적으로 master채널, bgm채널, sfx채널이 구현되어있습니다.
+// AudioSource는 각각 하나의 출력 채널을 가지며, 하나의 채널에는 두개의 sound가 동시에 재생될 수 없습니다.
+// AudioSystem의 bgm채널, sfx채널에 각 AudioSource채널을 등록하여 전체 볼륨을 믹싱할 수 있습니다.
+// AudioCilp은 사운드 파일 리소스로 리소스 매니저를 통해 생성해야합니다. 
+// 생성한 AudioClip을 AudioSource에 set하여 사운드를 플레이하면 됩니다!

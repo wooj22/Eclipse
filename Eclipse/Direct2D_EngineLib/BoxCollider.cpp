@@ -133,17 +133,16 @@ bool BoxCollider::CheckAABBCollision(BoxCollider* other, ContactInfo& contact)
         contact.depth = overlapY;
     }
 
-    // 5. 플랫폼 처리
+    // 플랫폼 처리
     if (isFlatform || other->isFlatform)
     {
-        // 플랫폼이 누구인지 판별
-        BoxCollider* platform = isFlatform ? this : other;
-        BoxCollider* otherBox = (platform == this) ? other : this;
+        // 플랫폼 판별
+        BoxCollider* flatform = isFlatform ? this : other;
+        BoxCollider* otherBox = (flatform == this) ? other : this;
 
-        // normal이 항상 this 기준이므로, contact.normal을 platform 기준으로 반전해서 판단
-        Vector2 platformNormal = (platform == this) ? contact.normal : -contact.normal;
+        // this기준 nomal
+        Vector2 platformNormal = (flatform == this) ? contact.normal : -contact.normal;
 
-        // 상대방이 위에서 충돌해온게 아니라면 충돌 무시
         if (platformNormal != Vector2(0, -1))
             return false;
     }
@@ -186,6 +185,13 @@ bool BoxCollider::CheckCircleCollision(CircleCollider* other, ContactInfo& conta
         float distance = sqrtf(distSq);
         contact.normal = -diff.Normalized();
         contact.depth = circleRadius - distance;
+    }
+
+    // 플랫폼 처리
+    if (isFlatform)
+    {
+        if (contact.normal != Vector2(0, -1))
+            return false;
     }
 
     return true;

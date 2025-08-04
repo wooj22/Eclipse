@@ -28,9 +28,6 @@ public:
     Vector2 offset = Vector2::zero;
     float radius = 1.0f;
 
-    // Flatformer일 경우 위로 충돌 보정 무시
-    bool isFlatformerCharacter = false;
-
 public:
     // component cycle
     CircleCollider() { colliderType = ColliderType::Circle; }
