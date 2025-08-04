@@ -1,0 +1,187 @@
+{
+    "texture": "N_Player_Idle.png",
+    "textureWidth": 2045,
+    "textureHeight": 2000,
+    "sprites": [
+        {
+            "name": "idle_sheets 1_0",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_1",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_2",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_3",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_4",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_5",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_6",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_7",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_8",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_9",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_10",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_11",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_12",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_13",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_14",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_15",
+            "x": 0.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_16",
+            "x": 409.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_17",
+            "x": 818.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_18",
+            "x": 1227.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "idle_sheets 1_19",
+            "x": 1636.0,
+            "y": 1522.0,
+            "width": 409.0,
+            "height": 478.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}
