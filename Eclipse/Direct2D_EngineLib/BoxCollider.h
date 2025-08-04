@@ -27,9 +27,8 @@ public:
     Vector2 offset = Vector2::zero;
     Vector2 size = { 10,10 };
 
-    // Flatformer일 경우 위로 충돌 보정 무시
-    bool isFlatformerCharacter = false;     // TODO :: Delete
-    bool isFlatform = false;                // 플랫폼
+    // Flatform :: normal.y == 1일때만 충돌 인식
+    bool isFlatform = false;
     
 public:
     // component cycle

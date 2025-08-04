@@ -28,8 +28,8 @@ public:
     Vector2 offset = Vector2::zero;
     float radius = 1.0f;
 
-    // Flatformer일 경우 위로 충돌 보정 무시
-    bool isFlatformerCharacter = false;
+    // Flatform :: normal.y == 1일때만 충돌 인식
+    bool isFlatform = false;
 
 public:
     // component cycle
