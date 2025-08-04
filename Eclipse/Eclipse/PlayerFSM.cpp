@@ -39,6 +39,8 @@ void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
 	// for (int i = 0; i < 3; ++i) 
+	GameManager::Get().honCount = 1000;
+
 	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
 	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
 	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
