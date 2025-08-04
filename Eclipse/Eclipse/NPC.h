@@ -5,6 +5,7 @@
 #include "../Direct2D_EngineLib/BoxCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 
+#include "NPCInteraction.h"
 #include "PlayUI.h"
 
 class NPC : public GameObject
@@ -13,6 +14,8 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
+	NPCInteraction* script;
+	GameObject* interactImage;
 
 public:
 	// game object cycle
@@ -30,5 +33,4 @@ public:
 
 	// Scene¿« Exit, GameObject Delete
 	void Destroyed() override;
-	//void PlayerInteraction();
 };

@@ -1,4 +1,5 @@
 #include "SkillWindowButton.h"
+#include <DirectXMath.h>
 
 SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowButton", "SkillWindowButton"), skillName(name)
 {
@@ -21,13 +22,16 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 	skillColor3_Text->rectTransform->SetParent(this->rectTransform);
 
 	skillIcon_Button->rectTransform->SetSize(100,100); //이미지 크기
-
+	preRenderMode = RenderMode::UnlitColorTint;
+	skillIcon_Button->imageRenderer->renderMode = preRenderMode;
+	skillIcon_Button->imageRenderer->SetColor(0.4, 0.4, 0.4);
 }
 
 void SkillWindowButton::SceneStart()
 {
-
 	const auto& skillInfo = GameManager::Get().skillTree[skillName];
+	const auto& skillvalue = GameManager::Get().skillValue[skillName];
+	const auto& skilltext = GameManager::Get().skillText[skillName];
 
 	//이미지 및 폰트 크기에따라 미세 조정 필요
 	skillLevel_Text->rectTransform->SetPosition(0,-50); 
@@ -51,16 +55,21 @@ void SkillWindowButton::SceneStart()
 	skillColor2_Text->rectTransform->SetPosition(colorPositionX, -10);
 	skillColor3_Text->rectTransform->SetPosition(colorPositionX, -10);
 
-	skillName_Text->screenTextRenderer->SetText(skillInfo.skillname);
-	skillDesc_Text->screenTextRenderer->SetText(skillInfo.skillDesc);
+	skillName_Text->screenTextRenderer->SetText(skilltext.skillname);
+	skillDesc_Text->screenTextRenderer->SetText(skilltext.skillDesc);
 
 
-	if (skillInfo.maxLevel > 1)
+	if (skillName == SkillType::SkillCooldownDown)
 	{
-		skillColor1_Text->screenTextRenderer->SetText(ToWString(skillInfo.skillValue[0]));
-		skillColor2_Text->screenTextRenderer->SetText(ToWString(skillInfo.skillValue[1]));
-		if (skillInfo.skillValue.size() >= 3)
-			skillColor3_Text->screenTextRenderer->SetText(ToWString(skillInfo.skillValue[2]));
+		skillColor1_Text->screenTextRenderer->SetText(ToWString(skillvalue[0]));
+		skillColor2_Text->screenTextRenderer->SetText(ToWString(skillvalue[1]));
+		skillColor3_Text->SetActive(false);
+	}
+	else if (skillInfo.maxLevel > 1)
+	{
+		skillColor1_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[0]-1)*100))));
+		skillColor2_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[1]-1)*100))));
+		skillColor3_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[2] - 1) * 100))));
 	}
 	else
 	{
@@ -72,6 +81,12 @@ void SkillWindowButton::SceneStart()
 
 	skillIcon_Button->button->onClickListeners.AddListener(
 		this, std::bind(&SkillWindowButton::OnClickSkillButton, this));
+
+	skillIcon_Button->button->onPointEnterListeners.AddListener(
+		this, std::bind(&SkillWindowButton::OnPointEnterButton, this));
+
+	skillIcon_Button->button->onPointExitListeners.AddListener(
+		this, std::bind(&SkillWindowButton::OnPointExitButton, this));
 }
 
 void SkillWindowButton::Update()
@@ -103,6 +118,14 @@ void SkillWindowButton::Update()
 		else if (prevLevel == 3)
 			skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
 	}
+
+	if (isEnterButton)
+	{
+		glowtimer += Time::GetDeltaTime();  // 매 프레임 시간 누적
+
+		float glow = ((sinf(glowtimer * glowspeed - DirectX::XM_PIDIV2)+1.0f) / 2.0f) * 30.0f;
+		skillIcon_Button->imageRenderer->SetGlowAmmount(glow);
+	}
 }
 
 float SkillWindowButton::GetWidthSize(D2D1_SIZE_F size1, D2D1_SIZE_F size2)
@@ -123,7 +146,31 @@ std::wstring SkillWindowButton::ToWString(float value)
 		return wss.str();
 	}
 }
+
 void SkillWindowButton::OnClickSkillButton()
 {
-	GameManager::Get().LevelUpSkill(skillName);
+	if (GameManager::Get().LevelUpSkill(skillName) && !GameManager::Get().LevelUpSkill(skillName,true) && skillIcon_Button->imageRenderer->renderMode != RenderMode::Unlit)
+	{
+		preRenderMode = RenderMode::Unlit;
+		skillIcon_Button->imageRenderer->renderMode = preRenderMode;
+	}
+}
+
+void SkillWindowButton::OnPointEnterButton()
+{
+	if (GameManager::Get().CanUnlock(skillName)|| GameManager::Get().LevelUpSkill(skillName,true))
+	{
+		skillIcon_Button->imageRenderer->renderMode = RenderMode::Lit_Glow;
+		isEnterButton = true;
+		glowtimer = 0;
+	}
+}
+
+void SkillWindowButton::OnPointExitButton()
+{
+	if (isEnterButton)
+	{
+		skillIcon_Button->imageRenderer->renderMode = preRenderMode;
+		isEnterButton = false;
+	}
 }

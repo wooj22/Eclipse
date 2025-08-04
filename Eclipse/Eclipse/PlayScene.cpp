@@ -99,7 +99,7 @@ void PlayScene::Update()
 
 	if (Input::GetKeyDown(VK_F1))
 	{
-		GameManager::Get().honCount += 10000; // ȥ ġƮ
+		GameManager::Get().honCount += 149; // ȥ ġƮ
 	}
 
 	if (Input::GetKeyDown(VK_F2))
@@ -121,6 +121,7 @@ void PlayScene::Update()
 void PlayScene::Exit()
 {
 	// game object -> destroy()
+	GameManager::Get().ReSetData();
 	__super::Exit();
 }
 
