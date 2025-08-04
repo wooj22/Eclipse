@@ -90,13 +90,18 @@ void GameApp::Init()
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
 
+	OutputDebugStringA("[Woo Engine] Window Create\n");
+
 	CoInitialize(nullptr);			// com 객체 초기화	
 	
 	// init
 	Input::Init(hWnd);
 	Time::Init();
+	audioSystem.Init();
 	renderSystem.Init(hWnd, width, height);
 	resourceManager.Init();	 // rendersystem init 후에 호출해야 함
+
+	OutputDebugStringA("[Woo Engine] System Init\n");
 }
 
 /// Update
@@ -113,6 +118,7 @@ void GameApp::Update()
 	buttonSystem.Update();
 	renderSystem.Update();
 	cameraSystem.Update();
+	audioSystem.Update();
 }
 
 /// Fixed Update
@@ -141,12 +147,12 @@ void GameApp::Loop()
 		{
 			if (msg.message == WM_QUIT) {
 				isLoop = false;
+				OutputDebugStringA("[Woo Engine] WM_QUIT!\n");
 				break;
 			}
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-
 		}
 
 		// physics update -> fixed udpate
@@ -167,7 +173,10 @@ void GameApp::Loop()
 void GameApp::UnInit()
 {
 	sceneManager.UnInit();
+	audioSystem.UnInit();
 	renderSystem.UnInit();   
 	resourceManager.UnInit();
 	CoUninitialize();			 // com 객체 해제
+
+	OutputDebugStringA("[Woo Engine] GameApp Release\n");
 }

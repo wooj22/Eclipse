@@ -28,7 +28,8 @@ public:
     Vector2 size = { 10,10 };
 
     // Flatformer일 경우 위로 충돌 보정 무시
-    bool isFlatformerCharacter = false;
+    bool isFlatformerCharacter = false;     // TODO :: Delete
+    bool isFlatform = false;                // 플랫폼
     
 public:
     // component cycle

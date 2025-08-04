@@ -60,7 +60,7 @@ void ImageRenderer::Render()
                 RenderSystem::Get().renderTarget->DrawBitmap(
                     sprite->texture->texture2D.Get(),
                     destRect,
-                    alpha
+                    colorMultiplier.a
                 );
             }
             else
@@ -202,37 +202,38 @@ void ImageRenderer::SetBaseColor(const D2D1_COLOR_F& newColor)
 // Set Sprite Color
 void ImageRenderer::SetColor(float r, float g, float b)
 {
-    // set RGBA
     colorMultiplier.r = r;
     colorMultiplier.g = g;
     colorMultiplier.b = b;
 
-    // color maritx
-    colorMatrix = {
-    colorMultiplier.r, 0.0f,           0.0f,           0.0f,
-    0.0f,           colorMultiplier.g, 0.0f,           0.0f,
-    0.0f,           0.0f,           colorMultiplier.b, 0.0f,
-    0.0f,           0.0f,           0.0f,           alpha
-    };
+    // color Matrix
+    colorMatrix._11 = colorMultiplier.r;  // Red
+    colorMatrix._22 = colorMultiplier.g;  // Green
+    colorMatrix._33 = colorMultiplier.b;  // Blue
 }
 
 // Set Aplha (sprite & image)
 void ImageRenderer::SetAlpha(float a)
 {
-    // set alpha
-    alpha = a;
+    colorMultiplier.a = a;
 
     // brush
-    if (brush) brush->SetOpacity(alpha);
-
-    // set RGBA
-    colorMultiplier.a = alpha;
+    if (brush) brush->SetOpacity(colorMultiplier.a);
 
     // color maritx
+    colorMatrix._44 = colorMultiplier.a;  // Alpha
+}
+
+// Saturation
+void ImageRenderer::SetSaturation(float s)
+{
+    saturation = s;
+
+    // color matrix
     colorMatrix = {
-    colorMultiplier.r, 0.0f,           0.0f,           0.0f,
-    0.0f,           colorMultiplier.g, 0.0f,           0.0f,
-    0.0f,           0.0f,           colorMultiplier.b, 0.0f,
-    0.0f,           0.0f,           0.0f,           colorMultiplier.a
+        rw + (1 - rw) * saturation, gw - gw * saturation,     bw - bw * saturation,     0,
+        rw - rw * saturation,       gw + (1 - gw) * saturation, bw - bw * saturation,   0,
+        rw - rw * saturation,       gw - gw * saturation,     bw + (1 - bw) * saturation, 0,
+        0,                 0,               0,               colorMultiplier.a
     };
 }

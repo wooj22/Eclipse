@@ -82,7 +82,7 @@ void SpriteRenderer::Render()
 		RenderSystem::Get().renderTarget->DrawBitmap(
 			sprite->texture->texture2D.Get(),
 			destRect,           // 출력 위치 및 크기
-			alpha,				// 불투명도
+			colorMultiplier.a,	// 불투명도
 			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 			srcRect             // source rect
 		);
@@ -208,34 +208,35 @@ void SpriteRenderer::Render()
 // Set Color
 void SpriteRenderer::SetColor(float r, float g, float b)
 {
-	// set RGBA
 	colorMultiplier.r = r;
 	colorMultiplier.g = g;
 	colorMultiplier.b = b;
 
-	// color maritx
-	colorMatrix = {
-	colorMultiplier.r, 0.0f,           0.0f,           0.0f,
-	0.0f,           colorMultiplier.g, 0.0f,           0.0f,
-	0.0f,           0.0f,           colorMultiplier.b, 0.0f,
-	0.0f,           0.0f,           0.0f,           colorMultiplier.a
-	};
+	// color Matrix
+	colorMatrix._11 = colorMultiplier.r;  // Red
+	colorMatrix._22 = colorMultiplier.g;  // Green
+	colorMatrix._33 = colorMultiplier.b;  // Blue
 }
 
 // Set Alpha
 void SpriteRenderer::SetAlpha(float a)
 {
-	// set alpha
-	alpha = a;
+	colorMultiplier.a = a;
 
-	// set RGBA
-	colorMultiplier.a = alpha;
+	// color matrix
+	colorMatrix._44 = colorMultiplier.a;  // Alpha
+}
 
-	// color maritx
+// Saturation
+void SpriteRenderer::SetSaturation(float s)
+{
+	saturation = s;
+
+	// color matrix
 	colorMatrix = {
-	colorMultiplier.r, 0.0f,           0.0f,           0.0f,
-	0.0f,           colorMultiplier.g, 0.0f,           0.0f,
-	0.0f,           0.0f,           colorMultiplier.b, 0.0f,
-	0.0f,           0.0f,           0.0f,           colorMultiplier.a
+		rw + (1 - rw) * saturation, gw - gw * saturation,     bw - bw * saturation,     0,
+		rw - rw * saturation,       gw + (1 - gw) * saturation, bw - bw * saturation,   0,
+		rw - rw * saturation,       gw - gw * saturation,     bw + (1 - bw) * saturation, 0,
+		0,                 0,               0,               colorMultiplier.a
 	};
 }

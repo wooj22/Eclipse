@@ -6,6 +6,7 @@
 #include "../Direct2D_EngineLib/Singleton.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "GameManager.h"
+#include "SkillWindowButton.h"
 
 class Chat;
 class Quest;
@@ -14,6 +15,8 @@ class Quest;
 class PlayUI : public GameObject
 {
 private:
+	float waveTimer = 0;
+
 	float waveInfoTimer = 0;
 	float waveIntoTime = 5;
 
@@ -54,7 +57,19 @@ public:
 	UI_Text* tooltipName_Text;		// 툴팁 이름 텍스트
 	UI_Text* tooltipEx_Text;		// 툴팁 설명 텍스트
 
-	UI_Image* tooltip2_Image;		// 툴팁 이미지
+	UI_Image* skillWindow_Image;	// 스킬 창 이미지
+	SkillWindowButton* skillbutton1;
+	SkillWindowButton* skillbutton2;
+	SkillWindowButton* skillbutton3;
+	SkillWindowButton* skillbutton4;
+	SkillWindowButton* skillbutton5;
+	SkillWindowButton* skillbutton6;
+	SkillWindowButton* skillbutton7;
+	SkillWindowButton* skillbutton8;
+	SkillWindowButton* skillbutton9;
+	UI_Image* skillHon_Image;		// 스킬창 혼 이미지
+	UI_Text* skillHon_Text;			// 스킬창 혼 개수 텍스트
+
 public:
 	// game object cycle
 	PlayUI() : GameObject("PlayUI","PlayUI") {}

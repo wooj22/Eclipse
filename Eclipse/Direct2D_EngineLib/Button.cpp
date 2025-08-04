@@ -27,15 +27,12 @@ void Button::Update()
 {
     if (!rectTransform) return;
 
-    // 1. 마우스 클릭 감지
-    if (!Input::GetKeyDown(VK_LBUTTON)) return;
-
-    // 2. 마우스 위치 가져오기 (클라이언트 좌표계)
+    // mouse position
     Vector2 mouse = Input::GetMouseScreenPosition();
     float mouseX = mouse.x;
     float mouseY = mouse.y;
 
-    // 3. 버튼 영역 계산 (pivot 보정된 screen 영역)
+    // button rect
     Vector2 pos = rectTransform->GetWorldPosition();
     D2D1_SIZE_F size = rectTransform->GetSize();
     D2D1_POINT_2F pivot = rectTransform->GetPivot();
@@ -45,15 +42,55 @@ void Button::Update()
     float right = left + size.width;
     float bottom = top + size.height;
 
-    // 4. 마우스가 버튼 영역 안에 있는지 확인
-    if (mouseX >= left && mouseX <= right &&
-        mouseY >= top && mouseY <= bottom)
+    // mouse inside button?
+    bool inside = (mouseX >= left && mouseX <= right &&
+        mouseY >= top && mouseY <= bottom);
+
+    // On Point Enter
+    if (inside && !isMouseInside)
     {
-        OnClick();  // 클릭 이벤트 호출
+        isMouseInside = true;
+        OnPointEnter();
+    }
+    // On Point Exit
+    else if (!inside && isMouseInside)
+    {
+        isMouseInside = false;
+        OnPointExit();
+    }
+    // On Click
+    if (inside && Input::GetMouseButtonDown(0))
+    {
+        OnClick();
     }
 }
 
 inline void Button::OnClick()
 {
+    OutputDebugStringA("[Woo Engine] Button Event! OnClick()\n");
     onClickListeners.Invoke();
+}
+
+inline void Button::OnPointEnter()
+{
+    OutputDebugStringA("[Woo Engine] Button Event! OnPointEnter()\n");
+    
+    // TODO :: 채도 변환 함수로 바꾸기
+    // 렌더모드를 바꿔야해서 안바꾸는게 나을 것 같음
+    ImageRenderer* ir = this->gameObject->GetComponent<ImageRenderer>();
+    if (ir) ir->SetAlpha(0.8);
+
+    onPointEnterListeners.Invoke();
+}
+
+inline void Button::OnPointExit()
+{
+    OutputDebugStringA("[Woo Engine] Button Event! OnPointExit()\n");
+    
+    // TODO :: 채도 변환 함수로 바꾸기
+    // 렌더모드를 바꿔야해서 안바꾸는게 나을 것 같음
+    ImageRenderer* ir = this->gameObject->GetComponent<ImageRenderer>();
+    if (ir) ir->SetAlpha(1);
+
+    onPointExitListeners.Invoke();
 }

@@ -30,7 +30,7 @@ private:
 
 public:
 	shared_ptr<Sprite> sprite;		// 공유 자원	
-	float alpha = 1.0f;				// 투명도		// TODO :: private!
+	float alpha = 1.0f;				// 투명도		// TODO :: 삭제!
 	bool flipX = false;				// x축 반전
 	bool flipY = false;				// y축 반전
 
@@ -40,21 +40,29 @@ private:
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
 	ComPtr<ID2D1Effect> blurEffect = nullptr;
 
-	// ColorMatrix (Sprite)
-	ColorRGBA colorMultiplier = { 1,1,1,1 };	// User Set : R, G, B, A
-	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix 행렬
+	// ColorMatrix
+	ColorRGBA colorMultiplier = { 1,1,1,1 };	// R, G, B, A
+	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix
 	colorMultiplier.a, 0, 0, 0,
 	0, colorMultiplier.g, 0, 0,
 	0, 0, colorMultiplier.b, 0,
 	0, 0, 0, colorMultiplier.a
 	};
 
-	// Blur (Sprite)
+	// Saturation
+	float saturation = 1.0f;
+
+	// 흑백 변환 계수
+	float rw = 0.3086f;
+	float gw = 0.6094f;
+	float bw = 0.0820f;
+
+	// Blur
 	float blurAmmount = 15.0f;
 
 public:
 	// component cycle
-	SpriteRenderer() { renderMode = RenderMode::Unlit; }
+	SpriteRenderer() = default;
 	~SpriteRenderer() override = default;
 
 	void OnEnable_Inner() override final;
@@ -67,11 +75,19 @@ public:
 	// Color
 	void SetColor(float r, float g, float b);
 	ColorRGBA GetColor()  { return colorMultiplier; };
+
+	// Alpha
 	void SetAlpha(float a);
-	float GetAlpha() { return alpha; }
+	float GetAlpha() { return colorMultiplier.a; }
+
+	// Saturation
+	// 0.6 ~ 1.0
+	void SetSaturation(float s);
+	float GetSaturation() { return saturation; }
 
 public:
 	// Glow (Blur)
 	void SetGlowAmmount(float blur) { blurAmmount = blur; }
+	float GetFlowAmmount() { return blurAmmount; }
 };
 

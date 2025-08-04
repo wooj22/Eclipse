@@ -46,6 +46,10 @@ void Woo_Scene::Awake()
 	ground2->collider->size = { 100,20 };
 	ground3->collider->size = { 100,20 };
 
+	ground1->collider->isFlatform = true;
+	ground2->collider->isFlatform = true;
+	ground3->collider->isFlatform = true;
+
 	// ui test
 	/*parent = CreateObject<UI_Image>();
 	child = CreateObject<UI_Image>();
@@ -54,6 +58,8 @@ void Woo_Scene::Awake()
 	child->rectTransform->SetPosition(100, 0);
 
 	child->imageRenderer->SetAlpha(0.1);*/
+
+	button = CreateObject<UI_Button>();
 
 	// [ player ] 
 	player = CreateObject<Player>();

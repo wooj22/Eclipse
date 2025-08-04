@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/UI_Image.h"
+#include "../Direct2D_EngineLib/UI_Button.h"
 #include "Player_Woo.h"
 #include "Map_Woo.h"
 #include "Boss.h"
@@ -31,6 +32,9 @@ private:
 	// rect parent pivot test
 	/*UI_Image* parent;
 	UI_Image* child;*/
+
+	// button new event test
+	UI_Button* button;
 
 	GameObject* wall_r;
 	GameObject* wall_l;

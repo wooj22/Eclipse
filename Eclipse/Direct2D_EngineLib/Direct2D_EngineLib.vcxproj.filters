@@ -157,6 +157,18 @@
     <Filter Include="헤더 파일\03. Component\Base\Interface">
       <UniqueIdentifier>{dd2f0dfb-cdb5-4146-9f6b-5a057e0a29ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\03. Component\Audio">
+      <UniqueIdentifier>{ef57d735-f77b-4690-979d-eeaf8faadf81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\03. Component\Audio">
+      <UniqueIdentifier>{32f4c1dd-a91a-4bca-bfbf-366b4ee9eab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\10. Audio">
+      <UniqueIdentifier>{c6632b46-5e35-409d-87a8-515642489439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\10. Audio">
+      <UniqueIdentifier>{31dff612-afc3-4352-9599-857edce00862}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -306,6 +318,15 @@
     <ClInclude Include="Rect.h">
       <Filter>헤더 파일\98. Utils</Filter>
     </ClInclude>
+    <ClInclude Include="AudioClip.h">
+      <Filter>헤더 파일\10. Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSystem.h">
+      <Filter>헤더 파일\04. ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSource.h">
+      <Filter>헤더 파일\03. Component\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -449,6 +470,15 @@
     </ClCompile>
     <ClCompile Include="Rect.cpp">
       <Filter>소스 파일\98. Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioClip.cpp">
+      <Filter>소스 파일\10. Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSystem.cpp">
+      <Filter>소스 파일\04. ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSource.cpp">
+      <Filter>소스 파일\03. Component\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

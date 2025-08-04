@@ -183,32 +183,11 @@
     <ClCompile Include="PlayerController_Woo.cpp">
       <Filter>03. Script\Woo\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Attack_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Honmun.cpp">
       <Filter>02. GameObject\Aron</Filter>
     </ClCompile>
-    <ClCompile Include="BulletTime_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Hanging_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="HonmunCollisionScript.cpp">
       <Filter>03. Script\Aron</Filter>
-    </ClCompile>
-    <ClCompile Include="Quest.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Chat.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Fall_State.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="HonmunAFSM.cpp">
       <Filter>소스 파일</Filter>
@@ -227,6 +206,33 @@
     </ClCompile>
     <ClCompile Include="BossController.cpp">
       <Filter>03. Script\Woo\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillWindowButton.cpp">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Chat.cpp">
+      <Filter>03. Script\Yunmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Quest.cpp">
+      <Filter>03. Script\Yunmo</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>02. GameObject\Yunmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Attack_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletTime_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="Fall_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="Hanging_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClCompile>
+    <ClCompile Include="Dash_State.cpp">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,47 +305,11 @@
     <ClInclude Include="PlayerController_Woo.h">
       <Filter>03. Script\Woo\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Attack_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementFSM.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementStateBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Honmun.h">
       <Filter>02. GameObject\Aron</Filter>
     </ClInclude>
-    <ClInclude Include="BulletTime_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Hanging_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerStateBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="StateBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="HonmunCollisionScript.h">
       <Filter>03. Script\Aron</Filter>
-    </ClInclude>
-    <ClInclude Include="Quest.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Chat.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Fall_State.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="HonmunAFSM.h">
       <Filter>헤더 파일</Filter>
@@ -358,6 +328,54 @@
     </ClInclude>
     <ClInclude Include="BossController.h">
       <Filter>03. Script\Woo\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillWindowButton.h">
+      <Filter>02. GameObject\Yunmo\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Chat.h">
+      <Filter>03. Script\Yunmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest.h">
+      <Filter>03. Script\Yunmo</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>02. GameObject\Yunmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>02. GameObject\Moon\[ Player ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Hanging_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Fall_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Attack_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletTime_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementFSM.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementStateBase.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStateBase.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="StateBase.h">
+      <Filter>03. Script\Moon\[ Player FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="Dash_State.h">
+      <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAnimatorController.h">
+      <Filter>04. Animation\Moon</Filter>
+    </ClInclude>
+    <ClInclude Include="playerAttackArea.h">
+      <Filter>02. GameObject\Moon\[ Player ]</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -133,6 +133,21 @@ bool BoxCollider::CheckAABBCollision(BoxCollider* other, ContactInfo& contact)
         contact.depth = overlapY;
     }
 
+    // 5. 플랫폼 처리
+    if (isFlatform || other->isFlatform)
+    {
+        // 플랫폼이 누구인지 판별
+        BoxCollider* platform = isFlatform ? this : other;
+        BoxCollider* otherBox = (platform == this) ? other : this;
+
+        // normal이 항상 this 기준이므로, contact.normal을 platform 기준으로 반전해서 판단
+        Vector2 platformNormal = (platform == this) ? contact.normal : -contact.normal;
+
+        // 상대방이 위에서 충돌해온게 아니라면 충돌 무시
+        if (platformNormal != Vector2(0, -1))
+            return false;
+    }
+
     return true;
 }
 
@@ -234,30 +249,14 @@ void BoxCollider::OnCollisionEnter(ICollider* other, ContactInfo& contact)
     Rigidbody* rb = gameObject->GetComponent<Rigidbody>();
     if (rb)
     {
-        if (isFlatformerCharacter)
-        {
-            // ground
-            if (contact.normal.y > 0)
-            {
-                rb->groundContactCount++;
-                rb->isGrounded = true;
-            }
+        // 충돌 보정
+        rb->CorrectPosition(contact);
 
-            // up collision 보정 x
-            if (contact.normal.y != -1)
-            {
-                rb->CorrectPosition(contact);
-            }
-        }
-        else
+        // ground
+        if (contact.normal.y > 0)
         {
-            // ground
-            rb->CorrectPosition(contact);
-            if (contact.normal.y > 0)
-            {
-                rb->groundContactCount++;
-                rb->isGrounded = true;
-            }
+            rb->groundContactCount++;
+            rb->isGrounded = true;
         }
 
         // script
