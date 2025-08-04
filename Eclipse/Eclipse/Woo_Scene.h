@@ -9,6 +9,7 @@
 #include "Map_Woo.h"
 #include "Boss.h"
 #include "HonA.h"
+#include "HonB.h"
 
 #include "Player.h"
 #include "playerAttackArea.h"
@@ -31,6 +32,9 @@ private:
 	// Hon
 	HonA* honA1;
 	HonA* honA2;
+	HonB* honB1;
+	HonB* honB2;
+
 
 	// player sample
 	//Player_Woo* player;
