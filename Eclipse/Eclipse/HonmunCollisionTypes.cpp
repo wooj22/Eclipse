@@ -362,15 +362,45 @@ void HonmunCollisionTypes::HandleSmallBReaction(HonmunCollisionBase* script, Hon
 
 void HonmunCollisionTypes::HandleUmbraReaction(HonmunCollisionBase* script, HonmunCollisionBase* otherScript)
 {
-    // B + B = 기획서 기반: 분열됨. 분열된 b는 HP 1, 크기 30%감소, 낙하속도 20%증가, 충돌 시 0점
+    // B + B = 기획서 기반: 체력에 따라 분열 또는 체력 감소
     
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    OutputDebugStringA("=== B + B SPLIT (기획서 기반) STARTED ===\n");
-    OutputDebugStringA("B + B collision - splitting into 4 pieces (b type) with 30% size decrease, 20% speed increase!\n");
+    int hp1 = script->GetHealth();
+    int hp2 = otherScript->GetHealth();
     
-    // 기획서: B+B 충돌은 점수 변화 없음 (0점)
+    OutputDebugStringA("=== B + B COLLISION STARTED ===\n");
+    
+    // 기획서: B1 + B1은 분열 없이 체력 감소만
+    if (hp1 == 1 && hp2 == 1)
+    {
+        OutputDebugStringA("B1 + B1: Health decrease only, no split\n");
+        
+        // 둘 다 체력 감소 (-1)
+        script->SetHealth(0);  // B1이 체력 감소하면 파괴
+        otherScript->SetHealth(0);  // B1이 체력 감소하면 파괴
+        
+        // 점수 +2 (B1 파괴 시 2점)
+        if (aronScene) {
+            aronScene->AddScore(2);
+            OutputDebugStringA("B1+B1 collision: +2 points (both destroyed)\n");
+        }
+        
+        // 파괴 처리
+        if (aronScene) {
+            aronScene->RemoveHonmunFromManager(script->GetHonmun());
+            aronScene->RemoveHonmunFromManager(otherScript->GetHonmun());
+        }
+        script->DestroyThis();
+        otherScript->DestroyThis();
+        
+        OutputDebugStringA("=== B1 + B1 COLLISION COMPLETED ===\n");
+        return;
+    }
+    
+    // 기획서: B3, B2가 포함된 경우 분열 (b x4)
+    OutputDebugStringA("B + B collision - splitting into 4 pieces (b type)\n");
     OutputDebugStringA("B+B collision: no score change (0 points)\n");
     
     // 충돌 지점 계산
@@ -434,7 +464,7 @@ void HonmunCollisionTypes::HandleDarknessReaction(HonmunCollisionBase* script, H
     if (script->GetTransform() && otherScript->GetTransform())
     {
         Vector2 pos1 = script->GetTransform()->GetPosition();
-        Vector2 pos2 = script->GetTransform()->GetPosition();
+        Vector2 pos2 = otherScript->GetTransform()->GetPosition();
         attractionPoint = Vector2((pos1.x + pos2.x) * 0.5f, (pos1.y + pos2.y) * 0.5f);
     }
     
@@ -558,8 +588,15 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
     auto* currentScene = SceneManager::Get().GetCurrentScene();
     auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
     
-    char debugMsg[150];
-    sprintf_s(debugMsg, "Mixed collision: %d(HP%d) vs %d(HP%d)\n", 
+    // A+B 충돌 세부 추적을 위한 상세 로그
+    bool isABCollision = ((type1 == HonmunType::A || type1 == HonmunType::A2) && 
+                          (type2 == HonmunType::B || type2 == HonmunType::b)) ||
+                         ((type1 == HonmunType::B || type1 == HonmunType::b) && 
+                          (type2 == HonmunType::A || type2 == HonmunType::A2));
+    
+    char debugMsg[200];
+    sprintf_s(debugMsg, "*** MIXED COLLISION %s: Type%d(HP%d) vs Type%d(HP%d) ***\n", 
+             isABCollision ? "[A+B]" : "[OTHER]",
              static_cast<int>(type1), hp1, static_cast<int>(type2), hp2);
     OutputDebugStringA(debugMsg);
     
@@ -586,9 +623,36 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
         newHp1 = hp1 - 1;  // 기본적으로 체력 -1
         newHp2 = hp2 - 1;
         
-        char mixedMsg[100];
-        sprintf_s(mixedMsg, "Mixed collision: +%d points (기획서 테이블 기준)\n", scoreToAdd);
+        char mixedMsg[200];
+        sprintf_s(mixedMsg, "Mixed collision: Type%d(HP%d→%d) vs Type%d(HP%d→%d), Score: +%d\n", 
+                 static_cast<int>(type1), hp1, newHp1, static_cast<int>(type2), hp2, newHp2, scoreToAdd);
         OutputDebugStringA(mixedMsg);
+    }
+    else
+    {
+        // 점수가 0인 경우에도 체력은 감소 (A+B 기본 상호작용)
+        if ((type1 == HonmunType::A || type1 == HonmunType::A2) && 
+            (type2 == HonmunType::B || type2 == HonmunType::b))
+        {
+            newHp1 = hp1 - 1;
+            newHp2 = hp2 - 1;
+            
+            char noScoreMsg[200];
+            sprintf_s(noScoreMsg, "A+B collision (no score): Type%d(HP%d→%d) vs Type%d(HP%d→%d)\n", 
+                     static_cast<int>(type1), hp1, newHp1, static_cast<int>(type2), hp2, newHp2);
+            OutputDebugStringA(noScoreMsg);
+        }
+        else if ((type1 == HonmunType::B || type1 == HonmunType::b) && 
+                 (type2 == HonmunType::A || type2 == HonmunType::A2))
+        {
+            newHp1 = hp1 - 1;
+            newHp2 = hp2 - 1;
+            
+            char noScoreMsg[200];
+            sprintf_s(noScoreMsg, "B+A collision (no score): Type%d(HP%d→%d) vs Type%d(HP%d→%d)\n", 
+                     static_cast<int>(type1), hp1, newHp1, static_cast<int>(type2), hp2, newHp2);
+            OutputDebugStringA(noScoreMsg);
+        }
     }
     
     // 점수 및 체력 변화 적용 (중복 방지)
@@ -607,6 +671,11 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
     if (newHp1 <= 0)
     {
         shouldDestroyScript = true;
+        char destroyMsg[100];
+        sprintf_s(destroyMsg, "DESTROY: Type%d HP%d→%d (≤0), will be destroyed\n", 
+                 static_cast<int>(type1), hp1, newHp1);
+        OutputDebugStringA(destroyMsg);
+        
         if (aronScene && !scoreAlreadyApplied)  // 중복 점수 방지
         {
             int destroyScore = GetDestructionScore(type1, hp1);  // 원래 체력으로 계산
@@ -618,12 +687,22 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
     }
     else
     {
+        // 체력 업데이트 (자동 동기화)
         script->SetHealth(newHp1);
+        char surviveMsg[100];
+        sprintf_s(surviveMsg, "SURVIVE: Type%d HP%d→%d, health synchronized\n", 
+                 static_cast<int>(type1), hp1, newHp1);
+        OutputDebugStringA(surviveMsg);
     }
     
     if (newHp2 <= 0)
     {
         shouldDestroyOther = true;
+        char destroyMsg2[100];
+        sprintf_s(destroyMsg2, "DESTROY: Type%d HP%d→%d (≤0), will be destroyed\n", 
+                 static_cast<int>(type2), hp2, newHp2);
+        OutputDebugStringA(destroyMsg2);
+        
         if (aronScene && !scoreAlreadyApplied)  // 중복 점수 방지
         {
             int destroyScore = GetDestructionScore(type2, hp2);  // 원래 체력으로 계산
@@ -635,7 +714,12 @@ void HonmunCollisionTypes::HandleMixedReaction(HonmunCollisionBase* script, Honm
     }
     else
     {
+        // 체력 업데이트 (자동 동기화)
         otherScript->SetHealth(newHp2);
+        char surviveMsg2[100];
+        sprintf_s(surviveMsg2, "SURVIVE: Type%d HP%d→%d, health synchronized\n", 
+                 static_cast<int>(type2), hp2, newHp2);
+        OutputDebugStringA(surviveMsg2);
     }
     
     // 물리 효과 적용

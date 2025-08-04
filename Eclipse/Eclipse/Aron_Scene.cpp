@@ -239,9 +239,9 @@ void Aron_Scene::StartWave1()
 	waveData.waveStartTime = Time::GetTotalTime();
 	waveData.spawnedHonmuns.clear();
 	
-	// 웨이브 1: A, B 타입만 스폰
+	// 웨이브 1: A, B, C 타입 스폰
 	char waveMsg[100];
-	sprintf_s(waveMsg, "=== WAVE 1 STARTED === (A, B types only - %d honmuns)\n", waveData.totalSpawnCount);
+	sprintf_s(waveMsg, "=== WAVE 1 STARTED === (A, B, C types - %d honmuns)\n", waveData.totalSpawnCount);
 	OutputDebugStringA(waveMsg);
 }
 
@@ -321,16 +321,20 @@ void Aron_Scene::SpawnHonmun()
 
 	float spawnX = xDis(gen);
 
-	// 새로운 혼문 생성 (Wave 1은 A, B만)
+	// 새로운 혼문 생성 (Wave 1은 A, B, C 포함)
 	auto* newHonmun = CreateObject<Honmun>();
 	HonmunType spawnType = GetRandomHonmunTypeWave1();
 	newHonmun->SetHonmunType(spawnType);
 	newHonmun->SetPosition(spawnX, waveData.spawnY);
 	
-	// 스폰 타입 확인 로그
-	char spawnMsg[100];
-	sprintf_s(spawnMsg, "Wave1 Spawned: %s (type:%d) at (%.1f, %.1f)\n", 
+	// 스폰 타입 및 위치 상세 로그
+	char spawnMsg[150];
+	sprintf_s(spawnMsg, "🔵 Wave1 Spawned: %s (type:%d) at (%.1f, %.1f) - Ground at Y=-350\n", 
 	         newHonmun->name.c_str(), static_cast<int>(spawnType), spawnX, waveData.spawnY);
+	OutputDebugStringA(spawnMsg);
+	
+	sprintf_s(spawnMsg, "스폰 높이 분석: Y=%.1f, Ground까지 거리=%.1f (%.1f낙하 필요)\n", 
+	         waveData.spawnY, waveData.spawnY - (-350.0f), waveData.spawnY + 350.0f);
 	OutputDebugStringA(spawnMsg);
 
 	// 관리 리스트에 추가
@@ -398,11 +402,12 @@ HonmunType Aron_Scene::GetRandomHonmunTypeWave1()
 {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	static std::uniform_int_distribution<int> dis(0, 1);
+	static std::uniform_int_distribution<int> dis(0, 2); // C 타입도 포함
 
 	int choice = dis(gen);
 	if (choice == 0) return HonmunType::A;
-	else return HonmunType::B;
+	else if (choice == 1) return HonmunType::B;
+	else return HonmunType::C; // Wave 1에서도 C 타입 스폰
 }
 
 HonmunType Aron_Scene::GetRandomHonmunTypeWave2()

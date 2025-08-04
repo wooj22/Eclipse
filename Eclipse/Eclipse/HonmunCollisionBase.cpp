@@ -39,6 +39,12 @@ void HonmunCollisionBase::Awake()
             health = honmun->GetHP();
             currentSize = honmun->GetSize();
             
+            // 체력 동기화 확인 로그
+            char syncMsg[100];
+            sprintf_s(syncMsg, "Health sync at Awake: Honmun HP=%d, Script health=%d\n", 
+                     honmun->GetHP(), health);
+            OutputDebugStringA(syncMsg);
+            
             // 안전한 이름 접근 with 디버그 로그
             std::string safeName = "UNKNOWN";
             try {
@@ -102,9 +108,10 @@ void HonmunCollisionBase::Update()
     // 키네마틱 모드에서 수동 낙하 시스템
     if (rigidbody && transform && !markedForDestroy)
     {
-        // 키네마틱 모드 유지 (중력 없이 동작)
-        rigidbody->isKinematic = true;
-        rigidbody->useGravity = false;
+        // 키네마틱 모드 유지하되 충돌 감지를 위해 특별 설정
+        rigidbody->isKinematic = false; // 트리거 충돌 감지를 위해 키네마틱 해제
+        rigidbody->useGravity = false;  // 중력은 비활성화 유지
+        rigidbody->drag = 10.0f;        // 높은 드래그로 물리 움직임 최소화
         
         // 타입별 낙하속도로 수동 낙하 (기획서: A,B,C(1) D(2))
         float fallingSpeed = GetFallingSpeedByType();
@@ -112,7 +119,43 @@ void HonmunCollisionBase::Update()
         
         // 매 프레임 아래로 이동
         float deltaTime = Time::GetDeltaTime();
+        float previousY = currentPos.y;
         currentPos.y -= fallingSpeed * 50.0f * deltaTime; // 50.0f는 속도 배율
+        
+        // Y좌표 변화 추적 (5프레임마다 한번씩만 로그)
+        static int fallLogCounter = 0;
+        fallLogCounter++;
+        if (fallLogCounter % 5 == 0 && abs(previousY - currentPos.y) > 0.1f)
+        {
+            char fallMsg[200];
+            sprintf_s(fallMsg, "혼문 낙하: Type%d, Y좌표 %.1f→%.1f (속도=%.1f, Ground=-350)\n", 
+                     static_cast<int>(honmunType), previousY, currentPos.y, fallingSpeed);
+            OutputDebugStringA(fallMsg);
+            
+            // 물리 상태 추가 로그
+            sprintf_s(fallMsg, "물리상태: isKinematic=%s, useGravity=%s, drag=%.1f\n", 
+                     rigidbody->isKinematic ? "true" : "false",
+                     rigidbody->useGravity ? "true" : "false",
+                     rigidbody->drag);
+            OutputDebugStringA(fallMsg);
+            
+            // Ground에 근접했을 때 특별히 로그
+            if (currentPos.y < -320.0f && currentPos.y > -380.0f)
+            {
+                sprintf_s(fallMsg, "⚠️ Ground 근접: Y=%.1f (Ground=-350, 차이=%.1f)\n", 
+                         currentPos.y, currentPos.y - (-350.0f));
+                OutputDebugStringA(fallMsg);
+                
+                // 콜라이더 상태도 확인
+                auto* collider = gameObject->GetComponent<CircleCollider>();
+                if (collider) {
+                    sprintf_s(fallMsg, "콜라이더 상태: isTrigger=%s, radius=%.1f, offset=(%.1f,%.1f)\n", 
+                             collider->isTrigger ? "true" : "false",
+                             collider->radius, collider->offset.x, collider->offset.y);
+                    OutputDebugStringA(fallMsg);
+                }
+            }
+        }
         
         transform->SetPosition(currentPos.x, currentPos.y);
     }
@@ -192,6 +235,15 @@ void HonmunCollisionBase::Update()
 
 void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
+    // 모든 트리거 진입 로그 (디버깅용)
+    if (other && other->gameObject) {
+        char triggerMsg[200];
+        sprintf_s(triggerMsg, "🔥 OnTriggerEnter: %s 와 %s 충돌!\n", 
+                 gameObject ? gameObject->name.c_str() : "NULL", 
+                 other->gameObject->name.c_str());
+        OutputDebugStringA(triggerMsg);
+    }
+    
     // Early safety checks before any processing
     if (markedForDestroy)
     {
@@ -253,17 +305,102 @@ void HonmunCollisionBase::OnTriggerEnter(ICollider* other, const ContactInfo& co
         // 가장 긴 콜라이더(실제 바닥)와 충돌 시에만 혼문 제거 + 혼의 개수 감소
         else if (other->gameObject && other->gameObject->name == "Ground")
         {
+            // 상세한 Ground 충돌 분석 로그
+            Vector2 honmunPos = transform ? transform->GetPosition() : Vector2(0, 0);
+            Vector2 groundPos = other->gameObject->GetComponent<Transform>() ? 
+                               other->gameObject->GetComponent<Transform>()->GetPosition() : Vector2(0, 0);
+            
+            char groundDebugMsg[200];
+            sprintf_s(groundDebugMsg, "🚨 *** GROUND COLLISION DETECTED *** 🚨\n");
+            OutputDebugStringA(groundDebugMsg);
+            
+            sprintf_s(groundDebugMsg, "혼문 중심: (%.1f, %.1f), Ground 중심: (%.1f, %.1f)\n", 
+                     honmunPos.x, honmunPos.y, groundPos.x, groundPos.y);
+            OutputDebugStringA(groundDebugMsg);
+            
+            // 혼문 콜라이더 정보 추가
+            auto* honmunCollider = gameObject->GetComponent<CircleCollider>();
+            if (honmunCollider) {
+                float honmunBottom = honmunPos.y + honmunCollider->offset.y + honmunCollider->radius;
+                sprintf_s(groundDebugMsg, "혼문 콜라이더: 반지름=%.1f, 오프셋Y=%.1f, 아래끝=%.1f\n", 
+                         honmunCollider->radius, honmunCollider->offset.y, honmunBottom);
+                OutputDebugStringA(groundDebugMsg);
+            }
+            
             auto* boxCollider = other->gameObject->GetComponent<BoxCollider>();
-            if (boxCollider && boxCollider->size.x > 1500.0f) // 진짜 바닥만
+            if (boxCollider)
             {
-                // 아론 씬에서 혼의 개수 감소
-                auto* currentScene = SceneManager::Get().GetCurrentScene();
-                auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
-                if (aronScene)
-                {
-                    aronScene->DecreaseSoulCount();
+                sprintf_s(groundDebugMsg, "Ground BoxCollider 크기: %.1f x %.1f, 오프셋: (%.1f, %.1f)\n", 
+                         boxCollider->size.x, boxCollider->size.y, 
+                         boxCollider->offset.x, boxCollider->offset.y);
+                OutputDebugStringA(groundDebugMsg);
+                
+                // 실제 충돌 영역 계산
+                float groundTop = groundPos.y + boxCollider->offset.y - (boxCollider->size.y * 0.5f);
+                float groundBottom = groundPos.y + boxCollider->offset.y + (boxCollider->size.y * 0.5f);
+                
+                sprintf_s(groundDebugMsg, "Ground 박스 충돌영역: Top=%.1f, Bottom=%.1f, Center=%.1f\n", 
+                         groundTop, groundBottom, groundPos.y + boxCollider->offset.y);
+                OutputDebugStringA(groundDebugMsg);
+                
+                // 혼문과 Ground 사이의 거리 계산
+                auto* honmunCollider = gameObject->GetComponent<CircleCollider>();
+                if (honmunCollider) {
+                    float honmunBottom = honmunPos.y + honmunCollider->offset.y + honmunCollider->radius;
+                    float distanceToGround = honmunBottom - groundTop;
+                    sprintf_s(groundDebugMsg, "🎯 충돌 분석: 혼문아래끝=%.1f, Ground위끝=%.1f, 침투깊이=%.1f\n", 
+                             honmunBottom, groundTop, distanceToGround);
+                    OutputDebugStringA(groundDebugMsg);
                 }
-                DestroyThis();
+                
+                // Ground 객체 식별
+                std::string groundType = "UNKNOWN";
+                if (abs(groundPos.y - (-350.0f)) < 10.0f && boxCollider->size.x > 1500.0f) {
+                    groundType = "메인바닥";
+                } else if (abs(groundPos.y - (-200.0f)) < 10.0f && boxCollider->size.x < 300.0f) {
+                    groundType = "플랫폼1";
+                } else if (abs(groundPos.y - 0.0f) < 10.0f && boxCollider->size.x < 300.0f) {
+                    groundType = "플랫폼2";
+                } else if (abs(groundPos.y - (-350.0f)) < 10.0f && boxCollider->size.x < 1200.0f) {
+                    groundType = "플레이어바닥";
+                }
+                
+                sprintf_s(groundDebugMsg, "🏗️ Ground 객체 식별: %s (Y=%.1f, 크기=%.1fx%.1f)\n", 
+                         groundType.c_str(), groundPos.y, boxCollider->size.x, boxCollider->size.y);
+                OutputDebugStringA(groundDebugMsg);
+                
+                // 높은 위치에 있는 혼문은 아직 땅에 도달하지 않았으므로 파괴하지 않음
+                if (honmunPos.y > -345.0f) // 바닥(-350) 위쪽 5픽셀 여유를 둠
+                {
+                    sprintf_s(groundDebugMsg, "🔄 혼문이 아직 높은 위치 (Y=%.1f > -345), 관통 처리\n", 
+                             honmunPos.y);
+                    OutputDebugStringA(groundDebugMsg);
+                }
+                else if (boxCollider->size.x > 1500.0f) // 진짜 바닥만
+                {
+                    sprintf_s(groundDebugMsg, "✅ 진짜 바닥 확인됨 (%s, 크기=%.1f > 1500), 혼문 파괴!\n", 
+                             groundType.c_str(), boxCollider->size.x);
+                    OutputDebugStringA(groundDebugMsg);
+                    
+                    // 아론 씬에서 혼의 개수 감소
+                    auto* currentScene = SceneManager::Get().GetCurrentScene();
+                    auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+                    if (aronScene)
+                    {
+                        aronScene->DecreaseSoulCount();
+                    }
+                    DestroyThis();
+                }
+                else
+                {
+                    sprintf_s(groundDebugMsg, "🔄 플랫폼/짧은콜라이더 (%s, 크기=%.1f ≤ 1500), 관통 처리\n", 
+                             groundType.c_str(), boxCollider->size.x);
+                    OutputDebugStringA(groundDebugMsg);
+                }
+            }
+            else
+            {
+                OutputDebugStringA("ERROR: Ground 객체에 BoxCollider가 없음!\n");
             }
         }
         return;
@@ -303,9 +440,82 @@ void HonmunCollisionBase::OnCollisionEnter(ICollider* other, const ContactInfo& 
 {
     // 박스 콜라이더와의 충돌 테스트용
     char debugMsg[100];
-    sprintf_s(debugMsg, "OnCollisionEnter called! Other: %s\n", 
+    sprintf_s(debugMsg, "💥 OnCollisionEnter called! Other: %s\n", 
               other->gameObject ? other->gameObject->name.c_str() : "null");
     OutputDebugStringA(debugMsg);
+    
+    // Ground 충돌도 OnCollisionEnter에서 처리 (playerGround는 isTrigger=false)
+    if (other && other->gameObject && other->gameObject->name == "Ground")
+    {
+        OutputDebugStringA("💥 OnCollisionEnter - Ground 충돌 감지됨!\n");
+        
+        // 상세한 Ground 충돌 분석 로그 (OnTriggerEnter와 동일)
+        Vector2 honmunPos = transform ? transform->GetPosition() : Vector2(0, 0);
+        Vector2 groundPos = other->gameObject->GetComponent<Transform>() ? 
+                           other->gameObject->GetComponent<Transform>()->GetPosition() : Vector2(0, 0);
+        
+        char groundDebugMsg[200];
+        sprintf_s(groundDebugMsg, "🚨 *** OnCollisionEnter GROUND COLLISION *** 🚨\n");
+        OutputDebugStringA(groundDebugMsg);
+        
+        sprintf_s(groundDebugMsg, "혼문 중심: (%.1f, %.1f), Ground 중심: (%.1f, %.1f)\n", 
+                 honmunPos.x, honmunPos.y, groundPos.x, groundPos.y);
+        OutputDebugStringA(groundDebugMsg);
+        
+        auto* boxCollider = other->gameObject->GetComponent<BoxCollider>();
+        if (boxCollider)
+        {
+            sprintf_s(groundDebugMsg, "Ground BoxCollider 크기: %.1f x %.1f, isTrigger=%s\n", 
+                     boxCollider->size.x, boxCollider->size.y, 
+                     boxCollider->isTrigger ? "true" : "false");
+            OutputDebugStringA(groundDebugMsg);
+            
+            // Ground 객체 식별
+            std::string groundType = "UNKNOWN";
+            if (abs(groundPos.y - (-350.0f)) < 10.0f && boxCollider->size.x > 1500.0f) {
+                groundType = "메인바닥";
+            } else if (abs(groundPos.y - (-350.0f)) < 10.0f && boxCollider->size.x < 1200.0f) {
+                groundType = "플레이어바닥";
+            } else if (abs(groundPos.y - (-200.0f)) < 10.0f && boxCollider->size.x < 300.0f) {
+                groundType = "플랫폼1";
+            } else if (abs(groundPos.y - 0.0f) < 10.0f && boxCollider->size.x < 300.0f) {
+                groundType = "플랫폼2";
+            }
+            
+            sprintf_s(groundDebugMsg, "🏗️ OnCollisionEnter Ground 식별: %s (Y=%.1f, 크기=%.1fx%.1f)\n", 
+                     groundType.c_str(), groundPos.y, boxCollider->size.x, boxCollider->size.y);
+            OutputDebugStringA(groundDebugMsg);
+            
+            // 높은 위치에 있는 혼문은 아직 땅에 도달하지 않았으므로 파괴하지 않음
+            if (honmunPos.y > -345.0f) // 바닥(-350) 위쪽 5픽셀 여유를 둠
+            {
+                sprintf_s(groundDebugMsg, "🔄 OnCollisionEnter - 혼문이 아직 높은 위치 (Y=%.1f > -345), 관통 처리\n", 
+                         honmunPos.y);
+                OutputDebugStringA(groundDebugMsg);
+            }
+            // 메인바닥에서만 파괴 (OnTriggerEnter와 동일 로직)
+            else if (boxCollider->size.x > 1500.0f) 
+            {
+                sprintf_s(groundDebugMsg, "✅ OnCollisionEnter - 진짜 바닥 확인됨 (%s), 혼문 파괴!\n", 
+                         groundType.c_str());
+                OutputDebugStringA(groundDebugMsg);
+                
+                auto* currentScene = SceneManager::Get().GetCurrentScene();
+                auto* aronScene = dynamic_cast<Aron_Scene*>(currentScene);
+                if (aronScene)
+                {
+                    aronScene->DecreaseSoulCount();
+                }
+                DestroyThis();
+            }
+            else
+            {
+                sprintf_s(groundDebugMsg, "🔄 OnCollisionEnter - 플랫폼/플레이어바닥 (%s), 물리 충돌만\n", 
+                         groundType.c_str());
+                OutputDebugStringA(groundDebugMsg);
+            }
+        }
+    }
 }
 
 void HonmunCollisionBase::SetHonmunType(HonmunType type)

@@ -127,7 +127,7 @@ void Honmun::SetHonmunType(HonmunType type)
 			hp = 3; // A타입: 3 HP
 			break;
 		case HonmunType::B:
-			hp = 2; // B타입: 2 HP
+			hp = 3; // B타입: 3 HP (기획서 수정)
 			break;
 		case HonmunType::C:
 			hp = 3; // C타입: 3 HP로 수정
@@ -249,8 +249,8 @@ void Honmun::SetupColliderForType()
 		collider->offset.y = -8.0f; // 위치 조정
 		break;
 	case HonmunType::B:
-		collider->radius = 34.0f; // 원래 크기로 복원
-		collider->offset.y = -23.0f; // 원래 위치로 복원 (아래쪽)
+		collider->radius = 50.0f; // 충돌 감지를 위해 많이 키움
+		collider->offset.y = -15.0f; // 위치도 조정
 		break;
 	case HonmunType::C:
 		collider->radius = 35.0f; // 충돌 감지 개선
@@ -266,7 +266,7 @@ void Honmun::SetupColliderForType()
 		break;
 	case HonmunType::b:
 		collider->radius = 35.0f; // b 조각 충돌 감지 개선
-		collider->offset.y = -12.0f;
+		collider->offset.y = -18.0f; // b 콜라이더를 더 아래로 이동
 		break;
 	default:
 		collider->radius = 40.0f;

@@ -72,7 +72,13 @@ public:
 
 	// Public interface
 	void SetHonmunType(HonmunType type);
-	void SetHealth(int hp) { health = hp; }
+	void SetHealth(int hp) { 
+		health = hp; 
+		// 혼문 객체와 동기화
+		if (honmun) {
+			honmun->SetHP(hp);
+		}
+	}
 	void DestroyThis();
 	void DestroyThis_CrashFix_Version();  // Alternative crash-safe version
 
