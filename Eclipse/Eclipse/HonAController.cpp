@@ -110,10 +110,6 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 
 		}
-		else if (honType == "HonD")
-		{
-
-		}
 
 		// collider on
 		collider->SetEnabled(true);
