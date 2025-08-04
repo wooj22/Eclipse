@@ -10,6 +10,7 @@
 
 void EclipseApp::Init()
 {
+	gameManager.Init();
 	__super::Init();
 
 	// matrix init
@@ -29,7 +30,6 @@ void EclipseApp::Init()
 	sceneManager.CreateScene<EndScene>();
 	sceneManager.SetCurrentScene(MOON);
 	sceneManager.Init();
-	gameManager.Init();
 }
 
 
