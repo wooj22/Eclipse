@@ -9,6 +9,10 @@ private:
     float dashTimer = 0.0f;
     float dashDuration = 0.2f;
 
+    float moveBonus = 0.0f;
+    float dashSpeed = 0.0;
+    int inputX = 0.0f;
+
 public:
     void Enter(MovementFSM* fsm) override;
     void Update(MovementFSM* fsm) override;
