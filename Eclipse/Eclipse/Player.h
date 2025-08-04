@@ -62,11 +62,11 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(0, 0);
-		transform->SetScale(1.2, 1.2);
+		transform->SetPosition(0, 60);
+		transform->SetScale(0.5, 0.5);
 
-		collider->offset = { 0.0f, -5.0f };
-		collider->size = { 50.0f, 70.0f };
+		collider->offset = { 0.0f, -25.0f };
+		collider->size = { 150.0f, 350.0f };
 		collider->isFlatformerCharacter = true; 
 		// collider->isTrigger = false;
 

@@ -24,7 +24,7 @@ void Attack_State::Enter(MovementFSM* fsm)
     OutputDebugStringA(dbg.c_str());
 
     // 애니메이션 재생 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", true);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", true);
 
     // [ 공격 이동 ] 
     startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
@@ -96,7 +96,7 @@ void Attack_State::Exit(MovementFSM* fsm)
 
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
+    // fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Attack", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
 }

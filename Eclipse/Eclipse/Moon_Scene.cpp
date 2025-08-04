@@ -39,7 +39,7 @@ void Moon_Scene::Awake()
 	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
 	playerAttackArea = CreateObject<PlayerAttackArea>();
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
-	playerAttackArea->SetActive(false);
+	// playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 	// [ ground ]

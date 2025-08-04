@@ -21,7 +21,7 @@ void Hanging_State::Enter(MovementFSM * fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0.0f;
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Hanging", true);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", true);
 }
 
 void Hanging_State::Update(MovementFSM* fsm)
@@ -68,5 +68,5 @@ void Hanging_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = 80;
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Samurai_Hanging", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", false);
 }
