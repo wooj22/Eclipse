@@ -1083,7 +1083,11 @@ void HonmunCollisionTypes::ApplyOppositeForces(HonmunCollisionBase* script1, Hon
 void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, HonmunCollisionBase* script2, float force)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     // 각 혼문이 원래 움직여온 방향으로 되돌려보냄 - 키네마틱 모드 유지 버전
+=======
+    // 충돌 방향에 따라 좌우로 밀어냄 - 키네마틱 모드 유지 버전
+>>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
 =======
     // 충돌 방향에 따라 좌우로 밀어냄 - 키네마틱 모드 유지 버전
 >>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
@@ -1124,7 +1128,13 @@ void HonmunCollisionTypes::ApplyLeftRightPush(HonmunCollisionBase* script1, Honm
     transform2->SetPosition(newPos2.x, newPos2.y);
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     // 위치 고정을 위해 물리 상태 초기화 (드리프트 방지)
+=======
+    // 위치 고정을 위해 물리 상태 초기화
+    auto* rigidbody1 = script1->GetRigidbody();
+    auto* rigidbody2 = script2->GetRigidbody();
+>>>>>>> parent of cfe06e0 (Revert "Fix | "왼쪽에서 온 혼문은 왼쪽으로, 오른쪽에서 온 혼문은 오른쪽으로"")
 =======
     // 위치 고정을 위해 물리 상태 초기화
     auto* rigidbody1 = script1->GetRigidbody();
