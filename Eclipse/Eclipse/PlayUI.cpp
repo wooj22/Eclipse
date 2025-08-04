@@ -3,6 +3,7 @@
 #include "Chat.h"
 #include "Quest.h"
 #include <algorithm>
+#include "../Direct2D_EngineLib/Input.h"
 
 void PlayUI::Awake()
 {  
@@ -14,7 +15,6 @@ void PlayUI::SceneStart()
 	// 웨이브 타이머 UI
 	timer_Text->rectTransform->SetPosition(0, 500);
 	timer_Text->rectTransform->SetSize(500, 40);
-	timer_Text->screenTextRenderer->SetText(L"추후 타이머 연결");
 	timer_Text->screenTextRenderer->SetFontSize(50);
 
 	waveInfo_Text->rectTransform->SetPosition(0, 400);
@@ -55,6 +55,9 @@ void PlayUI::SceneStart()
 		this, std::bind(&PlayUI::ClickChatButton, this));
 
 	chat_Image->SetActive(false);
+	chat_Image->imageRenderer->layer = 1;
+	chat_Text->screenTextRenderer->layer = 2;
+	chat_Button->imageRenderer->layer = 3;
 	chat_Image->rectTransform->SetPosition(0, -400);
 	chat_Image->rectTransform->SetSize(1500, 200);
 	auto chatImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Chat.png");
@@ -111,6 +114,59 @@ void PlayUI::SceneStart()
 	skill2_Text->screenTextRenderer->SetText(L"x 1");
 	skill2_Text->screenTextRenderer->SetFontSize(50);*/
 
+	// 스킬창 UI
+	skillbutton1->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton2->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton3->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton4->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton5->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton6->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton7->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton8->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillbutton9->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillHon_Image->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillHon_Text->rectTransform->SetParent(skillWindow_Image->rectTransform);
+
+	skillWindow_Image->SetActive(false);
+	skillWindow_Image->rectTransform->SetSize(1920, 1080);
+	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
+	skillWindow_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowImageTexture, "SkillWindow");
+	auto skillbutton1Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill1.png");
+	skillbutton1->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton1Texture, "Skill1");
+	auto skillbutton2Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill2.png");
+	skillbutton2->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton2Texture, "Skill2");
+	auto skillbutton3Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill3.png");
+	skillbutton3->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton3Texture, "Skill3");
+	auto skillbutton4Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill4.png");
+	skillbutton4->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton4Texture, "Skill4");
+	auto skillbutton5Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill5.png");
+	skillbutton5->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton5Texture, "Skill5");
+	auto skillbutton6Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill6.png");
+	skillbutton6->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton6Texture, "Skill6");
+	auto skillbutton7Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill7.png");
+	skillbutton7->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton7Texture, "Skill7");
+	auto skillbutton8Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill8.png");
+	skillbutton8->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton8Texture, "Skill8");
+	auto skillbutton9Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill9.png");
+	skillbutton9->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton9Texture, "Skill9");
+	skillHon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
+
+
+	skillbutton1->rectTransform->SetPosition(0,0);
+	skillbutton2->rectTransform->SetPosition(0,200);
+	skillbutton3->rectTransform->SetPosition(0,400);
+	skillbutton4->rectTransform->SetPosition(-300,0);
+	skillbutton5->rectTransform->SetPosition(-450,200);
+	skillbutton6->rectTransform->SetPosition(-600,400);
+	skillbutton7->rectTransform->SetPosition(300,0);
+	skillbutton8->rectTransform->SetPosition(450,200);
+	skillbutton9->rectTransform->SetPosition(600,400);
+
+	skillHon_Image->rectTransform->SetPosition(-100,-250);
+	skillHon_Text->rectTransform->SetPosition(200,-250);
+	skillHon_Text->rectTransform->SetSize(500,100);
+	skillHon_Text->screenTextRenderer->SetFontSize(50);
+	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 }
 
 
@@ -118,6 +174,21 @@ void PlayUI::Update()
 {
 
 	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
+	skillHon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
+
+	if (waveTimer > 0)
+	{
+		waveTimer -= Time::GetDeltaTime();
+		if (waveTimer < 0)
+		{
+			waveTimer = 0;
+			GameManager::Get().isWave = false;
+			GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);//TODOMO : 퀘스트 완료에 대한 추가 구현
+		}
+		timer_Text->screenTextRenderer->SetText(L"남은 시간: " + std::to_wstring(static_cast<int>(std::floor(waveTimer))));
+	}
+	else if (GameManager::Get().waveCount > 0)
+		timer_Text->screenTextRenderer->SetText(L"웨이브 종료");
 
 	if (waveInfo_Text->IsActive())
 	{
@@ -183,6 +254,19 @@ void PlayUI::Update()
 			tooltip_Image->SetActive(false);
 		}
 	}
+
+	// 스킬 창 UI 이것도 Play에 가야하는지
+	if( Input::GetKeyDown(VK_TAB))
+	{
+		if (skillWindow_Image->IsActive())
+		{
+			skillWindow_Image->SetActive(false);
+		}
+		else
+		{
+			skillWindow_Image->SetActive(true);
+		}
+	}
 }
 
 void PlayUI::Destroyed()
@@ -193,9 +277,12 @@ void PlayUI::Destroyed()
 void PlayUI::ClickChatButton() {
 	GameManager::Get().isWave = true;
 	GameManager::Get().waveCount++;
+	if (GameManager::Get().waveCount > 3) waveTimer = 81;
+	else waveTimer = 6;// TODOMO : 테스트로 6초 71초로 변경 필요
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
 	StartWaveInfo(GameManager::Get().waveCount);
+	if (skillWindow_Image->IsActive()) skillWindow_Image->SetActive(false);
 }
 
 void PlayUI::StartWaveInfo(int waveNumber)

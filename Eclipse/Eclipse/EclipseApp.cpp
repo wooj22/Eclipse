@@ -36,6 +36,7 @@ void EclipseApp::Init()
 void EclipseApp::UnInit()
 {
 	__super::UnInit();
+	gameManager.UnInit();
 }
 
 
