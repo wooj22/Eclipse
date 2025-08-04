@@ -1,0 +1,21 @@
+#include "NPCInteraction.h"
+#include "PlayUI.h"
+#include "GameManager.h"
+
+void NPCInteraction::OnTriggerStay(ICollider* other, const ContactInfo& contact)
+{
+	if (other->gameObject->name == "Player" && !GameManager::Get().g_playUI->ChatActiveCheck() && !GameManager::Get().isWave)
+		interactionImage->SetActive(true);
+}
+
+void NPCInteraction::OnTriggerExit(ICollider* other, const ContactInfo& contact)
+{
+	if (other->gameObject->name == "Player")
+		interactionImage->SetActive(false);
+}
+
+void NPCInteraction::Update()
+{
+	if(GameManager::Get().g_playUI->ChatActiveCheck() || GameManager::Get().isWave)
+		interactionImage->SetActive(false);
+}
