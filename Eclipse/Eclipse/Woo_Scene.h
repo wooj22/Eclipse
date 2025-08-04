@@ -38,6 +38,7 @@ private:
 	HonB* honB2;
 	HonC* honC1;
 	HonC* honC2;
+	HonC* honC3;
 	HonD* honD1;
 	HonD* honD2;
 

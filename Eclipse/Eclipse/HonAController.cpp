@@ -71,6 +71,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+
+		// hp
+		hp--;
 	}
 
 	// [hon collision]
@@ -88,9 +91,6 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			isCollisionMoving = true;
 			collisionMovingDelta = 0;
 
-			// collider off
-			collider->SetEnabled(false);
-
 			// controller
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 
@@ -101,6 +101,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				SetSize(size * 1.4);
 				SetDirection(moveDirection);
 				SetDescentSpeed(descentSpeed * 0.6);
+				hp--;
 			}
 			else
 			{
@@ -117,11 +118,10 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			isCollisionMoving = true;
 			collisionMovingDelta = 0;
 
-			// collider off
-			collider->SetEnabled(false);
-
 			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
+		
+			hp--;
 		}
 		else if (honType == "HonC")
 		{
@@ -129,21 +129,18 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			isCollisionMoving = true;
 			collisionMovingDelta = 0;
 
-			// collider off
-			collider->SetEnabled(false);
-
 			// 로직은 C쪽에서 처리
+			hp--;
 		}
-
-
-		// collider on
-		collider->SetEnabled(true);
 	}
+
+	// HP Cheak
+	if (hp <= 0) gameObject->Destroy();
 }
 
 
 /*------------- Functions -------------*/
-// 3. 연쇄반응 C-C
+// C-C
 void HonAController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();

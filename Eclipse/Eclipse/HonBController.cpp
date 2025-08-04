@@ -72,6 +72,9 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+
+		// hp
+		hp--;
 	}
 
 	// [hon collision]
@@ -82,44 +85,48 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
+		// 1. ¿¬¼â¹ÝÀÀ B-A
 		if (honType == "HonA")
 		{
 			// collision move start (reset)
 			isCollisionMoving = true;
 			pushBackDeltaTime = 0;
 
-			// collider off
-			collider->SetEnabled(false);
-
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
+		
+			hp--;
 		}
+		// 2. ¿¬¼â¹ÝÀÀ B-B
 		else if (honType == "HonB")
 		{
 			// collision move start (reset)
 			isCollisionMoving = true;
 			pushBackDeltaTime = 0;
 
-			// collider off
-			collider->SetEnabled(false);
-
 			SetSize(size * 0.7);
 			SetDescentSpeed(descentSpeed * 1.2);
 			SetDirection(Vector2::down);
-
-			GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(100,0));
-			HonBController* controller = newHonB->GetComponent<HonBController>();
-			controller->SetSize(size);
-			controller->SetDescentSpeed(descentSpeed * 1.2);
+			hp--;
+			if (hp <= 0) gameObject->Destroy();
+			else
+			{
+				GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(150, 150));
+				HonBController* controller = newHonB->GetComponent<HonBController>();
+				controller->SetSize(size);
+				controller->SetDescentSpeed(descentSpeed * 1.2);
+				controller->SetHp(hp);
+			}
 		}
-		
-		// collider on
-		collider->SetEnabled(true);
 	}
+
+	// HP Cheak
+	if (hp <= 0) gameObject->Destroy();
 }
 
 
 /*------------- Functions -------------*/
+// C-C
 void HonBController::HonC_PullMe(Vector2 pos)
 {
 	pullDirection = (pos - tr->GetWorldPosition()).Normalized();
