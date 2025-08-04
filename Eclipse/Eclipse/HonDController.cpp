@@ -1,14 +1,8 @@
 #include "HonDController.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/Transform.h"
-#include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
-#include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "../Direct2D_EngineLib/Input.h"
-#include "../Direct2D_EngineLib/Camera.h"
-#include "HonAController.h"
-#include "HonBController.h"
 
 // script component cycle
 void HonDController::Awake()

@@ -1,12 +1,8 @@
 #include "HonAController.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/Transform.h"
-#include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
-#include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "../Direct2D_EngineLib/Input.h"
-#include "../Direct2D_EngineLib/Camera.h"
 #include "HonA.h"
 #include "HonBController.h"
 
@@ -14,8 +10,6 @@
 void HonAController::Awake()
 {
 	tr = gameObject->transform;
-	sr = gameObject->GetComponent<SpriteRenderer>();
-	rb = gameObject->GetComponent<Rigidbody>();
 	collider = gameObject->GetComponent<CircleCollider>();
 
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();

@@ -3,8 +3,6 @@
 #include "../Direct2D_EngineLib/Vector2.h"
 
 class Transform;
-class SpriteRenderer;
-class Rigidbody;
 class CircleCollider;
 
 class HonAController : public Script
@@ -27,8 +25,6 @@ private:
 
 	// ref component
 	Transform* tr;
-	SpriteRenderer* sr;
-	Rigidbody* rb;
 	CircleCollider* collider;
 
 public:
