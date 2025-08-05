@@ -43,6 +43,7 @@ void Idle_State::Update(MovementFSM* fsm)
     {
         fsm->GetPlayerFSM()->canDoubleJump = true;
         fsm->GetPlayerFSM()->canHanging = true;
+        fsm->GetPlayerFSM()->canFallAttack = true;
     }
 
     // [ Jump ]

@@ -78,7 +78,7 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Attack / Bullet ]
-    if (fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON))
+    if (fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON) && !fsm->GetPlayerFSM()->canFallAttack)
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 
@@ -88,15 +88,17 @@ void Fall_State::Update(MovementFSM* fsm)
         if (fsm->GetPlayerFSM()->CanAttack() &&
             fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold)
         {
+            fsm->GetPlayerFSM()->canFallAttack = false;
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
         }
     }
-    else if (fsm->GetPlayerFSM()->CanAttack())
+    else if(!fsm->GetPlayerFSM()->canFallAttack)
     {
         // [ Attack ]
         if (fsm->GetPlayerFSM()->CanAttack() &&
             fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold)
         {
+            fsm->GetPlayerFSM()->canFallAttack = false;
             fsm->GetPlayerFSM()->OnAirAttack();
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
         }
@@ -117,18 +119,6 @@ void Fall_State::FixedUpdate(MovementFSM* fsm)
     // [ 좌우 이동 ]
     inputX = fsm->GetPlayerFSM()->GetInputX();
     curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
-
-    //// 입력이 있는 경우: 목표 속도로 보간 
-    //if (inputX != 0.0f && !fsm->GetPlayerFSM()->GetIsWall())
-    //{
-    //    float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
-    //    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
-    //}
-    //else
-    //{
-    //    // 입력이 없으면 감속
-    //    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
-    //}
 
     // 입력이 있는 경우 
     if (inputX != 0.0f) 

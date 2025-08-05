@@ -89,7 +89,9 @@ public:
 
 	bool canDoubleJump = false;             // 다시 땅 밟기 전까지 더블점프는 한번만 가능 
 	bool canHanging = false;				// 다시 땅 밟기 전까지 매달리기는 한번만 가능 
-	bool isHolding = false;
+	bool canFallAttack = false;				// 다시 땅 밟기 전까지 공중에서 공격 가능 
+
+ 	bool isHolding = false;
 
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
