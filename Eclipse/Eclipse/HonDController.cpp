@@ -3,7 +3,9 @@
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Time.h"
-
+#include "HonAController.h"
+#include "HonBController.h"
+#include "HonCController.h"
 /*------------- Cycle  -------------*/
 void HonDController::Awake()
 {
@@ -53,23 +55,37 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
-		// collision move start (reset)
 		CollisionStart();
-
-		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
 
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
+		if (gameObject->IsDestroyed()) return;
+
 		// other gameobject
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
 		// destroy
-		otherGameObject->Destroy();
+		if (honType == "HonA")
+		{
+			otherGameObject->GetComponent<HonAController>()->TakeDamage();
+		}
+		else if(honType == "HonB")
+		{
+			otherGameObject->GetComponent<HonBController>()->TakeDamage();
+		}
+		else if (honType == "HonC")
+		{
+			otherGameObject->GetComponent<HonCController>()->TakeDamage();
+		}
+		else if(honType == "HonD")
+		{
+			otherGameObject->Destroy();
+		}
 		this->gameObject->Destroy();
 	}
 }

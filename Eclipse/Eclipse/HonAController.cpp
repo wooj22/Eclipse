@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "HonBController.h"
+#include "HonCController.h"
 
 /*------------- Cycle  -------------*/
 void HonAController::Awake()
@@ -65,35 +66,31 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
-		// collision move start (reset)
 		CollisionStart();
-
-		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-
-		// hp
 		TakeDamage();
 	}
 
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
+		if (gameObject->IsDestroyed()) return;
+
 		// other gameobject
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
-		// 1. 연쇄반응 A-A
+		// 연쇄반응 A-A
 		if (honType == "HonA")
 		{
 			// hp cheak
-			
-			// collision move start (reset)
-			CollisionStart();
-
-			// controller
+			TakeDamage();
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
-
+			otherController->TakeDamage();
+			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+			
+			// collision move start
 			// Size를 기준으로 합체 주체 결정
 			if (size >= otherController->GetSize())
 			{
@@ -108,33 +105,26 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherController->SetSize(otherController->GetSize() * 1.5);
 				otherController->CollisionEnd();
 				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
-				otherController->SetHp(otherController->GetHp());
+				otherController->SetHp(1);
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
 		}
-		// 2. 연쇄반응 A-B
+		// 연쇄반응 A-B
 		else if (honType == "HonB")
 		{
-			// collision move start (reset)
-			CollisionStart();
-
+			// hp cheak
+			TakeDamage();
 			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
-			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
-		
-			hp--;
-		}
-		else if (honType == "HonC")
-		{
-			// collision move start (reset)
-			CollisionStart();
+			otherController->TakeDamage();
+			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
-			// 로직은 C쪽에서 처리
-			hp--;
+			// collision move start
+			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
+			otherController->SetDirection((otherGameObject->transform->GetWorldPosition() - tr->GetWorldPosition()).Normalized());
+			CollisionStart();
+			otherController->CollisionStart();
 		}
 	}
-
-	// HP Cheak
-	if (hp <= 0) gameObject->Destroy();
 }
 
 

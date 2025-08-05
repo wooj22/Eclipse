@@ -66,59 +66,60 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
-		// collision move start (reset)
 		CollisionStart();
-
-		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-
-		// hp
 		TakeDamage();
 	}
 
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
+		if (gameObject->IsDestroyed()) return;
+
 		// other gameobject
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
-		// 1. 연쇄반응 B-A
-		if (honType == "HonA")
+		// 연쇄반응 B-B
+		if (honType == "HonB")
 		{
-			// collision move start (reset)
-			CollisionStart();
+			// hp cheak
+			TakeDamage();
+			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
+			otherController->TakeDamage();
+			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
-			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
-			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
-		
-			hp--;
-		}
-		// 2. 연쇄반응 B-B
-		else if (honType == "HonB")
-		{
-			// collision move start (reset)
-			CollisionStart();
+			// collision move start
+			// 일단 하드코딩!
+			GameObject* newHonB1 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(-100, 100));
+			HonBController* controller = newHonB1->GetComponent<HonBController>();
+			controller->SetSize(size * 0.7);
+			controller->SetDescentSpeed(descentSpeed * 1.2);
+			controller->SetHp(1);
 
-			SetSize(size * 0.7);
-			SetDescentSpeed(descentSpeed * 1.2);
-			SetDirection(Vector2::down);
-			hp--;
-			if (hp <= 0) gameObject->Destroy();
-			else
-			{
-				GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(150, 150));
-				HonBController* controller = newHonB->GetComponent<HonBController>();
-				controller->SetSize(size);
-				controller->SetDescentSpeed(descentSpeed * 1.2);
-				controller->SetHp(hp);
-			}
+			GameObject* newHonB2 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(-100, -100));
+			HonBController* controller1 = newHonB2->GetComponent<HonBController>();
+			controller1->SetSize(size * 0.7);
+			controller1->SetDescentSpeed(descentSpeed * 1.2);
+			controller1->SetHp(1);
+
+			GameObject* newHonB3 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(100, -100));
+			HonBController* controller2 = newHonB3->GetComponent<HonBController>();
+			controller2->SetSize(size * 0.7);
+			controller2->SetDescentSpeed(descentSpeed * 1.2);
+			controller2->SetHp(1);
+
+			GameObject* newHonB4 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(100, 100));
+			HonBController* controller3 = newHonB4->GetComponent<HonBController>();
+			controller3->SetSize(size * 0.7);
+			controller3->SetDescentSpeed(descentSpeed * 1.2);
+			controller3->SetHp(1);
+
+			otherGameObject->Destroy();
+			gameObject->Destroy();
 		}
 	}
-
-	// HP Cheak
-	if (hp <= 0) gameObject->Destroy();
 }
 
 
