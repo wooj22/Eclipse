@@ -24,7 +24,7 @@ void HonAController::Update()
 	{
 		// pulling move
 		pullMovingDelta += Time::GetDeltaTime();
-		tr->Translate(pullDirection * collisionSpeed * 2 * Time::GetDeltaTime());
+		tr->Translate(pullDirection * collisionSpeed * 1.2f * Time::GetDeltaTime());
 
 		// end pulling
 		if (pullMovingDelta >= pullMovingTime) {

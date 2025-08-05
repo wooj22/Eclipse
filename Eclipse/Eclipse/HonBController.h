@@ -18,10 +18,9 @@ public:
 		hp = 3;
 		size = 1;
 		descentSpeed = 80;
-		collisionSpeed = 150;
+		collisionSpeed = 1000;
 
-		collisionMovingTime = 3.0f;
-		pullMovingTime = 0.7f;
+		collisionMovingTime = 1.5f;
 	}
 
 	// script component cycle
