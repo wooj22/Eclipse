@@ -1,0 +1,547 @@
+{
+    "texture": "HonC.png",
+    "textureWidth": 1024,
+    "textureHeight": 1024,
+    "sprites": [
+        {
+            "name": "HonC_0",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_1",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_2",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_3",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_4",
+            "x": 512.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_5",
+            "x": 640.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_6",
+            "x": 768.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_7",
+            "x": 896.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_8",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_9",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_10",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_11",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_12",
+            "x": 512.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_13",
+            "x": 640.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_14",
+            "x": 768.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_15",
+            "x": 896.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_16",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_17",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_18",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_19",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_20",
+            "x": 512.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_21",
+            "x": 640.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_22",
+            "x": 768.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_23",
+            "x": 896.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_24",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_25",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_26",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_27",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_28",
+            "x": 512.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_29",
+            "x": 640.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_30",
+            "x": 768.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_31",
+            "x": 896.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_32",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_33",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_34",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_35",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_36",
+            "x": 512.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_37",
+            "x": 640.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_38",
+            "x": 768.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_39",
+            "x": 896.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_40",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_41",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_42",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_43",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_44",
+            "x": 512.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_45",
+            "x": 640.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_46",
+            "x": 768.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_47",
+            "x": 896.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_48",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_49",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_50",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_51",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_52",
+            "x": 512.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_53",
+            "x": 640.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_54",
+            "x": 768.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_55",
+            "x": 896.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_56",
+            "x": 0.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_57",
+            "x": 128.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_58",
+            "x": 256.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "HonC_59",
+            "x": 384.0,
+            "y": 896.0,
+            "width": 128.0,
+            "height": 128.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}

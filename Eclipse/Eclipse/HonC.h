@@ -4,6 +4,8 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
+#include "../Direct2D_EngineLib/Animator.h"
+#include "HonCAnimatorController.h"
 #include "HonCController.h"
 
 /* Darkness ¾îµÒÀÇ È¥ */
@@ -16,7 +18,11 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
+	Animator* animator;
 	HonCController* controller;
+
+	// animator controller asset
+	HonCAnimatorController* animatorController;
 
 	HonC() : GameObject("HonC", "Hon")		// name, tag
 	{
@@ -24,12 +30,14 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
+		animator = AddComponent<Animator>();
 		controller = AddComponent<HonCController>();
 
+		// animator
+		animatorController = new HonCAnimatorController();
+		animator->SetController(animatorController);
+
 		// renderer set
-		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/HonC.png");
-		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "HonC");
-		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->renderMode = RenderMode::Lit_Glow;
 		spriteRenderer->layer = 11;
 
@@ -39,6 +47,11 @@ public:
 		collider->isTrigger = true;
 		collider->offset = { 0, -15 };
 		collider->radius = 40;
+	}
+
+	~HonC()
+	{
+		delete animatorController;
 	}
 
 	void Update() override
