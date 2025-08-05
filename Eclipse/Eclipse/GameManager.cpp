@@ -13,12 +13,27 @@ void GameManager::ReSetData()
 {
 	honCount = 0;
 	waveCount = 0;
+	honKill = 0;
+	cainCount = 0;
+	lunaKill = 0;
+	bossKill = 0;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;		
 	canUseAbsorb = false;		
 	canUseRelease = false;
 	SkillReset();
+}
+
+void GameManager::WaveStart()
+{
+	isWave = true;
+	waveCount++;
+
+	honKill = 0;
+	cainCount = 0;
+	lunaKill = 0;
+	bossKill = 0;
 }
 
 void GameManager::SkillReset()

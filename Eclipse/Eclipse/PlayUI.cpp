@@ -289,7 +289,7 @@ void PlayUI::Update()
 			GameManager::Get().waveTime -= Time::GetDeltaTime();
 	}
 	else
-		GameManager::Get().waveTime = GameManager::Get().waveCount != 4 ? 2 : 80;
+		GameManager::Get().waveTime = 2;
 
 	if (GameManager::Get().absorbCoolTime > 0)
 		GameManager::Get().absorbCoolTime -= Time::GetDeltaTime();
@@ -310,8 +310,7 @@ void PlayUI::ClickChatButton() {
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
-	GameManager::Get().isWave = true;
-	GameManager::Get().waveCount++;
+	GameManager::Get().WaveStart();
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
 	StartWaveInfo(GameManager::Get().waveCount);

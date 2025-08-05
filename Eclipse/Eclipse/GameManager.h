@@ -91,6 +91,12 @@ public:
 	bool isWave;				// UI 에서 넘겨 줄 웨이브 시작 여부
 	float waveTime;				// 웨이브에서 넘겨줄 웨이브 타임
 
+	//퀘스트
+	int honKillCount;				// 1웨이브	A,B 체력 0 일때만!
+	int cainCount;				// 2웨이브	A-A, B-B, C-C 연쇄 반응만
+	int lunaKillCount;				// 3웨이브	D 체력 0 일때 
+	int bossKillCount;				// 4웨이브	TODOMO : 추후 보스에서 사용
+
 	//플레이어 스킬
 	float absorbCoolTime;		// Q 흡수 쿨타임				PlayerFSM -> absorbCooldownTimer
 	bool canUseAbsorb;			// Q 흡수 스킬 사용 가능 여부	PlayerFSM -> isAbsorbSkillActive
@@ -106,6 +112,7 @@ public:
 	void Init() { g_playUI = nullptr; ReSetData(); }
 	void UnInit();
 	void ReSetData();
+	void WaveStart();
 	void SkillReset();
 	bool CanUnlock(SkillType skill);
 	bool CheckUnlock(SkillType skill) { return skillTree[skill].unlocked; }
