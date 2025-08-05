@@ -87,7 +87,7 @@ public:
         //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Jump_AniClip.json");
 
         name = "N_Player_Jump";
-        loop = true;
+        loop = false;
         duration = 1.6f;
 
         const std::string basePath = "../Resource/Moon/Texture/N_Player_Jump/";
@@ -117,9 +117,32 @@ class PlayerHangingClip : public AnimationClip
 public:
     PlayerHangingClip()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Jump.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Jump_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Jump_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Jump.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Jump_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Jump_AniClip.json");
+
+        name = "N_Player_Hanging";
+        loop = true;
+        duration = 1.5f;
+
+        const std::string basePath = "../Resource/Moon/Texture/N_Player_Hanging/";
+        const int frameCount = 20;
+        const float frameTime = duration / frameCount;
+
+        for (int i = 0; i < frameCount; ++i)
+        {
+            char filename[256];
+            sprintf_s(filename, "%sN_Hanging (%d).png", basePath.c_str(), i);
+
+            auto texture = ResourceManager::Get().CreateTexture2D(filename);
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "N_Hanging_" + std::to_string(i));
+
+            AnimationFrame frame;
+            frame.sprite = sprite;
+            frame.time = i * frameTime;
+
+            frames.push_back(frame);
+        }
     }
     ~PlayerHangingClip() override {}
 };
@@ -284,7 +307,7 @@ public:
         //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Jump_AniClip.json");
 
         name = "Y_Player_Jump";
-        loop = true;
+        loop = false;
         duration = 1.6f;
 
         const std::string basePath = "../Resource/Moon/Texture/Y_Player_Jump/";
@@ -314,9 +337,32 @@ class PlayerHangingClip_Y : public AnimationClip
 public:
     PlayerHangingClip_Y()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Jump.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Jump_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Jump_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Jump.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Jump_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Jump_AniClip.json");
+
+        name = "Y_Player_Hanging";
+        loop = true;
+        duration = 1.5f;
+
+        const std::string basePath = "../Resource/Moon/Texture/Y_Player_Hanging/";
+        const int frameCount = 20;
+        const float frameTime = duration / frameCount;
+
+        for (int i = 0; i < frameCount; ++i)
+        {
+            char filename[256];
+            sprintf_s(filename, "%sY_Hanging (%d).png", basePath.c_str(), i);
+
+            auto texture = ResourceManager::Get().CreateTexture2D(filename);
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "Y_Hanging_" + std::to_string(i));
+
+            AnimationFrame frame;
+            frame.sprite = sprite;
+            frame.time = i * frameTime;
+
+            frames.push_back(frame);
+        }
     }
     ~PlayerHangingClip_Y() override {}
 };

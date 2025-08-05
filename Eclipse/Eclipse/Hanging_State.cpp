@@ -21,8 +21,10 @@ void Hanging_State::Enter(MovementFSM * fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0.0f;
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;
 
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", true);
+    fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
+
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", true);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Hanging", true);
 
 }
 
@@ -70,6 +72,8 @@ void Hanging_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = 80;
 
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
+    fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
+
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", false);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Hanging", false);
 }
