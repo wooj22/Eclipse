@@ -86,6 +86,8 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		// 1. ø¨º‚π›¿¿ A-A
 		if (honType == "HonA")
 		{
+			// hp cheak
+			
 			// collision move start (reset)
 			CollisionStart();
 

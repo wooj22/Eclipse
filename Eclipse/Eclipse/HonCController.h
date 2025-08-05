@@ -71,6 +71,11 @@ public:
 		hp--;
 		if (hp <= 0) gameObject->Destroy();
 	}
+	bool TakeDamageAfterLife()
+	{
+		if (hp-1 <= 0) return false;
+		else return true;
+	}
 
 	void CollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
 	void CollisionStart() { isCollisionMoving = true; collisionMovingDelta = 0; }
