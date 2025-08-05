@@ -40,7 +40,7 @@ void HonBController::Update()
 		pushBackDeltaTime += Time::GetDeltaTime();
 		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
-		// move end
+		// end collidion moving
 		if (pushBackDeltaTime >= collisionMovingTime)
 		{
 			isCollisionMoving = false;

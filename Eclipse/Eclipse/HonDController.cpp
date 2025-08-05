@@ -32,7 +32,7 @@ void HonDController::Update()
 		collisionMovingDelta += Time::GetDeltaTime();
 		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
-		// move end
+		// end collidion moving
 		if (collisionMovingDelta >= collisionMovingTime)
 		{
 			isCollisionMoving = false;
@@ -59,9 +59,6 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-
-		// hp
-		hp--;
 	}
 
 	// [hon collision]
@@ -80,9 +77,6 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		otherGameObject->Destroy();
 		this->gameObject->Destroy();
 	}
-
-	// HP Cheak
-	if (hp <= 0) gameObject->Destroy();
 }
 
 /*------------- Functions -------------*/

@@ -39,7 +39,7 @@ void HonCController::Update()
 	}
 	else if (isCollisionMoving)
 	{
-		// collision move
+		// end collidion moving
 		collisionMovingDelta += Time::GetDeltaTime();
 		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 

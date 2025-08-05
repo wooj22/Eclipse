@@ -18,7 +18,6 @@ class HonDController : public Script
 {
 private:
 	// hon stat
-	int hp = 3;
 	float descentSpeed = 150;				// 하강 speed
 	float collisionSpeed = 150;				// 충돌 밀림 speed
 
@@ -56,9 +55,6 @@ public:
 	// get & set
 	void SetDirection(Vector2 dir) { moveDirection = dir; }
 	Vector2 Getdirection() { return moveDirection; }
-
-	void SetHp(int h) { hp = h; }
-	int GetHp() { return hp; }
 
 	// HonC 끌어당기는 함수
 	void HonC_PullMe(Vector2 pos);

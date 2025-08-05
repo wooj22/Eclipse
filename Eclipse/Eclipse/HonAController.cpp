@@ -39,7 +39,7 @@ void HonAController::Update()
 		collisionMovingDelta += Time::GetDeltaTime();
 		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
-		// move end
+		// end collidion moving
 		if (collisionMovingDelta >= collisionMovingTime)
 		{
 			isCollisionMoving = false;
