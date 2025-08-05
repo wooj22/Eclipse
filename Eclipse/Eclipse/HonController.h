@@ -23,8 +23,9 @@ protected:
 	// hon stat
 	int hp = 3;
 	float size = 1;
-	float descentSpeed = 1000;				// 하강 speed
-	float collisionSpeed = 150;				// 충돌 밀림 speed
+	float descentSpeed = 80;						// 하강 speed
+	float collisionSpeed = 1000;					// 충돌 밀림 speed
+	const float collisionSpeedDefalut = 1000;		// 충돌 밀림 기본 speed
 
 	// data
 	float collisionMovingTime = 1.5f;		// 충돌 밀림 지속시간
@@ -63,7 +64,7 @@ public:
 	float GetSize() { return size; }
 
 	// collision move speed
-	void SetSpeedUpRate(float r) { collisionSpeed *= r; }
+	void SetSpeedUpRate(float r) { collisionSpeed = collisionSpeedDefalut * r; }
 
 	// descent speed
 	void SetDescentSpeed(float s) { descentSpeed = s; }
