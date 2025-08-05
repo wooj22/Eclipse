@@ -73,7 +73,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 
 		// hp
-		hp--;
+		TakeDamage();
 	}
 
 	// [hon collision]
