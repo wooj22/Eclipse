@@ -93,15 +93,14 @@ void PlayUI::SceneStart()
 	hon_Text->screenTextRenderer->SetFontSize(50);
 
 	// 스킬1
+	skill1_Text->rectTransform->SetParent(skill1_Image->rectTransform);
+
 	skill1_Image->rectTransform->SetPosition(20, -125);
 	skill1_Image->rectTransform->SetSize(200, 200);
 	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill1.png");
 	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "Skill1");
-
-	/*skill1_Text->rectTransform->SetPosition(-830, -300);
-	skill1_Text->rectTransform->SetSize(100, 50);
-	skill1_Text->screenTextRenderer->SetText(L"x 1");
-	skill1_Text->screenTextRenderer->SetFontSize(50);*/
+	skill1_Text->rectTransform->SetSize(150, 150);
+	skill1_Text->screenTextRenderer->SetFontSize(50);
 
 	// 스킬2
 	skill2_Image->rectTransform->SetPosition(200, -125);
@@ -160,6 +159,7 @@ void PlayUI::Update()
 	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
 	skillHon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
 
+	//TODOMO : 퀘스트 쪽에서 하도록 수정
 	if (waveTimer > 0)
 	{
 		waveTimer -= Time::GetDeltaTime();
@@ -169,10 +169,11 @@ void PlayUI::Update()
 			GameManager::Get().isWave = false;
 			GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);//TODOMO : 퀘스트 완료에 대한 추가 구현
 		}
-		timer_Text->screenTextRenderer->SetText(L"남은 시간: " + std::to_wstring(static_cast<int>(std::floor(waveTimer))));
+		std::wstring timeText = (waveTimer < 10 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(waveTimer)));
+		timer_Text->screenTextRenderer->SetText(timeText);
 	}
 	else if (GameManager::Get().waveCount > 0)
-		timer_Text->screenTextRenderer->SetText(L"웨이브 종료");
+		timer_Text->screenTextRenderer->SetText(L"00");
 
 	if (waveInfo_Text->IsActive())
 	{
@@ -266,8 +267,8 @@ void PlayUI::ClickChatButton() {
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
-	if (GameManager::Get().waveCount > 3) waveTimer = 81;
-	else waveTimer = 71;
+	if (GameManager::Get().waveCount > 3) waveTimer = 80;
+	else waveTimer = 70;
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
 	StartWaveInfo(GameManager::Get().waveCount);
