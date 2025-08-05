@@ -21,7 +21,6 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
     OutputDebugStringA("[Jump_Wall_State] 벽 점프 상태 진입\n");
  
     // 초기화 
-    // canDoubleJump = true;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
     fsm->GetPlayerFSM()->timer = 0.0f;
@@ -66,9 +65,10 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
             fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-doubleJumpXPower, wallJumpForce));
         }
 
+        OutputDebugStringA(" 더블 점프 합니다 \n");
         fsm->GetPlayerFSM()->OnJump(JumpPhase::DoubleJump);
+        fsm->GetPlayerFSM()->canDoubleJump = false;
     }
-    
 
     // [ Hanging ] 
     // 왼쪽으로 튕긴 후, 왼쪽 이동 중이면, 왼쪽벽에 매달리기 
@@ -150,7 +150,7 @@ void Jump_Wall_State::FixedUpdate(MovementFSM* fsm)
     inputX = fsm->GetPlayerFSM()->GetInputX();
     curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
 
-    // 입력이 있는 경우: 목표 속도로 보간
+    // 입력이 있는 경우: 목표 속도로 보간 ()
     if (inputX != 0.0f)
     {
         curVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();

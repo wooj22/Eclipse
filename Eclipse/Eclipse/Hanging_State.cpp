@@ -27,7 +27,7 @@ void Hanging_State::Enter(MovementFSM * fsm)
 void Hanging_State::Update(MovementFSM* fsm)
 {
     // 점프 키 누르면 벽 점프로 전환
-    if (/*GameManager::Get().CheckUnlock(SkillType::WallJump) &&*/ fsm->GetPlayerFSM()->GetIsSpace())
+    if (GameManager::Get().CheckUnlock(SkillType::WallJump) && fsm->GetPlayerFSM()->GetIsSpace() )
     {
         fsm->ChangeState(std::make_unique<Jump_Wall_State>());
         return;
