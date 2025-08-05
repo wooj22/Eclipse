@@ -74,17 +74,17 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		if (gameObject->IsDestroyed()) return;
 
-		// other gameobject
+		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
+		HonController* otherController = otherGameObject->GetComponent<HonController>();
+		//HonType honType = otherController->honType;
 		string honType = otherGameObject->name;
 
-		// ¿¬¼â¹ÝÀÀ C-A
 		if (honType == "HonA")
 		{
 			// hp cheak
 			TakeDamage();
-			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
@@ -95,13 +95,11 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			
 			if (thisX <= otherX) {
 				moveDirection = Vector2::left;
-				HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 				otherController->SetDirection(Vector2::right);
 			}
 			else
 			{
 				moveDirection = Vector2::right;
-				HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 				otherController->SetDirection(Vector2::left);
 			}
 
@@ -112,7 +110,6 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		else if (honType == "HonB")
 		{
 			TakeDamage();
-			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			otherController->TakeDamage();
 		}
 		// ¿¬¼â¹ÝÀÀ C-C
@@ -128,14 +125,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				SpriteRenderer* sr = ob->GetComponent<SpriteRenderer>();
 				if (Camera::GetMainCamera()->IsInView(ob->transform->GetWorldPosition(), sr->boundSize))
 				{
-					if (ob->name == "HonA")
-						ob->GetComponent<HonAController>()->HonC_PullMe(pullingPos);
-					else if (ob->name == "HonB")
-						ob->GetComponent<HonBController>()->HonC_PullMe(pullingPos);
-					else if (ob->name == "HonC" && ob != this->gameObject && ob != otherGameObject)
-						ob->GetComponent<HonCController>()->HonC_PullMe(pullingPos);
-					else if (ob->name == "HonD")
-						ob->GetComponent<HonDController>()->HonC_PullMe(pullingPos);
+					ob->GetComponent<HonController>()->HonC_PullMe(pullingPos);
 				}
 			}
 

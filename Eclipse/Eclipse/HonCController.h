@@ -13,6 +13,8 @@ class HonCController : public HonController
 public:
 	HonCController()
 	{
+		honType = HonType::C;
+
 		hp = 3;
 		size = 1;
 		descentSpeed = 80;

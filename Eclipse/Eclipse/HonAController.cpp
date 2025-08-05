@@ -72,25 +72,25 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		if (gameObject->IsDestroyed()) return;
 
-		// other gameobject
+		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
-		string honType = otherGameObject->name;
+		HonController* otherController = otherGameObject->GetComponent<HonController>();
+		HonType honType = otherController->honType;
 
-		// 연쇄반응 A-A
-		if (honType == "HonA")
+		switch (honType)
 		{
+		case HonType::A:		// 연쇄반응 A-A
 			// hp cheak
 			TakeDamage();
-			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
-			
+
 			// collision move start
 			// Size를 기준으로 합체 주체 결정
 			if (size >= otherController->GetSize())
 			{
-				if(!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
+				if (!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
 				SetSize(size * 1.4);
 				CollisionEnd();
 				SetDescentSpeed(descentSpeed * 0.6);
@@ -104,13 +104,11 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherController->SetHp(1);
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
-		}
-		// 연쇄반응 A-B
-		else if (honType == "HonB")
-		{
+			break;
+
+		case HonType::B:		// 연쇄반응 A-B
 			// hp cheak
 			TakeDamage();
-			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
@@ -119,6 +117,10 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->SetDirection((otherGameObject->transform->GetWorldPosition() - tr->GetWorldPosition()).Normalized());
 			CollisionStart();
 			otherController->CollisionStart();
+			break;
+
+		default:
+			break;
 		}
 	}
 }

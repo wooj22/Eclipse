@@ -13,6 +13,8 @@ class HonDController : public HonController
 public:
 	HonDController()
 	{
+		honType = HonType::D;
+
 		hp = 1;
 		size = 1;
 		descentSpeed = 150;

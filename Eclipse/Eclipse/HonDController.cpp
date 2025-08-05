@@ -61,28 +61,14 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		if (gameObject->IsDestroyed()) return;
 
-		// other gameobject
+		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
 		// destroy
-		if (honType == "HonA")
-		{
-			otherGameObject->GetComponent<HonAController>()->TakeDamage();
-		}
-		else if(honType == "HonB")
-		{
-			otherGameObject->GetComponent<HonBController>()->TakeDamage();
-		}
-		else if (honType == "HonC")
-		{
-			otherGameObject->GetComponent<HonCController>()->TakeDamage();
-		}
-		else if(honType == "HonD")
-		{
-			otherGameObject->Destroy();
-		}
+		if(honType == "HonD") otherGameObject->Destroy();
+		else otherGameObject->GetComponent<HonController>()->TakeDamage();
 		this->gameObject->Destroy();
 	}
 }

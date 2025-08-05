@@ -71,7 +71,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		if (gameObject->IsDestroyed()) return;
 
-		// other gameobject
+		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;

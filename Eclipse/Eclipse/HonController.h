@@ -6,10 +6,18 @@
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 
-/* Hon A, B, C, D Controller Base */
+/* Hon Type Enum */
+enum class HonType
+{
+	A,B,C,D, NONE
+};
 
+/* Hon A, B, C, D Controller Base */
 class HonController : public Script
 {
+public:
+	HonType honType = HonType::NONE;
+
 protected:
 	// hon stat
 	int hp = 3;
@@ -40,12 +48,6 @@ protected:
 	CircleCollider* collider = nullptr;
 
 public:
-	/*void Awake() override {
-		tr = gameObject->transform;
-		collider = gameObject->GetComponent<CircleCollider>();
-		playerTr = GameObject::Find("Player")->GetComponent<Transform>();
-	}*/
-
 	// direction
 	void SetDirection(Vector2 dir) { moveDirection = dir; }
 	Vector2 Getdirection() { return moveDirection; }
