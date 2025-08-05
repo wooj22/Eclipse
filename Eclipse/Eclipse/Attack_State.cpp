@@ -24,7 +24,9 @@ void Attack_State::Enter(MovementFSM* fsm)
     OutputDebugStringA(dbg.c_str());
 
     // 애니메이션 재생 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", true);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", true);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", true);
+
 
     // [ 공격 이동 ] 
     startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
@@ -92,12 +94,12 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
 
 void Attack_State::Exit(MovementFSM* fsm)
 {
-    // fsm->GetPlayerFSM()->UseAttack(); // 공격 차감 
     fsm->GetPlayerFSM()->OnAirAttack();
 
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", false);
 }

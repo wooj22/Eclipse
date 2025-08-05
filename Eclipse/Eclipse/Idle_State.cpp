@@ -29,9 +29,8 @@ void Idle_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // 움직임이 있었다면 정지 
 
     // 애니메이션 재생
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
-    // if(!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
-    // else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", true);
+    if(!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
+    else { OutputDebugStringA("Y_Player_Idle 재생합니다 \n"); fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", true); }
 }
 
 void Idle_State::Update(MovementFSM* fsm)

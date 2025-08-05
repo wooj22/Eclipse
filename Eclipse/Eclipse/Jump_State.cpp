@@ -38,7 +38,9 @@ void Jump_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
 
     // 애니메이션 재생
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", true);
+
 }
 
 void Jump_State::Update(MovementFSM* fsm)
@@ -161,5 +163,6 @@ void Jump_State::Exit(MovementFSM* fsm)
     //    canDoubleJump = true;  // 착지 시 더블 점프를 할 수 있도록 설정
     //}
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 }

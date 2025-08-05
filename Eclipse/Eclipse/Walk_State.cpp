@@ -23,7 +23,9 @@ void Walk_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->isHolding = false;
     fsm->GetPlayerFSM()->timer = 0.0f;
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Walk", true);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Walk", true);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Walk", true);
+
 }
 
 void Walk_State::Update(MovementFSM* fsm)
@@ -77,5 +79,6 @@ void Walk_State::FixedUpdate(MovementFSM* fsm)
 
 void Walk_State::Exit(MovementFSM* fsm)
 {
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Walk", false);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Walk", false);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Walk", false);
 }

@@ -195,7 +195,7 @@ public:
 	void ResetDashCooldown();
 
 	// Q Èí¼ö 
-	bool isAbsorbSkillActive = false;
+	bool isAbsorbSkillActive = true;
 	float absorbCooldown = 5.0f;		// ÄðÅ¸ÀÓ 
 	float absorbCooldownTimer = 0.0f;
 	float absorbRange = 300.0f;			// Èí¼ö ¹üÀ§ 

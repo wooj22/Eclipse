@@ -21,7 +21,9 @@ void Hanging_State::Enter(MovementFSM * fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0.0f;
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", true);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", true);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Hanging", true);
+
 }
 
 void Hanging_State::Update(MovementFSM* fsm)
@@ -68,5 +70,6 @@ void Hanging_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = 80;
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", false);
+    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", false);
+    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Hanging", false);
 }

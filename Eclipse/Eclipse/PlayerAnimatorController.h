@@ -131,10 +131,10 @@ public:
         for (int i = 0; i < frameCount; ++i)
         {
             char filename[256];
-            sprintf_s(filename, "%sIdle_%02d.png", basePath.c_str(), i);
+            sprintf_s(filename, "%sY_Idle_%02d.png", basePath.c_str(), i);
 
             auto texture = ResourceManager::Get().CreateTexture2D(filename);
-            auto sprite = ResourceManager::Get().CreateSprite(texture, "Idle_" + std::to_string(i));
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "Y_Idle_" + std::to_string(i));
 
             AnimationFrame frame;
             frame.sprite = sprite;
@@ -226,6 +226,13 @@ public:
         else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
         else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
         else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+
+        else if (controller->GetBool("Y_Player_Idle") == true)    controller->PlayAnimation("Y_Player_Idle");
+        else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
+        else if (controller->GetBool("Y_Player_Jump") == true)    controller->PlayAnimation("Y_Player_Jump");
+        else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
+        else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
+        else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
     }
     void Exit() override {}
 };
@@ -244,6 +251,12 @@ public:
         else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
         else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
         else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+
+        else if (controller->GetBool("Y_Player_Idle") == true)    controller->PlayAnimation("Y_Player_Idle");
+        else if (controller->GetBool("Y_Player_Jump") == true)    controller->PlayAnimation("Y_Player_Jump");
+        else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
+        else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
+        else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
     }
     void Exit() override {}
 };
@@ -263,6 +276,12 @@ public:
         else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
         else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
         // else if (controller->GetBool("N_Player_Fall") == true)  controller->PlayAnimation("N_Player_Jump");
+
+        else if (controller->GetBool("Y_Player_Idle") == true)         controller->PlayAnimation("Y_Player_Idle");
+        else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
+        else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
+        else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
+        else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
     }
     void Exit() override {}
 };
@@ -282,6 +301,12 @@ public:
         else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
         else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
         // else if (controller->GetBool("N_Player_Fall") == true)  controller->PlayAnimation("N_Player_Jump");
+
+        else if (controller->GetBool("Y_Player_Idle") == true)         controller->PlayAnimation("Y_Player_Idle");
+        else if (controller->GetBool("Y_Player_Jump") == true)    controller->PlayAnimation("Y_Player_Jump");
+        else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
+        else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
+        else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
     }
     void Exit() override {}
 };
@@ -320,6 +345,13 @@ public:
         else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
         else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
         else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+
+        else if (controller->GetBool("Y_Player_Idle") == true)         controller->PlayAnimation("Y_Player_Idle");
+        else if (controller->GetBool("Y_Player_Jump") == true)    controller->PlayAnimation("Y_Player_Jump");
+        else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
+        else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
+        else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
+        else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
     }
     void Exit() override {}
 };
@@ -338,6 +370,12 @@ public:
         else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
         else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
         else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+
+        else if (controller->GetBool("Y_Player_Idle") == true)         controller->PlayAnimation("Y_Player_Idle");
+        else if (controller->GetBool("Y_Player_Jump") == true)    controller->PlayAnimation("Y_Player_Jump");
+        else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
+        else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
+        else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
     }
     void Exit() override {}
 };
@@ -359,6 +397,12 @@ public:
         else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
         else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
         else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
+
+        else if (controller->GetBool("N_Player_Walk") == true)         controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
     }
     void Exit() override {}
 };
@@ -377,6 +421,12 @@ public:
         else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
         else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
         else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
+
+        else if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
     }
     void Exit() override {}
 };
@@ -395,6 +445,13 @@ public:
         else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
         else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
         else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
+
+        else if (controller->GetBool("N_Player_Idle") == true)    controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+        // else if (controller->GetBool("N_Player_Fall") == true)  controller->PlayAnimation("N_Player_Jump");
     }
     void Exit() override {}
 };
@@ -413,6 +470,13 @@ public:
         else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
         else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
         else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
+
+        else if (controller->GetBool("N_Player_Idle") == true)    controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+        // else if (controller->GetBool("N_Player_Fall") == true)  controller->PlayAnimation("N_Player_Jump");
     }
     void Exit() override {}
 };
@@ -432,6 +496,13 @@ public:
         else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
         else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
         else if (controller->GetBool("Y_Player_Attack") == true)  controller->PlayAnimation("Y_Player_Attack");
+
+        else if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
     }
     void Exit() override {}
 };
@@ -450,6 +521,12 @@ public:
         else if (controller->GetBool("Y_Player_Dash") == true)    controller->PlayAnimation("Y_Player_Dash");
         else if (controller->GetBool("Y_Player_Walk") == true)    controller->PlayAnimation("Y_Player_Walk");
         else if (controller->GetBool("Y_Player_Hanging") == true) controller->PlayAnimation("Y_Player_Hanging");
+
+        else if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
     }
     void Exit() override {}
 };
