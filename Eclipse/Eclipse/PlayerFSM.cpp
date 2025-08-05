@@ -191,14 +191,12 @@ void PlayerFSM::OnJump(JumpPhase jumpType)
 bool PlayerFSM::CanAttack()
 {
 	// 땅에 있으면 언제나 가능
-	if (GetIsGround())
-		return true;
+	if (GetIsGround())	return true;
 
 	// 공중에서는 점프 종류 중 하나라도 true면 공격 가능
 	for (const auto& pair : canAttackAfterJump)
 	{
-		if (pair.second)
-			return true;
+		if (pair.second) return true;
 	}
 
 	return false;

@@ -91,7 +91,7 @@ void Fall_State::Update(MovementFSM* fsm)
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
         }
     }
-    else
+    else if (fsm->GetPlayerFSM()->CanAttack())
     {
         // [ Attack ]
         if (fsm->GetPlayerFSM()->CanAttack() &&
