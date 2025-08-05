@@ -212,7 +212,7 @@ void BossController::Die()
 /*-----------------  trigger event  -----------------*/ 
 void BossController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
-	if (other->gameObject->tag == "Goal")
+	if (other->gameObject->tag == "EndLine")
 	{
 		isGoal = true;
 		// TODO :: GameManager 게임 오버 전달

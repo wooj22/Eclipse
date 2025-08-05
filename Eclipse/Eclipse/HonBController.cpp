@@ -1,6 +1,7 @@
 #include "HonBController.h"
 #include "HonB.h"
 #include "HonAController.h"
+#include "BossController.h"
 
 /*------------- Cycle  -------------*/
 void HonBController::Awake()
@@ -66,6 +67,19 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 		TakeDamage();
+	}
+
+	// [endline collision]
+	if (other->gameObject->tag == "EndLine")
+	{
+		gameObject->Destroy();
+	}
+
+	// [boss collision]
+	if (other->gameObject->tag == "Boss")
+	{
+		other->gameObject->GetComponent<BossController>()->TakeDamage(1);
+		gameObject->Destroy();
 	}
 
 	// [hon collision]

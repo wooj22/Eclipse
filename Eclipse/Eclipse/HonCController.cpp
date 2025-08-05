@@ -2,6 +2,7 @@
 #include "HonAController.h"
 #include "HonBController.h"
 #include "HonDController.h"
+#include "BossController.h"
 #include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 
@@ -69,6 +70,19 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 		TakeDamage();
+	}
+
+	// [endline collision]
+	if (other->gameObject->tag == "EndLine")
+	{
+		gameObject->Destroy();
+	}
+
+	// [boss collision]
+	if (other->gameObject->tag == "Boss")
+	{
+		other->gameObject->GetComponent<BossController>()->TakeDamage(1);
+		gameObject->Destroy();
 	}
 
 	// [hon collision]

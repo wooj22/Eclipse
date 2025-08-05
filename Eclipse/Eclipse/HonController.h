@@ -5,6 +5,7 @@
 #include "../Direct2D_EngineLib/Vector2.h"
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
+#include "GameManager.h"
 
 /* Hon Type Enum */
 enum class HonType
