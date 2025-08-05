@@ -3,6 +3,7 @@
 #include "../Direct2D_EngineLib/UI_Image.h"
 #include"../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/GameObject.h"
+#include "Options.h"
 
 class TitleUI : public GameObject
 {
@@ -14,6 +15,8 @@ public:
 	UI_Button* end_Button;
 	UI_Image* underscore_Image;
 	std::vector<UI_Button*> menuButtons;
+
+	Options* optionUI;
 
 	// hover event check
 	UI_Button* currentHoverButton = nullptr;
@@ -36,6 +39,7 @@ public:
 	void Destroyed() override;
 	void OnPointEnterButton(UI_Button* parent);
 	void OnPointExitButton(UI_Button* prevButton);
+	void OpenOptionUI();
 };
 
 
