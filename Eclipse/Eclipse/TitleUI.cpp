@@ -76,9 +76,9 @@ void TitleUI::OnPointEnterButton(UI_Button* parent)
 	underscore_Image->rectTransform->SetParent(parent->rectTransform);
 }
 
-void TitleUI::OnPointExitButton(UI_Button* currButton)
+void TitleUI::OnPointExitButton(UI_Button* prevButton)
 {
-	if(currentHoverButton == currButton)
+	if(currentHoverButton == prevButton)
 		underscore_Image->SetActive(false);
 }
 

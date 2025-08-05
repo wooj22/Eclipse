@@ -35,7 +35,7 @@ public:
 	// Scene¿« Exit, GameObject Delete
 	void Destroyed() override;
 	void OnPointEnterButton(UI_Button* parent);
-	void OnPointExitButton(UI_Button* currButton);
+	void OnPointExitButton(UI_Button* prevButton);
 };
 
 
