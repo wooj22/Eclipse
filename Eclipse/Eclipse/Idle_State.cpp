@@ -26,8 +26,7 @@ void Idle_State::Enter(MovementFSM* fsm)
 
     fsm->GetPlayerFSM()->OnGround();  // 모든 공격 기회 리셋
 
-    // fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // 움직임이 있었다면 정지 
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0);
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0);  // 움직임이 있었다면 정지 
 
     // 애니메이션 재생
     if(!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
@@ -43,6 +42,7 @@ void Idle_State::Update(MovementFSM* fsm)
     {
         fsm->GetPlayerFSM()->canDoubleJump = true;
         fsm->GetPlayerFSM()->canHanging = true;
+        fsm->GetPlayerFSM()->canFallAttack = true;
     }
 
     // [ Jump ]
@@ -98,8 +98,6 @@ void Idle_State::FixedUpdate(MovementFSM* fsm) {}
 
 void Idle_State::Exit(MovementFSM* fsm)
 {
-   // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
-
    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", false);
 }

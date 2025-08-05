@@ -82,6 +82,8 @@ private:
 	PlayerAttackArea* playerAttackArea = nullptr;
 	GameObject* playerAttackParent = nullptr;
 
+	GameObject* targetHon = nullptr;
+
 public:
 	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 
 	float holdTime = 0.0f;
@@ -89,7 +91,9 @@ public:
 
 	bool canDoubleJump = false;             // 다시 땅 밟기 전까지 더블점프는 한번만 가능 
 	bool canHanging = false;				// 다시 땅 밟기 전까지 매달리기는 한번만 가능 
-	bool isHolding = false;
+	bool canFallAttack = false;				// 다시 땅 밟기 전까지 공중에서 공격 가능 
+
+ 	bool isHolding = false;
 
 	const float bulletTimeThreshold = 0.4f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
@@ -195,7 +199,7 @@ public:
 	void ResetDashCooldown();
 
 	// Q 흡수 
-	// bool isAbsorbSkillActive = false;
+	bool isAbsorbSkillActive = false;
 	float absorbCooldown = 5.0f;		// 쿨타임 
 	float absorbCooldownTimer = 0.0f;
 	float absorbRange = 300.0f;			// 흡수 범위 
@@ -222,5 +226,8 @@ private:
 
 	// [ Animator State ]
 	void UpdateCurrentAnimationByReleaseState();
+
+	// [ Q Skill ]
+	void AttractionTargetHon();
 };
 
