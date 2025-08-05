@@ -78,10 +78,11 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
-		//HonType honType = otherController->honType;
-		string honType = otherGameObject->name;
+		HonType honType = otherController->honType;
 
-		if (honType == "HonA")
+		switch (honType)
+		{
+		case HonType::A:		// 연쇄 반응 C-A
 		{
 			// hp cheak
 			TakeDamage();
@@ -92,7 +93,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
 			float otherX = otherGameObject->transform->GetWorldPosition().x;
-			
+
 			if (thisX <= otherX) {
 				moveDirection = Vector2::left;
 				otherController->SetDirection(Vector2::right);
@@ -105,15 +106,15 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 			otherController->CollisionStart();
 			CollisionStart();
+			break;
 		}
-		// 연쇄반응 C-B
-		else if (honType == "HonB")
+		case HonType::B:		// 연쇄 반응 C-B
 		{
 			TakeDamage();
 			otherController->TakeDamage();
+			break;
 		}
-		// 연쇄반응 C-C
-		else if (honType == "HonC")
+		case HonType::C:		// 연쇄 반응 C-C
 		{
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();
@@ -131,6 +132,10 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 			if (!other->gameObject->IsDestroyed()) other->gameObject->Destroy();
 			gameObject->Destroy();
+			break;
+		}
+		default:
+			break;
 		}
 	}
 }

@@ -74,10 +74,9 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
-		string honType = otherGameObject->name;
 
 		// ¿¬¼â¹ÝÀÀ B-B
-		if (honType == "HonB")
+		if (otherGameObject->name == "HonB")
 		{
 			// hp cheak
 			TakeDamage();
