@@ -4,6 +4,8 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
+#include "../Direct2D_EngineLib/Animator.h"
+#include "HonAAnimatorController.h"
 #include "HonAController.h"
 
 /* Ignis ∫“¿« »•*/
@@ -16,7 +18,11 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
+	Animator* animator;
 	HonAController* controller;
+
+	// animator controller asset
+	HonAAnimatorController* animatorController;
 
 	HonA() : GameObject("HonA", "Hon")		// name, tag
 	{
@@ -25,11 +31,13 @@ public:
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
 		controller = AddComponent<HonAController>();
+		animator = AddComponent<Animator>();
+
+		// animator
+		animatorController = new HonAAnimatorController();
+		animator->SetController(animatorController);
 
 		// renderer set
-		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/HonA.png");
-		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "HonA");
-		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->renderMode = RenderMode::Lit_Glow;
 		spriteRenderer->layer = 11;
 
@@ -39,6 +47,11 @@ public:
 		collider->isTrigger = true;
 		collider->offset = { 0, -5 };
 		collider->radius = 40;
+	}
+
+	~HonA() 
+	{
+		delete animatorController;
 	}
 
 	void Update() override
