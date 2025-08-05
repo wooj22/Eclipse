@@ -10,10 +10,12 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Camera.h"
 
+#include "Dash_State.h"
+
 #include "GameManager.h"
 #include "PlayUI.h"
 #include "Chat.h"
-#include "Dash_State.h"
+// #include "HonController.h"
 
 
 // 컴포넌트 활성화 시점
@@ -70,7 +72,6 @@ void PlayerFSM::Update()
 	if (isQ) { TryUseAbsorb(); }
 	if (isE) { TryUseRelease(); }
 
-
 	movementFSM->Update();
 
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
@@ -81,6 +82,8 @@ void PlayerFSM::Update()
 
 	UpdateDashCooldown(); // dash 쿨타임 업데이트
 
+	// if (isAbsorbSkillActive) AttractionTargetHon(); // [ Q 스킬 상태 ]: 타겟 혼이 플레이어 쪽으로 작아지면서 다가오기
+	
 	// [ FSM 상태 ] 
 	//MovementStateBase* currentState = playerFSM->GetMovementFSM()->GetCurrentState();
 	//if (currentState)
@@ -265,13 +268,16 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 {
 	if (!CanUseAbsorb()){ OutputDebugStringA("[Skill] Q 흡수 실패 - 쿨타임 또는 이미 보유\n"); return; }
 
-	GameObject* soul = FindNearestSoulInRange(absorbRange); // 범위 내의 혼 찾기 
-	//std::string debugStr = "[PlayerFSM] Absorb Hunmon's tag = " + soul->tag + "\n";
+	targetHon = FindNearestSoulInRange(absorbRange); // 범위 내의 혼 찾기 
+	//std::string debugStr = "[PlayerFSM] Absorb Hunmon's tag = " + targetHon->tag + "\n";
 	//OutputDebugStringA(debugStr.c_str());
 
-	if (soul)
+	if (targetHon)
 	{
-		soul->Destroy(); // 흡수(제거)
+		// soul->GetComponent<HonController>().Absorption(); // 흡수 시작할 때 호출 
+		targetHon->Destroy(); // 흡수(제거)
+
+		isAbsorbSkillActive = true; // 혼 끌어당기기 시작 
 		hasAbsorbedSoul = true;
 		isReleaseSkillAvailable = true;
 		absorbCooldownTimer = absorbCooldown;
@@ -334,6 +340,37 @@ GameObject* PlayerFSM::FindNearestSoulInRange(float range)
 		}
 	}
 	return closestSoul;
+}
+
+void PlayerFSM::AttractionTargetHon()
+{
+	if (isAbsorbSkillActive)
+	{
+		// 타겟 혼이 플레이어 쪽으로 다가오기
+		Vector2 targetPosition = this->transform->GetPosition();
+		Vector2 currentPosition = targetHon->GetComponent<Transform>()->GetPosition();
+
+		// 혼 - 플레이어 쪽으로 이동 
+		float speed = 5.0f;
+		Vector2 newPosition = Vector2::Lerp(currentPosition, targetPosition, speed * Time::GetDeltaTime());
+		targetHon->GetComponent<Transform>()->SetPosition(newPosition);
+
+		// 혼의 크기 줄어듦 
+		float scaleSpeed = 0.1f; // 크기 감소 속도
+		Vector2 currentScale = targetHon->GetComponent<Transform>()->GetScale();
+
+		Vector2 newScale = Vector2(
+			currentScale.x - scaleSpeed * Time::GetDeltaTime(),
+			currentScale.y - scaleSpeed * Time::GetDeltaTime()
+		);
+
+		// 최소 크기 제한 (Scale이 0 미만 X)
+		if (newScale.x < 0.1f) newScale.x = 0.1f;
+		if (newScale.y < 0.1f) newScale.y = 0.1f;
+
+		// 크기 업데이트
+		targetHon->GetComponent<Transform>()->SetScale(newScale);
+	}
 }
 
 void PlayerFSM::UpdateSkillCooldowns()

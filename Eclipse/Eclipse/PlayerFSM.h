@@ -82,6 +82,8 @@ private:
 	PlayerAttackArea* playerAttackArea = nullptr;
 	GameObject* playerAttackParent = nullptr;
 
+	GameObject* targetHon = nullptr;
+
 public:
 	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 
 	float holdTime = 0.0f;
@@ -197,7 +199,7 @@ public:
 	void ResetDashCooldown();
 
 	// Q 흡수 
-	// bool isAbsorbSkillActive = false;
+	bool isAbsorbSkillActive = false;
 	float absorbCooldown = 5.0f;		// 쿨타임 
 	float absorbCooldownTimer = 0.0f;
 	float absorbRange = 300.0f;			// 흡수 범위 
@@ -224,5 +226,8 @@ private:
 
 	// [ Animator State ]
 	void UpdateCurrentAnimationByReleaseState();
+
+	// [ Q Skill ]
+	void AttractionTargetHon();
 };
 
