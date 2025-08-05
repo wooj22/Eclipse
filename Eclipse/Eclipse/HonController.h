@@ -61,6 +61,9 @@ public:
 	}
 	float GetSize() { return size; }
 
+	// collision move speed
+	void SetSpeedUpRate(float r) { collisionSpeed *= r; }
+
 	// descent speed
 	void SetDescentSpeed(float s) { descentSpeed = s; }
 	float GetSDescentpeed() { return descentSpeed; }
