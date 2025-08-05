@@ -24,7 +24,7 @@ void Attack_State::Enter(MovementFSM* fsm)
     OutputDebugStringA(dbg.c_str());
 
     // 애니메이션 재생 
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", true);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", true);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", true);
 
 
@@ -100,6 +100,6 @@ void Attack_State::Exit(MovementFSM* fsm)
 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
 
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", false);
 }

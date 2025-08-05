@@ -176,15 +176,16 @@ void PlayerFSM::OnGround()
 
 void PlayerFSM::OnJump(JumpPhase jumpType)
 {
+	// 점프 공격 해금 유무 
 	if (!GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra))
 	{
 		// 전부 false로 초기화
-		for (auto& pair : canAttackAfterJump)
-			pair.second = false;
+		for (auto& pair : canAttackAfterJump) pair.second = false;
 	}
 
 	// 해당 점프만 true로 설정
 	canAttackAfterJump[jumpType] = true;
+
 }
 
 bool PlayerFSM::CanAttack()
@@ -261,7 +262,7 @@ float PlayerFSM::GetAttackRangeBonus() const
 	}
 }
 
-// Q E skill 
+// [ Q E skill ]
 void PlayerFSM::TryUseAbsorb() // [ 흡수 ] 
 {
 	if (!CanUseAbsorb()){ OutputDebugStringA("[Skill] Q 흡수 실패 - 쿨타임 또는 이미 보유\n"); return; }
@@ -276,6 +277,9 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 		hasAbsorbedSoul = true;
 		isReleaseSkillAvailable = true;
 		absorbCooldownTimer = absorbCooldown;
+
+		// UpdateCurrentAnimationByReleaseState(); // 애니메이션 바로 전환 
+
 		OutputDebugStringA("[Skill] Q 흡수 성공 - 영혼 저장됨\n");
 	}
 	else
@@ -292,9 +296,9 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 		return;
 	}
 
-	// 1. Honmun 탐색 및 제거 : 일단 냅다 다 삭제할게유! 추후 점수제로 변경 필요 
+	// Honmun 탐색 & 제거 : 일단 냅다 다 삭제할게유! 추후 점수제로 변경 필요 
 	int removedCount = 0;
-	for (auto* obj : GameObject::FindAll("Honmun"))
+	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
 		if (!obj) continue;
 
@@ -306,12 +310,12 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 		}
 	}
 
-	// 2. 상태 리셋
+	// 상태 리셋
 	hasAbsorbedSoul = false;
 	isReleaseSkillAvailable = false;
 
-	// 3. 이펙트 발동 
-	// PerformReleaseEffect(); // 범위 이펙트, 데미지 
+	// 이펙트 발동 
+	// HonReleaseEffect(); // 범위 이펙트, 데미지 
 
 	std::string debugStr = "[Skill] E 방출 성공 - " + std::to_string(removedCount) + "개 혼 제거됨\n";
 	OutputDebugStringA(debugStr.c_str());
@@ -322,7 +326,7 @@ GameObject* PlayerFSM::FindNearestSoulInRange(float range)
 	GameObject* closestSoul = nullptr;
 	float closestDist = FLT_MAX;
 
-	for (auto* obj : GameObject::FindAll("Honmun"))
+	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist < range && dist < closestDist)
@@ -405,5 +409,34 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 		isWall = false;
 		if (contact.normal.x == 1)   isWallLeft = false;
 		if (contact.normal.x == -1)  isWallRight = false;
+	}
+}
+
+
+// --- Animator State ----
+void PlayerFSM::UpdateCurrentAnimationByReleaseState()
+{
+	auto anim = GetAnimatorController();
+
+	// 현재 어떤 애니메이션 Bool이 활성화되어 있는지 확인
+	if (isReleaseSkillAvailable)
+	{
+		// 흡수된 상태이므로 Y_Player_ 애니메이션으로 전환
+		if (anim->GetBool("N_Player_Idle")) { anim->SetBool("N_Player_Idle", false); anim->SetBool("Y_Player_Idle", true); }
+		else if (anim->GetBool("N_Player_Walk")) { anim->SetBool("N_Player_Walk", false); anim->SetBool("Y_Player_Walk", true); }
+		else if (anim->GetBool("N_Player_Jump")) { anim->SetBool("N_Player_Jump", false); anim->SetBool("Y_Player_Jump", true); }
+		else if (anim->GetBool("N_Player_Dash")) { anim->SetBool("N_Player_Dash", false); anim->SetBool("Y_Player_Dash", true); }
+		else if (anim->GetBool("N_Player_Hanging")) { anim->SetBool("N_Player_Hanging", false); anim->SetBool("Y_Player_Hanging", true); }
+		else if (anim->GetBool("N_Player_Attack")) { anim->SetBool("N_Player_Attack", false); anim->SetBool("Y_Player_Attack", true); }
+	}
+	else
+	{
+		// 방출 상태 또는 초기 상태 → N_Player_ 애니메이션으로 전환
+		if (anim->GetBool("Y_Player_Idle")) { anim->SetBool("Y_Player_Idle", false); anim->SetBool("N_Player_Idle", true); }
+		else if (anim->GetBool("Y_Player_Walk")) { anim->SetBool("Y_Player_Walk", false); anim->SetBool("N_Player_Walk", true); }
+		else if (anim->GetBool("Y_Player_Jump")) { anim->SetBool("Y_Player_Jump", false); anim->SetBool("N_Player_Jump", true); }
+		else if (anim->GetBool("Y_Player_Dash")) { anim->SetBool("Y_Player_Dash", false); anim->SetBool("N_Player_Dash", true); }
+		else if (anim->GetBool("Y_Player_Hanging")) { anim->SetBool("Y_Player_Hanging", false); anim->SetBool("N_Player_Hanging", true); }
+		else if (anim->GetBool("Y_Player_Attack")) { anim->SetBool("Y_Player_Attack", false); anim->SetBool("N_Player_Attack", true); }
 	}
 }

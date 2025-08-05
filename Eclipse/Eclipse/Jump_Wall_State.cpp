@@ -48,7 +48,7 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
     }
 
     // 애니메이션 재생
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", true);
 }
 
@@ -167,6 +167,6 @@ void Jump_Wall_State::FixedUpdate(MovementFSM* fsm)
 
 void Jump_Wall_State::Exit(MovementFSM* fsm)
 {
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 }

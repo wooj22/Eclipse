@@ -26,7 +26,7 @@ void Fall_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
 
     // 애니메이션 재생
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", true);
 
 }
@@ -43,7 +43,8 @@ void Fall_State::Update(MovementFSM* fsm)
     // [ Jump ] 해금 유무 확인
     if (GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra) &&
         fsm->GetPlayerFSM()->canDoubleJump &&
-        !fsm->GetPlayerFSM()->GetIsGround() &&
+        !fsm->GetPlayerFSM()->GetIsGround() && 
+        !fsm->GetPlayerFSM()->GetIsWall() &&
         fsm->GetPlayerFSM()->GetIsSpace())
     {
         fsm->GetPlayerFSM()->canDoubleJump = false;  // 사용 처리
@@ -52,7 +53,8 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Hanging ]
-    if (!fsm->GetPlayerFSM()->GetIsGround() && GameManager::Get().CheckUnlock(SkillType::WallJump) && fsm->GetPlayerFSM()->canHanging)
+    if (!fsm->GetPlayerFSM()->GetIsGround() && GameManager::Get().CheckUnlock(SkillType::WallJump) 
+        && fsm->GetPlayerFSM()->canHanging)
     {
         if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
         {
@@ -74,6 +76,34 @@ void Fall_State::Update(MovementFSM* fsm)
         fsm->ChangeState(std::make_unique<Dash_State>());
         return;
     }
+
+    // [ Attack / Bullet ]
+    if (fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON))
+    {
+        if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
+
+        fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
+
+        // [ BulletTime ]
+        if (fsm->GetPlayerFSM()->CanAttack() &&
+            fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold)
+        {
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+        }
+    }
+    else
+    {
+        // [ Attack ]
+        if (fsm->GetPlayerFSM()->CanAttack() &&
+            fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold)
+        {
+            fsm->GetPlayerFSM()->OnAirAttack();
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+        }
+
+        // 초기화
+        fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
+    }
 }
 
 void Fall_State::FixedUpdate(MovementFSM* fsm) 
@@ -88,11 +118,26 @@ void Fall_State::FixedUpdate(MovementFSM* fsm)
     inputX = fsm->GetPlayerFSM()->GetInputX();
     curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
 
-    // 입력이 있는 경우: 목표 속도로 보간
-    if (inputX != 0.0f)
+    //// 입력이 있는 경우: 목표 속도로 보간 
+    //if (inputX != 0.0f && !fsm->GetPlayerFSM()->GetIsWall())
+    //{
+    //    float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
+    //    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
+    //}
+    //else
+    //{
+    //    // 입력이 없으면 감속
+    //    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
+    //}
+
+    // 입력이 있는 경우 
+    if (inputX != 0.0f) 
     {
-        float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
-        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
+        if (!fsm->GetPlayerFSM()->GetIsWall()) // 벽이랑 닿지 않았을 때만 보간 
+        {
+            float targetVelX = inputX * fsm->GetPlayerFSM()->GetCurSpeed();
+            fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, targetVelX, Time::GetDeltaTime() * airAcceleration);
+        }
     }
     else
     {
@@ -105,6 +150,6 @@ void Fall_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
 
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 }

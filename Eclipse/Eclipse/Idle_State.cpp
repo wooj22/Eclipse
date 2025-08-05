@@ -26,11 +26,12 @@ void Idle_State::Enter(MovementFSM* fsm)
 
     fsm->GetPlayerFSM()->OnGround();  // 모든 공격 기회 리셋
 
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // 움직임이 있었다면 정지 
+    // fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;         // 움직임이 있었다면 정지 
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0);
 
     // 애니메이션 재생
-    if(!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
-    else { OutputDebugStringA("Y_Player_Idle 재생합니다 \n"); fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", true); }
+    if(!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
+    else { fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", true); }
 }
 
 void Idle_State::Update(MovementFSM* fsm)
@@ -38,7 +39,7 @@ void Idle_State::Update(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
     // DubleJump / Hanging 초기화
-    if (fsm->GetPlayerFSM()->GetIsGround() && (!fsm->GetPlayerFSM()->canDoubleJump || !fsm->GetPlayerFSM()->canHanging))
+    if (fsm->GetPlayerFSM()->GetIsGround())
     {
         fsm->GetPlayerFSM()->canDoubleJump = true;
         fsm->GetPlayerFSM()->canHanging = true;
@@ -99,6 +100,6 @@ void Idle_State::Exit(MovementFSM* fsm)
 {
    // fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
 
-   if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
+   if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", false);
 }

@@ -155,15 +155,15 @@ void Moon_Scene::Awake()
 
 
 	// [ Hon ]
-	//honA1 = CreateObject<HonA>({ -200, -100 });
-	//honA2 = CreateObject<HonA>({ -500, 100 });
-	//honB1 = CreateObject<HonB>({ 0, -100 });
-	//honB2 = CreateObject<HonB>({ 200, 100 });
-	//honC1 = CreateObject<HonC>({ -100, 300 });
-	//honC2 = CreateObject<HonC>({ -200, 300 });
-	//honC3 = CreateObject<HonC>({ -200, 600});
-	//honD1 = CreateObject<HonD>({ 100, 800 });
-	//honD2 = CreateObject<HonD>({ -100, 800 });
+	honA1 = CreateObject<HonA>({ -200, -100 });
+	honA2 = CreateObject<HonA>({ -500, 100 });
+	honB1 = CreateObject<HonB>({ 0, -100 });
+	honB2 = CreateObject<HonB>({ 200, 100 });
+	honC1 = CreateObject<HonC>({ -100, 300 });
+	honC2 = CreateObject<HonC>({ -200, 300 });
+	honC3 = CreateObject<HonC>({ -200, 600});
+	honD1 = CreateObject<HonD>({ 100, 800 });
+	honD2 = CreateObject<HonD>({ -100, 800 });
 }
 
 void Moon_Scene::Start()

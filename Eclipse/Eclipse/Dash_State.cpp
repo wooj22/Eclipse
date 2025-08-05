@@ -37,7 +37,7 @@ void Dash_State::Enter(MovementFSM* fsm)
     }
 
     // 애니메이션
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Dash", true);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Dash", true);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Dash", true);
 
 }
@@ -52,10 +52,8 @@ void Dash_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->SetInvincible(false);  
 
         // 상태 전환
-        if (fsm->GetPlayerFSM()->GetIsGround())
-            fsm->ChangeState(std::make_unique<Idle_State>());
-        else
-            fsm->ChangeState(std::make_unique<Fall_State>());
+        if (fsm->GetPlayerFSM()->GetIsGround()) fsm->ChangeState(std::make_unique<Idle_State>());
+        else fsm->ChangeState(std::make_unique<Fall_State>());
 
         return;
     }
@@ -85,6 +83,6 @@ void Dash_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->ResetDashCooldown(); 
 
     // 애니메이션 종료
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Dash", false);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Dash", false);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Dash", false);
 }

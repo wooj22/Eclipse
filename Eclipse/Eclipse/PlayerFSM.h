@@ -195,14 +195,14 @@ public:
 	void ResetDashCooldown();
 
 	// Q 흡수 
-	bool isAbsorbSkillActive = true;
+	// bool isAbsorbSkillActive = false;
 	float absorbCooldown = 5.0f;		// 쿨타임 
 	float absorbCooldownTimer = 0.0f;
 	float absorbRange = 300.0f;			// 흡수 범위 
 	bool hasAbsorbedSoul = false;       // 저장 여부
 
 	// E 방출 
-	bool isReleaseSkillAvailable = false;
+	bool isReleaseSkillAvailable = false; // 흡수된 혼이 있는가? = 방출 가능한가? 
 	float releaseEffectRange = 400.0f;
 	// float releaseDamage = 3.0f; // 혼 점수제에 따른 데미지 
 
@@ -219,5 +219,8 @@ private:
 	void InputSetting();
 	void SpeedSetting();
 	void FlipXSetting();
+
+	// [ Animator State ]
+	void UpdateCurrentAnimationByReleaseState();
 };
 

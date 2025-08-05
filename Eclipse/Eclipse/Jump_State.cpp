@@ -26,7 +26,7 @@ void Jump_State::Enter(MovementFSM* fsm)
     // fsm->GetPlayerFSM()->canDoubleJump = true;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
-    fsm->GetPlayerFSM()->canHanging = true;
+    // fsm->GetPlayerFSM()->canHanging = true;
     fsm->GetPlayerFSM()->timer = 0.0f;
 
     fsm->GetPlayerFSM()->OnJump(JumpPhase::NormalJump);
@@ -38,7 +38,7 @@ void Jump_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
 
     // 애니메이션 재생
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", true);
 
 }
@@ -72,6 +72,7 @@ void Jump_State::Update(MovementFSM* fsm)
         }
         else if (fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetInputX() > 0.5f)
         {
+
             fsm->GetPlayerFSM()->canHanging = false;
             fsm->ChangeState(std::make_unique<Hanging_State>());
             return;
@@ -163,6 +164,6 @@ void Jump_State::Exit(MovementFSM* fsm)
     //    canDoubleJump = true;  // 착지 시 더블 점프를 할 수 있도록 설정
     //}
 
-    if (!fsm->GetPlayerFSM()->isAbsorbSkillActive) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 }
