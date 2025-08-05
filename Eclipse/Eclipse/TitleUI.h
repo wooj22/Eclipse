@@ -15,6 +15,9 @@ public:
 	UI_Image* underscore_Image;
 	std::vector<UI_Button*> menuButtons;
 
+	// hover event check
+	UI_Button* currentHoverButton = nullptr;
+
 public:
 	// game object cycle
 	TitleUI() {}
@@ -32,7 +35,7 @@ public:
 	// Scene¿« Exit, GameObject Delete
 	void Destroyed() override;
 	void OnPointEnterButton(UI_Button* parent);
-	void OnPointExitButton();
+	void OnPointExitButton(UI_Button* currButton);
 };
 
 

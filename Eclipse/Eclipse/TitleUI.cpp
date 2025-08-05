@@ -13,20 +13,20 @@ void TitleUI::SceneStart()
 	backgroundImage->imageRenderer->sprite = ResourceManager::Get().CreateSprite(title, "TitleBackGround");
 
 	play_Button->rectTransform->SetPosition(0, 100);
-	play_Button->rectTransform->SetSize(200, 90);
+	play_Button->rectTransform->SetSize(200, 100);
 	auto playButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/PlayButton.png");
 	play_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(playButtonTexture, "PlayButton");
 
 	options_Button->rectTransform->SetPosition(0, 0);
-	options_Button->rectTransform->SetSize(200, 90);
+	options_Button->rectTransform->SetSize(200, 100);
 	options_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink,0));
 
 	credit_Button->rectTransform->SetPosition(0, -100);
-	credit_Button->rectTransform->SetSize(200, 90);
+	credit_Button->rectTransform->SetSize(200, 100);
 	credit_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
 	end_Button->rectTransform->SetPosition(0, -200);
-	end_Button->rectTransform->SetSize(200, 90);
+	end_Button->rectTransform->SetSize(200, 100);
 	end_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink,0));
 
 	//TODOMO : 이미지로하면 텍스트는 제거
@@ -55,7 +55,7 @@ void TitleUI::SceneStart()
 		btn->button->onPointEnterListeners.AddListener(
 			this,std::bind(&TitleUI::OnPointEnterButton, this, btn));
 		btn->button->onPointExitListeners.AddListener(
-			this, std::bind(&TitleUI::OnPointExitButton, this));
+			this, std::bind(&TitleUI::OnPointExitButton, this, btn));
 	}
 }
 
@@ -71,12 +71,14 @@ void TitleUI::Destroyed()
 
 void TitleUI::OnPointEnterButton(UI_Button* parent)
 {
+	currentHoverButton = parent;
 	underscore_Image->SetActive(true);
 	underscore_Image->rectTransform->SetParent(parent->rectTransform);
 }
 
-void TitleUI::OnPointExitButton()
+void TitleUI::OnPointExitButton(UI_Button* currButton)
 {
-	underscore_Image->SetActive(false);
+	if(currentHoverButton == currButton)
+		underscore_Image->SetActive(false);
 }
 
