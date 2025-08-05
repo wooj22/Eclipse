@@ -6,6 +6,7 @@
 
 class PlayUI;
 
+enum class ChatCondition { None, Success, Fail };
 
 enum class SkillType {
 	KnockbackDistanceUp,	// 1-1	충돌 비거리 증가	최대 3
