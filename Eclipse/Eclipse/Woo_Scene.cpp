@@ -16,7 +16,8 @@ void Woo_Scene::Awake()
 	title_text->rectTransform->SetSize(500, 100);
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
-	title_text->screenTextRenderer->SetText(L"Woo Scene");
+	title_text->screenTextRenderer->SetText(L"WooScene ´ö¿Â°øÁÖÃ¼");
+	title_text->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
 	//title_text->screenTextRenderer->SetAlpha(0.5);
 
 	// background sample
