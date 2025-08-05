@@ -36,20 +36,19 @@ void PlayScene::Awake()
 	playUI->skill1_Image = CreateObject<UI_Image>();
 	playUI->skill1_Text = CreateObject<UI_Text>();
 	playUI->skill2_Image = CreateObject<UI_Image>();
-	playUI->skill2_Text = CreateObject<UI_Text>();
 	playUI->waveInfo_Text = CreateObject<UI_Text>();
 	playUI->tooltip_Image = CreateObject<UI_Image>();
 
 	playUI->skillWindow_Image = CreateObject<UI_Image>();
-	playUI->skillbutton1 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp);
-	playUI->skillbutton2 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump);
-	playUI->skillbutton3 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump);
-	playUI->skillbutton4 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown);
-	playUI->skillbutton5 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra);
-	playUI->skillbutton6 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall);
-	playUI->skillbutton7 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp);
-	playUI->skillbutton8 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp);
-	playUI->skillbutton9 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash);
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
 	playUI->skillHon_Image = CreateObject<UI_Image>();
 	playUI->skillHon_Text= CreateObject<UI_Text>();
 	
@@ -104,17 +103,17 @@ void PlayScene::Update()
 
 	if (Input::GetKeyDown(VK_F2))
 	{
-		GameManager::Get().AllSkillUnlock(); // 모든 스킬 해금 치트
+		GameManager::Get().honCount += 1; // 혼 치트
 	}
 
 	if (Input::GetKeyDown(VK_F3))
 	{
-
+		GameManager::Get().AllSkillUnlock(); // 모든 스킬 해금 치트
 	}
 
 	if (Input::GetKeyDown(VK_F4))
 	{
-
+		GameManager::Get().SkillReset();
 	}
 }
 

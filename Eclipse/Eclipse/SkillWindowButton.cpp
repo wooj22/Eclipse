@@ -22,8 +22,7 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 	skillColor3_Text->rectTransform->SetParent(this->rectTransform);
 
 	skillIcon_Button->rectTransform->SetSize(100,100); //이미지 크기
-	preRenderMode = RenderMode::UnlitColorTint;
-	skillIcon_Button->imageRenderer->renderMode = preRenderMode;
+	skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 	skillIcon_Button->imageRenderer->SetColor(0.4, 0.4, 0.4);
 }
 
@@ -103,12 +102,9 @@ void SkillWindowButton::Update()
 
 
 		// 먼저 전부 초기화 (FloralWhite)
-		if (prevLevel >= 1)
-			skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-		if (prevLevel >= 2)
-			skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-		if (prevLevel >= 3)
-			skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+		skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+		skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+		skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
 
 		// 현재 레벨 칸만 빨간색
 		if (prevLevel == 1)
@@ -149,16 +145,20 @@ std::wstring SkillWindowButton::ToWString(float value)
 
 void SkillWindowButton::OnClickSkillButton()
 {
-	if (GameManager::Get().LevelUpSkill(skillName) && !GameManager::Get().LevelUpSkill(skillName,true) && skillIcon_Button->imageRenderer->renderMode != RenderMode::Unlit)
+	if (GameManager::Get().LevelUpSkill(skillName))
 	{
-		preRenderMode = RenderMode::Unlit;
-		skillIcon_Button->imageRenderer->renderMode = preRenderMode;
+		// 해금 또는 레벨업 성공 후 다시한번 레벨업 가능한지 체크
+		if (GameManager::Get().LevelUpSkill(skillName, true))
+			isEnterButton = true;
+		else
+			skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
 	}
 }
 
 void SkillWindowButton::OnPointEnterButton()
 {
-	if (GameManager::Get().CanUnlock(skillName)|| GameManager::Get().LevelUpSkill(skillName,true))
+	// 해금 또는 레벨업 가능 체크
+	if (GameManager::Get().CanUnlock(skillName) || GameManager::Get().LevelUpSkill(skillName,true))
 	{
 		skillIcon_Button->imageRenderer->renderMode = RenderMode::Lit_Glow;
 		isEnterButton = true;
@@ -170,7 +170,12 @@ void SkillWindowButton::OnPointExitButton()
 {
 	if (isEnterButton)
 	{
-		skillIcon_Button->imageRenderer->renderMode = preRenderMode;
+		// 해금이 안된 경우 UnlitColorTint로 변경
+		if(GameManager::Get().CanUnlock(skillName))
+			skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+		else
+			skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
+
 		isEnterButton = false;
 	}
 }

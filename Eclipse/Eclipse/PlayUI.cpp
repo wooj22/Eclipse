@@ -80,7 +80,6 @@ void PlayUI::SceneStart()
 	skill1_Image->rectTransform->SetParent(hon_Image->rectTransform);
 	skill1_Text->rectTransform->SetParent(hon_Image->rectTransform);
 	skill2_Image->rectTransform->SetParent(hon_Image->rectTransform);
-	skill2_Text->rectTransform->SetParent(hon_Image->rectTransform);
 
 	// È¥
 	hon_Image->rectTransform->SetPosition(-850, -300);
@@ -110,58 +109,42 @@ void PlayUI::SceneStart()
 	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill2.png");
 	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "Skill2");
 
-	/*skill2_Text->rectTransform->SetPosition(-830, -300);
-	skill2_Text->rectTransform->SetSize(100, 50);
-	skill2_Text->screenTextRenderer->SetText(L"x 1");
-	skill2_Text->screenTextRenderer->SetFontSize(50);*/
+	skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+	skill2_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
 
 	// ½ºÅ³Ã¢ UI
-	skillbutton1->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton2->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton3->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton4->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton5->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton6->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton7->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton8->rectTransform->SetParent(skillWindow_Image->rectTransform);
-	skillbutton9->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	for (auto& skillButton : skillButtons)
+	{
+		skillButton->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	}
 	skillHon_Image->rectTransform->SetParent(skillWindow_Image->rectTransform);
 	skillHon_Text->rectTransform->SetParent(skillWindow_Image->rectTransform);
 
 	skillWindow_Image->SetActive(false);
-	skillWindow_Image->rectTransform->SetSize(1920, 1080);
+	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
 	skillWindow_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowImageTexture, "SkillWindow");
-	auto skillbutton1Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill1.png");
-	skillbutton1->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton1Texture, "Skill1");
-	auto skillbutton2Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill2.png");
-	skillbutton2->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton2Texture, "Skill2");
-	auto skillbutton3Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill3.png");
-	skillbutton3->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton3Texture, "Skill3");
-	auto skillbutton4Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill4.png");
-	skillbutton4->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton4Texture, "Skill4");
-	auto skillbutton5Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill5.png");
-	skillbutton5->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton5Texture, "Skill5");
-	auto skillbutton6Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill6.png");
-	skillbutton6->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton6Texture, "Skill6");
-	auto skillbutton7Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill7.png");
-	skillbutton7->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton7Texture, "Skill7");
-	auto skillbutton8Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill8.png");
-	skillbutton8->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton8Texture, "Skill8");
-	auto skillbutton9Texture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill9.png");
-	skillbutton9->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillbutton9Texture, "Skill9");
+
+	for (int i = 0; i < skillButtons.size(); ++i)
+	{
+		std::string texturePath = "../Resource/mo/Skill" + std::to_string(i + 1) + ".png";
+		std::string spriteName = "Skill" + std::to_string(i + 1);
+
+		auto texture = ResourceManager::Get().CreateTexture2D(texturePath);
+		skillButtons[i]->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(texture, spriteName);
+	}
 	skillHon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
 
-	skillbutton1->rectTransform->SetPosition(0,0);
-	skillbutton2->rectTransform->SetPosition(0,200);
-	skillbutton3->rectTransform->SetPosition(0,400);
-	skillbutton4->rectTransform->SetPosition(-300,0);
-	skillbutton5->rectTransform->SetPosition(-450,200);
-	skillbutton6->rectTransform->SetPosition(-600,400);
-	skillbutton7->rectTransform->SetPosition(300,0);
-	skillbutton8->rectTransform->SetPosition(450,200);
-	skillbutton9->rectTransform->SetPosition(600,400);
+	skillButtons[0]->rectTransform->SetPosition(-50, -50);
+	skillButtons[1]->rectTransform->SetPosition(-50, 100);
+	skillButtons[2]->rectTransform->SetPosition(-50, 250);
+	skillButtons[3]->rectTransform->SetPosition(-450, -200);
+	skillButtons[4]->rectTransform->SetPosition(-450, -50);
+	skillButtons[5]->rectTransform->SetPosition(-450, 100);
+	skillButtons[6]->rectTransform->SetPosition(300, -200);
+	skillButtons[7]->rectTransform->SetPosition(300, -50);
+	skillButtons[8]->rectTransform->SetPosition(300,100);
 
 	skillHon_Image->rectTransform->SetPosition(-100,-250);
 	skillHon_Text->rectTransform->SetPosition(200,-250);
@@ -302,4 +285,20 @@ void PlayUI::StartWaveInfo(int waveNumber)
 	tolltipInfoTimer = 0;
 	tooltip_Image->SetActive(true);
 	tooltip_Image->imageRenderer->SetAlpha(0);
+}
+
+void PlayUI::AllSkillButtonRenderMod()
+{
+	for (auto& skillButton : skillButtons)
+	{
+		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
+	}
+}
+
+void PlayUI::SkillReSetButtonRenderMod()
+{
+	for (auto& skillButton : skillButtons)
+	{
+		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+	}
 }
