@@ -135,7 +135,7 @@ public:
 
         name = "N_Player_Attack";
         loop = true;
-        duration = 1.6f;
+        duration = 1.0f;
 
         const std::string basePath = "../Resource/Moon/Texture/N_Player_Attack/";
         const int frameCount = 20;
@@ -244,9 +244,32 @@ class PlayerWalkClip_Y : public AnimationClip
 public:
     PlayerWalkClip_Y()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Walk.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Walk_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Walk_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Walk.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Walk_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Walk_AniClip.json");
+
+        name = "Y_Player_Walk";
+        loop = true;
+        duration = 1.6f;
+
+        const std::string basePath = "../Resource/Moon/Texture/Y_Player_Walk/";
+        const int frameCount = 20;
+        const float frameTime = duration / frameCount;
+
+        for (int i = 0; i < frameCount; ++i)
+        {
+            char filename[256];
+            sprintf_s(filename, "%sY_Walk (%d).png", basePath.c_str(), i);
+
+            auto texture = ResourceManager::Get().CreateTexture2D(filename);
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "Y_Walk_" + std::to_string(i));
+
+            AnimationFrame frame;
+            frame.sprite = sprite;
+            frame.time = i * frameTime;
+
+            frames.push_back(frame);
+        }
     }
     ~PlayerWalkClip_Y() override {}
 };
@@ -256,9 +279,32 @@ class PlayerJumpClip_Y : public AnimationClip
 public:
     PlayerJumpClip_Y()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Jump.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Jump_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Jump_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Jump.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Jump_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Jump_AniClip.json");
+
+        name = "Y_Player_Jump";
+        loop = true;
+        duration = 1.6f;
+
+        const std::string basePath = "../Resource/Moon/Texture/Y_Player_Jump/";
+        const int frameCount = 20;
+        const float frameTime = duration / frameCount;
+
+        for (int i = 0; i < frameCount; ++i)
+        {
+            char filename[256];
+            sprintf_s(filename, "%sY_Jump (%d).png", basePath.c_str(), i);
+
+            auto texture = ResourceManager::Get().CreateTexture2D(filename);
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "Y_Jump_" + std::to_string(i));
+
+            AnimationFrame frame;
+            frame.sprite = sprite;
+            frame.time = i * frameTime;
+
+            frames.push_back(frame);
+        }
     }
     ~PlayerJumpClip_Y() override {}
 };
@@ -280,9 +326,32 @@ class PlayerAttackClip_Y : public AnimationClip
 public:
     PlayerAttackClip_Y()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Attack.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Attack_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Attack_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Attack.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Attack_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Attack_AniClip.json");
+
+        name = "Y_Player_Attack";
+        loop = true;
+        duration = 1.0f;
+
+        const std::string basePath = "../Resource/Moon/Texture/Y_Player_Attack/";
+        const int frameCount = 20;
+        const float frameTime = duration / frameCount;
+
+        for (int i = 0; i < frameCount; ++i)
+        {
+            char filename[256];
+            sprintf_s(filename, "%sY_Attack (%d).png", basePath.c_str(), i);
+
+            auto texture = ResourceManager::Get().CreateTexture2D(filename);
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "Y_Attack_" + std::to_string(i));
+
+            AnimationFrame frame;
+            frame.sprite = sprite;
+            frame.time = i * frameTime;
+
+            frames.push_back(frame);
+        }
     }
     ~PlayerAttackClip_Y() override {}
 };
@@ -292,9 +361,32 @@ class PlayerDashClip_Y : public AnimationClip
 public:
     PlayerDashClip_Y()
     {
-        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Dash.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Dash_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Dash_AniClip.json");
+        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Dash.png");
+        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Dash_Sprites.json");
+        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Dash_AniClip.json");
+
+        name = "Y_Player_Dash";
+        loop = true;
+        duration = 0.5f;
+
+        const std::string basePath = "../Resource/Moon/Texture/Y_Player_Dash/";
+        const int frameCount = 20;
+        const float frameTime = duration / frameCount;
+
+        for (int i = 0; i < frameCount; ++i)
+        {
+            char filename[256];
+            sprintf_s(filename, "%sY_Dash (%d).png", basePath.c_str(), i);
+
+            auto texture = ResourceManager::Get().CreateTexture2D(filename);
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "Y_Dash_" + std::to_string(i));
+
+            AnimationFrame frame;
+            frame.sprite = sprite;
+            frame.time = i * frameTime;
+
+            frames.push_back(frame);
+        }
     }
     ~PlayerDashClip_Y() override {}
 };
