@@ -1,6 +1,6 @@
 {
     "clipName": "N_Player_Walk",
-    "loop": false,
+    "loop": true,
     "texturePath": "Assets/02. Sprite/Player/N_Player_Walk.png",
     "duration": 1.6666667461395264,
     "frames": [

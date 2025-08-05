@@ -51,7 +51,7 @@
         {
             "name": "N_Player_Attack_5",
             "x": 0.0,
-            "y": 1522.0,
+            "y": 1022.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -60,7 +60,7 @@
         {
             "name": "N_Player_Attack_6",
             "x": 409.0,
-            "y": 1522.0,
+            "y": 1022.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -69,7 +69,7 @@
         {
             "name": "N_Player_Attack_7",
             "x": 818.0,
-            "y": 1522.0,
+            "y": 1022.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -78,7 +78,7 @@
         {
             "name": "N_Player_Attack_8",
             "x": 1227.0,
-            "y": 1522.0,
+            "y": 1022.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -87,7 +87,7 @@
         {
             "name": "N_Player_Attack_9",
             "x": 1636.0,
-            "y": 1522.0,
+            "y": 1022.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -96,7 +96,7 @@
         {
             "name": "N_Player_Attack_10",
             "x": 0.0,
-            "y": 1522.0,
+            "y": 522.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -105,7 +105,7 @@
         {
             "name": "N_Player_Attack_11",
             "x": 409.0,
-            "y": 1522.0,
+            "y": 522.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -114,7 +114,7 @@
         {
             "name": "N_Player_Attack_12",
             "x": 818.0,
-            "y": 1522.0,
+            "y": 522.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -123,7 +123,7 @@
         {
             "name": "N_Player_Attack_13",
             "x": 1227.0,
-            "y": 1522.0,
+            "y": 522.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -132,7 +132,7 @@
         {
             "name": "N_Player_Attack_14",
             "x": 1636.0,
-            "y": 1522.0,
+            "y": 522.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -141,7 +141,7 @@
         {
             "name": "N_Player_Attack_15",
             "x": 0.0,
-            "y": 1522.0,
+            "y": 22.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -150,7 +150,7 @@
         {
             "name": "N_Player_Attack_16",
             "x": 409.0,
-            "y": 1522.0,
+            "y": 22.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -159,7 +159,7 @@
         {
             "name": "N_Player_Attack_17",
             "x": 818.0,
-            "y": 1522.0,
+            "y": 22.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -168,7 +168,7 @@
         {
             "name": "N_Player_Attack_18",
             "x": 1227.0,
-            "y": 1522.0,
+            "y": 22.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,
@@ -177,7 +177,7 @@
         {
             "name": "N_Player_Attack_19",
             "x": 1636.0,
-            "y": 1522.0,
+            "y": 22.0,
             "width": 409.0,
             "height": 478.0,
             "pivotX": 0.5,

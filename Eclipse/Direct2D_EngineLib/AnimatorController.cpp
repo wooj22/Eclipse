@@ -70,6 +70,9 @@ void AnimatorController::ChangeAnimation(AnimationBaseState* state)
 shared_ptr<Sprite> AnimatorController::GetCurrentSprite()
 {
     if (!curState || !curState->clip) return nullptr;
+    auto sprite = curState->clip->frames[currentFrameIndex].sprite;
+    if (!sprite)
+        OutputDebugStringA("currentFrameIndex에 해당하는 sprite가 nullptr입니다.\n");
     return curState->clip->frames[currentFrameIndex].sprite;
 }
 
