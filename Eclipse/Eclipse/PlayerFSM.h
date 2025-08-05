@@ -13,10 +13,11 @@
 
 enum class JumpPhase
 {
-	None,       // 공중에 안뜬 상태
+	// None,       // 공중에 안뜬 상태
 	NormalJump,
 	DoubleJump,
-	WallJump
+	WallJump,
+	COUNT
 };
 
 class Transform;
@@ -87,6 +88,7 @@ public:
 	float timer = 0.0f;
 
 	bool canDoubleJump = false;             // 다시 땅 밟기 전까지 더블점프는 한번만 가능 
+	bool canHanging = false;				// 다시 땅 밟기 전까지 매달리기는 한번만 가능 
 	bool isHolding = false;
 
 	const float bulletTimeThreshold = 0.4f;
@@ -177,9 +179,9 @@ public:
 
 	// jump 
 	void OnGround();
-	void OnJump(JumpPhase jumpType);
-	bool CanAttack();
-	void UseAttack();
+	void OnJump(JumpPhase jumpType);	// 해당 점프 타입만 true, 나머지 false
+	bool CanAttack();					// 공격 가능 조건 판별
+	void OnAirAttack();					// 공격 시 현재 가능한 점프 타입의 플래그 false
 
 	// speed 
 	float GetMoveSpeedBonus() const;

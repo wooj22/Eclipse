@@ -26,7 +26,9 @@ void Jump_State::Enter(MovementFSM* fsm)
     // fsm->GetPlayerFSM()->canDoubleJump = true;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
+    fsm->GetPlayerFSM()->canHanging = true;
     fsm->GetPlayerFSM()->timer = 0.0f;
+
     fsm->GetPlayerFSM()->OnJump(JumpPhase::NormalJump);
 
     // 첫번째 Jump 실행 
@@ -43,16 +45,6 @@ void Jump_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
-    // [ Jump_Wall ]
-    //if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace())
-    //{
-    //    if (fsm->GetPlayerFSM()->GetIsWallLeft() || fsm->GetPlayerFSM()->GetIsWallRight())
-    //    {
-    //        fsm->ChangeState(std::make_unique<Jump_Wall_State>());
-    //        return;
-    //    }
-    //}
-
     // 두번째 Jump 실행 
     if (GameManager::Get().CheckUnlock(SkillType::DoubleJump) && fsm->GetPlayerFSM()->canDoubleJump
         && !fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsSpace()
@@ -68,22 +60,25 @@ void Jump_State::Update(MovementFSM* fsm)
     }
 
     // [ Hanging ]
-    if (!fsm->GetPlayerFSM()->GetIsGround() && GameManager::Get().CheckUnlock(SkillType::WallJump))
+    if (!fsm->GetPlayerFSM()->GetIsGround() && GameManager::Get().CheckUnlock(SkillType::WallJump) && fsm->GetPlayerFSM()->canHanging)
     {
         if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
         {
-            fsm->ChangeState(std::make_unique<Hanging_State>());
+            fsm->GetPlayerFSM()->canHanging = false;
+            fsm->ChangeState(std::make_unique<Hanging_State>()); 
             return;
         }
         else if (fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetInputX() > 0.5f)
         {
+            fsm->GetPlayerFSM()->canHanging = false;
             fsm->ChangeState(std::make_unique<Hanging_State>());
             return;
         }
+       
     }
 
     // [ Attack / Bullet ]
-    if (Input::GetKey(VK_LBUTTON))
+    if (fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON))
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 
@@ -93,7 +88,6 @@ void Jump_State::Update(MovementFSM* fsm)
         if (fsm->GetPlayerFSM()->CanAttack() &&
             fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold)
         {
-            // fsm->GetPlayerFSM()->UseAttack();  // 공격 기회 사용
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
         }
     }
@@ -103,7 +97,7 @@ void Jump_State::Update(MovementFSM* fsm)
         if (fsm->GetPlayerFSM()->CanAttack() &&
             fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold)
         {
-            // fsm->GetPlayerFSM()->UseAttack();  // 공격 기회 사용
+            fsm->GetPlayerFSM()->OnAirAttack();
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
         }
 

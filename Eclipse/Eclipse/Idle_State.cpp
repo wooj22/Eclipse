@@ -36,10 +36,11 @@ void Idle_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
 
-    // DubleJump 초기화
-    if (fsm->GetPlayerFSM()->GetIsGround() && !fsm->GetPlayerFSM()->canDoubleJump)
+    // DubleJump / Hanging 초기화
+    if (fsm->GetPlayerFSM()->GetIsGround() && (!fsm->GetPlayerFSM()->canDoubleJump || !fsm->GetPlayerFSM()->canHanging))
     {
         fsm->GetPlayerFSM()->canDoubleJump = true;
+        fsm->GetPlayerFSM()->canHanging = true;
     }
 
     // [ Jump ]

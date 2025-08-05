@@ -29,6 +29,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
     if (Input::GetKeyUp(VK_LBUTTON))
     {
         Time::SetTimeScale(1.0f); 
+        fsm->GetPlayerFSM()->OnAirAttack();
         fsm->ChangeState(std::make_unique<Attack_State>());
         return;
     }

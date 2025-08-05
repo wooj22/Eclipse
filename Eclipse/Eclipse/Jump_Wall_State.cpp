@@ -85,7 +85,7 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
 
 
     // [ Attack / Bullet ]
-    if (Input::GetKey(VK_LBUTTON))
+    if (fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON))
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 
@@ -104,6 +104,7 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
         if ( fsm->GetPlayerFSM()->CanAttack() &&
             (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold))
         {
+            fsm->GetPlayerFSM()->OnAirAttack();
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
         }
 

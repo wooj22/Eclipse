@@ -176,38 +176,45 @@ void PlayerFSM::OnGround()
 
 void PlayerFSM::OnJump(JumpPhase jumpType)
 {
-	// 점프 시 공격 가능 여부 설정
 	if (!GameManager::Get().CheckUnlock(SkillType::JumpAttackExtra))
 	{
-		if (jumpType == JumpPhase::NormalJump)	canAttackAfterJump[jumpType] = true;
-		else									canAttackAfterJump[jumpType] = false;
+		// 전부 false로 초기화
+		for (auto& pair : canAttackAfterJump)
+			pair.second = false;
 	}
-	else
-	{
-		canAttackAfterJump[jumpType] = true;
-	}
+
+	// 해당 점프만 true로 설정
+	canAttackAfterJump[jumpType] = true;
 }
 
 bool PlayerFSM::CanAttack()
 {
-	for (auto it = canAttackAfterJump.begin(); it != canAttackAfterJump.end(); ++it)
+	// 땅에 있으면 언제나 가능
+	if (GetIsGround())
+		return true;
+
+	// 공중에서는 점프 종류 중 하나라도 true면 공격 가능
+	for (const auto& pair : canAttackAfterJump)
 	{
-		if (it->second)  return true;
+		if (pair.second)
+			return true;
 	}
+
 	return false;
 }
 
-void PlayerFSM::UseAttack()
+void PlayerFSM::OnAirAttack() // 어떤 점프 상태에서든 공격했다면 해당 플래그를 꺼줌
 {
-	for (auto it = canAttackAfterJump.begin(); it != canAttackAfterJump.end(); ++it)
+	for (auto& pair : canAttackAfterJump)
 	{
-		if (it->second)
+		if (pair.second)
 		{
-			it->second = false;
-			break; // 한 번만 비활성화
+			pair.second = false;
+			break; // 한 번만 차감
 		}
 	}
 }
+
 
 // dash
 void PlayerFSM::UpdateDashCooldown() // Dash 쿨타임 업데이트

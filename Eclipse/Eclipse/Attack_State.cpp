@@ -92,7 +92,8 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
 
 void Attack_State::Exit(MovementFSM* fsm)
 {
-    fsm->GetPlayerFSM()->UseAttack(); // 공격 차감 
+    // fsm->GetPlayerFSM()->UseAttack(); // 공격 차감 
+    fsm->GetPlayerFSM()->OnAirAttack();
 
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
