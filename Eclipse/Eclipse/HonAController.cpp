@@ -78,6 +78,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
 		HonType honType = otherController->honType;
 
+		// collision acttion
 		switch (honType)
 		{
 		case HonType::A:		// ø¨º‚π›¿¿ A-A

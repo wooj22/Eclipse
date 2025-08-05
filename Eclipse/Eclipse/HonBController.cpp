@@ -75,41 +75,38 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 
+		// collision acttion
 		// 연쇄반응 B-B
 		if (otherGameObject->name == "HonB")
 		{
-			// hp cheak
+			// hp check
 			TakeDamage();
 			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
-			// collision move start
-			// 일단 하드코딩!
-			GameObject* newHonB1 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(-100, 100));
-			HonBController* controller = newHonB1->GetComponent<HonBController>();
-			controller->SetSize(size * 0.7);
-			controller->SetDescentSpeed(descentSpeed * 1.2);
-			controller->SetHp(1);
+			// position
+			std::vector<Vector2> offsets = {
+				Vector2(-100, 100),
+				Vector2(-100, -100),
+				Vector2(100, -100),
+				Vector2(100, 100)
+			};
 
-			GameObject* newHonB2 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(-100, -100));
-			HonBController* controller1 = newHonB2->GetComponent<HonBController>();
-			controller1->SetSize(size * 0.7);
-			controller1->SetDescentSpeed(descentSpeed * 1.2);
-			controller1->SetHp(1);
+			// new HonB
+			for (const Vector2& offset : offsets)
+			{
+				GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + offset);
+				HonBController* controller = newHonB->GetComponent<HonBController>();
+				if (controller)
+				{
+					controller->SetSize(size * 0.7f);
+					controller->SetDescentSpeed(descentSpeed * 1.2f);
+					controller->SetHp(1);
+				}
+			}
 
-			GameObject* newHonB3 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(100, -100));
-			HonBController* controller2 = newHonB3->GetComponent<HonBController>();
-			controller2->SetSize(size * 0.7);
-			controller2->SetDescentSpeed(descentSpeed * 1.2);
-			controller2->SetHp(1);
-
-			GameObject* newHonB4 = Instantiate<HonB>(tr->GetWorldPosition() + Vector2(100, 100));
-			HonBController* controller3 = newHonB4->GetComponent<HonBController>();
-			controller3->SetSize(size * 0.7);
-			controller3->SetDescentSpeed(descentSpeed * 1.2);
-			controller3->SetHp(1);
-
+			// old HonB
 			otherGameObject->Destroy();
 			gameObject->Destroy();
 		}
