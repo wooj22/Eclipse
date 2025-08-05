@@ -93,7 +93,7 @@ public:
 
 	//퀘스트
 	int honKillCount;				// 1웨이브	A,B 체력 0 일때만!
-	int cainCount;				// 2웨이브	A-A, B-B, C-C 연쇄 반응만
+	int cainCount;					// 2웨이브	A-A, B-B, C-C 연쇄 반응만
 	int lunaKillCount;				// 3웨이브	D 체력 0 일때 
 	int bossKillCount;				// 4웨이브	TODOMO : 추후 보스에서 사용
 
