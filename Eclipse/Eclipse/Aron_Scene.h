@@ -9,84 +9,50 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include <vector>
-#include <random>
-
-// Forward declarations
-class Honmun;
-enum class HonmunType;
+#include "WaveSystem.h"
 
 class Aron_Scene : public Scene
 {
 public:
-	// Scene��(��) ���� ��ӵ�
 	virtual void Awake() override;
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual void Exit() override;
 
 private:
-	// camera
+	// Camera
 	GameObject* cam = nullptr;
 
-	// UI
+	// UI Elements
 	UI_Text* title_text = nullptr;
-	UI_Text* score_text = nullptr;
+	UI_Text* wave_status_text = nullptr;
+	UI_Text* timer_text = nullptr;
+	UI_Text* progress_text = nullptr;
 	UI_Text* debug_text = nullptr;
 
-	// \ud63c\ubb38 enemies (Honmun \ud074\ub798\uc2a4 \uc0ac\uc6a9) - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8: A, B\ub9cc \uc0ac\uc6a9
-	Honmun* honmun_a = nullptr;
-	Honmun* honmun_b = nullptr;
-	// Honmun* honmun_c = nullptr;  // \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc5d0\uc11c \uc8fc\uc11d\ucc98\ub9ac
-	// Honmun* honmun_d = nullptr;  // \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc5d0\uc11c \uc8fc\uc11d\ucc98\ub9ac
-	
-	// 오브젝트 선택 시스템
-	std::vector<Honmun*> allHonmuns;
-	int selectedHonmunIndex = 0;
-
-	// ground for enemies to stand on
-	GameObject* ground = nullptr;      // 1층 바닥 (파괴용)
+	// Ground system
+	GameObject* ground = nullptr;
 	BoxCollider* ground_col = nullptr;
-	GameObject* floor2 = nullptr;      // 2층 플랫폼 (통과 가능)
+	GameObject* floor2 = nullptr;
 	BoxCollider* floor2_col = nullptr;
 
-	// 점수 시스템
+	// Wave System
+	WaveSystem* waveSystem = nullptr;
+
+	// Score System
 	int currentScore = 0;
-	
-	// 웨이브 시스템
-	struct WaveSpawnData {
-		float spawnY = 800.0f;          // 카메라 위 스폰 위치
-		float groundY = -350.0f;        // 바닥 위치 (1층 위쪽)
-		float floor2Y = -180.0f;        // 2층 위치
-		int totalSpawnCount = 20;       // 총 스폰할 혼문 수
-		int currentSpawnIndex = 0;      // 현재 스폰된 개수
-		float spawnInterval = 1.0f;     // 스폰 간격 (초)
-		float lastSpawnTime = 0.0f;     // 마지막 스폰 시간
-		bool waveActive = false;        // 웨이브 활성 상태
-		int currentWave = 1;            // 현재 웨이브 번호 (1 또는 2)
-		std::vector<Honmun*> spawnedHonmuns; // 스폰된 혼문들
-	} waveData;
-	
-	// collision detection function
-	void CheckCollisionAndChangeColor();
-	void HandleHonmunMovement();
+
+	// Helper functions
 	void HandleCameraMovement();
+	void InitializeWaveSystem();
+	void UpdateWaveUI();
+	void StartWave(int waveIndex);
+	void ResetScene();
+	void SetupFonts();
 	
 public:
-	// 점수 관련 함수들 (다른 클래스에서 접근 가능)
+	// Score functions
 	void AddScore(int points);
 	int GetScore() const { return currentScore; }
 	void UpdateScoreUI();
-	
-	// 웨이브 시스템 함수들
-	void StartWave1();
-	void StartWave2();
-	void UpdateWaveSystem();
-	void SpawnHonmun();
-	void SpawnHonmunWave2();  // 웨이브 2용 스폰 (A, B, C 포함)
-	bool IsHonmunOnGround(Honmun* honmun);
-	void CheckHonmunsReachFloor1();
-	HonmunType GetRandomHonmunType();
-	HonmunType GetRandomHonmunTypeWave2();  // 웨이브 2용 (A, B, C 포함)
-	void ResetScene();  // 씬 완전 초기화
 };
