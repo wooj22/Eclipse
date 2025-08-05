@@ -18,9 +18,13 @@ public:
 		hp = 3;
 		size = 1;
 		descentSpeed = 80;
-		collisionSpeed = 1000;
 
-		collisionMovingTime = 1.5f;
+		// gamemanager 충돌 비거리 증가
+		int level = GameManager::Get().skillTree[SkillType::KnockbackDistanceUp].unlockLevel;
+		if (level != 0)
+		{
+			SetSpeedUpRate(GameManager::Get().skillValue[SkillType::KnockbackDistanceUp][level - 1]);
+		}
 	}
 
 	// script component cycle
