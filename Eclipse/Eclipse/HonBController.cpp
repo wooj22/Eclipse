@@ -67,8 +67,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// collision move start (reset)
-		isCollisionMoving = true;
-		collisionMovingDelta = 0;
+		CollisionStart();
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
@@ -89,8 +88,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (honType == "HonA")
 		{
 			// collision move start (reset)
-			isCollisionMoving = true;
-			collisionMovingDelta = 0;
+			CollisionStart();
 
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
@@ -101,8 +99,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		else if (honType == "HonB")
 		{
 			// collision move start (reset)
-			isCollisionMoving = true;
-			collisionMovingDelta = 0;
+			CollisionStart();
 
 			SetSize(size * 0.7);
 			SetDescentSpeed(descentSpeed * 1.2);

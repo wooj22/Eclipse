@@ -70,8 +70,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// collision move start (reset)
-		isCollisionMoving = true;
-		collisionMovingDelta = 0;
+		CollisionStart();
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
@@ -92,8 +91,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (honType == "HonA")
 		{
 			// collision move start (reset)
-			isCollisionMoving = true;
-			collisionMovingDelta = 0;;
+			CollisionStart();
 
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
@@ -117,8 +115,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		else if (honType == "HonC")
 		{
 			// collision move start (reset)
-			isCollisionMoving = true;
-			collisionMovingDelta = 0;
+			CollisionStart();
 
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();

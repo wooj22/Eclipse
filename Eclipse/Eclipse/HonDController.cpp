@@ -54,8 +54,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// collision move start (reset)
-		isCollisionMoving = true;
-		collisionMovingDelta = 0;
+		CollisionStart();
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
@@ -68,10 +67,6 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
-
-		// collision move start (reset)
-		isCollisionMoving = true;
-		collisionMovingDelta = 0;
 
 		// destroy
 		otherGameObject->Destroy();
