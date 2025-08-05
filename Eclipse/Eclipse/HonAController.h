@@ -67,7 +67,7 @@ public:
 	void SetHp(int h) { hp = h; }
 	int GetHp() { return hp; }
 
-	void SetCollisionState(bool b) { isCollisionMoving = b; }
+	void SetCollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
 
 	// HonC 끌어당기는 함수
 	void HonC_PullMe(Vector2 pos);
