@@ -66,6 +66,19 @@ public:
 
 	void SetHp(int h) { hp = h; }
 	int GetHp() { return hp; }
+	void TakeDamage()
+	{
+		hp--;
+		if (hp <= 0) gameObject->Destroy();
+	}
+	bool TakeDamageAfterLife()
+	{
+		if (hp-1 <= 0) return false;
+		else return true;
+	}
+
+	void CollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
+	void CollisionStart() { isCollisionMoving = true; collisionMovingDelta = 0; }
 
 	// HonC 끌어당기는 함수
 	void HonC_PullMe(Vector2 pos);

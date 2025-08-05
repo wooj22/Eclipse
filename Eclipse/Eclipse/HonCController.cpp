@@ -39,7 +39,7 @@ void HonCController::Update()
 	}
 	else if (isCollisionMoving)
 	{
-		// collision move
+		// end collidion moving
 		collisionMovingDelta += Time::GetDeltaTime();
 		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
@@ -69,32 +69,31 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
-		// collision move start (reset)
-		isCollisionMoving = true;
-		collisionMovingDelta = 0;
-
-		// direction
+		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-
-		// hp
-		hp--;
+		TakeDamage();
 	}
 
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
+		if (gameObject->IsDestroyed()) return;
+
 		// other gameobject
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
-		// 1. 연쇄반응 C-A
+		// 연쇄반응 C-A
 		if (honType == "HonA")
 		{
-			// collision move start (reset)
-			isCollisionMoving = true;
-			collisionMovingDelta = 0;;
+			// hp cheak
+			TakeDamage();
+			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
+			otherController->TakeDamage();
+			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
+			// collision move start (reset)
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
 			float otherX = otherGameObject->transform->GetWorldPosition().x;
@@ -111,15 +110,19 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherController->SetDirection(Vector2::left);
 			}
 
-			hp--;
+			otherController->CollisionStart();
+			CollisionStart();
 		}
-		// 2. 연쇄반응 C-C
+		// 연쇄반응 C-B
+		else if (honType == "HonB")
+		{
+			TakeDamage();
+			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
+			otherController->TakeDamage();
+		}
+		// 연쇄반응 C-C
 		else if (honType == "HonC")
 		{
-			// collision move start (reset)
-			isCollisionMoving = true;
-			collisionMovingDelta = 0;
-
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();
 
@@ -145,9 +148,6 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			gameObject->Destroy();
 		}
 	}
-
-	// HP Cheak
-	if (hp <= 0) gameObject->Destroy();
 }
 
 /*------------- Functions -------------*/

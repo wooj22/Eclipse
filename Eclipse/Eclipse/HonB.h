@@ -4,6 +4,8 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
+#include "../Direct2D_EngineLib/Animator.h"
+#include "HonBAnimatorController.h"
 #include "HonBController.h"
 
 /* Umbra ±×¸²ÀÚÀÇ È¥ */
@@ -16,7 +18,11 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
+	Animator* animator;
 	HonBController* controller;
+
+	// animator controller asset
+	HonBAnimatorController* animatorController;
 
 	HonB() : GameObject("HonB", "Hon")		// name, tag
 	{
@@ -24,12 +30,14 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
+		animator = AddComponent<Animator>();
 		controller = AddComponent<HonBController>();
+		
+		// animator
+		animatorController = new HonBAnimatorController();
+		animator->SetController(animatorController);
 
 		// renderer set
-		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/HonB.png");
-		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "HonB");
-		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->renderMode = RenderMode::Lit_Glow;
 		spriteRenderer->layer = 11;
 
@@ -39,6 +47,11 @@ public:
 		collider->isTrigger = true;
 		collider->offset = { 0, -15 };
 		collider->radius = 40;
+	}
+
+	~HonB()
+	{
+		delete animatorController;
 	}
 
 	void Update() override

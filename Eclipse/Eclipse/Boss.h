@@ -70,11 +70,11 @@ public:
 		bgmSource->SetVolume(1);
 		bgmSource->SetClip(bgmClip);
 		bgmSource->SetLoop(true);
-		bgmSource->Play();
+		//bgmSource->Play();
 
 		sfxSource->SetClip(sfxClip);
 		sfxSource->SetLoop(true);
-		sfxSource->Play();
+		//sfxSource->Play();
 	}
 
 	void Update() override
