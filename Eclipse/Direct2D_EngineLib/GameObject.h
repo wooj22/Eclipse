@@ -264,8 +264,9 @@ public:
     template<typename T>
     T* GetComponent() {
         for (Component* comp : components) {
-            if (typeid(*comp) == typeid(T))
-                return static_cast<T*>(comp);
+            T* casted = dynamic_cast<T*>(comp);
+            if (casted != nullptr)
+                return casted;
         }
         return nullptr;
     }
