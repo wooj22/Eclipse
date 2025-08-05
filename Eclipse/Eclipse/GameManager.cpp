@@ -13,10 +13,10 @@ void GameManager::ReSetData()
 {
 	honCount = 0;
 	waveCount = 0;
-	honKill = 0;
+	honKillCount = 0;
 	cainCount = 0;
-	lunaKill = 0;
-	bossKill = 0;
+	lunaKillCount = 0;
+	bossKillCount = 0;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;		
@@ -30,10 +30,10 @@ void GameManager::WaveStart()
 	isWave = true;
 	waveCount++;
 
-	honKill = 0;
+	honKillCount = 0;
 	cainCount = 0;
-	lunaKill = 0;
-	bossKill = 0;
+	lunaKillCount = 0;
+	bossKillCount = 0;
 }
 
 void GameManager::SkillReset()
