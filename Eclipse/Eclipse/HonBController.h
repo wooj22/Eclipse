@@ -33,7 +33,7 @@ private:
 	bool isPullMoving = false;				    // C에게 당겨지고 있는 상태
 
 	// delta
-	float pushBackDeltaTime = 0.0f;
+	float collisionMovingDelta = 0.0f;
 	float pullMovingDelta = 0.0f;
 
 	// player 
@@ -71,6 +71,9 @@ public:
 		hp--;
 		if (hp <= 0) gameObject->Destroy();
 	}
+
+	void CollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
+	void CollisionStart() { isCollisionMoving = true; collisionMovingDelta = 0; }
 
 	// HonC 끌어당기는 함수
 	void HonC_PullMe(Vector2 pos);

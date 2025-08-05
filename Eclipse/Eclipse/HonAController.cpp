@@ -99,14 +99,14 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			{
 				if(!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
 				SetSize(size * 1.4);
-				SetCollisionEnd();
+				CollisionEnd();
 				SetDescentSpeed(descentSpeed * 0.6);
 				hp--;
 			}
 			else
 			{
 				otherController->SetSize(otherController->GetSize() * 1.5);
-				otherController->SetCollisionEnd();
+				otherController->CollisionEnd();
 				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}

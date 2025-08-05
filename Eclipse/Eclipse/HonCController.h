@@ -72,6 +72,9 @@ public:
 		if (hp <= 0) gameObject->Destroy();
 	}
 
+	void CollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
+	void CollisionStart() { isCollisionMoving = true; collisionMovingDelta = 0; }
+
 	// HonC 끌어당기는 함수
 	void HonC_PullMe(Vector2 pos);
 };

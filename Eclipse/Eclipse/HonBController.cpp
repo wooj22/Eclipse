@@ -37,14 +37,14 @@ void HonBController::Update()
 	else if (isCollisionMoving)
 	{
 		// collision move
-		pushBackDeltaTime += Time::GetDeltaTime();
+		collisionMovingDelta += Time::GetDeltaTime();
 		tr->Translate(moveDirection * collisionSpeed * Time::GetDeltaTime());
 
 		// end collidion moving
-		if (pushBackDeltaTime >= collisionMovingTime)
+		if (collisionMovingDelta >= collisionMovingTime)
 		{
 			isCollisionMoving = false;
-			pushBackDeltaTime = 0;
+			collisionMovingDelta = 0;
 		}
 	}
 	else
@@ -68,7 +68,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	{
 		// collision move start (reset)
 		isCollisionMoving = true;
-		pushBackDeltaTime = 0;
+		collisionMovingDelta = 0;
 
 		// direction
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
@@ -90,7 +90,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 			// collision move start (reset)
 			isCollisionMoving = true;
-			pushBackDeltaTime = 0;
+			collisionMovingDelta = 0;
 
 			HonAController* otherController = otherGameObject->GetComponent<HonAController>();
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();
@@ -102,7 +102,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 			// collision move start (reset)
 			isCollisionMoving = true;
-			pushBackDeltaTime = 0;
+			collisionMovingDelta = 0;
 
 			SetSize(size * 0.7);
 			SetDescentSpeed(descentSpeed * 1.2);
