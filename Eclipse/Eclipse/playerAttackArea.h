@@ -23,7 +23,7 @@ public:
 		collider = AddComponent<CircleCollider>();
 
 		spriteRenderer->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Attack_Effect.png"), "Attack_Effect");
-		spriteRenderer->layer = 1;
+		spriteRenderer->layer = 2;
 
 	}
 	~PlayerAttackArea() override
@@ -35,9 +35,10 @@ public:
 	{
 		transform->SetPosition(0.0f, 30.0f);
 		transform->SetRotation(0.0f);
+		transform->SetScale(3.0f, 3.0f);
 
-		collider->offset = { 0.0f, 20.0f };
-		collider->radius = 40.0f;
+		collider->offset = { 0.0f, 30.0f };
+		collider->radius = 50.0f;
 		collider->isTrigger = true;
 	}
 

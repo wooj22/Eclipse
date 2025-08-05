@@ -45,44 +45,44 @@ void Moon_Scene::Awake()
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
-	ground->AddComponent<Transform>()->SetPosition(0.0f, -350.0f);
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -650.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
 	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
 	ground_sr->layer = 0;
 
 	ground_col = ground->AddComponent<BoxCollider>();
-	ground_col->size = { 1110.0f, 30.0f };
+	ground_col->size = { 1920.0f, 50.0f };
 
 
 	// [ wall_r ]
 	wall_r = CreateObject<GameObject>();
 	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(550.0f, 0.0f);;
+	wall_r->AddComponent<Transform>()->SetPosition(1000.0f, -100.0f);;
 
 	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
 	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
 	wall_r_col = wall_r->AddComponent<BoxCollider>();
-	wall_r_col->size = { 30.0f, 750.0f };
+	wall_r_col->size = { 50.0f, 1400.0f };
 
 
 	// [ wall_l ]
 	wall_l = CreateObject<GameObject>();
 	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-550.0f, 0.0f);;
+	wall_l->AddComponent<Transform>()->SetPosition(-1000.0f, -100.0f);;
 
 	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
 	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
 	wall_l_col = wall_l->AddComponent<BoxCollider>();
-	wall_l_col->size = { 30.0f, 750.0f };
+	wall_l_col->size = { 50.0f, 1400.0f };
 
 
 	// [ Platform1 ]
 	platform1 = CreateObject<GameObject>();
 	platform1->name = "Ground";
-	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -200.0f);
+	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -500.0f);
 
 	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
 	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
@@ -95,7 +95,7 @@ void Moon_Scene::Awake()
 	// [ Platform2 ]
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
-	platform2->AddComponent<Transform>()->SetPosition(200.0f, 0.0f);
+	platform2->AddComponent<Transform>()->SetPosition(200.0f, -220.0f);
 
 	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
 	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");

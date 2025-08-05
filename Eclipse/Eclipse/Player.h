@@ -63,10 +63,10 @@ public:
 		animator->SetController(playerAnimatorController);
 
 		transform->SetPosition(0, 0);
-		transform->SetScale(1.2, 1.2);
+		transform->SetScale(0.5, 0.5);
 
-		collider->offset = { 0.0f, -5.0f };
-		collider->size = { 50.0f, 70.0f };
+		collider->offset = { 10.0f, -55.0f };
+		collider->size = { 140.0f, 350.0f };
 		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;

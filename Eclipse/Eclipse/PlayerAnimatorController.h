@@ -14,7 +14,7 @@ public:
     {
         name = "N_Player_Idle";
         loop = true;
-        duration = 1.6f;
+        duration = 1.3f;
 
         const std::string basePath = "../Resource/Moon/Texture/N_Player_Idle/";
         const int frameCount = 20;
