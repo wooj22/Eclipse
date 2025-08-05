@@ -20,6 +20,8 @@ void HonCController::Start()
 
 void HonCController::Update()
 {
+	if (isAbsorption) return;
+
 	if (isPullMoving)
 	{
 		// pulling move

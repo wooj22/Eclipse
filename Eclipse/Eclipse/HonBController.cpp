@@ -17,6 +17,8 @@ void HonBController::Start()
 
 void HonBController::Update()
 {
+	if (isAbsorption) return;
+
 	if (isPullMoving)
 	{
 		// pulling move

@@ -35,6 +35,7 @@ protected:
 	Vector2 pullDirection = Vector2::zero;		// Hon C 끌어당김 dir
 	bool isCollisionMoving = false;				// 충돌로 밀려지고 있는 상태
 	bool isPullMoving = false;				    // C에게 당겨지고 있는 상태
+	bool isAbsorption = false;					// 플레이어에게 흡수되고 있는 상태 (D는 안쓰지만 플레이어의 호출 통일성을 위해)
 
 	// delta
 	float collisionMovingDelta = 0.0f;
@@ -83,5 +84,8 @@ public:
 		pullDirection = (pos - tr->GetWorldPosition()).Normalized();
 		isPullMoving = true;
 	}
+
+	// 플레이어 흡수
+	void Absorption() { isAbsorption = true; }
 };
 

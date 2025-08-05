@@ -18,6 +18,8 @@ void HonAController::Start()
 
 void HonAController::Update()
 {
+	if (isAbsorption) return;
+
 	if (isPullMoving)
 	{
 		// pulling move
