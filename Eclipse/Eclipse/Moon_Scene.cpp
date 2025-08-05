@@ -39,13 +39,13 @@ void Moon_Scene::Awake()
 	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
 	playerAttackArea = CreateObject<PlayerAttackArea>();
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
-	// playerAttackArea->SetActive(false);
+	playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
-	ground->AddComponent<Transform>()->SetPosition(0.0f, -650.0f);
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -800.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
 	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
@@ -53,12 +53,13 @@ void Moon_Scene::Awake()
 
 	ground_col = ground->AddComponent<BoxCollider>();
 	ground_col->size = { 1920.0f, 50.0f };
+	ground_col->isFlatform = true;
 
 
 	// [ wall_r ]
 	wall_r = CreateObject<GameObject>();
 	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(1000.0f, -100.0f);;
+	wall_r->AddComponent<Transform>()->SetPosition(1000.0f, -300.0f);;
 
 	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
 	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
@@ -70,38 +71,40 @@ void Moon_Scene::Awake()
 	// [ wall_l ]
 	wall_l = CreateObject<GameObject>();
 	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-1000.0f, -100.0f);;
+	wall_l->AddComponent<Transform>()->SetPosition(-1000.0f, -300.0f);;
 
 	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
 	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
 	wall_l_col = wall_l->AddComponent<BoxCollider>();
 	wall_l_col->size = { 50.0f, 1400.0f };
-
-
-	// [ Platform1 ]
-	platform1 = CreateObject<GameObject>();
-	platform1->name = "Ground";
-	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -500.0f);
-
-	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
-	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
-
-	platform1_col = platform1->AddComponent<BoxCollider>();
-	platform1_col->offset = { 0.0f, 12.0f };
-	platform1_col->size = { 200.0f, 5.0f };
 	
 
-	// [ Platform2 ]
-	platform2 = CreateObject<GameObject>();
-	platform2->name = "Ground";
-	platform2->AddComponent<Transform>()->SetPosition(200.0f, -220.0f);
+	//// [ Platform1 ]
+	//platform1 = CreateObject<GameObject>();
+	//platform1->name = "Ground";
+	//platform1->AddComponent<Transform>()->SetPosition(-300.0f, -700.0f);
 
-	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
-	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+	//auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
+	//platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
 
-	platform2_col = platform2->AddComponent<BoxCollider>();
-	platform2_col->size = { 200.0f, 30.0f };
+	//platform1_col = platform1->AddComponent<BoxCollider>();
+	//platform1_col->offset = { 0.0f, 12.0f };
+	//platform1_col->size = { 200.0f, 5.0f };
+	//platform1_col->isFlatform = true;
+	//
+
+	//// [ Platform2 ]
+	//platform2 = CreateObject<GameObject>();
+	//platform2->name = "Ground";
+	//platform2->AddComponent<Transform>()->SetPosition(200.0f, -420.0f);
+
+	//auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
+	//platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+
+	//platform2_col = platform2->AddComponent<BoxCollider>();
+	//platform2_col->size = { 200.0f, 30.0f };
+	//platform2_col->isFlatform = true;
 	
 	// boundary condition
 	Rect mapRect;
@@ -150,6 +153,17 @@ void Moon_Scene::Awake()
 	playUI->skillHon_Image = CreateObject<UI_Image>();
 	playUI->skillHon_Text = CreateObject<UI_Text>();*/
 
+
+	// hon
+	honA1 = CreateObject<HonA>({ -200, -100 });
+	honA2 = CreateObject<HonA>({ -500, 100 });
+	honB1 = CreateObject<HonB>({ 0, -100 });
+	honB2 = CreateObject<HonB>({ 200, 100 });
+	honC1 = CreateObject<HonC>({ -100, 300 });
+	honC2 = CreateObject<HonC>({ -200, 300 });
+	honC3 = CreateObject<HonC>({ -200, 600});
+	honD1 = CreateObject<HonD>({ 100, 800 });
+	honD2 = CreateObject<HonD>({ -100, 800 });
 }
 
 void Moon_Scene::Start()
@@ -198,8 +212,8 @@ void Moon_Scene::Update()
 	ground_col->DebugColliderDraw();
 	wall_r_col->DebugColliderDraw();
 	wall_l_col->DebugColliderDraw();
-	platform1_col->DebugColliderDraw();
-	platform2_col->DebugColliderDraw();
+	// platform1_col->DebugColliderDraw();
+	// platform2_col->DebugColliderDraw();
 	// playerAttack_col->DebugColliderDraw();
 }
 

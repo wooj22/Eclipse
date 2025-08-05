@@ -96,7 +96,7 @@ void Attack_State::Exit(MovementFSM* fsm)
 
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
-    // fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
 }

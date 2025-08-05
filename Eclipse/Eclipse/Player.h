@@ -62,7 +62,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(0, 0);
+		transform->SetPosition(100, -200);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };

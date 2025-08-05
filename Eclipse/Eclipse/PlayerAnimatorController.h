@@ -125,17 +125,17 @@ public:
 //    ~PlayerFallClip() override {}
 //};
 
-//class PlayerDashClip : public AnimationClip
-//{
-//public:
-//    PlayerDashClip()
-//    {
-//        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Samurai_Dash.png");
-//        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Samurai_Dash_Sprites.json");
-//        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Samurai_Dash_AniClip.json");
-//    }
-//    ~PlayerDashClip() override {}
-//};
+class PlayerDashClip : public AnimationClip
+{
+public:
+    PlayerDashClip()
+    {
+        auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Dash.png");
+        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Dash_Sprites.json");
+        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Dash_AniClip.json");
+    }
+    ~PlayerDashClip() override {}
+};
 
 
 /*------------ Animation State ------------*/
@@ -233,24 +233,24 @@ public:
 //    void Exit() override {}
 //};
 
-//class PlayerDashState : public AnimationBaseState
-//{
-//public:
-//    PlayerDashState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
-//
-//    void Enter() override {}
-//    void Update(float dt) override
-//    {
-//        // [ tansition ]
-//        if (controller->GetBool("Samurai_Idle") == true)         controller->PlayAnimation("Samurai_Idle");
-//        else if (controller->GetBool("Samurai_Jump") == true)    controller->PlayAnimation("Samurai_Jump");
-//        else if (controller->GetBool("Samurai_Dash") == true)    controller->PlayAnimation("Samurai_Dash");
-//        else if (controller->GetBool("Samurai_Walk") == true)    controller->PlayAnimation("Samurai_Walk");
-//        else if (controller->GetBool("Samurai_Hanging") == true)         controller->PlayAnimation("Samurai_Hanging");
-//        else if (controller->GetBool("Samurai_Attack") == true)    controller->PlayAnimation("Samurai_Attack");
-//    }
-//    void Exit() override {}
-//};
+class PlayerDashState : public AnimationBaseState
+{
+public:
+    PlayerDashState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
+
+    void Enter() override {}
+    void Update(float dt) override
+    {
+        // [ tansition ]
+        if (controller->GetBool("N_Player_Idle") == true)         controller->PlayAnimation("N_Player_Idle");
+        else if (controller->GetBool("N_Player_Jump") == true)    controller->PlayAnimation("N_Player_Jump");
+        else if (controller->GetBool("N_Player_Dash") == true)    controller->PlayAnimation("N_Player_Dash");
+        else if (controller->GetBool("N_Player_Walk") == true)    controller->PlayAnimation("N_Player_Walk");
+        else if (controller->GetBool("N_Player_Hanging") == true) controller->PlayAnimation("N_Player_Hanging");
+        else if (controller->GetBool("N_Player_Attack") == true)  controller->PlayAnimation("N_Player_Attack");
+    }
+    void Exit() override {}
+};
 
 class PlayerAttackState : public AnimationBaseState
 {
@@ -284,7 +284,7 @@ public:
     PlayerHangingClip* hangingClip = nullptr;
     PlayerAttackClip* attackClip = nullptr;
     // PlayerFallClip* fallClip = nullptr;
-    // PlayerDashClip* dashClip = nullptr;
+    PlayerDashClip* dashClip = nullptr;
 
     // States
     PlayerIdleState* idleState = nullptr;
@@ -293,7 +293,7 @@ public:
     PlayerHangingState* hangingState = nullptr;
     PlayerAttackState* attackState = nullptr;
     // PlayerFallState* fallState = nullptr;
-    // PlayerDashState* dashState = nullptr;
+    PlayerDashState* dashState = nullptr;
 
 public: 
     PlayerAnimatorController()
@@ -305,7 +305,7 @@ public:
         hangingClip = new PlayerHangingClip();
         attackClip = new PlayerAttackClip();
         // fallClip = new PlayerFallClip();
-        // dashClip = new PlayerDashClip();
+        dashClip = new PlayerDashClip();
 
 
         // state 생성
@@ -315,7 +315,7 @@ public:
         hangingState = new PlayerHangingState(hangingClip, this);
         attackState = new PlayerAttackState(attackClip, this);
         // fallState = new PlayerFallState(fallClip, this);
-        // dashState = new PlayerDashState(dashClip, this);
+        dashState = new PlayerDashState(dashClip, this);
 
         // state 등록
         AddState(idleState);
@@ -324,7 +324,7 @@ public:
         AddState(hangingState);
         AddState(attackState);
         // AddState(fallState);
-        // AddState(dashState);
+        AddState(dashState);
 
         // 초기 상태
         ChangeAnimation(idleState);
@@ -337,6 +337,6 @@ public:
         delete hangingState;
         delete attackState;
         // delete fallState;
-        // delete dashState;
+        delete dashState;
     }
 };

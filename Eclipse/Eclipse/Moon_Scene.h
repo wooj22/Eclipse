@@ -11,6 +11,12 @@
 #include "PlayUI.h"
 #include "SkillWindowButton.h"
 
+#include "HonA.h"
+#include "HonB.h"
+#include "HonC.h"
+#include "HonD.h"
+
+
 class Moon_Scene : public Scene
 {
 private:
@@ -41,6 +47,16 @@ private:
 	BoxCollider* platform2_col;
 	BoxCollider* playerAttack_col;
 
+	// Hon
+	HonA* honA1;
+	HonA* honA2;
+	HonB* honB1;
+	HonB* honB2;
+	HonC* honC1;
+	HonC* honC2;
+	HonC* honC3;
+	HonD* honD1;
+	HonD* honD2;
 
 public:
 	Moon_Scene() = default;
