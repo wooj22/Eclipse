@@ -6,7 +6,7 @@ void TitleUI::Awake()
 
 void TitleUI::SceneStart()
 {
-	menuButtons = { play_Button, options_Button, credit_Button, end_Button };
+	menuButtons = { play_Button, options_Button, credit_Button, end_Button, optionUI->sound_Button,optionUI->key_Button };
 	backgroundImage->rectTransform->SetPivot(0.5, 0.5);
 	backgroundImage->rectTransform->SetSize(1920, 1080);
 	auto title = ResourceManager::Get().CreateTexture2D("../Resource/mo/TitleBackGround.png");
@@ -47,8 +47,12 @@ void TitleUI::SceneStart()
 	underscore_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(underScoreTexture, "Underscore");
 	underscore_Image->SetActive(false); // 초기에는 밑줄 이미지 비활성화
 
-	/*play_Button->button->onClickListeners.AddListener(
-		this, std::bind(&SceneManager::ChangeScene(), this));*/
+	// 옵션 UI 생성
+	optionUI->SetActive(false);
+	optionUI->rectTransform->SetPosition(0, 0);
+
+	options_Button->button->onClickListeners.AddListener(
+		this, std::bind(&TitleUI::OpenOptionUI, this));
 
 	for (UI_Button* btn : menuButtons)
 	{
@@ -82,3 +86,7 @@ void TitleUI::OnPointExitButton(UI_Button* prevButton)
 		underscore_Image->SetActive(false);
 }
 
+void TitleUI::OpenOptionUI()
+{
+	optionUI->SetActive(true);
+}

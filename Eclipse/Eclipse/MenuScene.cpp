@@ -18,6 +18,8 @@ void MenuScene::Awake()
 	titleUI->end_Button = CreateObject<UI_Button>();
 	titleUI->underscore_Image = CreateObject<UI_Image>();
 
+	titleUI->optionUI = CreateObject<Options>();
+
 	// title sample
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);

@@ -3,10 +3,10 @@
 
 void Quest::Awake()
 {
-	questLines.push_back(L"영혼을 n회 처치하세요.");
-	questLines.push_back(L"연쇄를 n회 진행하세요.");
-	questLines.push_back(L"새로 등장하는 영혼을 n회 미만으로 처치하세요.");
-	questLines.push_back(L"보스를 처치하세요.");
+	questLines.push_back(L"영혼을 30회 정화하세요.");
+	questLines.push_back(L"연쇄 30회 진행하세요.");
+	questLines.push_back(L"루나를 보호하세요.");
+	questLines.push_back(L"녹스를 처치하세요.");
 }
 
 void Quest::Update()
