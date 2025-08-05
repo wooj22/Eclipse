@@ -18,7 +18,6 @@ public:
 
 
 /*------------ Animation State ------------*/
-
 class HonAIdleState : public AnimationBaseState
 {
 public:
