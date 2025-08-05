@@ -84,9 +84,13 @@ class GameManager : public Singleton<GameManager>
 public:
 	PlayUI* g_playUI;
 	int honCount;
-	int waveCount;
-	bool isWave;
 
+	//웨이브
+	int waveCount;				// UI 에서 넘겨 줄 웨이브 카운트
+	bool isWave;				// UI 에서 넘겨 줄 웨이브 시작 여부
+	float waveTime;				// 웨이브에서 넘겨줄 웨이브 타임
+
+	//플레이어 스킬
 	float absorbCoolTime;		// Q 흡수 쿨타임				PlayerFSM -> absorbCooldownTimer
 	bool canUseAbsorb;			// Q 흡수 스킬 사용 가능 여부	PlayerFSM -> isAbsorbSkillActive
 	bool canUseRelease ;		// E 방출 스킬 사용 가능 여부	PlayerFSM -> isReleaseSkillAvailable
