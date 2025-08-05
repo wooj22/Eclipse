@@ -1,8 +1,4 @@
 #include "HonBController.h"
-#include "../Direct2D_EngineLib/GameObject.h"
-#include "../Direct2D_EngineLib/Transform.h"
-#include "../Direct2D_EngineLib/CircleCollider.h"
-#include "../Direct2D_EngineLib/Time.h"
 #include "HonB.h"
 #include "HonAController.h"
 
@@ -11,7 +7,6 @@ void HonBController::Awake()
 {
 	tr = gameObject->transform;
 	collider = gameObject->GetComponent<CircleCollider>();
-
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
 }
 
@@ -120,13 +115,4 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			gameObject->Destroy();
 		}
 	}
-}
-
-
-/*------------- Functions -------------*/
-// C-C
-void HonBController::HonC_PullMe(Vector2 pos)
-{
-	pullDirection = (pos - tr->GetWorldPosition()).Normalized();
-	isPullMoving = true;
 }

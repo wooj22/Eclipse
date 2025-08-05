@@ -1,11 +1,8 @@
 #include "HonDController.h"
-#include "../Direct2D_EngineLib/GameObject.h"
-#include "../Direct2D_EngineLib/Transform.h"
-#include "../Direct2D_EngineLib/CircleCollider.h"
-#include "../Direct2D_EngineLib/Time.h"
 #include "HonAController.h"
 #include "HonBController.h"
 #include "HonCController.h"
+
 /*------------- Cycle  -------------*/
 void HonDController::Awake()
 {
@@ -88,12 +85,4 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		}
 		this->gameObject->Destroy();
 	}
-}
-
-/*------------- Functions -------------*/
-// C-C
-void HonDController::HonC_PullMe(Vector2 pos)
-{
-	pullDirection = (pos - tr->GetWorldPosition()).Normalized();
-	isPullMoving = true;
 }
