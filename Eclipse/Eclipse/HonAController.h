@@ -66,6 +66,11 @@ public:
 
 	void SetHp(int h) { hp = h; }
 	int GetHp() { return hp; }
+	void TakeDamage()
+	{
+		hp--;
+		if (hp <= 0) gameObject->Destroy();
+	}
 
 	void SetCollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
 

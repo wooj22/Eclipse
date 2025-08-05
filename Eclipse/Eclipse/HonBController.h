@@ -66,6 +66,11 @@ public:
 
 	void SetHp(int h) { hp = h; }
 	int GetHp() { return hp; }
+	void TakeDamage()
+	{
+		hp--;
+		if (hp <= 0) gameObject->Destroy();
+	}
 
 	// HonC 끌어당기는 함수
 	void HonC_PullMe(Vector2 pos);
