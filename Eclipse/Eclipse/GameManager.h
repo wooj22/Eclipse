@@ -6,6 +6,7 @@
 
 class PlayUI;
 
+enum class ChatCondition { None, Success, Fail };
 
 enum class SkillType {
 	KnockbackDistanceUp,	// 1-1	충돌 비거리 증가	최대 3
@@ -84,8 +85,23 @@ class GameManager : public Singleton<GameManager>
 public:
 	PlayUI* g_playUI;
 	int honCount;
-	int waveCount;
-	bool isWave;
+
+	//웨이브
+	int waveCount;				// UI 에서 넘겨 줄 웨이브 카운트
+	bool isWave;				// UI 에서 넘겨 줄 웨이브 시작 여부
+	float waveTime;				// 웨이브에서 넘겨줄 웨이브 타임
+
+	//퀘스트
+	int honKillCount;				// 1웨이브	A,B 체력 0 일때만!
+	int cainCount;					// 2웨이브	A-A, B-B, C-C 연쇄 반응만
+	int lunaKillCount;				// 3웨이브	D 체력 0 일때 
+	int bossKillCount;				// 4웨이브	TODOMO : 추후 보스에서 사용
+
+	//플레이어 스킬
+	float absorbCoolTime;		// Q 흡수 쿨타임				PlayerFSM -> absorbCooldownTimer
+	bool canUseAbsorb;			// Q 흡수 스킬 사용 가능 여부	PlayerFSM -> isAbsorbSkillActive
+	bool canUseRelease ;		// E 방출 스킬 사용 가능 여부	PlayerFSM -> isReleaseSkillAvailable
+
 	std::unordered_map<SkillType, SkillInfo> skillTree;
 	std::unordered_map<SkillType, std::vector<float>> skillValue;
 	std::unordered_map<SkillType, SkillText> skillText;
@@ -96,6 +112,8 @@ public:
 	void Init() { g_playUI = nullptr; ReSetData(); }
 	void UnInit();
 	void ReSetData();
+	void WaveStart();
+	void SkillReset();
 	bool CanUnlock(SkillType skill);
 	bool CheckUnlock(SkillType skill) { return skillTree[skill].unlocked; }
 	bool LevelUpSkill(SkillType skill, bool check = false);

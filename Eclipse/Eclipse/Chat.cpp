@@ -13,13 +13,13 @@ void Chat::Awake()
 	AddChat(0, ChatCondition::None, L"그들을 막지 않으면 더는 되돌릴 수 없어.\n영혼을 n회 처치하세요.");
 
 	// 웨이브 1
-	AddChat(1, ChatCondition::Success, L"그대 덕에 잠시나마 숨을 쉴수 있었어.");
+	AddChat(1, ChatCondition::Success, L"그대 덕에 잠시나마 숨을 쉴 수 있었어.");
 	AddChat(1, ChatCondition::Fail, L"혼들은 여전히 떠돌고 있지.");
-	AddChat(1, ChatCondition::None, L"다음은 더 거셀거야.");
+	AddChat(1, ChatCondition::None, L"다음은 더 거셀 거야.");
 
 	AddChat(1, ChatCondition::None, L"…혼이 네 안에 남아있어.");
 	AddChat(1, ChatCondition::None, L"그 혼을, 네가 원하는 형태로 다듬어 봐.");
-	AddChat(1, ChatCondition::None, L"원하는 형태로 그 힘을 펼칠 수 있을거야.");
+	AddChat(1, ChatCondition::None, L"원하는 형태로 그 힘을 펼칠 수 있을 거야.");
 
 	AddChat(1, ChatCondition::None, L"더 깊은 어둠에서 길을 잃은 혼들…");
 	AddChat(1, ChatCondition::None, L"그들은 기억조차 없겠지.");
@@ -39,7 +39,7 @@ void Chat::Awake()
 	AddChat(3, ChatCondition::Success, L"정화된 혼들도… 조용해졌어.");
 	AddChat(3, ChatCondition::Fail, L"…그 혼이… 너무 깊이 잠식됐나 봐.");
 	AddChat(3, ChatCondition::None, L"이젠, 틈도 없고, 뒤로 물러날 곳도 없어.");
-	AddChat(3, ChatCondition::None, L"그를 막아줘.\n보스를 처치하세요.");
+	AddChat(3, ChatCondition::None, L"그를 막아 줘.\n보스를 처치하세요.");
 
 	// 웨이브 4
 	AddChat(4, ChatCondition::Success, L"달도, 다시 빛을 되찾고 있어.");

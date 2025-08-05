@@ -4,7 +4,6 @@
 #include "GameManager.h"
 #include "PlayUI.h"
 
-enum class ChatCondition { None, Success, Fail };
 
 struct WaveChatGroup {
 	int waveIndex;

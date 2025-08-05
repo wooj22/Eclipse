@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "PlayUI.h"
 
 void GameManager::UnInit()
 {
@@ -12,8 +13,31 @@ void GameManager::ReSetData()
 {
 	honCount = 0;
 	waveCount = 0;
+	honKillCount = 0;
+	cainCount = 0;
+	lunaKillCount = 0;
+	bossKillCount = 0;
 	isWave = false;
 	g_playUI = nullptr;
+	absorbCoolTime = 0;		
+	canUseAbsorb = false;		
+	canUseRelease = false;
+	SkillReset();
+}
+
+void GameManager::WaveStart()
+{
+	isWave = true;
+	waveCount++;
+
+	honKillCount = 0;
+	cainCount = 0;
+	lunaKillCount = 0;
+	bossKillCount = 0;
+}
+
+void GameManager::SkillReset()
+{
 	skillTree.clear();
 	skillValue.clear();
 	skillText.clear();
@@ -30,9 +54,9 @@ void GameManager::ReSetData()
 	skillTree[SkillType::MoveSpeedUp] = { false, 0, 3, SkillType::COUNT, 0,{5,8,10} };
 	skillTree[SkillType::AttackRangeUp] = { false, 0, 3, SkillType::MoveSpeedUp, 3,{5,8,10} };
 	skillTree[SkillType::Dash] = { false, 0, 1, SkillType::AttackRangeUp, 3,{15} };
-	
+
 	//스킬값 초기화
-	skillValue[SkillType::KnockbackDistanceUp] = {1.05f,1.1f,1.15f};
+	skillValue[SkillType::KnockbackDistanceUp] = { 1.05f,1.1f,1.15f };
 	skillValue[SkillType::DoubleJump] = { 1 };
 	skillValue[SkillType::WallJump] = { 1 };
 
@@ -45,17 +69,22 @@ void GameManager::ReSetData()
 	skillValue[SkillType::Dash] = { 1 };
 
 	//스킬 텍스트 초기화
-	skillText[SkillType::KnockbackDistanceUp] = {L"충돌 비거리 증가",L"밀려나는 영혼의 이동거리가\n        /        /       %\n만큼 증가한다."};
-	skillText[SkillType::DoubleJump] = { L"더블 점프", L"공중에서 1회 \n추가 점프가 가능해진다."};
-	skillText[SkillType::WallJump] = { L"벽 점프",L"벽을 타고 반대방향으로\n1회 점프가 가능해 진다."};
+	skillText[SkillType::KnockbackDistanceUp] = { L"충돌 비거리 증가",L"밀려나는 영혼의 이동거리가\n        /        /       %\n만큼 증가한다." };
+	skillText[SkillType::DoubleJump] = { L"더블 점프", L"공중에서 1회 \n추가 점프가 가능해진다." };
+	skillText[SkillType::WallJump] = { L"벽 점프",L"벽을 타고 반대방향으로\n1회 점프가 가능해 진다." };
 
 	skillText[SkillType::SkillCooldownDown] = { L"스킬 쿨타임 감소",L"Q와 E 스킬의 쿨타임이\n        /        초 감소한다." };
-	skillText[SkillType::JumpAttackExtra] = { L"점프 후 추가공격" ,L"기본 1회 이외에\n더블점프, 벽점프 이후\n1회 추가 공격이 가능해진다."  };
-	skillText[SkillType::FastFall] = { L"빠른 낙하" ,L"아래 방향키를 눌러\n빠르게 플랫폼 위로\n내려올 수 있다."  };
+	skillText[SkillType::JumpAttackExtra] = { L"점프 후 추가공격" ,L"기본 1회 이외에\n더블점프, 벽점프 이후\n1회 추가 공격이 가능해진다." };
+	skillText[SkillType::FastFall] = { L"빠른 낙하" ,L"아래 방향키를 눌러\n빠르게 플랫폼 위로\n내려올 수 있다." };
 
-	skillText[SkillType::MoveSpeedUp] = { L"이동속도 증가" ,L"이동 속도가\n        /        /       %\n만큼 증가한다."  };
+	skillText[SkillType::MoveSpeedUp] = { L"이동속도 증가" ,L"이동 속도가\n        /        /       %\n만큼 증가한다." };
 	skillText[SkillType::AttackRangeUp] = { L"공격 이동거리 증가",L"공격 이동거리가\n        /        /       %\n만큼 증가한다." };
-	skillText[SkillType::Dash] = {  L"대시",L"Shift를 눌러\n대시를 사용할 수 있다." };
+	skillText[SkillType::Dash] = { L"대시",L"Shift를 눌러\n대시를 사용할 수 있다." };
+
+	if (g_playUI != nullptr)
+	{
+		g_playUI->SkillReSetButtonRenderMod();
+	}
 }
 
 bool GameManager::CanUnlock(SkillType skill)
@@ -110,12 +139,15 @@ bool GameManager::LevelUpSkill(SkillType skill, bool check )
 
 void GameManager::AllSkillUnlock()
 {
-	if (g_playUI == nullptr)
-		return;
 	for (auto& pair : skillTree)
 	{
 		SkillInfo& info = pair.second;
 		info.unlocked = true;
 		info.unlockLevel = info.maxLevel;
+	}
+
+	if (g_playUI !=nullptr)
+	{
+		g_playUI->AllSkillButtonRenderMod();
 	}
 }

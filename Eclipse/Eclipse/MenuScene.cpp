@@ -12,10 +12,12 @@ void MenuScene::Awake()
 	// create gameobject
 	titleUI = CreateObject<TitleUI>();
 	titleUI->backgroundImage = CreateObject<UI_Image>();
-	titleUI->playButton = CreateObject<UI_Button>();
-	titleUI->optionsButton = CreateObject<UI_Button>();
-	titleUI->creditButton = CreateObject<UI_Button>();
-	titleUI->endButton = CreateObject<UI_Button>();
+	titleUI->play_Button = CreateObject<UI_Button>();
+	titleUI->options_Button = CreateObject<UI_Button>();
+	titleUI->credit_Button = CreateObject<UI_Button>();
+	titleUI->end_Button = CreateObject<UI_Button>();
+	titleUI->underscore_Image = CreateObject<UI_Image>();
+
 	// title sample
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
@@ -31,7 +33,7 @@ void MenuScene::Start()
 	// game object -> SceneStart()
 	__super::Start();
 
-	titleUI->playButton->button->onClickListeners.AddListener(
+	titleUI->play_Button->button->onClickListeners.AddListener(
 		this, std::bind(&MenuScene::ChagnePlayScene, this));
 }
 
