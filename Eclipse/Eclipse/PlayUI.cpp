@@ -109,6 +109,7 @@ void PlayUI::SceneStart()
 	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "Skill2");
 
 	skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+	skill1_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
 	skill2_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
 
 	// 스킬창 UI
@@ -159,21 +160,32 @@ void PlayUI::Update()
 	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
 	skillHon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
 
-	//TODOMO : 퀘스트 쪽에서 하도록 수정
-	if (waveTimer > 0)
+	if (GameManager::Get().canUseAbsorb)
 	{
-		waveTimer -= Time::GetDeltaTime();
-		if (waveTimer < 0)
-		{
-			waveTimer = 0;
-			GameManager::Get().isWave = false;
-			GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);//TODOMO : 퀘스트 완료에 대한 추가 구현
-		}
-		std::wstring timeText = (waveTimer < 10 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(waveTimer)));
+		skill1_Image->imageRenderer->renderMode = RenderMode::Unlit;
+		skill1_Text->SetActive(false);
+	}
+	else
+	{
+		skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+		skill1_Text->SetActive(true);
+		skill1_Text->screenTextRenderer->SetText(std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().absorbCoolTime))));
+	}
+
+	if (GameManager::Get().canUseRelease)
+		skill2_Image->imageRenderer->renderMode = RenderMode::Unlit;
+	else
+		skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+
+
+	if (GameManager::Get().isWave)
+	{
+		std::wstring timeText = (GameManager::Get().waveTime < 10 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().waveTime)));
 		timer_Text->screenTextRenderer->SetText(timeText);
 	}
 	else if (GameManager::Get().waveCount > 0)
 		timer_Text->screenTextRenderer->SetText(L"00");
+
 
 	if (waveInfo_Text->IsActive())
 	{
@@ -240,7 +252,7 @@ void PlayUI::Update()
 		}
 	}
 
-	// 스킬 창 UI 이것도 Play에 가야하는지
+	// TODOMO : 아래 입력 삭제 
 	if( Input::GetKeyDown(VK_TAB))
 	{
 		if (skillWindow_Image->IsActive())
@@ -252,6 +264,39 @@ void PlayUI::Update()
 			skillWindow_Image->SetActive(true);
 		}
 	}
+
+	if (Input::GetKeyDown('Q') && GameManager::Get().canUseAbsorb)
+	{
+		GameManager::Get().absorbCoolTime = 9;
+		GameManager::Get().canUseAbsorb = false;
+		GameManager::Get().canUseRelease = true;
+	}
+
+
+	if (Input::GetKeyDown('E') && GameManager::Get().canUseRelease)
+	{
+		GameManager::Get().canUseRelease = false;
+	}
+
+	if (GameManager::Get().isWave)
+	{
+		if (GameManager::Get().waveTime <= 0)
+		{
+			GameManager::Get().isWave = false;
+			GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);//TODOMO : 퀘스트 완료에 대한 추가 구현
+		}
+		else
+			GameManager::Get().waveTime -= Time::GetDeltaTime();
+	}
+	else
+		GameManager::Get().waveTime = GameManager::Get().waveCount != 4 ? 2 : 80;
+
+	if (GameManager::Get().absorbCoolTime > 0)
+		GameManager::Get().absorbCoolTime -= Time::GetDeltaTime();
+	else
+		GameManager::Get().canUseAbsorb = true;
+	
+
 }
 
 void PlayUI::Destroyed()
@@ -260,15 +305,13 @@ void PlayUI::Destroyed()
 }
 
 void PlayUI::ClickChatButton() {
-	GameManager::Get().isWave = true;
-	GameManager::Get().waveCount++;
-	if (GameManager::Get().waveCount == 5)
+	if (GameManager::Get().waveCount == 4)
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
-	if (GameManager::Get().waveCount > 3) waveTimer = 80;
-	else waveTimer = 70;
+	GameManager::Get().isWave = true;
+	GameManager::Get().waveCount++;
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
 	StartWaveInfo(GameManager::Get().waveCount);
@@ -277,7 +320,7 @@ void PlayUI::ClickChatButton() {
 
 void PlayUI::StartWaveInfo(int waveNumber)
 {
-	std::wstring waveText = waveNumber < 3 ? L"Wave " + std::to_wstring(waveNumber) : L"Boss" ;
+	std::wstring waveText = waveNumber < 4 ? L"Wave " + std::to_wstring(waveNumber) : L"Boss" ;
 	waveInfo_Text->screenTextRenderer->SetText(waveText);
 	
 	waveInfoTimer = 0;

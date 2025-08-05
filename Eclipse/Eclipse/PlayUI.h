@@ -15,8 +15,6 @@ class Quest;
 class PlayUI : public GameObject
 {
 private:
-	float waveTimer = 0;// TODOMO : 추후 GameManager에서 관리
-
 	float waveInfoTimer = 0;
 	float waveIntoTime = 5;
 
