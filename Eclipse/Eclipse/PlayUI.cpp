@@ -277,7 +277,8 @@ void PlayUI::ClickChatButton() {
 
 void PlayUI::StartWaveInfo(int waveNumber)
 {
-	waveInfo_Text->screenTextRenderer->SetText(L"Wave " + std::to_wstring(waveNumber));
+	std::wstring waveText = waveNumber < 3 ? L"Wave " + std::to_wstring(waveNumber) : L"Boss" ;
+	waveInfo_Text->screenTextRenderer->SetText(waveText);
 	
 	waveInfoTimer = 0;
 	waveInfo_Text->SetActive(true);
