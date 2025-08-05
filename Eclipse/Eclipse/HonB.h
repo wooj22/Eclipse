@@ -30,9 +30,9 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
-		controller = AddComponent<HonBController>();
 		animator = AddComponent<Animator>();
-
+		controller = AddComponent<HonBController>();
+		
 		// animator
 		animatorController = new HonBAnimatorController();
 		animator->SetController(animatorController);
@@ -47,6 +47,11 @@ public:
 		collider->isTrigger = true;
 		collider->offset = { 0, -15 };
 		collider->radius = 40;
+	}
+
+	~HonB()
+	{
+		delete animatorController;
 	}
 
 	void Update() override

@@ -30,8 +30,8 @@ public:
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
-		controller = AddComponent<HonAController>();
 		animator = AddComponent<Animator>();
+		controller = AddComponent<HonAController>();
 
 		// animator
 		animatorController = new HonAAnimatorController();
