@@ -346,17 +346,18 @@ void PlayerFSM::AttractionTargetHon()
 {
 	if (!targetHon) return;
 
-	// 타겟 혼이 플레이어 쪽으로 다가오기
+	honTimer += Time::GetDeltaTime();
+
+	// 타겟 혼 - 플레이어 쪽으로 다가오기
 	Vector2 targetPosition = this->transform->GetPosition();
 	Vector2 currentPosition = targetHon->GetComponent<Transform>()->GetPosition();
 
-	// 혼 - 플레이어 쪽으로 이동 
-	float speed = 5.0f;
+	float speed = 10.0f; // 혼 이동 속도 
 	Vector2 newPosition = Vector2::Lerp(currentPosition, targetPosition, speed * Time::GetDeltaTime());
 	targetHon->GetComponent<Transform>()->SetPosition(newPosition);
 
-	// 혼의 크기 줄어듦 
-	float scaleSpeed = 8.0f; // 크기 감소 속도
+	// 혼 크기 감소 속도
+	float scaleSpeed = 8.0f; 
 	Vector2 currentScale = targetHon->GetComponent<Transform>()->GetScale();
 
 	Vector2 newScale = Vector2(
@@ -371,14 +372,12 @@ void PlayerFSM::AttractionTargetHon()
 	// 크기 업데이트
 	targetHon->GetComponent<Transform>()->SetScale(newScale);
 
-	// 플레이어와 혼 간의 거리 계산
-	float distanceToPlayer = (targetPosition - currentPosition).Magnitude();
-
-	// 타겟 혼이 플레이어와 일정 거리 가까워지면 제거
-	float removeDistanceThreshold = 0.5f;  
-	if (distanceToPlayer < removeDistanceThreshold)
+	float distanceToPlayer = (targetPosition - currentPosition).Magnitude(); 
+	float removeDistanceThreshold = 10.0f;  
+	if (distanceToPlayer < removeDistanceThreshold || honTimer >= honQLifetime)
 	{
 		targetHon->Destroy();  // 혼 제거
+		isAbsorbSkillActive = false;
 	}
 }
 

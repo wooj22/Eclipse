@@ -205,6 +205,9 @@ public:
 	float absorbRange = 300.0f;			// 흡수 범위 
 	bool hasAbsorbedSoul = false;       // 저장 여부
 
+	float honTimer = 0.0f;				// 혼의 지속 시간 누적
+	const float honQLifetime = 1.0f;		// 혼이 플레이어 따라오는 최대 지속 시간 (초)
+
 	// E 방출 
 	bool isReleaseSkillAvailable = false; // 흡수된 혼이 있는가? = 방출 가능한가? 
 	float releaseEffectRange = 400.0f;
