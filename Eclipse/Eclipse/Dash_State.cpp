@@ -133,7 +133,6 @@ void Dash_State::CreateAfterImage(MovementFSM* fsm)
     GameObject* afterImage = player->Instantiate<GameObject>();
     afterImage->AddComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
     afterImage->GetComponent<Transform>()->SetPosition(position);
-    // afterImage->GetComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
 
     // ·»´õ·¯ Ãß°¡
     auto renderer = afterImage->AddComponent<SpriteRenderer>();

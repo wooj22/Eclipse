@@ -15,7 +15,7 @@ void Moon_Scene::Awake()
 	auto backGround = CreateObject<GameObject>();
 	backGround->AddComponent<Transform>()->SetPosition(0.0f, 0.0f);;
 	auto background_sr = backGround->AddComponent<SpriteRenderer>();
-	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background.png"), "Background_Moon");
+	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background_1.png"), "Background_Moon_1");
 
 	// [ title ]
 	title_text = CreateObject<UI_Text>();
