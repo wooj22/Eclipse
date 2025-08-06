@@ -49,8 +49,24 @@ void WaveSystem::Start()
 
 void WaveSystem::Update()
 {
-    if (m_currentWaveState == WaveState::IDLE || m_currentWaveState == WaveState::COMPLETED)
+    // Wait for GameManager to signal wave start
+    if (!m_gameManager->isWave)
+    {
+        // Reset flag when not in wave
+        if (m_currentWaveState != WaveState::IDLE)
+        {
+            m_currentWaveState = WaveState::IDLE;
+            m_waveStartCheck = true;
+        }
         return;
+    }
+
+    // Start wave when GameManager signals
+    if (m_waveStartCheck && m_gameManager->isWave)
+    {
+		StartWave(m_gameManager->waveCount);
+	    m_waveStartCheck = false;
+    }
     
     // Update wave elapsed time
     m_waveElapsedTime += Time::GetDeltaTime();
@@ -101,22 +117,34 @@ void WaveSystem::Update()
     }
     
     // Check wave completion
-    if (m_waveElapsedTime >= m_waveDuration && m_destroyedCount >= m_spawnedCount)
+    if (m_waveElapsedTime >= m_waveDuration)
     {
-        if (m_currentWaveState == WaveState::WAVE_BOSS)
+        char debugMsg[256];
+        sprintf_s(debugMsg, "Wave %d time expired! Notifying GameManager.\n", static_cast<int>(m_currentWaveState));
+        OutputDebugStringA(debugMsg);
+        
+        // Clean up remaining hons
+        for (auto* hon : m_activeHons)
         {
-            m_currentWaveState = WaveState::COMPLETED;
-            OutputDebugStringA("All waves completed!\n");
+            if (hon && hon->IsActive())
+            {
+                hon->SetActive(false);
+            }
         }
+        m_activeHons.clear();
+        
+        // Notify GameManager that wave is complete
+        m_gameManager->isWave = false;
+        m_currentWaveState = WaveState::IDLE;
+        m_waveStartCheck = true;
+        
+        OutputDebugStringA("Wave ended. Waiting for GameManager to start next wave.\n");
     }
     
     // Send state to GameManager
     if (m_gameManager)
     {
-        m_gameManager->isWave = IsWaveActive();
-        m_gameManager->waveTime = m_waveElapsedTime;
-        m_gameManager->waveCount = static_cast<int>(m_currentWaveState);
-        m_gameManager->honCount = static_cast<int>(m_activeHons.size());
+        m_gameManager->waveTime = m_waveDuration - m_waveElapsedTime; // 남은 시간 전달
         
         // Debug GameManager communication every 2 seconds
         static float debugTimer = 0.0f;
@@ -143,28 +171,28 @@ void WaveSystem::StartWave(int waveNumber)
     {
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
-        m_waveDuration = 70.0f;
+        m_waveDuration = 2.0f;        
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;
         
     case 2:
         m_currentWaveState = WaveState::WAVE_2;
-        m_waveDuration = 70.0f;
+        m_waveDuration = 2.0f;        
         SetupWave2Pattern();
         OutputDebugStringA("Wave 2 Started - Chain Reaction (HonA, HonB, HonC)\n");
         break;
         
     case 3:
         m_currentWaveState = WaveState::WAVE_3;
-        m_waveDuration = 70.0f;
+        m_waveDuration = 2.0f;        
         SetupWave3Pattern();
         OutputDebugStringA("Wave 3 Started - Increased Difficulty (All Hons)\n");
         break;
         
     case 4:
         m_currentWaveState = WaveState::WAVE_BOSS;
-        m_waveDuration = 80.0f;
+        m_waveDuration = 80.0f;        
         SetupBossPattern();
         OutputDebugStringA("Boss Wave Started!\n");
         break;

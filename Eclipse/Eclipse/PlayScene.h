@@ -9,6 +9,7 @@
 #include "NPC.h"
 #include "Player_Test.h"
 #include "SkillWindowButton.h"
+#include "WaveSystem.h"
 
 class PlayScene : public Scene
 {
@@ -18,6 +19,10 @@ private:
 	GameObject* backGround;
 	Player_Test* player;
 	NPC* npc;
+
+	GameObject* waveSystemObj = nullptr;
+	WaveSystem* waveSystem = nullptr;
+
 	PlayUI* playUI;
 
 public:

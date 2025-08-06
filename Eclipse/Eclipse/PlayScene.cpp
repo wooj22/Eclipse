@@ -17,6 +17,11 @@ void PlayScene::Awake()
 	backGround->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(playbg, "PlayBackGround");
 	backGround->GetComponent<Transform>()->SetScale(3, 3);
 
+	//wave
+	waveSystemObj = CreateObject<GameObject>();
+	waveSystemObj->name = "WaveSystem";
+	waveSystemObj->SetActive(true);  // GameObject í™œì„±í™”
+	waveSystem = waveSystemObj->AddComponent<WaveSystem>();
 
 	npc = CreateObject<NPC>();
 
@@ -108,7 +113,7 @@ void PlayScene::Update()
 
 	if (Input::GetKeyDown(VK_F3))
 	{
-		GameManager::Get().AllSkillUnlock(); // ¸ðµç ½ºÅ³ ÇØ±Ý Ä¡Æ®
+		GameManager::Get().AllSkillUnlock(); // ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½Ø±ï¿½ Ä¡Æ®
 	}
 
 	if (Input::GetKeyDown(VK_F4))

@@ -77,7 +77,10 @@ private:
     
     // GameManager reference
     GameManager* m_gameManager;
-    
+
+    // Wave StartCheck
+	bool m_waveStartCheck = true;
+
     // Spawn parameters
     static constexpr float SPAWN_Y = 2560.0f;
     static constexpr float BOSS_SPAWN_Y = 2560.0f;

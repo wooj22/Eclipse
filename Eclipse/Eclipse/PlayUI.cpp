@@ -278,18 +278,18 @@ void PlayUI::Update()
 		GameManager::Get().canUseRelease = false;
 	}
 
-	if (GameManager::Get().isWave)
-	{
-		if (GameManager::Get().waveTime <= 0)
-		{
-			GameManager::Get().isWave = false;
-			GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);//TODOMO : 퀘스트 완료에 대한 추가 구현
-		}
-		else
-			GameManager::Get().waveTime -= Time::GetDeltaTime();
-	}
-	else
-		GameManager::Get().waveTime = 2;
+	//if (GameManager::Get().isWave)
+	//{
+	//	if (GameManager::Get().waveTime <= 0)
+	//	{
+	//		GameManager::Get().isWave = false;
+	//		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);//TODOMO : 퀘스트 완료에 대한 추가 구현
+	//	}
+	//	else
+	//		GameManager::Get().waveTime -= Time::GetDeltaTime();
+	//}
+	//else
+	//	GameManager::Get().waveTime = 2;
 
 	if (GameManager::Get().absorbCoolTime > 0)
 		GameManager::Get().absorbCoolTime -= Time::GetDeltaTime();
