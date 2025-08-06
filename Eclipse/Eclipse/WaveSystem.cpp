@@ -302,7 +302,7 @@ void WaveSystem::SetupWave1Pattern()
             SpawnData data;
             data.x = GetRandomSpawnX();
             data.y = SPAWN_Y;
-            data.honType = ((i * 3 + j) % 2 == 0) ? 0 : 1;  // Alternate HonA and HonB
+            data.honType = (m_randomGen() % 2 == 0) ? 0 : 1;  // Random 1:1 HonA and HonB
             data.delayTime = i * spawnInterval;  // 같은 시간에 3개 스폰
             
             m_currentSpawnPattern.push_back(data);
@@ -326,14 +326,9 @@ void WaveSystem::SetupWave2Pattern()
             data.x = GetRandomSpawnX();
             data.y = SPAWN_Y;
             
-            // HonA(40%), HonB(40%), HonC(20%)
-            int rand = m_randomGen() % 10;
-            if (rand < 4)
-                data.honType = 0;  // HonA
-            else if (rand < 8)
-                data.honType = 1;  // HonB
-            else
-                data.honType = 2;  // HonC
+            // HonA, HonB, HonC 균등 분배 (1:1:1)
+            int rand = m_randomGen() % 3;
+            data.honType = rand;  // 0: HonA, 1: HonB, 2: HonC
                 
             data.delayTime = i * spawnInterval;  // 같은 시간에 3개 스폰
             m_currentSpawnPattern.push_back(data);
@@ -347,7 +342,6 @@ void WaveSystem::SetupWave3Pattern()
     
     // Wave 3: Increased difficulty - all hon types, high density
     float spawnInterval = 2.2f;
-    int honDCount = 0;  // HonD 카운터
     
     for (int i = 0; i < 30; i++)
     {
@@ -358,17 +352,18 @@ void WaveSystem::SetupWave3Pattern()
             data.x = GetRandomSpawnX();
             data.y = SPAWN_Y;
             
-            // HonD는 25개만 스폰 (총 90개 중 25개 = 약 28%) - 충돌 손실 감안
-            if (honDCount < 25 && m_randomGen() % 4 == 0)
+            // 0.8:1:1:1 비율로 설정 (총 3.8)
+            // HonD: 0.8/3.8 = 21%, A,B,C: 1/3.8 = 26.3%씩
+            int rand = m_randomGen() % 100;
+            if (rand < 25)  // 25% 확률로 HonD (충돌 손실 고려하여 높게 설정)
             {
                 data.honType = 3;  // HonD
-                honDCount++;
             }
             else
             {
-                // 나머지는 A, B, C 균등 분배
-                int rand = m_randomGen() % 3;
-                data.honType = rand;  // 0: HonA, 1: HonB, 2: HonC
+                // 나머지 75%를 A, B, C가 균등 분배 (각각 25%)
+                int honType = (rand - 25) % 3;
+                data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
             }
                 
             data.delayTime = i * spawnInterval;  // 같은 시간에 3개 스폰
@@ -409,7 +404,21 @@ void WaveSystem::SetupBossPattern()
             }
             
             data.y = SPAWN_Y;
-            data.honType = m_randomGen() % 4;  // All types
+            
+            // 0.8:1:1:1 비율로 설정 (총 3.8)
+            // HonD: 0.8/3.8 = 21%, A,B,C: 1/3.8 = 26.3%씩
+            int rand = m_randomGen() % 100;
+            if (rand < 21)  // 21% 확률로 HonD
+            {
+                data.honType = 3;  // HonD
+            }
+            else
+            {
+                // 나머지 79%를 A, B, C가 균등 분배 (각각 26.3%)
+                int honType = (rand - 21) % 3;
+                data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
+            }
+            
             data.delayTime = 5.0f + (i * spawnInterval);  // Start after 5 seconds
             
             m_currentSpawnPattern.push_back(data);
