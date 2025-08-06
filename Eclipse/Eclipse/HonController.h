@@ -86,6 +86,9 @@ public:
 		}
 	}
 
+	// player attack
+	virtual void TakeDamageByPlayer() = 0;
+
 	// collision moving flag
 	void CollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
 	void CollisionStart() { isCollisionMoving = true; collisionMovingDelta = 0; }

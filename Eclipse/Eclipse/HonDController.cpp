@@ -68,10 +68,10 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player attack collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
-		// score
-		GameManager::Get().honCount--;
+		//// score
+		//GameManager::Get().honCount--;
 
-		gameObject->Destroy();
+		//gameObject->Destroy();
 	}
 
 	// [endline collision]
@@ -108,4 +108,14 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		else otherGameObject->GetComponent<HonController>()->TakeDamage();
 		this->gameObject->Destroy();
 	}
+}
+
+
+// Player Attack
+void HonDController::TakeDamageByPlayer()
+{
+	// score
+	GameManager::Get().honCount--;
+
+	gameObject->Destroy();
 }
