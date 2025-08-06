@@ -18,7 +18,7 @@ private:
 
 	// stat
 	float hp = MAX_HP;
-	float speed = 20;
+	float speed = 35;
 	float palyer_deceleration = 0.5;
 
 	// flag

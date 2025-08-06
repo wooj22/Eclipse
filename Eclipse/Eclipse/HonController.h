@@ -28,7 +28,7 @@ protected:
 	const float collisionSpeedDefalut = 1000;		// 충돌 밀림 기본 speed
 
 	// data
-	float collisionMovingTime = 1.5f;		// 충돌 밀림 지속시간
+	float collisionMovingTime = 0.5f;		// 충돌 밀림 지속시간
 	float pullMovingTime = 0.15f;			// Hon C 끌어당김 지속시간
 
 	// controll
