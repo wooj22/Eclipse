@@ -36,6 +36,14 @@ void Dash_State::Enter(MovementFSM* fsm)
         inputX = flipX ? 1 : -1;  
     }
 
+    // 현재 위치 기준으로 위로 riseAmount 만큼 띄움
+    Vector2 currentPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
+    targetYPosition = currentPos.y - riseAmount; // Y축 음수 방향이 위라면 -riseAmount
+
+    Vector2 newPos = Vector2(currentPos.x, targetYPosition);
+    fsm->GetPlayerFSM()->GetTransform()->SetPosition(newPos);
+
+
     // 애니메이션
     if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Dash", true);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Dash", true);
@@ -61,9 +69,14 @@ void Dash_State::Update(MovementFSM* fsm)
 
 void Dash_State::FixedUpdate(MovementFSM* fsm)
 {
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0.0f;
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = inputX * dashSpeed;
-    
+    // X축 속도만 적용 (Y는 고정)
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(inputX * dashSpeed, 0.0f);
+
+    // Y위치 고정
+    Vector2 currentPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
+    currentPos.y = targetYPosition;
+    fsm->GetPlayerFSM()->GetTransform()->SetPosition(currentPos);
+
     std::string debugStr = "[Dash_State] velocity.y = " + std::to_string(fsm->GetPlayerFSM()->GetRigidbody()->velocity.y) + "\n";
     OutputDebugStringA(debugStr.c_str());
 

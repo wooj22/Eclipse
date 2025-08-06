@@ -13,6 +13,9 @@ private:
     float dashSpeed = 0.0;
     int inputX = 0.0f;
 
+    float targetYPosition = 0.0f;
+    float riseAmount = -15.0f; // 위로 얼마나 뜰지 (픽셀 단위)
+
 public:
     void Enter(MovementFSM* fsm) override;
     void Update(MovementFSM* fsm) override;

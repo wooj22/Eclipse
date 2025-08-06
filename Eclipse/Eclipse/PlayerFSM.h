@@ -211,7 +211,6 @@ public:
 	// E 방출 
 	bool isReleaseSkillAvailable = false; // 흡수된 혼이 있는가? = 방출 가능한가? 
 	float releaseEffectRange = 400.0f;
-	// float releaseDamage = 3.0f; // 혼 점수제에 따른 데미지 
 
 	void UpdateSkillCooldowns();
 	bool CanUseAbsorb() const;
