@@ -153,17 +153,13 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hanging_State.cpp" />
     <ClCompile Include="HonA.cpp" />
-    <ClCompile Include="HonAAnimatorController.cpp" />
     <ClCompile Include="HonAController.cpp" />
     <ClCompile Include="HonB.cpp" />
-    <ClCompile Include="HonBAnimatorController.cpp" />
     <ClCompile Include="HonBController.cpp" />
     <ClCompile Include="HonC.cpp" />
-    <ClCompile Include="HonCAnimatorController.cpp" />
     <ClCompile Include="HonCController.cpp" />
     <ClCompile Include="HonController.cpp" />
     <ClCompile Include="HonD.cpp" />
-    <ClCompile Include="HonDAnimatorController.cpp" />
     <ClCompile Include="HonDController.cpp" />
     <ClCompile Include="Honmun.cpp" />
     <ClCompile Include="HonmunAFSM.cpp" />

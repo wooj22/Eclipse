@@ -127,6 +127,12 @@
     <Filter Include="03. Script\Woo\Hon">
       <UniqueIdentifier>{3527d1a8-ef88-40d9-b309-46214eebf1cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Script\Aron\Old">
+      <UniqueIdentifier>{c8693c16-ec7f-48a8-ae24-248fd3344bc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo\Hon\Base">
+      <UniqueIdentifier>{f5c36a9e-6bcb-4980-830d-63a1a0e57a92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EclipseApp.cpp">
@@ -192,12 +198,6 @@
     <ClCompile Include="HonmunCollisionScript.cpp">
       <Filter>03. Script\Aron</Filter>
     </ClCompile>
-    <ClCompile Include="HonmunAFSM.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="HonmunBFSM.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>02. GameObject\Woo\Boss</Filter>
     </ClCompile>
@@ -227,9 +227,6 @@
     </ClCompile>
     <ClCompile Include="Dash_State.cpp">
       <Filter>03. Script\Moon\[ Player FSM ]\[ Movement FSM ]</Filter>
-    </ClCompile>
-    <ClCompile Include="HonmunCFSM.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
@@ -273,23 +270,8 @@
     <ClCompile Include="HonBController.cpp">
       <Filter>03. Script\Woo\Hon</Filter>
     </ClCompile>
-    <ClCompile Include="HonController.cpp">
-      <Filter>03. Script\Woo\Hon</Filter>
-    </ClCompile>
     <ClCompile Include="HonDController.cpp">
       <Filter>03. Script\Woo\Hon</Filter>
-    </ClCompile>
-    <ClCompile Include="HonAAnimatorController.cpp">
-      <Filter>04. Animation\Woo\Hon</Filter>
-    </ClCompile>
-    <ClCompile Include="HonBAnimatorController.cpp">
-      <Filter>04. Animation\Woo\Hon</Filter>
-    </ClCompile>
-    <ClCompile Include="HonCAnimatorController.cpp">
-      <Filter>04. Animation\Woo\Hon</Filter>
-    </ClCompile>
-    <ClCompile Include="HonDAnimatorController.cpp">
-      <Filter>04. Animation\Woo\Hon</Filter>
     </ClCompile>
     <ClCompile Include="HonCController.cpp">
       <Filter>03. Script\Woo\Hon</Filter>
@@ -302,6 +284,18 @@
     </ClCompile>
     <ClCompile Include="PlayerAnimationData.cpp">
       <Filter>04. Animation\Moon</Filter>
+    </ClCompile>
+    <ClCompile Include="HonmunAFSM.cpp">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="HonmunBFSM.cpp">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="HonmunCFSM.cpp">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="HonController.cpp">
+      <Filter>03. Script\Woo\Hon\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -377,12 +371,6 @@
     <ClInclude Include="HonmunCollisionScript.h">
       <Filter>03. Script\Aron</Filter>
     </ClInclude>
-    <ClInclude Include="HonmunAFSM.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunBFSM.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Boss.h">
       <Filter>02. GameObject\Woo\Boss</Filter>
     </ClInclude>
@@ -433,18 +421,6 @@
     </ClInclude>
     <ClInclude Include="playerAttackArea.h">
       <Filter>02. GameObject\Moon\[ Player ]</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunAAnimatorController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunBAnimatorController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunCAnimatorController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HonmunCFSM.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Options.h">
       <Filter>02. GameObject\Yunmo\PlayScene</Filter>
@@ -500,9 +476,6 @@
     <ClInclude Include="HonCController.h">
       <Filter>03. Script\Woo\Hon</Filter>
     </ClInclude>
-    <ClInclude Include="HonController.h">
-      <Filter>03. Script\Woo\Hon</Filter>
-    </ClInclude>
     <ClInclude Include="HonDController.h">
       <Filter>03. Script\Woo\Hon</Filter>
     </ClInclude>
@@ -517,6 +490,27 @@
     </ClInclude>
     <ClInclude Include="AfterImage.h">
       <Filter>02. GameObject\Moon</Filter>
+    </ClInclude>
+    <ClInclude Include="HonmunAAnimatorController.h">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="HonmunAFSM.h">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="HonmunBAnimatorController.h">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="HonmunBFSM.h">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="HonmunCAnimatorController.h">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="HonmunCFSM.h">
+      <Filter>03. Script\Aron\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="HonController.h">
+      <Filter>03. Script\Woo\Hon\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
