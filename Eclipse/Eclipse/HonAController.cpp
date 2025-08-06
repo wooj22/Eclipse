@@ -68,6 +68,11 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
+		// score
+		if (is2A) GameManager::Get().honCount += 3;
+		else  GameManager::Get().honCount += 1;
+
+		// collision acttion
 		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 		TakeDamage();
@@ -115,6 +120,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				CollisionEnd();
 				SetDescentSpeed(descentSpeed * 0.6);
 				SetHp(1);
+				is2A = true;
 			}
 			else
 			{
@@ -122,6 +128,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherController->CollisionEnd();
 				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
 				otherController->SetHp(1);
+				otherGameObject->GetComponent<HonAController>()->is2A = true;
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
 			break;
