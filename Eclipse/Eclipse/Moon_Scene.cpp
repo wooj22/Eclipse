@@ -15,7 +15,7 @@ void Moon_Scene::Awake()
 	auto backGround = CreateObject<GameObject>();
 	backGround->AddComponent<Transform>()->SetPosition(0.0f, 0.0f);;
 	auto background_sr = backGround->AddComponent<SpriteRenderer>();
-	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background.png"), "Background_Moon");
+	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background_1.png"), "Background_Moon_1");
 
 	// [ title ]
 	title_text = CreateObject<UI_Text>();
@@ -39,7 +39,9 @@ void Moon_Scene::Awake()
 	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
 	playerAttackArea = CreateObject<PlayerAttackArea>();
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
-	playerAttackArea->SetActive(false);
+	playerAttackArea->GetComponent<SpriteRenderer>()->SetEnabled(false); 
+	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false); 
+
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 	// [ ground ]
@@ -81,17 +83,17 @@ void Moon_Scene::Awake()
 	
 
 	// [ Platform1 ]
-	platform1 = CreateObject<GameObject>();
-	platform1->name = "Ground";
-	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -700.0f);
+	//platform1 = CreateObject<GameObject>();
+	//platform1->name = "Ground";
+	//platform1->AddComponent<Transform>()->SetPosition(-300.0f, -700.0f);
 
-	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
-	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+	//auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
+	//platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
 
-	platform1_col = platform1->AddComponent<BoxCollider>();
-	platform1_col->offset = { 0.0f, 12.0f };
-	platform1_col->size = { 200.0f, 5.0f };
-	platform1_col->isFlatform = true;
+	//platform1_col = platform1->AddComponent<BoxCollider>();
+	//platform1_col->offset = { 0.0f, 12.0f };
+	//platform1_col->size = { 200.0f, 5.0f };
+	//platform1_col->isFlatform = true;
 	
 
 	// [ Platform2 ]

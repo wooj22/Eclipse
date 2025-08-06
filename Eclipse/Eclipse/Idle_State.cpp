@@ -98,6 +98,9 @@ void Idle_State::FixedUpdate(MovementFSM* fsm) {}
 
 void Idle_State::Exit(MovementFSM* fsm)
 {
-   if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
-   else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", false);
+   fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
+   fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", false);
+ 
+   // if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
+   // else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", false);
 }

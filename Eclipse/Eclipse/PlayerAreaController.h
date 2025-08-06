@@ -17,16 +17,17 @@ public:
 	{
 		if (other->gameObject->tag == "Hon")
 		{
-			OutputDebugStringA("Hon과 충돌 함 \n");
-			this->gameObject->SetActive(false);
+			// OutputDebugStringA("Hon과 충돌 함 \n");
+
+			if (this->gameObject->GetComponent<CircleCollider>()->IsEnabled())
+			{
+				this->gameObject->GetComponent<CircleCollider>()->SetEnabled(false);
+			}
+			
 		}
 	}
 
 	void OnTriggerStay(ICollider* other, const ContactInfo& contact) override
 	{
-		if (other->gameObject->tag == "Hon")
-		{
-			this->gameObject->SetActive(false);
-		}
 	}
 };

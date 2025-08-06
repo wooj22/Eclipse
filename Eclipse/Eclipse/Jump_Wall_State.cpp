@@ -167,6 +167,9 @@ void Jump_Wall_State::FixedUpdate(MovementFSM* fsm)
 
 void Jump_Wall_State::Exit(MovementFSM* fsm)
 {
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
+
+    //if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    //else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 }

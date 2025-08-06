@@ -140,6 +140,9 @@ void Fall_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
 
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
+
+    //if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    //else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 }

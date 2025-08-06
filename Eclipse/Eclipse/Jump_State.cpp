@@ -159,11 +159,9 @@ void Jump_State::FixedUpdate(MovementFSM* fsm)
 
 void Jump_State::Exit(MovementFSM* fsm)
 {
-    //if (fsm->GetPlayerFSM()->GetIsGround())
-    //{
-    //    canDoubleJump = true;  // 착지 시 더블 점프를 할 수 있도록 설정
-    //}
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
+    //if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
+    //else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
 }

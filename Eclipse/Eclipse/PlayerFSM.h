@@ -46,7 +46,7 @@ private:
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 280.0f;
-	float dashSpeed = 450.0f;
+	float dashSpeed = 550.0f;
 	float jumpForce = 700.0f;
 
 	float speedDownRate = 1.0; 
@@ -145,6 +145,7 @@ public:
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 	AnimatorController* GetAnimatorController() const { return animatorController; }
     Transform* GetTransform() const { return transform; }
+	SpriteRenderer* GetSpriteRenderer() const { return spriteRenderer; }
 	void SetPlayerAttackArea(PlayerAttackArea* obj) { playerAttackArea = obj; }
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
@@ -205,10 +206,12 @@ public:
 	float absorbRange = 300.0f;			// 흡수 범위 
 	bool hasAbsorbedSoul = false;       // 저장 여부
 
+	float honTimer = 0.0f;				// 혼의 지속 시간 누적
+	const float honQLifetime = 1.0f;		// 혼이 플레이어 따라오는 최대 지속 시간 (초)
+
 	// E 방출 
 	bool isReleaseSkillAvailable = false; // 흡수된 혼이 있는가? = 방출 가능한가? 
 	float releaseEffectRange = 400.0f;
-	// float releaseDamage = 3.0f; // 혼 점수제에 따른 데미지 
 
 	void UpdateSkillCooldowns();
 	bool CanUseAbsorb() const;

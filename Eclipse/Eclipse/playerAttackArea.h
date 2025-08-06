@@ -50,6 +50,6 @@ public:
 	void Update() override
 	{
 		// AABB ¿µ¿ª 
-		collider->DebugColliderDraw();
+		// collider->DebugColliderDraw();
 	}
 };

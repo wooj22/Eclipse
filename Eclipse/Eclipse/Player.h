@@ -10,6 +10,7 @@
 
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
+#include "AfterImage.h"
 
 class Player : public GameObject
 {
@@ -19,7 +20,6 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
-	// CircleCollider* attackCollider;
 	Animator* animator;
 
 	// [ animation asset ]
@@ -42,11 +42,7 @@ public:
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<BoxCollider>();
 		animator = AddComponent<Animator>();
-		// attackCollider = AddComponent<CircleCollider>();
 
-
-		// auto player = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Player.png");
-		// spriteRenderer->sprite = ResourceManager::Get().CreateSprite(player, "Player");
 		spriteRenderer->layer = 2;
 
 		playerFSM = AddComponent<PlayerFSM>();
