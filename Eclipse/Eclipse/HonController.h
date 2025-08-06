@@ -91,6 +91,10 @@ public:
 	}
 
 	// 플레이어 흡수
-	void Absorption() { isAbsorption = true; }
+	void Absorption() 
+	{ 
+		isAbsorption = true;
+		if (collider) collider->SetEnabled(false);
+	}
 };
 
