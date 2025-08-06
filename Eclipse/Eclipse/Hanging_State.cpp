@@ -74,6 +74,9 @@ void Hanging_State::Exit(MovementFSM* fsm)
 
     fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
 
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", false);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Hanging", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Hanging", false);
+
+    //if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Hanging", false);
+    //else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Hanging", false);
 }

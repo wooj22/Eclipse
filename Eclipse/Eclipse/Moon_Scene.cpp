@@ -83,17 +83,17 @@ void Moon_Scene::Awake()
 	
 
 	// [ Platform1 ]
-	platform1 = CreateObject<GameObject>();
-	platform1->name = "Ground";
-	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -700.0f);
+	//platform1 = CreateObject<GameObject>();
+	//platform1->name = "Ground";
+	//platform1->AddComponent<Transform>()->SetPosition(-300.0f, -700.0f);
 
-	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
-	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+	//auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
+	//platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
 
-	platform1_col = platform1->AddComponent<BoxCollider>();
-	platform1_col->offset = { 0.0f, 12.0f };
-	platform1_col->size = { 200.0f, 5.0f };
-	platform1_col->isFlatform = true;
+	//platform1_col = platform1->AddComponent<BoxCollider>();
+	//platform1_col->offset = { 0.0f, 12.0f };
+	//platform1_col->size = { 200.0f, 5.0f };
+	//platform1_col->isFlatform = true;
 	
 
 	// [ Platform2 ]
