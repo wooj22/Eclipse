@@ -16,6 +16,10 @@
 #include "Player.h"
 #include "playerAttackArea.h"
 
+#include "NPC.h"
+#include "SkillWindowButton.h"
+#include "PlayUI.h"
+
 
 class Woo_Scene : public Scene
 {
@@ -41,6 +45,10 @@ private:
 	HonC* honC3;
 	HonD* honD1;
 	HonD* honD2;
+
+	// UI
+	NPC* npc;
+	PlayUI* playUI;
 
 	// player sample
 	//Player_Woo* player;
