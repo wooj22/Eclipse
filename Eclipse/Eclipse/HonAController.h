@@ -34,5 +34,8 @@ public:
 
 	// trigger event
 	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
+
+	// player attack
+	void TakeDamageByPlayer() override;
 };
 

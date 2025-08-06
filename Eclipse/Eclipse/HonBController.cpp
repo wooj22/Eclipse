@@ -77,18 +77,20 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player attack collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
-		// score
-		if (hp==1) GameManager::Get().honCount++;
+		//// score
+		//if (hp==1) GameManager::Get().honCount++;
 
-		// collision acttion
-		CollisionStart();
-		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-		TakeDamage();
+		//// collision acttion
+		//CollisionStart();
+		//moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+		//TakeDamage();
 	}
 
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{
+		// score
+		GameManager::Get().honCount--;
 		gameObject->Destroy();
 	}
 
@@ -150,4 +152,17 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			gameObject->Destroy();
 		}
 	}
+}
+
+
+// Player Attack
+void HonBController::TakeDamageByPlayer()
+{
+	// score
+	if (hp == 1) GameManager::Get().honCount++;
+
+	// collision acttion
+	CollisionStart();
+	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+	TakeDamage();
 }

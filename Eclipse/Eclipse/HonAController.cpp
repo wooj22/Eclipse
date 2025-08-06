@@ -78,19 +78,21 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player attack collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
-		// score
-		if (is2A) GameManager::Get().honCount += 3;
-		else  GameManager::Get().honCount += 1;
+		//// score
+		//if (is2A) GameManager::Get().honCount += 3;
+		//else  GameManager::Get().honCount += 1;
 
-		// collision acttion
-		CollisionStart();
-		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-		TakeDamage();
+		//// collision acttion
+		//CollisionStart();
+		//moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+		//TakeDamage();
 	}
 
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{
+		// score
+		GameManager::Get().honCount--;
 		gameObject->Destroy();
 	}
 
@@ -173,4 +175,17 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			break;
 		}
 	}
+}
+
+// Player Attack
+void HonAController::TakeDamageByPlayer()
+{
+	// score
+	if (is2A) GameManager::Get().honCount += 3;
+	else  GameManager::Get().honCount += 1;
+
+	// collision acttion
+	CollisionStart();
+	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+	TakeDamage();
 }
