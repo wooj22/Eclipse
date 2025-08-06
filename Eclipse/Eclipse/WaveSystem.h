@@ -2,6 +2,7 @@
 #include "../Direct2D_EngineLib/Script.h"
 #include <vector>
 #include <random>
+#include <cmath>
 
 class GameObject;
 class HonA;
