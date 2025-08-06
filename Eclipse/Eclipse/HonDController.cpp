@@ -65,15 +65,6 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		}
 	}
 
-	// [player attack collision]
-	if (other->gameObject->name == "PlayerAttackArea")
-	{
-		//// score
-		//GameManager::Get().honCount--;
-
-		//gameObject->Destroy();
-	}
-
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{
@@ -101,7 +92,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		string honType = otherGameObject->name;
 
 		// score
-		GameManager::Get().honCount--;
+		GameManager::Get().ChangeHonCount(-1);
 
 		// collision acttion
 		if(honType == "HonD") otherGameObject->Destroy();
@@ -115,7 +106,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 void HonDController::TakeDamageByPlayer()
 {
 	// score
-	GameManager::Get().honCount--;
+	GameManager::Get().ChangeHonCount(-1);
 
 	gameObject->Destroy();
 }
