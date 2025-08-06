@@ -18,15 +18,11 @@ public:
 		if (other->gameObject->tag == "Hon")
 		{
 			OutputDebugStringA("Hon과 충돌 함 \n");
-			this->gameObject->SetActive(false);
+			// this->gameObject->SetActive(false);
 		}
 	}
 
 	void OnTriggerStay(ICollider* other, const ContactInfo& contact) override
 	{
-		if (other->gameObject->tag == "Hon")
-		{
-			this->gameObject->SetActive(false);
-		}
 	}
 };

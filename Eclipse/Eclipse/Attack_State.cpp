@@ -49,9 +49,10 @@ void Attack_State::Enter(MovementFSM* fsm)
 
     // playerAttack_Parent 회전 : ( 원본 이미지가 위쪽 방향 기준 -> 시계방향 -90도 회전 적용 )
     fsm->GetPlayerFSM()->GetPlayerAttackParent()->GetComponent<Transform>()->SetRotation(angleDeg - 90.0f);
-
+   
     // 공격 범위 활성화
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(true);
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(true); 
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(true); 
 }
 
 void Attack_State::Update(MovementFSM* fsm)
@@ -98,7 +99,8 @@ void Attack_State::Exit(MovementFSM* fsm)
 
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->SetActive(false);
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false);
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false);
 
     if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", false);
