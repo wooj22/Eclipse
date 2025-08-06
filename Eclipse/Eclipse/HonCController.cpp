@@ -12,6 +12,7 @@ void HonCController::Awake()
 	tr = gameObject->transform;
 	collider = gameObject->GetComponent<CircleCollider>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
+
 }
 
 void HonCController::Start()
