@@ -17,6 +17,8 @@
 #include "Chat.h"
 #include "HonController.h"
 
+#include "PlayerAnimatorController.h"
+
 
 // 컴포넌트 활성화 시점
 void PlayerFSM::OnEnable()
@@ -31,6 +33,7 @@ void PlayerFSM::Awake()
 	rigidbody = gameObject->GetComponent<Rigidbody>();
 	animatorController = gameObject->GetComponent<Animator>()->controller;
 
+	playerAnimatorController = dynamic_cast<PlayerAnimatorController*>(animatorController);
 
 	// [ FSM 초기화 ]
 	movementFSM = std::make_unique<MovementFSM>();
@@ -82,8 +85,13 @@ void PlayerFSM::Update()
 
 	UpdateDashCooldown(); // dash 쿨타임 업데이트
 
-	if (isAbsorbSkillActive) AttractionTargetHon(); // [ Q 스킬 상태 ]: 타겟 혼이 플레이어 쪽으로 작아지면서 다가오기
-
+	if (isAbsorbSkillActive) 
+	{
+		AttractionTargetHon(); // [ Q 스킬 상태 ]: 타겟 혼이 플레이어 쪽으로 작아지면서 다가오기
+		
+		if(!playerAnimatorController->GetSkillAvailable()) playerAnimatorController->SetSkillAvailable(true);
+	} 
+	
 	
 	// [ FSM 상태 ] 
 	//MovementStateBase* currentState = GetMovementFSM()->GetCurrentState();
@@ -189,7 +197,6 @@ void PlayerFSM::OnJump(JumpPhase jumpType)
 
 	// 해당 점프만 true로 설정
 	canAttackAfterJump[jumpType] = true;
-
 }
 
 bool PlayerFSM::CanAttack()
@@ -322,6 +329,9 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 
 	// 이펙트 발동 
 	// HonReleaseEffect(); // 범위 이펙트, 데미지 
+
+	// 애니메이션 상태 변환
+	playerAnimatorController->SetSkillAvailable(false);
 
 	std::string debugStr = "[Skill] E 방출 성공 - " + std::to_string(removedCount) + "개 혼 제거됨\n";
 	OutputDebugStringA(debugStr.c_str());

@@ -26,6 +26,7 @@ class AnimatorController;
 class WorldTextRenderer;
 class Rigidbody;
 class PlayerAttackArea;
+class PlayerAnimatorController;
 
 class PlayerFSM : public Script
 {
@@ -84,6 +85,7 @@ private:
 
 	GameObject* targetHon = nullptr;
 
+	PlayerAnimatorController* playerAnimatorController = nullptr;
 
 public:
 	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 

@@ -22,19 +22,13 @@ void Idle_State::Enter(MovementFSM* fsm)
     // 초기화 
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
-    // fsm->GetPlayerFSM()->timer = 0.0f;
 
     fsm->GetPlayerFSM()->OnGround();  // 모든 공격 기회 리셋
 
     fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0);  // 움직임이 있었다면 정지 
 
     // 애니메이션 재생
-
-    //auto pac = dynamic_cast<PlayerAnimatorController*>(fsm->GetPlayerFSM()->GetAnimatorController());
-    //if (pac) pac->SetSkillSensitiveBool("Player_Idle", true);
-
-    if(!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
-    else { fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", true); }
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Idle", true);
 }
 
 void Idle_State::Update(MovementFSM* fsm)
@@ -102,9 +96,5 @@ void Idle_State::FixedUpdate(MovementFSM* fsm) {}
 
 void Idle_State::Exit(MovementFSM* fsm)
 {
-   fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
-   fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", false);
- 
-   // if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", false);
-   // else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", false);
+   fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Idle", false);
 }

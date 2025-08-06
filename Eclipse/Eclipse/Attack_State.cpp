@@ -24,9 +24,7 @@ void Attack_State::Enter(MovementFSM* fsm)
     OutputDebugStringA(dbg.c_str());
 
     // 애니메이션 재생 
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", true);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", true);
-
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", true);
 
     // [ 공격 이동 ] 
     startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
@@ -102,9 +100,5 @@ void Attack_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false);
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false);
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", false);
-
-    //if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Attack", false);
-    //else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Attack", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", false);
 }

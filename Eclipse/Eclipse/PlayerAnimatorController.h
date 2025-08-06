@@ -14,6 +14,7 @@ class PlayerAnimatorController : public AnimatorController
 
 public:
     void SetSkillAvailable(bool available) { isSkillAvailable = available; }
+    bool GetSkillAvailable() const { return isSkillAvailable; }
 
     //std::string GetCurrentPrefix() const {
     //    return isSkillAvailable ? "Y_" : "N_";

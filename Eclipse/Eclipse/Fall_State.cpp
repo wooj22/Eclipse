@@ -26,9 +26,7 @@ void Fall_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
 
     // 애니메이션 재생
-    if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", true);
-    else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", true);
-
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
 }
 
 void Fall_State::Update(MovementFSM* fsm)
@@ -140,9 +138,5 @@ void Fall_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
 
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
-    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
-
-    //if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Jump", false);
-    //else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Jump", false);
+    fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", false);
 }
