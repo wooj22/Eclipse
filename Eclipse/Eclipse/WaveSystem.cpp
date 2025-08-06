@@ -440,7 +440,7 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
         }
         
         // Set descent speed based on hon type
-        auto* controller = newHon->GetComponent<HonController>();
+        /*auto* controller = newHon->GetComponent<HonController>();
         if (controller)
         {
             float fallDistance = SPAWN_Y + 400.0f;  // 2560 + 400 = 2960
@@ -448,15 +448,15 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
             
             if (honType == 3)  // HonD is 2x faster
             {
-                targetFallTime = 7.5f;  // Half the time = double speed
+                targetFallTime = 20.0f;  // Half the time = double speed
             }
             else  // HonA, HonB, HonC normal speed
             {
-                targetFallTime = 15.0f;
+                targetFallTime = 30.0f;
             }
             
             controller->SetDescentSpeed(fallDistance / targetFallTime);
-        }
+        }*/
         
         m_activeHons.push_back(newHon);
         m_spawnedCount++;
