@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "../Direct2D_EngineLib/Camera.h"
 #include "GameManager.h"
+#include "PlayerFSM.h"
 
 /*-----------------  component life cycle  ----------------*/
 void BossController::Awake()
@@ -218,6 +219,13 @@ void BossController::Die()
 /*-----------------  trigger event  -----------------*/ 
 void BossController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
+	// [Player Collision]
+	if (other->gameObject->name == "Player")
+	{
+		other->gameObject->GetComponent<PlayerFSM>()->SetSpeedDownRate(palyer_deceleration);
+	}
+
+	// [Game Over]
 	if (other->gameObject->tag == "EndLine")
 	{
 		isGoal = true;

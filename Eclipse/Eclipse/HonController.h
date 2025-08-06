@@ -6,6 +6,8 @@
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "GameManager.h"
+#include "PlayerFSM.h"
+#include "Attack_State.h"
 
 /* Hon Type Enum */
 enum class HonType
@@ -45,6 +47,7 @@ protected:
 
 	// player 
 	Transform* playerTr;
+	float palyer_deceleration = 0.2;
 
 	// ref component
 	Transform* tr = nullptr;
