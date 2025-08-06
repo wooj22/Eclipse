@@ -27,7 +27,7 @@ void PlayerAreaController::OnTriggerEnter(ICollider* other, const ContactInfo& c
 {
 	if (other->gameObject->tag == "Hon")
 	{
-		//other->gameObject->GetComponent<HonController>().TakeDamageByPlayer();
+		other->gameObject->GetComponent<HonController>()->TakeDamageByPlayer();
 		// OutputDebugStringA("Hon과 충돌 함 \n");
 
 		if (this->gameObject->GetComponent<CircleCollider>()->IsEnabled())
