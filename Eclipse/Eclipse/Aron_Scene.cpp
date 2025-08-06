@@ -1,226 +1,151 @@
 #include "Aron_Scene.h"
 #include "EclipseApp.h"
-#include "Honmun.h"  // Honmun 클래스 포함
-#include "HonmunCollisionScript.h"
+#include "WaveSystem.h"
+#include "HonA.h"
+#include "HonB.h"
+#include "HonC.h"
+#include "HonD.h"
+#include "Player.h"
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 
 void Aron_Scene::Awake()
 {
-	// camera init
+	// Camera init
 	cam = CreateObject<GameObject>();
 	cam->AddComponent<Transform>();
 	cam->AddComponent<Camera>(1920, 1080);
 
-	// create gameobject
-	// title sample
+	// Create UI
+	// Title
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
 	title_text->rectTransform->SetSize(500, 100);
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::LightBlue));
-	title_text->screenTextRenderer->SetText(L"Aron Scene");
+	title_text->screenTextRenderer->SetText(L"Aron Scene - Wave System Test");
 	
-	// 점수 UI 추가
+	// Score UI
 	score_text = CreateObject<UI_Text>();
 	score_text->rectTransform->SetPosition(0, 400);
-	score_text->rectTransform->SetSize(300, 50);
+	score_text->rectTransform->SetSize(600, 50);
 	score_text->screenTextRenderer->SetFontSize(30);
 	score_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Yellow));
 	score_text->screenTextRenderer->SetText(L"Score: 0");
 	
-	// 디버그 정보 UI 추가
+	// Debug info UI
 	debug_text = CreateObject<UI_Text>();
 	debug_text->rectTransform->SetPosition(0, 300);
-	debug_text->rectTransform->SetSize(600, 50);
+	debug_text->rectTransform->SetSize(800, 50);
 	debug_text->screenTextRenderer->SetFontSize(20);
 	debug_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-	debug_text->screenTextRenderer->SetText(L"SPACE: Wave 1 | 2: Wave 2 | WASD: Camera | C: Reset Cam | Q/E: Select | R: Reset Scene | 3: Restart");
+	debug_text->screenTextRenderer->SetText(L"F5-F8: Start Waves | 1-7: Scene Change | WASD: Camera | C: Reset Cam | R: Reset Scene");
 
-	// [ \ud63c\ubb38 enemies ] - \uc6e8\uc774\ube0c 1 \ud14c\uc2a4\ud2b8\uc6a9 A, B \uc544\uc774\ud15c \uc5ec\ub7ec \uac1c \uc0dd\uc131
-	// A \ud0c0\uc785 \ud63c\ubb38 4\uac1c
-	honmun_a = CreateObject<Honmun>();
-	honmun_a->name = "Honmun_A1";
-	honmun_a->SetHonmunType(HonmunType::A);
-	honmun_a->SetPosition(-300.0f, 200.0f);
+	// Create Player (required for Hon controllers)
+	auto player = CreateObject<Player>();
+	player->name = "Player";
+	// Position player at center bottom
+	player->transform->SetPosition(0.0f, -300.0f);
 
-	auto* honmun_a2 = CreateObject<Honmun>();
-	honmun_a2->name = "Honmun_A2";
-	honmun_a2->SetHonmunType(HonmunType::A);
-	honmun_a2->SetPosition(-200.0f, 300.0f);
+	// Create Wave System
+	waveSystemObj = CreateObject<GameObject>();
+	waveSystemObj->name = "WaveSystem";
+	waveSystem = waveSystemObj->AddComponent<WaveSystem>();
 
-	auto* honmun_a3 = CreateObject<Honmun>();
-	honmun_a3->name = "Honmun_A3";
-	honmun_a3->SetHonmunType(HonmunType::A);
-	honmun_a3->SetPosition(-400.0f, 100.0f);
-
-	auto* honmun_a4 = CreateObject<Honmun>();
-	honmun_a4->name = "Honmun_A4";
-	honmun_a4->SetHonmunType(HonmunType::A);
-	honmun_a4->SetPosition(-100.0f, 150.0f);
-
-	// B \ud0c0\uc785 \ud63c\ubb38 4\uac1c (더 넓게 배치)
-	honmun_b = CreateObject<Honmun>();
-	honmun_b->name = "Honmun_B1";
-	honmun_b->SetHonmunType(HonmunType::B);
-	honmun_b->SetPosition(150.0f, 250.0f);
-
-	auto* honmun_b2 = CreateObject<Honmun>();
-	honmun_b2->name = "Honmun_B2";
-	honmun_b2->SetHonmunType(HonmunType::B);
-	honmun_b2->SetPosition(350.0f, 400.0f);
-
-	auto* honmun_b3 = CreateObject<Honmun>();
-	honmun_b3->name = "Honmun_B3";
-	honmun_b3->SetHonmunType(HonmunType::B);
-	honmun_b3->SetPosition(450.0f, 50.0f);
-
-	auto* honmun_b4 = CreateObject<Honmun>();
-	honmun_b4->name = "Honmun_B4";
-	honmun_b4->SetHonmunType(HonmunType::B);
-	honmun_b4->SetPosition(50.0f, 50.0f);
-
-	// C 타입 혼문 임시 제거 (테스트용)
-	// auto* honmun_c = CreateObject<Honmun>();
-	// honmun_c->name = "Honmun_C1";
-	// honmun_c->SetHonmunType(HonmunType::C);
-	// honmun_c->SetPosition(-500.0f, -200.0f);
-
-	// auto* honmun_c2 = CreateObject<Honmun>();
-	// honmun_c2->name = "Honmun_C2";
-	// honmun_c2->SetHonmunType(HonmunType::C);
-	// honmun_c2->SetPosition(500.0f, -200.0f);
-
-	// 모든 혼문을 벡터에 추가 (C 타입 제외)
-	allHonmuns.push_back(honmun_a);
-	allHonmuns.push_back(honmun_a2);
-	allHonmuns.push_back(honmun_a3);
-	allHonmuns.push_back(honmun_a4);
-	allHonmuns.push_back(honmun_b);
-	allHonmuns.push_back(honmun_b2);
-	allHonmuns.push_back(honmun_b3);
-	allHonmuns.push_back(honmun_b4);
-	// allHonmuns.push_back(honmun_c);   // 임시 제거
-	// allHonmuns.push_back(honmun_c2);  // 임시 제거
-	
-	// 웨이브 시스템 초기화
-	waveData.waveActive = false;
-	waveData.currentSpawnIndex = 0;
-	waveData.lastSpawnTime = 0.0f;
-	waveData.spawnInterval = 1.0f;
-	waveData.spawnedHonmuns.clear();
-	currentScore = 0;
-	
-	// 선택 인덱스 안전 초기화
-	selectedHonmunIndex = 0;
-
-	// 웨이브 1 테스트: C, D 주석처리
-	// honmun_c = CreateObject<Honmun>();
-	// honmun_c->name = "Honmun_C";
-	// honmun_c->SetHonmunType(HonmunType::C);
-	// honmun_c->SetPosition(100.0f, 200.0f);
-
-	// honmun_d = CreateObject<Honmun>();
-	// honmun_d->name = "Honmun_D";
-	// honmun_d->SetHonmunType(HonmunType::D);
-	// honmun_d->SetPosition(300.0f, 200.0f);
-
-	// [ ground system ] - 1층(파괴), 2층(통과) 구조
-	// 1층 바닥 (혼문이 닿으면 파괴됨)
+	// Ground system - Floor 1 (destruction) and Floor 2 (passthrough)
+	// Floor 1 (Hons are destroyed when they reach this)
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground_Floor1";
-	ground->AddComponent<Transform>()->SetPosition(0.0f, -400.0f); // 더 아래로 이동
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -400.0f);
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
 	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Ground.png"), "Ground");
 	ground_sr->layer = 0;
 	ground_col = ground->AddComponent<BoxCollider>();
 	ground_col->size = { 1110.0f, 30.0f };
-	ground_col->isTrigger = true; // 트리거로 설정 (파괴 감지용)
+	ground_col->isTrigger = true;
 	auto ground_rb = ground->AddComponent<Rigidbody>();
 	ground_rb->useGravity = false;
 	ground_rb->isKinematic = true;
-	// 1층 바닥은 트리거로 설정됨 (파괴 감지는 Update에서 처리)
 	
-	// 2층 플랫폼 (혼문이 통과 가능)
+	// Floor 2 (Hons can pass through)
 	floor2 = CreateObject<GameObject>();
 	floor2->name = "Ground_Floor2";
-	floor2->AddComponent<Transform>()->SetPosition(0.0f, -200.0f); // 중간 높이
+	floor2->AddComponent<Transform>()->SetPosition(0.0f, -200.0f);
 	auto floor2_sr = floor2->AddComponent<SpriteRenderer>();
 	floor2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Aron/Ground.png"), "Ground");
 	floor2_sr->layer = 0;
 	floor2_col = floor2->AddComponent<BoxCollider>();
-	floor2_col->size = { 1110.0f, 20.0f }; // 조금 더 얇게
-	floor2_col->isTrigger = true; // 트리거로 설정 (통과 가능)
+	floor2_col->size = { 1110.0f, 20.0f };
+	floor2_col->isTrigger = true;
 	auto floor2_rb = floor2->AddComponent<Rigidbody>();
 	floor2_rb->useGravity = false;
 	floor2_rb->isKinematic = true;
-	// 2층 플랫폼은 트리거로 설정됨 (통과 가능)
+
+	// Initialize score
+	currentScore = 0;
 }
 
 void Aron_Scene::Start()
 {
-	// game object -> SceneStart()
+	// Call base class Start
 	__super::Start();
 }
 
 void Aron_Scene::Update()
 {
-	// game object -> Update()
+	// Call base class Update
 	__super::Update();
 
-	// 충돌 테스트 및 색상 변경
-	CheckCollisionAndChangeColor();
-	
-	// 혼문 이동 컨트롤
-	HandleHonmunMovement();
-	
-	// 웨이브 시스템 업데이트
-	UpdateWaveSystem();
-	
-	// 1층 바닥 도달 체크 (혼문 파괴)
-	CheckHonmunsReachFloor1();
-	
-	// UI 업데이트
+	// Update UI
 	UpdateScoreUI();
 	
-	// 웨이브 1 시작 (스페이스바) - 활성화되지 않은 경우에만
-	if (Input::GetKeyDown(VK_SPACE))
+	// Wave system controls (F5-F8)
+	if (Input::GetKeyDown(VK_F5))
 	{
-		if (!waveData.waveActive)
+		if (waveSystem && !waveSystem->IsWaveActive())
 		{
-			StartWave1();
+			waveSystem->StartWave(1);
+			OutputDebugStringA("Starting Wave 1!\n");
 		}
-		else
+	}
+	if (Input::GetKeyDown(VK_F6))
+	{
+		if (waveSystem && !waveSystem->IsWaveActive())
 		{
-			OutputDebugStringA("Wave already active! Press R to reset first.\n");
+			waveSystem->StartWave(2);
+			OutputDebugStringA("Starting Wave 2!\n");
+		}
+	}
+	if (Input::GetKeyDown(VK_F7))
+	{
+		if (waveSystem && !waveSystem->IsWaveActive())
+		{
+			waveSystem->StartWave(3);
+			OutputDebugStringA("Starting Wave 3!\n");
+		}
+	}
+	if (Input::GetKeyDown(VK_F8))
+	{
+		if (waveSystem && !waveSystem->IsWaveActive())
+		{
+			waveSystem->StartWave(4);
+			OutputDebugStringA("Starting Boss Wave!\n");
 		}
 	}
 	
-	// 웨이브 2 시작 (2키)
-	if (Input::GetKeyDown('2'))
-	{
-		if (!waveData.waveActive)
-		{
-			StartWave2();
-		}
-		else
-		{
-			OutputDebugStringA("Wave already active! Press R to reset first.\n");
-		}
-	}
-	
-	// R키로 씬 완전 초기화
+	// Reset scene
 	if (Input::GetKeyDown('R'))
 	{
 		ResetScene();
 	}
 	
-	// 카메라 이동 (WASD 키)
+	// Camera movement
 	HandleCameraMovement();
 
-	// scene change
+	// Scene change shortcuts (1-7)
 	if (Input::GetKeyDown('1'))
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::MOON);
@@ -231,7 +156,7 @@ void Aron_Scene::Update()
 	}
 	if (Input::GetKeyDown('3'))
 	{
-		// '3' 키로 Aron 씬 재시작 (완전 초기화)
+		// '3' 키로 Aron 씬 재시작
 		OutputDebugStringA("Restarting Aron Scene (key 3)...\n");
 		SceneManager::Get().ChangeScene(EclipseApp::ARON);
 	}
@@ -252,404 +177,16 @@ void Aron_Scene::Update()
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
 
-	// AABB 그리기 - 바닥들 (모든 층 표시)
-	if (ground_col) ground_col->DebugColliderDraw(); // 1층 (파괴)
-	if (floor2_col) floor2_col->DebugColliderDraw(); // 2층 (통과)
-
-	
+	// Draw colliders for debugging
+	if (ground_col) ground_col->DebugColliderDraw();
+	if (floor2_col) floor2_col->DebugColliderDraw();
 }
 
 void Aron_Scene::Exit()
 {
-	OutputDebugStringA("�� ��������� ��");
-	// game object -> destroy()
+	OutputDebugStringA("Aron Scene Exit\n");
+	// Call base class Exit
 	__super::Exit();
-}
-
-void Aron_Scene::CheckCollisionAndChangeColor()
-{
-	// �����̽��ٸ� ������ ��� ȥ���� �������ϰ� �����
-	if (Input::GetKeyDown(VK_SPACE))
-	{
-		if (honmun_a) honmun_a->SetAlpha(0.5f);
-		if (honmun_b) honmun_b->SetAlpha(0.5f);
-		// 웨이브 1 테스트: C, D 주석처리
-		// if (honmun_c) honmun_c->SetAlpha(0.5f);
-		// if (honmun_d) honmun_d->SetAlpha(0.5f);
-	}
-
-	// �����̽��ٸ� ���� ���� �������� ����
-	if (Input::GetKeyUp(VK_SPACE))
-	{
-		if (honmun_a) honmun_a->ResetAlpha();
-		if (honmun_b) honmun_b->ResetAlpha();
-		// 웨이브 1 테스트: C, D 주석처리
-		// if (honmun_c) honmun_c->ResetAlpha();
-		// if (honmun_d) honmun_d->ResetAlpha();
-	}
-}
-
-void Aron_Scene::HandleHonmunMovement()
-{
-	float moveSpeed = 3.0f; // 키네마틱 이동 속도
-	
-	// Q/E 키로 오브젝트 선택 (벡터가 비어있지 않을 때만)
-	if (Input::GetKeyDown('Q') && !allHonmuns.empty())
-	{
-		selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
-		// 유효하지 않은 오브젝트는 건너뛰기
-		int startIndex = selectedHonmunIndex;
-		while (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive())
-		{
-			selectedHonmunIndex = (selectedHonmunIndex - 1 + allHonmuns.size()) % allHonmuns.size();
-			if (selectedHonmunIndex == startIndex) break; // 무한루프 방지
-		}
-		char debugMsg[100];
-		sprintf_s(debugMsg, "Selected Honmun index: %d\n", selectedHonmunIndex);
-		OutputDebugStringA(debugMsg);
-	}
-	if (Input::GetKeyDown('E') && !allHonmuns.empty())
-	{
-		selectedHonmunIndex = (selectedHonmunIndex + 1) % allHonmuns.size();
-		// 유효하지 않은 오브젝트는 건너뛰기
-		int startIndex = selectedHonmunIndex;
-		while (!allHonmuns[selectedHonmunIndex] || !allHonmuns[selectedHonmunIndex]->IsActive())
-		{
-			selectedHonmunIndex = (selectedHonmunIndex + 1) % allHonmuns.size();
-			if (selectedHonmunIndex == startIndex) break; // 무한루프 방지
-		}
-		char debugMsg[100];
-		sprintf_s(debugMsg, "Selected Honmun index: %d\n", selectedHonmunIndex);
-		OutputDebugStringA(debugMsg);
-	}
-	
-	// 선택된 오브젝트 이동 (화살표 키) - 벡터가 비어있지 않고 유효한 인덱스일 때만
-	if (!allHonmuns.empty() && 
-		selectedHonmunIndex < allHonmuns.size() && 
-		allHonmuns[selectedHonmunIndex] && 
-		allHonmuns[selectedHonmunIndex]->IsActive())
-	{
-		auto* transform = allHonmuns[selectedHonmunIndex]->GetComponent<Transform>();
-		if (transform)
-		{
-			Vector2 currentPos = transform->GetPosition();
-			if (Input::GetKey(VK_LEFT)) transform->SetPosition(currentPos.x - moveSpeed, currentPos.y);
-			if (Input::GetKey(VK_RIGHT)) transform->SetPosition(currentPos.x + moveSpeed, currentPos.y);
-			if (Input::GetKey(VK_UP)) transform->SetPosition(currentPos.x, currentPos.y + moveSpeed);
-			if (Input::GetKey(VK_DOWN)) transform->SetPosition(currentPos.x, currentPos.y - moveSpeed);
-		}
-	}
-	
-	// 웨이브 1 테스트: C, D 주석처리
-	// // C 혼문 (IJKL로 상하좌우 이동)
-	// if (honmun_c)
-	// {
-	// 	auto* rb = honmun_c->GetComponent<Rigidbody>();
-	// 	if (rb)
-	// 	{
-	// 		if (Input::GetKey('J')) rb->AddForce(Vector2(-moveSpeed, 0));
-	// 		if (Input::GetKey('L')) rb->AddForce(Vector2(moveSpeed, 0));
-	// 		if (Input::GetKey('I')) rb->AddForce(Vector2(0, moveSpeed));
-	// 		if (Input::GetKey('K')) rb->AddForce(Vector2(0, -moveSpeed));
-	// 	}
-	// }
-	// 
-	// // D 혼문 (8456 숫자키로 상하좌우 이동)
-	// if (honmun_d)
-	// {
-	// 	auto* rb = honmun_d->GetComponent<Rigidbody>();
-	// 	if (rb)
-	// 	{
-	// 		if (Input::GetKey('4')) rb->AddForce(Vector2(-moveSpeed, 0));
-	// 		if (Input::GetKey('6')) rb->AddForce(Vector2(moveSpeed, 0));
-	// 		if (Input::GetKey('8')) rb->AddForce(Vector2(0, moveSpeed));
-	// 		if (Input::GetKey('5')) rb->AddForce(Vector2(0, -moveSpeed));
-	// 	}
-	// }
-	
-	// R키는 이제 Update()에서 ResetScene()으로 처리됨
-}
-
-void Aron_Scene::AddScore(int points)
-{
-	currentScore += points;
-	UpdateScoreUI();
-	
-	// 디버그 출력
-	char debugMsg[100];
-	sprintf_s(debugMsg, "Score added: +%d, Total: %d\n", points, currentScore);
-	OutputDebugStringA(debugMsg);
-}
-
-void Aron_Scene::UpdateScoreUI()
-{
-	if (score_text && score_text->screenTextRenderer)
-	{
-		wchar_t scoreText[100];
-		if (waveData.waveActive)
-		{
-			swprintf_s(scoreText, L"Score: %d | Wave %d: %d/%d spawned", 
-				currentScore, waveData.currentWave, waveData.currentSpawnIndex, waveData.totalSpawnCount);
-		}
-		else
-		{
-			swprintf_s(scoreText, L"Score: %d | Press SPACE(Wave1) or 2(Wave2)", currentScore);
-		}
-		score_text->screenTextRenderer->SetText(scoreText);
-	}
-}
-
-void Aron_Scene::StartWave1()
-{
-	OutputDebugStringA("Wave 1 started!\n");
-	
-	// 웨이브 시스템 완전 초기화
-	waveData.waveActive = true;
-	waveData.currentSpawnIndex = 0;
-	waveData.lastSpawnTime = 0.0f;
-	waveData.spawnInterval = 1.0f;  // 스폰 간격 초기화
-	waveData.spawnedHonmuns.clear();
-	
-	// 기존 테스트용 혼문들 완전 제거
-	for (auto* honmun : allHonmuns)
-	{
-		if (honmun && honmun->IsActive())
-		{
-			// 스크립트의 DestroyThis 호출로 완전 파괴
-			auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			if (script)
-			{
-				script->DestroyThis();
-			}
-			else
-			{
-				honmun->SetActive(false);
-			}
-		}
-	}
-	allHonmuns.clear();
-	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
-	
-	// 웨이브 1 설정
-	waveData.currentWave = 1;
-	waveData.totalSpawnCount = 20;  // 웨이브 1: 20마리
-	
-	// 점수 초기화 (선택사항)
-	currentScore = 0;
-	UpdateScoreUI();
-}
-
-void Aron_Scene::StartWave2()
-{
-	OutputDebugStringA("Wave 2 started!\n");
-	
-	// 웨이브 시스템 완전 초기화
-	waveData.waveActive = true;
-	waveData.currentSpawnIndex = 0;
-	waveData.lastSpawnTime = 0.0f;
-	waveData.spawnInterval = 0.8f;  // 웨이브 2는 조금 더 빠른 스폰
-	waveData.spawnedHonmuns.clear();
-	
-	// 기존 테스트용 혼문들 완전 제거
-	for (auto* honmun : allHonmuns)
-	{
-		if (honmun && honmun->IsActive())
-		{
-			auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			if (script)
-			{
-				script->DestroyThis();
-			}
-			else
-			{
-				honmun->SetActive(false);
-			}
-		}
-	}
-	allHonmuns.clear();
-	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
-	
-	// 웨이브 2 설정
-	waveData.currentWave = 2;
-	waveData.totalSpawnCount = 25;  // 웨이브 2: 25마리 (더 많음)
-	
-	// 점수 초기화 (선택사항)
-	currentScore = 0;
-	UpdateScoreUI();
-}
-
-void Aron_Scene::UpdateWaveSystem()
-{
-	if (!waveData.waveActive) return;
-	
-	static float totalTime = 0.0f;
-	totalTime += Time::GetDeltaTime();
-	float currentTime = totalTime;
-	
-	// 스폰 간격에 따라 새로운 혼문 스폰
-	if (waveData.currentSpawnIndex < waveData.totalSpawnCount)
-	{
-		if (currentTime - waveData.lastSpawnTime >= waveData.spawnInterval)
-		{
-			// 웨이브에 따라 다른 스폰 함수 호출
-			if (waveData.currentWave == 1)
-			{
-				SpawnHonmun();  // 웨이브 1: A, B만
-			}
-			else if (waveData.currentWave == 2)
-			{
-				SpawnHonmunWave2();  // 웨이브 2: A, B, C 포함
-			}
-			
-			waveData.lastSpawnTime = currentTime;
-			waveData.currentSpawnIndex++;
-		}
-	}
-	
-	// 바닥에 도착한 혼문들 체크하여 다음 스폰 조건 확인
-	for (auto* honmun : waveData.spawnedHonmuns)
-	{
-		if (honmun && honmun->IsActive() && IsHonmunOnGround(honmun))
-		{
-			// 바닥에 도착한 혼문이 있으면 스폰 간격을 줄여서 더 빨리 스폰
-			waveData.spawnInterval = 0.5f; // 더 빨리 스폰
-		}
-	}
-}
-
-void Aron_Scene::SpawnHonmun()
-{
-	// 랜덤 X 위치 (카메라 영역 내)
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_real_distribution<float> xDis(-400.0f, 400.0f);
-	
-	float spawnX = xDis(gen);
-	
-	// 새로운 혼문 생성
-	auto* newHonmun = CreateObject<Honmun>();
-	newHonmun->SetHonmunType(GetRandomHonmunType());
-	newHonmun->SetPosition(spawnX, waveData.spawnY);
-	
-	// 중력과 물리 활성화
-	auto* rb = newHonmun->GetComponent<Rigidbody>();
-	if (rb)
-	{
-		rb->useGravity = true;      // 중력 활성화
-		rb->isKinematic = false;    // 물리 시뮬레이션 활성화
-	}
-	
-	// 리스트에 추가
-	waveData.spawnedHonmuns.push_back(newHonmun);
-	allHonmuns.push_back(newHonmun);
-	
-	char debugMsg[100];
-	sprintf_s(debugMsg, "Spawned Honmun %d/%d at (%.2f, %.2f)\n", 
-		waveData.currentSpawnIndex + 1, waveData.totalSpawnCount, spawnX, waveData.spawnY);
-	OutputDebugStringA(debugMsg);
-}
-
-bool Aron_Scene::IsHonmunOnGround(Honmun* honmun)
-{
-	if (!honmun || !honmun->IsActive()) return false;
-	
-	auto* transform = honmun->GetComponent<Transform>();
-	if (!transform) return false;
-	
-	Vector2 pos = transform->GetPosition();
-	// 2층에 도착했거나 그 아래에 있으면 "바닥 도착"으로 간주
-	return pos.y <= waveData.floor2Y + 30.0f;
-}
-
-HonmunType Aron_Scene::GetRandomHonmunType()
-{
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_int_distribution<int> dis(0, 1); // 0 = A, 1 = B
-	
-	return (dis(gen) == 0) ? HonmunType::A : HonmunType::B;
-}
-
-HonmunType Aron_Scene::GetRandomHonmunTypeWave2()
-{
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_int_distribution<int> dis(0, 2); // 0 = A, 1 = B, 2 = C
-	
-	int choice = dis(gen);
-	if (choice == 0) return HonmunType::A;
-	else if (choice == 1) return HonmunType::B;
-	else return HonmunType::C;
-}
-
-void Aron_Scene::SpawnHonmunWave2()
-{
-	// 랜덤 X 위치 (카메라 영역 내)
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_real_distribution<float> xDis(-400.0f, 400.0f);
-	
-	float spawnX = xDis(gen);
-	
-	// 새로운 혼문 생성 (Wave 2는 A, B, C 타입 포함)
-	auto* newHonmun = CreateObject<Honmun>();
-	newHonmun->SetHonmunType(GetRandomHonmunTypeWave2());
-	newHonmun->SetPosition(spawnX, waveData.spawnY);
-	
-	// 중력과 물리 활성화
-	auto* rb = newHonmun->GetComponent<Rigidbody>();
-	if (rb)
-	{
-		rb->useGravity = true;      // 중력 활성화
-		rb->isKinematic = false;    // 물리 시뮬레이션 활성화
-	}
-	
-	// 리스트에 추가
-	waveData.spawnedHonmuns.push_back(newHonmun);
-	allHonmuns.push_back(newHonmun);
-	
-	char debugMsg[100];
-	sprintf_s(debugMsg, "Wave 2: Spawned Honmun %d/%d at (%.2f, %.2f)\n", 
-		waveData.currentSpawnIndex + 1, waveData.totalSpawnCount, spawnX, waveData.spawnY);
-	OutputDebugStringA(debugMsg);
-}
-
-void Aron_Scene::CheckHonmunsReachFloor1()
-{
-	if (!waveData.waveActive) return;
-	
-	// 스폰된 혼문들을 체크
-	for (auto it = waveData.spawnedHonmuns.begin(); it != waveData.spawnedHonmuns.end();)
-	{
-		auto* honmun = *it;
-		if (!honmun || !honmun->IsActive())
-		{
-			it = waveData.spawnedHonmuns.erase(it);
-			continue;
-		}
-		
-		auto* transform = honmun->GetComponent<Transform>();
-		if (transform)
-		{
-			Vector2 pos = transform->GetPosition();
-			// 1층 바닥(-400) 도달 체크
-			if (pos.y <= -390.0f) // 바닥 근처
-			{
-				OutputDebugStringA("Honmun reached floor 1, destroying!\n");
-				
-				// 혼문 파괴
-				auto* honmunScript = honmun->GetComponent<HonmunCollisionScript>();
-				if (honmunScript)
-				{
-					honmunScript->DestroyThis();
-				}
-				
-				it = waveData.spawnedHonmuns.erase(it);
-				continue;
-			}
-		}
-		++it;
-	}
 }
 
 void Aron_Scene::HandleCameraMovement()
@@ -660,27 +197,27 @@ void Aron_Scene::HandleCameraMovement()
 	if (!cameraTransform) return;
 	
 	Vector2 currentPos = cameraTransform->GetPosition();
-	float moveSpeed = 300.0f * Time::GetDeltaTime(); // 초당 300픽셀 이동
+	float moveSpeed = 300.0f * Time::GetDeltaTime();
 	
-	// WASD로 카메라 이동
-	if (Input::GetKey('W')) // 위로
+	// WASD camera movement
+	if (Input::GetKey('W'))
 	{
 		cameraTransform->SetPosition(currentPos.x, currentPos.y + moveSpeed);
 	}
-	if (Input::GetKey('S')) // 아래로
+	if (Input::GetKey('S'))
 	{
 		cameraTransform->SetPosition(currentPos.x, currentPos.y - moveSpeed);
 	}
-	if (Input::GetKey('A')) // 왼쪽으로
+	if (Input::GetKey('A'))
 	{
 		cameraTransform->SetPosition(currentPos.x - moveSpeed, currentPos.y);
 	}
-	if (Input::GetKey('D')) // 오른쪽으로
+	if (Input::GetKey('D'))
 	{
 		cameraTransform->SetPosition(currentPos.x + moveSpeed, currentPos.y);
 	}
 	
-	// C키로 카메라 초기 위치로 리셋
+	// C key to reset camera
 	if (Input::GetKeyDown('C'))
 	{
 		cameraTransform->SetPosition(0.0f, 0.0f);
@@ -688,37 +225,54 @@ void Aron_Scene::HandleCameraMovement()
 	}
 }
 
+void Aron_Scene::AddScore(int points)
+{
+	currentScore += points;
+	UpdateScoreUI();
+	
+	char debugMsg[100];
+	sprintf_s(debugMsg, "Score added: +%d, Total: %d\n", points, currentScore);
+	OutputDebugStringA(debugMsg);
+}
+
+void Aron_Scene::UpdateScoreUI()
+{
+	if (score_text && score_text->screenTextRenderer)
+	{
+		wchar_t scoreText[256];
+		
+		if (waveSystem && waveSystem->IsWaveActive())
+		{
+			swprintf_s(scoreText, L"Score: %d | Wave State: %d | Spawned: %d | Destroyed: %d", 
+				currentScore, 
+				static_cast<int>(waveSystem->GetCurrentWaveState()),
+				waveSystem->GetSpawnedCount(),
+				waveSystem->GetDestroyedCount());
+		}
+		else
+		{
+			swprintf_s(scoreText, L"Score: %d | Press F5-F8 to start waves", currentScore);
+		}
+		
+		score_text->screenTextRenderer->SetText(scoreText);
+	}
+}
+
 void Aron_Scene::ResetScene()
 {
 	OutputDebugStringA("ResetScene called - complete scene reset!\n");
 	
-	// 웨이브 시스템 완전 정지
-	waveData.waveActive = false;
-	waveData.currentSpawnIndex = 0;
-	waveData.lastSpawnTime = 0.0f;
-	waveData.spawnInterval = 1.0f;
-	waveData.spawnedHonmuns.clear();
-	
-	// 모든 활성 혼문들 완전 제거
-	for (auto* honmun : allHonmuns)
+	// Reset wave system
+	if (waveSystem)
 	{
-		if (honmun && honmun->IsActive())
-		{
-			auto* script = honmun->GetComponent<HonmunCollisionScript>();
-			if (script)
-			{
-				script->DestroyThis();
-			}
-		}
+		waveSystem->ResetWaveSystem();
 	}
-	allHonmuns.clear();
-	selectedHonmunIndex = 0;  // 선택 인덱스 초기화
 	
-	// 점수 초기화
+	// Reset score
 	currentScore = 0;
 	UpdateScoreUI();
 	
-	// 카메라 위치 초기화
+	// Reset camera
 	if (cam)
 	{
 		auto* cameraTransform = cam->GetComponent<Transform>();
