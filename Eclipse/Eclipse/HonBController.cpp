@@ -108,6 +108,9 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
+			// score
+			GameManager::Get().honCount++;
+
 			// position
 			std::vector<Vector2> offsets = {
 				Vector2(-100, 100),

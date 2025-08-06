@@ -111,6 +111,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
+			// score
+			GameManager::Get().honCount++;
+
 			// collision move start
 			// Size를 기준으로 합체 주체 결정
 			if (size >= otherController->GetSize())
@@ -131,6 +134,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherGameObject->GetComponent<HonAController>()->is2A = true;
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
+
 			break;
 
 		case HonType::B:		// 연쇄반응 A-B
@@ -138,6 +142,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			TakeDamage();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+
+			// score
+			GameManager::Get().honCount++;
 
 			// collision move start
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();

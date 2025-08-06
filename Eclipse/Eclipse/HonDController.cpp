@@ -87,6 +87,9 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
 
+		// score
+		GameManager::Get().honCount -= 2;
+
 		// collision acttion
 		if(honType == "HonD") otherGameObject->Destroy();
 		else otherGameObject->GetComponent<HonController>()->TakeDamage();

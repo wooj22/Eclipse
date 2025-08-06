@@ -113,6 +113,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
+			// score
+			GameManager::Get().honCount++;
+
 			// collision move start (reset)
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
@@ -134,12 +137,19 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		}
 		case HonType::B:		// 연쇄 반응 C-B
 		{
+			// score
+			GameManager::Get().honCount++;
+
+			// collision action
 			TakeDamage();
 			otherController->TakeDamage();
 			break;
 		}
 		case HonType::C:		// 연쇄 반응 C-C
 		{
+			// score
+			GameManager::Get().honCount++;
+
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();
 
