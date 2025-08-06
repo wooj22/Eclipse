@@ -89,6 +89,8 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{
+		// score
+		GameManager::Get().honCount--;
 		gameObject->Destroy();
 	}
 
