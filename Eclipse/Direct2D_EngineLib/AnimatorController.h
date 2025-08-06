@@ -30,7 +30,7 @@ public:
     unordered_map<string, float> map_floatParams;
     unordered_map<string, int> map_intParams;
 
-public:
+protected:
     // clip state map <name, state>
     unordered_map<string, AnimationBaseState*> map_state;    
 

@@ -54,10 +54,10 @@ void AnimationClip::LoadAnimationClipFromJson(shared_ptr<Texture2D> texture, con
     }
 }
 
+// * 시간에 따른 프레임 인덱스 반환 
 int AnimationClip::GetFrameIndexAtTime(float time)
 {
-    if (frames.empty())
-        return 0;
+    if (frames.empty()) return 0; 
 
     int frameCount = static_cast<int>(frames.size());
 
@@ -65,7 +65,7 @@ int AnimationClip::GetFrameIndexAtTime(float time)
     if (loop)
         time = fmodf(time, duration);
     else if (time >= duration)
-        return frameCount - 1;
+        return frameCount - 1; // 마지막 프레임 
 
     for (int i = 0; i < frameCount - 1; ++i)
     {
