@@ -30,6 +30,9 @@ void HonBController::Update()
 		if (pullMovingDelta >= pullMovingTime) {
 			isPullMoving = false;
 			pullMovingDelta = 0;
+
+			isCollisionMoving = false;
+			collisionMovingDelta = 0;
 		}
 	}
 	else if (isCollisionMoving)
@@ -64,6 +67,10 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
+		// score
+		if (hp==1) GameManager::Get().honCount++;
+
+		// collision acttion
 		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 		TakeDamage();
@@ -100,6 +107,12 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+
+			// score
+			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
 
 			// position
 			std::vector<Vector2> offsets = {

@@ -33,6 +33,9 @@ void HonCController::Update()
 		if (pullMovingDelta >= pullMovingTime) {
 			isPullMoving = false;
 			pullMovingDelta = 0;
+
+			isCollisionMoving = false;
+			collisionMovingDelta = 0;
 		}
 	}
 	else if (isCollisionMoving)
@@ -67,6 +70,10 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
+		// score
+		if (hp == 1) GameManager::Get().honCount++;
+
+		// collision acttion
 		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 		TakeDamage();
@@ -106,6 +113,12 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
+			// score
+			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
+
 			// collision move start (reset)
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
@@ -127,12 +140,25 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		}
 		case HonType::B:		// 연쇄 반응 C-B
 		{
+			// score
+			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
+
+			// collision action
 			TakeDamage();
 			otherController->TakeDamage();
 			break;
 		}
 		case HonType::C:		// 연쇄 반응 C-C
 		{
+			// score
+			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
+
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();
 

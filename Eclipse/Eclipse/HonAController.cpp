@@ -31,6 +31,9 @@ void HonAController::Update()
 		if (pullMovingDelta >= pullMovingTime) {
 			isPullMoving = false;
 			pullMovingDelta = 0;
+
+			isCollisionMoving = false;
+			collisionMovingDelta = 0;
 		}
 	}
 	else if (isCollisionMoving)
@@ -65,6 +68,11 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
+		// score
+		if (is2A) GameManager::Get().honCount += 3;
+		else  GameManager::Get().honCount += 1;
+
+		// collision acttion
 		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 		TakeDamage();
@@ -103,6 +111,12 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
+			// score
+			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
+
 			// collision move start
 			// Size를 기준으로 합체 주체 결정
 			if (size >= otherController->GetSize())
@@ -112,6 +126,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				CollisionEnd();
 				SetDescentSpeed(descentSpeed * 0.6);
 				SetHp(1);
+				is2A = true;
 			}
 			else
 			{
@@ -119,8 +134,10 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherController->CollisionEnd();
 				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
 				otherController->SetHp(1);
+				otherGameObject->GetComponent<HonAController>()->is2A = true;
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
+
 			break;
 
 		case HonType::B:		// 연쇄반응 A-B
@@ -128,6 +145,12 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			TakeDamage();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+
+			// score
+			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
 
 			// collision move start
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();

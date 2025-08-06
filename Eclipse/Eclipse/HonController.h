@@ -76,7 +76,11 @@ public:
 	void TakeDamage()
 	{
 		hp--;
-		if (hp <= 0) gameObject->Destroy();
+		if (hp <= 0) 
+		{
+			GameManager::Get().honKillCount++;		// wave1 quest
+			gameObject->Destroy();
+		}
 	}
 
 	// collision moving flag
@@ -91,6 +95,10 @@ public:
 	}
 
 	// 플레이어 흡수
-	void Absorption() { isAbsorption = true; }
+	void Absorption() 
+	{ 
+		isAbsorption = true;
+		if (collider) collider->SetEnabled(false);
+	}
 };
 

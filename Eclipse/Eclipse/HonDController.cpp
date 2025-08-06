@@ -24,6 +24,9 @@ void HonDController::Update()
 		if (pullMovingDelta >= pullMovingTime) {
 			isPullMoving = false;
 			pullMovingDelta = 0;
+
+			isCollisionMoving = false;
+			collisionMovingDelta = 0;
 		}
 	}
 	else if (isCollisionMoving)
@@ -53,6 +56,10 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [player collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
+		// score
+		GameManager::Get().honCount--;
+
+		// collision acttion
 		CollisionStart();
 		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
 	}
@@ -60,6 +67,9 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{
+		// wave3 quest
+		GameManager::Get().lunaKillCount++;
+
 		gameObject->Destroy();
 	}
 
@@ -79,6 +89,9 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		string honType = otherGameObject->name;
+
+		// score
+		GameManager::Get().honCount -= 2;
 
 		// collision acttion
 		if(honType == "HonD") otherGameObject->Destroy();
