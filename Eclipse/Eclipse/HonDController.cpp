@@ -24,6 +24,9 @@ void HonDController::Update()
 		if (pullMovingDelta >= pullMovingTime) {
 			isPullMoving = false;
 			pullMovingDelta = 0;
+
+			isCollisionMoving = false;
+			collisionMovingDelta = 0;
 		}
 	}
 	else if (isCollisionMoving)
