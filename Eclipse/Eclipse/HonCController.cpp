@@ -94,7 +94,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	if (other->gameObject->tag == "EndLine")
 	{
 		// score
-		GameManager::Get().honCount--;
+		GameManager::Get().ChangeHonCount(-1);
 		gameObject->Destroy();
 	}
 
@@ -127,7 +127,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
 			// score
-			GameManager::Get().honCount++;
+			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
 			GameManager::Get().cainCount++;
@@ -154,7 +154,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::B:		// ø¨º‚ π›¿¿ C-B
 		{
 			// score
-			GameManager::Get().honCount++;
+			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
 			GameManager::Get().cainCount++;
@@ -167,7 +167,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::C:		// ø¨º‚ π›¿¿ C-C
 		{
 			// score
-			GameManager::Get().honCount++;
+			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
 			GameManager::Get().cainCount++;
@@ -201,7 +201,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 void HonCController::TakeDamageByPlayer()
 {
 	// score
-	if (hp == 1) GameManager::Get().honCount++;
+	if (hp == 1) GameManager::Get().ChangeHonCount(1);
 
 	// collision acttion
 	CollisionStart();

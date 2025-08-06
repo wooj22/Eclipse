@@ -101,7 +101,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		string honType = otherGameObject->name;
 
 		// score
-		GameManager::Get().honCount--;
+		GameManager::Get().ChangeHonCount(-1);
 
 		// collision acttion
 		if(honType == "HonD") otherGameObject->Destroy();
@@ -115,7 +115,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 void HonDController::TakeDamageByPlayer()
 {
 	// score
-	GameManager::Get().honCount--;
+	GameManager::Get().ChangeHonCount(-1);
 
 	gameObject->Destroy();
 }
