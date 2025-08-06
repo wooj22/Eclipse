@@ -311,6 +311,7 @@ void PlayerFSM::TryUseRelease() // [ ¹æÃâ ]
 		{
 			obj->Destroy(); // È¥ Á¦°Å
 			removedCount++;
+			GameManager::Get().honCount++;
 		}
 	}
 
