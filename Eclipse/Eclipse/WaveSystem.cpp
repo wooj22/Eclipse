@@ -125,11 +125,23 @@ void WaveSystem::Update()
         sprintf_s(debugMsg, "Wave %d time expired! Notifying GameManager.\n", static_cast<int>(m_currentWaveState));
         OutputDebugStringA(debugMsg);
         
-        // Clean up remaining hons - clear vector first, then deactivate
-        auto activeHonsCopy = m_activeHons;
-        m_activeHons.clear();  // Clear the vector BEFORE calling SetActive
+        // Clean up remaining hons
+        OutputDebugStringA("Starting wave cleanup...\n");
         
-        for (auto* hon : activeHonsCopy)
+        int remainingHons = static_cast<int>(m_activeHons.size());
+        char debugMsg2[256];
+        sprintf_s(debugMsg2, "Cleaning up %d remaining hons\n", remainingHons);
+        OutputDebugStringA(debugMsg2);
+        
+        // Clear the vector
+        m_activeHons.clear();
+        
+        // Find and deactivate all Hon objects using tag
+        auto hons = GameObject::FindAllWithTag("Hon");
+        sprintf_s(debugMsg2, "Found %d Hon objects to deactivate\n", static_cast<int>(hons.size()));
+        OutputDebugStringA(debugMsg2);
+        
+        for (auto* hon : hons)
         {
             if (hon && hon->IsActive())
             {
@@ -137,8 +149,13 @@ void WaveSystem::Update()
             }
         }
         
+        OutputDebugStringA("Wave cleanup completed.\n");
+        
         // Notify GameManager that wave is complete
-        m_gameManager->isWave = false;
+        if (m_gameManager)
+        {
+            m_gameManager->isWave = false;
+        }
         m_currentWaveState = WaveState::IDLE;
         m_waveStartCheck = true;
         
@@ -170,6 +187,7 @@ void WaveSystem::Update()
 
 void WaveSystem::StartWave(int waveNumber)
 {
+    // Clean up any remaining hons from previous wave
     StopWave();
     
     switch (waveNumber)
@@ -216,16 +234,18 @@ void WaveSystem::StartWave(int waveNumber)
 
 void WaveSystem::StopWave()
 {
-    // Clean up active hons - use copy to avoid iterator invalidation
-    auto activeHonsCopy = m_activeHons;
-    for (auto* hon : activeHonsCopy)
+    // Clear the vector
+    m_activeHons.clear();
+    
+    // Find and deactivate all Hon objects using tag
+    auto hons = GameObject::FindAllWithTag("Hon");
+    for (auto* hon : hons)
     {
         if (hon && hon->IsActive())
         {
             hon->SetActive(false);
         }
     }
-    m_activeHons.clear();
     
     // Clean up boss
     if (m_activeBoss && m_activeBoss->IsActive())
