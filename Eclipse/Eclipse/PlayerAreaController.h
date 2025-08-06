@@ -17,8 +17,13 @@ public:
 	{
 		if (other->gameObject->tag == "Hon")
 		{
-			OutputDebugStringA("Hon과 충돌 함 \n");
-			// this->gameObject->SetActive(false);
+			// OutputDebugStringA("Hon과 충돌 함 \n");
+
+			if (this->gameObject->GetComponent<CircleCollider>()->IsEnabled())
+			{
+				this->gameObject->GetComponent<CircleCollider>()->SetEnabled(false);
+			}
+			
 		}
 	}
 
