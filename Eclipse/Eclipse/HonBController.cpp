@@ -74,18 +74,6 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		}
 	}
 
-	// [player attack collision]
-	if (other->gameObject->name == "PlayerAttackArea")
-	{
-		//// score
-		//if (hp==1) GameManager::Get().honCount++;
-
-		//// collision acttion
-		//CollisionStart();
-		//moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-		//TakeDamage();
-	}
-
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{

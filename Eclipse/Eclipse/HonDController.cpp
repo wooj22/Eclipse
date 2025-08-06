@@ -65,15 +65,6 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		}
 	}
 
-	// [player attack collision]
-	if (other->gameObject->name == "PlayerAttackArea")
-	{
-		//// score
-		//GameManager::Get().honCount--;
-
-		//gameObject->Destroy();
-	}
-
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{
