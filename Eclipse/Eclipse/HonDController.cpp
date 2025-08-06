@@ -10,6 +10,8 @@ void HonDController::Awake()
 	tr = gameObject->transform;
 	collider = gameObject->GetComponent<CircleCollider>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
+
+	SetSize(size);
 }
 
 void HonDController::Update()

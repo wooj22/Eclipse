@@ -15,15 +15,11 @@ public:
 	{
 		honType = HonType::C;
 
-		hp = 3;
-		size = 1;
-		descentSpeed = 80;
-
 		// gamemanager 충돌 비거리 증가
 		int level = GameManager::Get().skillTree[SkillType::KnockbackDistanceUp].unlockLevel;
 		if (level != 0)
 		{
-			SetSpeedUpRate(GameManager::Get().skillValue[SkillType::KnockbackDistanceUp][level - 1]);
+			//SetSpeedUpRate(GameManager::Get().skillValue[SkillType::KnockbackDistanceUp][level - 1]);
 		}
 	}
 
