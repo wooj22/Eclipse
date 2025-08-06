@@ -114,6 +114,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// score
 			GameManager::Get().honCount++;
 
+			// wave2 quest
+			GameManager::Get().cainCount++;
+
 			// collision move start
 			// Size를 기준으로 합체 주체 결정
 			if (size >= otherController->GetSize())
@@ -145,6 +148,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 			// score
 			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
 
 			// collision move start
 			moveDirection = (tr->GetWorldPosition() - otherGameObject->transform->GetWorldPosition()).Normalized();

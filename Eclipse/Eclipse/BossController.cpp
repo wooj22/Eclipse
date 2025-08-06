@@ -8,6 +8,7 @@
 #include "../Direct2D_EngineLib/Input.h"
 #include "Bullet.h"
 #include "../Direct2D_EngineLib/Camera.h"
+#include "GameManager.h"
 
 /*-----------------  component life cycle  ----------------*/
 void BossController::Awake()
@@ -34,7 +35,7 @@ void BossController::Update()
 	}
 
 	// test :: player -> take damage
-	if (Input::GetKeyDown('X'))
+	if (Input::GetKeyDown('F'))
 	{
 		TakeDamage(10);
 	}
@@ -204,9 +205,14 @@ void BossController::TakeDamage(int damage)
 void BossController::Die()
 {
 	isDie = true;
-	this->gameObject->Destroy();
+
+	// wave4 quest
+	GameManager::Get().bossKillCount++;
+
 	// TODO :: GameManager 게임 성공 전달
 	// TODO :: die animation? or 연출 or Destroy
+
+	this->gameObject->Destroy();
 }
 
 /*-----------------  trigger event  -----------------*/ 

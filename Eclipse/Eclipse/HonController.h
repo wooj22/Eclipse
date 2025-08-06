@@ -76,7 +76,11 @@ public:
 	void TakeDamage()
 	{
 		hp--;
-		if (hp <= 0) gameObject->Destroy();
+		if (hp <= 0) 
+		{
+			GameManager::Get().honKillCount++;		// wave1 quest
+			gameObject->Destroy();
+		}
 	}
 
 	// collision moving flag

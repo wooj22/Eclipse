@@ -116,6 +116,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// score
 			GameManager::Get().honCount++;
 
+			// wave2 quest
+			GameManager::Get().cainCount++;
+
 			// collision move start (reset)
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
 			float thisX = tr->GetWorldPosition().x;
@@ -140,6 +143,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// score
 			GameManager::Get().honCount++;
 
+			// wave2 quest
+			GameManager::Get().cainCount++;
+
 			// collision action
 			TakeDamage();
 			otherController->TakeDamage();
@@ -149,6 +155,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 			// score
 			GameManager::Get().honCount++;
+
+			// wave2 quest
+			GameManager::Get().cainCount++;
 
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();

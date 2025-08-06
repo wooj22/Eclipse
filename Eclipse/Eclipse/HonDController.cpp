@@ -67,6 +67,9 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [endline collision]
 	if (other->gameObject->tag == "EndLine")
 	{
+		// wave3 quest
+		GameManager::Get().lunaKillCount++;
+
 		gameObject->Destroy();
 	}
 
