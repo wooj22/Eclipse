@@ -53,3 +53,25 @@ void AnimationClip::LoadAnimationClipFromJson(shared_ptr<Texture2D> texture, con
         frames.push_back(frame);
     }
 }
+
+int AnimationClip::GetFrameIndexAtTime(float time)
+{
+    if (frames.empty())
+        return 0;
+
+    int frameCount = static_cast<int>(frames.size());
+
+    // 반복 애니메이션이면 duration 안에서 루프
+    if (loop)
+        time = fmodf(time, duration);
+    else if (time >= duration)
+        return frameCount - 1;
+
+    for (int i = 0; i < frameCount - 1; ++i)
+    {
+        if (time < frames[i + 1].time)
+            return i;
+    }
+
+    return frameCount - 1;
+}

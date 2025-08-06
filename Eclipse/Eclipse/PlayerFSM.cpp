@@ -83,9 +83,10 @@ void PlayerFSM::Update()
 	UpdateDashCooldown(); // dash 쿨타임 업데이트
 
 	if (isAbsorbSkillActive) AttractionTargetHon(); // [ Q 스킬 상태 ]: 타겟 혼이 플레이어 쪽으로 작아지면서 다가오기
+
 	
 	// [ FSM 상태 ] 
-	//MovementStateBase* currentState = playerFSM->GetMovementFSM()->GetCurrentState();
+	//MovementStateBase* currentState = GetMovementFSM()->GetCurrentState();
 	//if (currentState)
 	//{
 	//	std::string name = typeid(*currentState).name();  // 상태 이름 확인

@@ -41,4 +41,6 @@ public:
 public:
     void LoadSpriteSheetFromJson(shared_ptr<Texture2D> texture, const string& jsonPath);
     void LoadAnimationClipFromJson(shared_ptr<Texture2D> texture, const string& jsonPath);
+
+    int GetFrameIndexAtTime(float time);
 };
