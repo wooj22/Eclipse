@@ -358,8 +358,8 @@ void WaveSystem::SetupWave3Pattern()
             data.x = GetRandomSpawnX();
             data.y = SPAWN_Y;
             
-            // HonD는 10개만 스폰 (총 90개 중 10개 = 약 11%)
-            if (honDCount < 10 && m_randomGen() % 9 == 0)
+            // HonD는 25개만 스폰 (총 90개 중 25개 = 약 28%) - 충돌 손실 감안
+            if (honDCount < 25 && m_randomGen() % 4 == 0)
             {
                 data.honType = 3;  // HonD
                 honDCount++;
