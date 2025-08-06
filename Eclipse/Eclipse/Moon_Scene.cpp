@@ -41,7 +41,6 @@ void Moon_Scene::Awake()
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
 	playerAttackArea->GetComponent<SpriteRenderer>()->SetEnabled(false); 
 	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false); 
-	// playerAttackArea->SetActive(false);
 
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 

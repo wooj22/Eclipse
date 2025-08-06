@@ -123,7 +123,6 @@ void Dash_State::CreateAfterImage(MovementFSM* fsm)
         OutputDebugStringA("AfterImage sprite에 texture가 없음!\n");
         return;
     }
-    OutputDebugStringA("AfterImage 잘 되는 중!\n");
 
     // 위치 및 방향
     Vector2 position = player->GetTransform()->GetPosition();
