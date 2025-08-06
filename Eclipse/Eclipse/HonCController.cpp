@@ -12,6 +12,7 @@ void HonCController::Awake()
 	tr = gameObject->transform;
 	collider = gameObject->GetComponent<CircleCollider>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
+
 }
 
 void HonCController::Start()
@@ -68,6 +69,16 @@ void HonCController::OnDestroy()
 void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	// [player collision]
+	if (other->gameObject->name == "Player")
+	{
+		MovementFSM* playerFSM = other->gameObject->GetComponent<PlayerFSM>()->GetMovementFSM();
+		if (!playerFSM->IsInState<Attack_State>())
+		{
+			other->gameObject->GetComponent<PlayerFSM>()->SetSpeedDownRate(palyer_deceleration);
+		}
+	}
+
+	// [player attack collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// score

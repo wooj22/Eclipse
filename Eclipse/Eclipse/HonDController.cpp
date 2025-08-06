@@ -10,6 +10,8 @@ void HonDController::Awake()
 	tr = gameObject->transform;
 	collider = gameObject->GetComponent<CircleCollider>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
+
+	SetSize(size);
 }
 
 void HonDController::Update()
@@ -54,14 +56,22 @@ void HonDController::Update()
 void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	// [player collision]
+	if (other->gameObject->name == "Player")
+	{
+		MovementFSM* playerFSM = other->gameObject->GetComponent<PlayerFSM>()->GetMovementFSM();
+		if (!playerFSM->IsInState<Attack_State>())
+		{
+			other->gameObject->GetComponent<PlayerFSM>()->SetSpeedDownRate(palyer_deceleration);
+		}
+	}
+
+	// [player attack collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// score
 		GameManager::Get().honCount--;
 
-		// collision acttion
-		CollisionStart();
-		moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+		gameObject->Destroy();
 	}
 
 	// [endline collision]
@@ -91,7 +101,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		string honType = otherGameObject->name;
 
 		// score
-		GameManager::Get().honCount -= 2;
+		GameManager::Get().honCount--;
 
 		// collision acttion
 		if(honType == "HonD") otherGameObject->Destroy();

@@ -6,6 +6,8 @@
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "GameManager.h"
+#include "PlayerFSM.h"
+#include "Attack_State.h"
 
 /* Hon Type Enum */
 enum class HonType
@@ -23,12 +25,12 @@ protected:
 	// hon stat
 	int hp = 3;
 	float size = 1;
-	float descentSpeed = 80;						// 하강 speed
+	float descentSpeed = 85;						// 하강 speed
 	float collisionSpeed = 1000;					// 충돌 밀림 speed
 	const float collisionSpeedDefalut = 1000;		// 충돌 밀림 기본 speed
 
 	// data
-	float collisionMovingTime = 1.5f;		// 충돌 밀림 지속시간
+	float collisionMovingTime = 0.5f;		// 충돌 밀림 지속시간
 	float pullMovingTime = 0.15f;			// Hon C 끌어당김 지속시간
 
 	// controll
@@ -45,6 +47,7 @@ protected:
 
 	// player 
 	Transform* playerTr;
+	float palyer_deceleration = 0.2;
 
 	// ref component
 	Transform* tr = nullptr;

@@ -65,6 +65,16 @@ void HonBController::OnDestroy()
 void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
 	// [player collision]
+	if (other->gameObject->name == "Player")
+	{
+		MovementFSM* playerFSM = other->gameObject->GetComponent<PlayerFSM>()->GetMovementFSM();
+		if (!playerFSM->IsInState<Attack_State>())
+		{
+			other->gameObject->GetComponent<PlayerFSM>()->SetSpeedDownRate(palyer_deceleration);
+		}
+	}
+
+	// [player attack collision]
 	if (other->gameObject->name == "PlayerAttackArea")
 	{
 		// score
