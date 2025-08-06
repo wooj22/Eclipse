@@ -7,27 +7,12 @@ class PlayerAreaController : public Script
 {
 public:
 	// script component cycle
-	void Awake() override {}
-	void Start() override {}
-	void Update() override {}
-	void OnDestroy() override{}
+	void Awake() override;
+	void Start() override;
+	void Update() override;
+	void OnDestroy() override;
 
 	// trigger event
-	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override
-	{
-		if (other->gameObject->tag == "Hon")
-		{
-			// OutputDebugStringA("Hon과 충돌 함 \n");
+	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
 
-			if (this->gameObject->GetComponent<CircleCollider>()->IsEnabled())
-			{
-				this->gameObject->GetComponent<CircleCollider>()->SetEnabled(false);
-			}
-			
-		}
-	}
-
-	void OnTriggerStay(ICollider* other, const ContactInfo& contact) override
-	{
-	}
 };
