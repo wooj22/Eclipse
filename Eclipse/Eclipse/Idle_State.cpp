@@ -29,6 +29,10 @@ void Idle_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0);  // 움직임이 있었다면 정지 
 
     // 애니메이션 재생
+
+    //auto pac = dynamic_cast<PlayerAnimatorController*>(fsm->GetPlayerFSM()->GetAnimatorController());
+    //if (pac) pac->SetSkillSensitiveBool("Player_Idle", true);
+
     if(!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Idle", true);
     else { fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Idle", true); }
 }
