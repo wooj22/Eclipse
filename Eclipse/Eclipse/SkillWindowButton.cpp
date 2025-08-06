@@ -24,6 +24,7 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 	skillIcon_Button->rectTransform->SetSize(100,100); //이미지 크기
 	skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 	skillIcon_Button->imageRenderer->SetColor(0.4, 0.4, 0.4);
+	RefreshText();
 }
 
 void SkillWindowButton::SceneStart()
@@ -66,8 +67,8 @@ void SkillWindowButton::SceneStart()
 	}
 	else if (skillInfo.maxLevel > 1)
 	{
-		skillColor1_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[0]-1)*100))));
-		skillColor2_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[1]-1)*100))));
+		skillColor1_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[0] - 1) * 100))));
+		skillColor2_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[1] - 1) * 100))));
 		skillColor3_Text->screenTextRenderer->SetText(ToWString(static_cast<int>(std::round((skillvalue[2] - 1) * 100))));
 	}
 	else
@@ -90,31 +91,6 @@ void SkillWindowButton::SceneStart()
 
 void SkillWindowButton::Update()
 {
-	const auto& info = GameManager::Get().skillTree[skillName];
-
-	if (info.unlockLevel != prevLevel)
-	{
-		prevLevel = info.unlockLevel;
-
-		// 텍스트 갱신
-		skillLevel_Text->screenTextRenderer->SetText(
-			to_wstring(info.unlockLevel) + L"/" + to_wstring(maxSkillLevel));
-
-
-		// 먼저 전부 초기화 (FloralWhite)
-		skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-		skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-		skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-
-		// 현재 레벨 칸만 빨간색
-		if (prevLevel == 1)
-			skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-		else if (prevLevel == 2)
-			skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-		else if (prevLevel == 3)
-			skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-	}
-
 	if (isEnterButton)
 	{
 		glowtimer += Time::GetDeltaTime();  // 매 프레임 시간 누적
@@ -143,6 +119,27 @@ std::wstring SkillWindowButton::ToWString(float value)
 	}
 }
 
+void SkillWindowButton::RefreshText()
+{
+	const auto& info = GameManager::Get().skillTree[skillName];
+	// 텍스트 갱신
+	skillLevel_Text->screenTextRenderer->SetText(
+		to_wstring(info.unlockLevel) + L"/" + to_wstring(maxSkillLevel));
+
+	// 먼저 전부 초기화 (FloralWhite)
+	skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+	skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+	skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+
+	// 현재 레벨 칸만 빨간색
+	if (info.unlockLevel == 1)
+		skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+	else if (info.unlockLevel == 2)
+		skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+	else if (info.unlockLevel == 3)
+		skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+}
+
 void SkillWindowButton::OnClickSkillButton()
 {
 	if (GameManager::Get().LevelUpSkill(skillName))
@@ -152,6 +149,8 @@ void SkillWindowButton::OnClickSkillButton()
 			isEnterButton = true;
 		else
 			skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
+
+		RefreshText();
 	}
 }
 

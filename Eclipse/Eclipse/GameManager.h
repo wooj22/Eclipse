@@ -113,9 +113,24 @@ public:
 	void UnInit();
 	void ReSetData();
 	void WaveStart();
+
+	// UI스킬 관련 함수
 	void SkillReset();
 	bool CanUnlock(SkillType skill);
 	bool CheckUnlock(SkillType skill) { return skillTree[skill].unlocked; }
 	bool LevelUpSkill(SkillType skill, bool check = false);
 	void AllSkillUnlock();
+
+	// 플레이어 스킬 관련 함수
+	void CanAbsorb();
+	void UseAbsorb();
+	void CanRelease();
+	void UseRelease();
+
+
+	// 혼 관련 함수
+	void ChangeHonCount(int num);
+
+	// 웨이브 관련 함수
+	void FinishWaveTimeText();
 };

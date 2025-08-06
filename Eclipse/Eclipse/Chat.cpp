@@ -46,25 +46,26 @@ void Chat::Awake()
 	AddChat(4, ChatCondition::Success, L"잘 해줬어. 정말로.");
 
 	SetCondition(chatCondition);
-
+	chatText->screenTextRenderer->SetText(currentLines[chatCount]);
 }
 void Chat::Update()
 {
-	if (finished)
-	{
-		if (!GameManager::Get().g_playUI->chat_Button->IsActive())
-			GameManager::Get().g_playUI->chat_Button->SetActive(true);
-		return;
-	}
 
-	if (chatCount < currentLines.size())
+}
+
+//플레이어 인터렉션 시 호출 함수
+void Chat::NextChat()
+{
+	if (!finished)
 	{
+		chatCount++;
 		chatText->screenTextRenderer->SetText(currentLines[chatCount]);
-		finished = chatCount == currentLines.size() - 1 ? true : finished;
+		if (chatCount == currentLines.size() - 1)
+		{
+			finished = true;
+			GameManager::Get().g_playUI->chat_Button->SetActive(true);
+		}
 	}
-
-
-
 }
 
 void Chat::AddChat(int waveIndex, ChatCondition condition, const std::wstring& line)
@@ -100,6 +101,9 @@ void Chat::SetCondition(ChatCondition condition)
 	{
 		for (const auto& group : chatGroups)
 		{
+			bool gd = group.waveIndex == GameManager::Get().waveCount;
+			bool gsd = group.condition == chatCondition;
+
 			if (group.waveIndex == GameManager::Get().waveCount && group.condition == chatCondition)
 			{
 				currentLines.insert(currentLines.end(), group.lines.begin(), group.lines.end());
@@ -117,4 +121,6 @@ void Chat::SetCondition(ChatCondition condition)
 			break;
 		}
 	}
+
+	chatText->screenTextRenderer->SetText(currentLines[chatCount]);
 }

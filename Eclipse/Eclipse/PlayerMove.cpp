@@ -22,11 +22,7 @@ void PlayerMove::Update()
 
 	if (Input::GetKeyDown('F'))
 	{
-		if (GameManager::Get().g_playUI->ChatActiveCheck())
-		{
-			if (!GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->GetFinished())
-				GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->AddChatCount();
-		}
+		GameManager::Get().g_playUI->PlayerInteraction();
 	}
 
 	if (Input::GetKeyDown(VK_RETURN))
@@ -49,6 +45,7 @@ void PlayerMove::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck() 
 		&& !GameManager::Get().isWave && Input::GetKey('F'))
 	{
-			GameManager::Get().g_playUI->ChatSetActive(true);
+		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);// 추후 제거
+		GameManager::Get().g_playUI->ChatSetActive(true);
 	}
 }

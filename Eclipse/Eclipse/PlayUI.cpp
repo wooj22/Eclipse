@@ -92,6 +92,8 @@ void PlayUI::SceneStart()
 	hon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	hon_Text->screenTextRenderer->SetFontSize(50);
 
+	hon_Text->screenTextRenderer->SetText(L"x 0") ;
+
 	// 스킬1
 	skill1_Text->rectTransform->SetParent(skill1_Image->rectTransform);
 
@@ -151,41 +153,19 @@ void PlayUI::SceneStart()
 	skillHon_Text->rectTransform->SetSize(500,100);
 	skillHon_Text->screenTextRenderer->SetFontSize(50);
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
+	skillHon_Text->screenTextRenderer->SetText(L"x 0");
 }
-
 
 void PlayUI::Update()
 {
-
-	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
-	skillHon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
-
-	if (GameManager::Get().canUseAbsorb)
-	{
-		skill1_Image->imageRenderer->renderMode = RenderMode::Unlit;
-		skill1_Text->SetActive(false);
-	}
-	else
-	{
-		skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-		skill1_Text->SetActive(true);
-		skill1_Text->screenTextRenderer->SetText(std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().absorbCoolTime))));
-	}
-
-	if (GameManager::Get().canUseRelease)
-		skill2_Image->imageRenderer->renderMode = RenderMode::Unlit;
-	else
-		skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-
-
 	if (GameManager::Get().isWave)
 	{
 		std::wstring timeText = (GameManager::Get().waveTime < 10 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().waveTime)));
 		timer_Text->screenTextRenderer->SetText(timeText);
 	}
-	else if (GameManager::Get().waveCount > 0)
-		timer_Text->screenTextRenderer->SetText(L"00");
 
+	if (!GameManager::Get().canUseAbsorb)
+		skill1_Text->screenTextRenderer->SetText(std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().absorbCoolTime))));
 
 	if (waveInfo_Text->IsActive())
 	{
@@ -253,7 +233,15 @@ void PlayUI::Update()
 	}
 
 	// TODOMO : 아래 입력 삭제 
-	if( Input::GetKeyDown(VK_TAB))
+
+	if (Input::GetKeyDown('Q') && GameManager::Get().canUseAbsorb)
+	{
+		GameManager::Get().absorbCoolTime = 9;
+		GameManager::Get().canUseAbsorb = false;
+		GameManager::Get().canUseRelease = true;
+	}
+
+	if (Input::GetKeyDown(VK_TAB))
 	{
 		if (skillWindow_Image->IsActive())
 		{
@@ -264,14 +252,6 @@ void PlayUI::Update()
 			skillWindow_Image->SetActive(true);
 		}
 	}
-
-	if (Input::GetKeyDown('Q') && GameManager::Get().canUseAbsorb)
-	{
-		GameManager::Get().absorbCoolTime = 9;
-		GameManager::Get().canUseAbsorb = false;
-		GameManager::Get().canUseRelease = true;
-	}
-
 
 	if (Input::GetKeyDown('E') && GameManager::Get().canUseRelease)
 	{
@@ -331,18 +311,47 @@ void PlayUI::StartWaveInfo(int waveNumber)
 	tooltip_Image->imageRenderer->SetAlpha(0);
 }
 
-void PlayUI::AllSkillButtonRenderMod()
+void PlayUI::AllSkillCheat()
 {
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
+		skillButton->RefreshText();
 	}
 }
 
-void PlayUI::SkillReSetButtonRenderMod()
+void PlayUI::ResetAllSkillCheat()
 {
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+		skillButton->RefreshText();
 	}
+}
+
+void PlayUI::PlayerInteraction()
+{
+	if (chat_Image->IsActive())
+	{
+		chat->NextChat();
+	}
+}
+
+// 혼 개수 추가 호출 함수
+void PlayUI::ChangeHonCountText()
+{
+	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
+	skillHon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
+}
+
+void PlayUI::ActivateAbsorb()
+{
+	skill1_Image->imageRenderer->renderMode = RenderMode::Unlit;
+	skill1_Text->SetActive(false);
+}
+
+void PlayUI::DeactivateAbsorb()
+{
+	skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+	skill1_Text->SetActive(true);
 }

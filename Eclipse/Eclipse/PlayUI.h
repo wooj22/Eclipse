@@ -32,12 +32,12 @@ public:
 
 	UI_Image* quest_Image;			// 퀘스트창 이미지
 	UI_Text* quest_Text;			// 퀘스트창 텍스트
-	//Quest* quest;
+	Quest* quest;					// 퀘스트 스크립트
 
 	UI_Image* chat_Image;			// 대화창 이미지
 	UI_Text* chat_Text;				// 대화창 텍스트
 	UI_Button* chat_Button;			// 퀘스트 수락 버튼
-	Chat* chat;
+	Chat* chat;						// 대화창 스크립트
 
 	UI_Image* hon_Image;			// 혼 이미지
 	UI_Text* hon_Text;				// 혼 개수 텍스트
@@ -66,26 +66,29 @@ public:
 
 	// 오브젝트가 생성될 때
 	void Awake() override;
-
 	// Scene의 Start (씬의 모든 오브젝트가 생성되고 난 뒤)
 	void SceneStart() override;
-
 	// Scene의 Update
 	void Update()  override;
-
 	// Scene의 Exit, GameObject Delete
 	void Destroyed() override;
 
+
+	void ChangeHonCountText();
+
+	void ActivateAbsorb();
+	void DeactivateAbsorb();
 
 	void ChatSetActive(bool check) {
 		chat_Image->SetActive(check);
 		chat_Button->SetActive(false);
 	}
-
 	bool ChatActiveCheck() { return chat_Image->IsActive(); }
-
 	void ClickChatButton();
+
+	void AllSkillCheat();
+	void ResetAllSkillCheat();
+	void PlayerInteraction();
+
 	void StartWaveInfo(int waveNumber);
-	void AllSkillButtonRenderMod();
-	void SkillReSetButtonRenderMod();
 };

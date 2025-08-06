@@ -24,6 +24,7 @@ private:
 public:
 	void Awake() override;
 	void Update() override;
+	void NextChat();
 	void AddChat(int waveIndex, ChatCondition condition, const std::wstring& line);
 	void AddChatCount() { chatCount++; }
 	bool GetFinished() { return finished; }
