@@ -101,24 +101,51 @@ void PlayScene::Update()
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
 
-	if (Input::GetKeyDown(VK_F1))
-	{
-		GameManager::Get().honCount += 149; // ȥ ġƮ
-	}
-
-	if (Input::GetKeyDown(VK_F2))
-	{
-		GameManager::Get().honCount += 1; // ȥ ġƮ
-	}
-
 	if (Input::GetKeyDown(VK_F3))
 	{
-		GameManager::Get().AllSkillUnlock(); // ��� ��ų �ر� ġƮ
+		GameManager::Get().ChangeHonCount(149); // ȥ ġƮ
 	}
 
 	if (Input::GetKeyDown(VK_F4))
 	{
+		GameManager::Get().ChangeHonCount(1); // ȥ ġƮ
+	}
+
+	if (Input::GetKeyDown(VK_F5))
+	{
+		GameManager::Get().AllSkillUnlock(); // ��� ��ų �ر� ġƮ
+	}
+
+	if (Input::GetKeyDown(VK_F6))
+	{
 		GameManager::Get().SkillReset();
+	}
+
+	if (Input::GetKeyDown(VK_F7))
+	{
+		GameManager::Get().CanAbsorb();
+	}
+
+	if (Input::GetKeyDown(VK_F8))
+	{
+		GameManager::Get().UseAbsorb();
+		GameManager::Get().absorbCoolTime = 5;
+	}
+
+	if (Input::GetKeyDown(VK_F9))
+	{
+		GameManager::Get().CanRelease();
+	}
+
+	if (Input::GetKeyDown(VK_F10))
+	{
+		GameManager::Get().UseRelease();
+	}
+
+	if (Input::GetKeyDown(VK_F11))
+	{
+		GameManager::Get().isWave = false;
+		GameManager::Get().FinishWaveTimeText();
 	}
 }
 

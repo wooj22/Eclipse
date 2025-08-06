@@ -83,7 +83,7 @@ void GameManager::SkillReset()
 
 	if (g_playUI != nullptr)
 	{
-		g_playUI->SkillReSetButtonRenderMod();
+		g_playUI->ResetAllSkillCheat();
 	}
 }
 
@@ -133,6 +133,7 @@ bool GameManager::LevelUpSkill(SkillType skill, bool check )
 	{
 		honCount -= info.skillCost[info.unlockLevel];
 		info.unlockLevel++;
+		if(g_playUI != nullptr) g_playUI->ChangeHonCountText();
 	}
 	return true;
 }
@@ -148,6 +149,41 @@ void GameManager::AllSkillUnlock()
 
 	if (g_playUI !=nullptr)
 	{
-		g_playUI->AllSkillButtonRenderMod();
+		g_playUI->AllSkillCheat();
 	}
+}
+
+void GameManager::ChangeHonCount(int num)
+{
+	honCount += num;
+	g_playUI->ChangeHonCountText();
+}
+
+void GameManager::CanAbsorb()
+{
+	canUseAbsorb = true;
+	g_playUI->ActivateAbsorb();
+}
+
+void GameManager::UseAbsorb()
+{
+	canUseAbsorb = false;
+	g_playUI->DeactivateAbsorb();
+}
+
+void GameManager::CanRelease()
+{
+	canUseRelease = true;
+	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::Unlit;
+}
+
+void GameManager::UseRelease()
+{
+	canUseRelease = false;
+	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+}
+
+void GameManager::FinishWaveTimeText()
+{
+	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
 }
