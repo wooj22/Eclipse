@@ -13,6 +13,9 @@ void PlayUI::Awake()
 
 void PlayUI::SceneStart()
 {
+
+	// NPC
+	
 	// 웨이브 타이머 UI
 	timer_Text->rectTransform->SetPosition(0, 500);
 	timer_Text->rectTransform->SetSize(500, 40);

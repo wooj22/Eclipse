@@ -14,6 +14,8 @@
 #include "../Direct2D_EngineLib/Singleton.h"
 #include <algorithm>
 #include <chrono>
+#include "PlayUI.h"
+#include "Chat.h"
 
 WaveSystem::WaveSystem()
 {
@@ -103,18 +105,18 @@ void WaveSystem::Update()
         {
             Vector2 pos = transform->GetPosition();
             // Check if reached ground (y < -400)
-            if (pos.y < -400.0f)
-            {
-                // Remove from vector first, then deactivate
-                m_activeHons.erase(m_activeHons.begin() + i);
-                m_destroyedCount++;
-                hon->SetActive(false);
-                
-                char debugMsg[256];
-                sprintf_s(debugMsg, "Hon reached ground. Active: %d, Destroyed: %d/%d\n", 
-                    static_cast<int>(m_activeHons.size()), m_destroyedCount, m_spawnedCount);
-                OutputDebugStringA(debugMsg);
-            }
+            //if (pos.y < -400.0f)
+            //{
+            //    // Remove from vector first, then deactivate
+            //    m_activeHons.erase(m_activeHons.begin() + i);
+            //    m_destroyedCount++;
+            //    hon->SetActive(false);
+            //    
+            //    char debugMsg[256];
+            //    sprintf_s(debugMsg, "Hon reached ground. Active: %d, Destroyed: %d/%d\n", 
+            //        static_cast<int>(m_activeHons.size()), m_destroyedCount, m_spawnedCount);
+            //    OutputDebugStringA(debugMsg);
+            //}
         }
     }
     
@@ -155,6 +157,7 @@ void WaveSystem::Update()
         if (m_gameManager)
         {
             m_gameManager->isWave = false;
+            m_gameManager->g_playUI->chat->SetCondition(ChatCondition::Success);
         }
         m_currentWaveState = WaveState::IDLE;
         m_waveStartCheck = true;
@@ -194,21 +197,22 @@ void WaveSystem::StartWave(int waveNumber)
     {
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
-        m_waveDuration = 70.0f;        
+        //m_waveDuration = 70.0f;        
+        m_waveDuration = 2.0f;        
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;
         
     case 2:
         m_currentWaveState = WaveState::WAVE_2;
-        m_waveDuration = 70.0f;        
+        m_waveDuration = 2.0f;        
         SetupWave2Pattern();
         OutputDebugStringA("Wave 2 Started - Chain Reaction (HonA, HonB, HonC)\n");
         break;
         
     case 3:
         m_currentWaveState = WaveState::WAVE_3;
-        m_waveDuration = 70.0f;        
+        m_waveDuration = 2.0f;        
         SetupWave3Pattern();
         OutputDebugStringA("Wave 3 Started - Increased Difficulty (All Hons)\n");
         break;

@@ -9,21 +9,12 @@ void Yunmo_Scene::Awake()
 	cam->AddComponent<Transform>();
 	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
 
-
-	// create gameobject
-	// title sample
-	title_text = CreateObject<UI_Text>();
-	title_text->rectTransform->SetPosition(0, 500);
-	title_text->rectTransform->SetSize(500, 100);
-	title_text->screenTextRenderer->SetFontSize(50);
-	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::GreenYellow));
-	title_text->screenTextRenderer->SetText(L"Yunmo Scene");
-
 	// [ BackGround ]
 	auto backGround = CreateObject<GameObject>();
 	backGround->AddComponent<Transform>()->SetPosition(0.0f, 0.0f);;
 	auto background_sr = backGround->AddComponent<SpriteRenderer>();
-	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background.png"), "Background_Moon");
+	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background_1.png"), "Background_Moon_1");
+
 
 	// [ player ] 
 	player = CreateObject<Player>();
@@ -38,51 +29,53 @@ void Yunmo_Scene::Awake()
 	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
 	playerAttackArea = CreateObject<PlayerAttackArea>();
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
-	playerAttackArea->SetActive(false);
+	playerAttackArea->GetComponent<SpriteRenderer>()->SetEnabled(false);
+	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false);
+
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
-	ground->AddComponent<Transform>()->SetPosition(0.0f, -700.0f);
+	ground->tag = "EndLine";
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -900.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
 	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
 	ground_sr->layer = 0;
 
 	ground_col = ground->AddComponent<BoxCollider>();
-	// ground_col->size = { 1110.0f, 30.0f };
-	ground_col->size = { 1920.0f, 30.0f };
+	ground_col->size = { 2560.0f, 50.0f };
+	ground_col->isFlatform = true;
 
 
 	// [ wall_r ]
 	wall_r = CreateObject<GameObject>();
 	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(960.0f, 0.0f);;
+	wall_r->AddComponent<Transform>()->SetPosition(1280.0f, -300.0f);;
 
 	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
 	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
 	wall_r_col = wall_r->AddComponent<BoxCollider>();
-	wall_r_col->size = { 30.0f, 1400.0f };
+	wall_r_col->size = { 50.0f, 1400.0f };
 
 
 	// [ wall_l ]
 	wall_l = CreateObject<GameObject>();
 	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-960.0f, 0.0f);;
+	wall_l->AddComponent<Transform>()->SetPosition(-1280.0f, -300.0f);;
 
 	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
 	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
 	wall_l_col = wall_l->AddComponent<BoxCollider>();
-	wall_l_col->size = { 30.0f, 1400.0f };
-
+	wall_l_col->size = { 50.0f, 1400.0f };
 
 	// [ Platform1 ]
 	platform1 = CreateObject<GameObject>();
 	platform1->name = "Ground";
-	platform1->AddComponent<Transform>()->SetPosition(-300.0f, -500.0f);
+	platform1->AddComponent<Transform>()->SetPosition(200.0f, -750.0f);
 
 	auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
 	platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
@@ -90,18 +83,43 @@ void Yunmo_Scene::Awake()
 	platform1_col = platform1->AddComponent<BoxCollider>();
 	platform1_col->offset = { 0.0f, 12.0f };
 	platform1_col->size = { 200.0f, 5.0f };
-
+	platform1_col->isFlatform = true;
 
 	// [ Platform2 ]
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
-	platform2->AddComponent<Transform>()->SetPosition(100.0f, -200.0f);
+	platform2->AddComponent<Transform>()->SetPosition(550.0f, -600.0f);
 
 	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
 	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
 
 	platform2_col = platform2->AddComponent<BoxCollider>();
 	platform2_col->size = { 200.0f, 30.0f };
+	platform2_col->isFlatform = true;
+
+	// [ Platform3 ]
+	platform3 = CreateObject<GameObject>();
+	platform3->name = "Ground";
+	platform3->AddComponent<Transform>()->SetPosition(-200.0f, -750.0f);
+
+	auto platform3_sr = platform3->AddComponent<SpriteRenderer>();
+	platform3_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+
+	platform3_col = platform3->AddComponent<BoxCollider>();
+	platform3_col->size = { 200.0f, 30.0f };
+	platform3_col->isFlatform = true;
+
+	// [ Platform4 ]
+	platform4 = CreateObject<GameObject>();
+	platform4->name = "Ground";
+	platform4->AddComponent<Transform>()->SetPosition(-550.0f, -600.0f);
+
+	auto platform4_sr = platform4->AddComponent<SpriteRenderer>();
+	platform4_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+
+	platform4_col = platform4->AddComponent<BoxCollider>();
+	platform4_col->size = { 200.0f, 30.0f };
+	platform4_col->isFlatform = true;
 
 	// boundary condition
 	Rect mapRect;
@@ -114,47 +132,44 @@ void Yunmo_Scene::Awake()
 	camCompo->SetTargetTraceLimitY(100.0f);
 	camCompo->SetMapCondition(mapRect);
 
+	//wave
+	waveSystemObj = CreateObject<GameObject>();
+	waveSystemObj->name = "WaveSystem";
+	waveSystemObj->SetActive(true);  // GameObject 활성화
+	waveSystem = waveSystemObj->AddComponent<WaveSystem>();
 
-	// honmun
-	honmun_a = CreateObject<Honmun>();
-	//honmun_a->name = "Honmun_A1";
-	honmun_a->SetHonmunType(HonmunType::A);
-	honmun_a->SetPosition(-300.0f, 200.0f);
+	npc = CreateObject<NPC>({0,-800});
 
-	honmun_a2 = CreateObject<Honmun>();
-	//honmun_a2->name = "Honmun_A2";
-	honmun_a2->SetHonmunType(HonmunType::A);
-	honmun_a2->SetPosition(-200.0f, 300.0f);
 
-	honmun_a3 = CreateObject<Honmun>();
-	//honmun_a3->name = "Honmun_A3";
-	honmun_a3->SetHonmunType(HonmunType::A);
-	honmun_a3->SetPosition(-400.0f, 100.0f);
+	playUI = CreateObject<PlayUI>();
+	GameManager::Get().g_playUI = playUI;
+	playUI->timer_Text = CreateObject<UI_Text>();
+	playUI->stop_Button = CreateObject<UI_Button>();
+	playUI->quest_Image = CreateObject<UI_Image>();
+	playUI->quest_Text = CreateObject<UI_Text>();
+	playUI->chat_Image = CreateObject<UI_Image>();
+	playUI->chat_Text = CreateObject<UI_Text>();
+	playUI->chat_Button = CreateObject<UI_Button>();
+	playUI->hon_Image = CreateObject<UI_Image>();
+	playUI->hon_Text = CreateObject<UI_Text>();
+	playUI->skill1_Image = CreateObject<UI_Image>();
+	playUI->skill1_Text = CreateObject<UI_Text>();
+	playUI->skill2_Image = CreateObject<UI_Image>();
+	playUI->waveInfo_Text = CreateObject<UI_Text>();
+	playUI->tooltip_Image = CreateObject<UI_Image>();
 
-	honmun_a4 = CreateObject<Honmun>();
-	//honmun_a4->name = "Honmun_A4";
-	honmun_a4->SetHonmunType(HonmunType::A);
-	honmun_a4->SetPosition(-100.0f, 150.0f);
-
-	honmun_b = CreateObject<Honmun>();
-	//honmun_b->name = "Honmun_B1";
-	honmun_b->SetHonmunType(HonmunType::B);
-	honmun_b->SetPosition(150.0f, 250.0f);
-
-	honmun_b2 = CreateObject<Honmun>();
-	//honmun_b2->name = "Honmun_B2";
-	honmun_b2->SetHonmunType(HonmunType::B);
-	honmun_b2->SetPosition(350.0f, 400.0f);
-
-	honmun_b3 = CreateObject<Honmun>();
-	//honmun_b3->name = "Honmun_B3";
-	honmun_b3->SetHonmunType(HonmunType::B);
-	honmun_b3->SetPosition(450.0f, 50.0f);
-
-	honmun_b4 = CreateObject<Honmun>();
-	//honmun_b4->name = "Honmun_B4";
-	honmun_b4->SetHonmunType(HonmunType::B);
-	honmun_b4->SetPosition(50.0f, 50.0f);
+	playUI->skillWindow_Image = CreateObject<UI_Image>();
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
+	playUI->skillHon_Image = CreateObject<UI_Image>();
+	playUI->skillHon_Text = CreateObject<UI_Text>();
 }
 
 void Yunmo_Scene::Start()
@@ -199,12 +214,15 @@ void Yunmo_Scene::Update()
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
 
+	if (Input::GetKeyDown('C'))
+	{
+		GameManager::Get().AllSkillUnlock();
+	}
+
 	// AABB 그리기 
 	ground_col->DebugColliderDraw();
 	wall_r_col->DebugColliderDraw();
 	wall_l_col->DebugColliderDraw();
-	platform1_col->DebugColliderDraw();
-	platform2_col->DebugColliderDraw();
 }
 
 void Yunmo_Scene::Exit()

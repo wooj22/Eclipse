@@ -41,26 +41,26 @@ void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
 	// for (int i = 0; i < 3; ++i) 
-	GameManager::Get().honCount = 1000;
+	//GameManager::Get().honCount = 1000;
 
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
-	GameManager::Get().LevelUpSkill(SkillType::WallJump);
+	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
+	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	//GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
+	//GameManager::Get().LevelUpSkill(SkillType::WallJump);
 
-	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
-	GameManager::Get().LevelUpSkill(SkillType::FastFall);
+	//GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	//GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	//GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
+	//GameManager::Get().LevelUpSkill(SkillType::FastFall);
 
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::Dash);
+	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	//GameManager::Get().LevelUpSkill(SkillType::Dash);
 }
 
 void PlayerFSM::Update()
@@ -71,7 +71,7 @@ void PlayerFSM::Update()
 	UpdateSkillCooldowns(); 
 	if (isQ) { TryUseAbsorb(); }
 	if (isE) { TryUseRelease(); }
-
+	if (isF) { GameManager::Get().g_playUI->PlayerInteraction(); }
 	movementFSM->Update();
 
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
@@ -91,17 +91,6 @@ void PlayerFSM::Update()
 	//{
 	//	std::string name = typeid(*currentState).name();  // 상태 이름 확인
 	//	OutputDebugStringA(("현재 상태: " + name + "\n").c_str());
-	//}
-
-
-	// [ mo_dev ] 
-	//if (isF)
-	//{
-	//	if (GameManager::Get().g_playUI->ChatActiveCheck())
-	//	{
-	//		if (!GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->GetFinished())
-	//			GameManager::Get().g_playUI->chat_Text->GetComponent<Chat>()->AddChatCount();
-	//	}
 	//}
 }
 
@@ -131,7 +120,7 @@ void PlayerFSM::InputSetting()
 	isLButton = Input::GetKeyDown(VK_LBUTTON);
 	isRButton = Input::GetKeyDown(VK_RBUTTON);
 
-	isF = Input::GetKey('F');
+	isF = Input::GetKeyDown('F');
 }
 
 void PlayerFSM::FlipXSetting()
@@ -408,11 +397,12 @@ void PlayerFSM::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 void PlayerFSM::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 	// mo_dev
-	//if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck()
-	//	&& !GameManager::Get().isWave && Input::GetKey('F'))
-	//{
-	//	GameManager::Get().g_playUI->ChatSetActive(true);
-	//}
+
+	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck()
+		&& !GameManager::Get().isWave && Input::GetKey('F'))
+	{
+		GameManager::Get().g_playUI->ChatSetActive(true);
+	}
 }
 
 void PlayerFSM::OnTriggerExit(ICollider* other, const ContactInfo& contact)

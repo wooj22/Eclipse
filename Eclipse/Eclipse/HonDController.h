@@ -23,7 +23,7 @@ public:
 		int level = GameManager::Get().skillTree[SkillType::KnockbackDistanceUp].unlockLevel;
 		if (level != 0)
 		{
-			//SetSpeedUpRate(GameManager::Get().skillValue[SkillType::KnockbackDistanceUp][level - 1]);
+			SetSpeedUpRate(GameManager::Get().skillValue[SkillType::KnockbackDistanceUp][level - 1]);
 		}
 	}
 
