@@ -46,7 +46,7 @@ private:
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 280.0f;
-	float dashSpeed = 450.0f;
+	float dashSpeed = 550.0f;
 	float jumpForce = 700.0f;
 
 	float speedDownRate = 1.0; 

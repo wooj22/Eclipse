@@ -7,7 +7,7 @@ class Dash_State : public MovementStateBase
 {
 private:
     float dashTimer = 0.0f;
-    float dashDuration = 0.2f;
+    float dashDuration = 0.3f;
 
     float moveBonus = 0.0f;
     float dashSpeed = 0.0;
@@ -18,7 +18,7 @@ private:
 
     // ¿‹ªÛ
     float afterimageTimer = 0.0f;
-    float afterimageInterval = 0.05f;
+    float afterimageInterval = 0.02f;
 
 public:
     void Enter(MovementFSM* fsm) override;

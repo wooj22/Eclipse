@@ -8,7 +8,7 @@
 class AfterImage : public Script
 {
 private:
-    float lifeTime = 1.0f;
+    float lifeTime = 0.5f;
     float timer = 0.0f;
     float initialAlpha = 1.0f;
 

@@ -129,19 +129,21 @@ void Dash_State::CreateAfterImage(MovementFSM* fsm)
     Vector2 position = player->GetTransform()->GetPosition();
     bool flipX = playerRenderer->flipX;
 
-    // 잔상 오브젝트 생성
-    GameObject* afterImage = player->Instantiate<GameObject>(position);
+    // 잔상 오브젝트 생성 
+    GameObject* afterImage = player->Instantiate<GameObject>();
     afterImage->AddComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
+    afterImage->GetComponent<Transform>()->SetPosition(position);
+    // afterImage->GetComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
 
     // 렌더러 추가
     auto renderer = afterImage->AddComponent<SpriteRenderer>();
     renderer->sprite = currentSprite;
     renderer->flipX = flipX;
     renderer->flipY = playerRenderer->flipY;
-    renderer->SetAlpha(0.4f);                            
-    renderer->SetColor(0.7f, 0.7f, 1.0f);
+    renderer->SetAlpha(0.1f);                
+    renderer->SetColor(1.0f, 1.0f, 0.8f);
     renderer->renderMode = RenderMode::Lit_ColorTint;
-    renderer->layer = 3;
+    renderer->layer = 1;
 
     // 잔상 스크립트
     auto afterImageScript = afterImage->AddComponent<AfterImage>();
