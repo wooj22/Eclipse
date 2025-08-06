@@ -10,6 +10,7 @@
 
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
+#include "AfterImage.h"
 
 class Player : public GameObject
 {
@@ -27,6 +28,7 @@ public:
 
 	// [ script ]
 	PlayerFSM* playerFSM;
+	// AfterImage* afterImage;
 
 	// [ player setting ]
 	float playerGravityScale = 100; 
@@ -50,6 +52,7 @@ public:
 		spriteRenderer->layer = 2;
 
 		playerFSM = AddComponent<PlayerFSM>();
+		// afterImage = AddComponent<AfterImage>();
 	}
 	~Player() override
 	{

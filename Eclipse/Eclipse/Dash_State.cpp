@@ -6,7 +6,9 @@
 #include "PlayerAnimatorController.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
+#include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "AfterImage.h"
 
 
 void Dash_State::Enter(MovementFSM* fsm)
@@ -77,11 +79,16 @@ void Dash_State::FixedUpdate(MovementFSM* fsm)
     currentPos.y = targetYPosition;
     fsm->GetPlayerFSM()->GetTransform()->SetPosition(currentPos);
 
-    std::string debugStr = "[Dash_State] velocity.y = " + std::to_string(fsm->GetPlayerFSM()->GetRigidbody()->velocity.y) + "\n";
-    OutputDebugStringA(debugStr.c_str());
+    //std::string debugStr = "[Dash_State] velocity.y = " + std::to_string(fsm->GetPlayerFSM()->GetRigidbody()->velocity.y) + "\n";
+    //OutputDebugStringA(debugStr.c_str());
 
-    // std::string debugStr = "[Dash_State] Dash Speed: " + std::to_string(dashSpeed) + "\n";
-    // OutputDebugStringA(debugStr.c_str());
+    afterimageTimer += Time::GetDeltaTime();
+    if (afterimageTimer >= afterimageInterval)
+    {
+        afterimageTimer = 0.0f;
+
+        CreateAfterImage(fsm);
+    }
 }
 
 void Dash_State::Exit(MovementFSM* fsm)
@@ -98,4 +105,45 @@ void Dash_State::Exit(MovementFSM* fsm)
     // 애니메이션 종료
     if (!fsm->GetPlayerFSM()->isReleaseSkillAvailable) fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("N_Player_Dash", false);
     else fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Y_Player_Dash", false);
+}
+
+
+void Dash_State::CreateAfterImage(MovementFSM* fsm)
+{
+    PlayerFSM* player = fsm->GetPlayerFSM();
+    if (!player) return;
+
+    // 현재 스프라이트 가져오기
+    SpriteRenderer* playerRenderer = player->GetSpriteRenderer();
+    if (!playerRenderer) return;
+
+    shared_ptr<Sprite> currentSprite = playerRenderer->sprite;
+    if (!currentSprite || !currentSprite->texture || !currentSprite->texture->texture2D)
+    {
+        OutputDebugStringA("AfterImage sprite에 texture가 없음!\n");
+        return;
+    }
+    OutputDebugStringA("AfterImage 잘 되는 중!\n");
+
+    // 위치 및 방향
+    Vector2 position = player->GetTransform()->GetPosition();
+    bool flipX = playerRenderer->flipX;
+
+    // 잔상 오브젝트 생성
+    GameObject* afterImage = player->Instantiate<GameObject>(position);
+    afterImage->AddComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
+
+    // 렌더러 추가
+    auto renderer = afterImage->AddComponent<SpriteRenderer>();
+    renderer->sprite = currentSprite;
+    renderer->flipX = flipX;
+    renderer->flipY = playerRenderer->flipY;
+    renderer->SetAlpha(0.4f);                            
+    renderer->SetColor(0.7f, 0.7f, 1.0f);
+    renderer->renderMode = RenderMode::Lit_ColorTint;
+    renderer->layer = 3;
+
+    // 잔상 스크립트
+    auto afterImageScript = afterImage->AddComponent<AfterImage>();
+    afterImageScript->SetInitialAlpha(0.4f);
 }

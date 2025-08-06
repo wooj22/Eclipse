@@ -145,6 +145,7 @@ public:
 	Rigidbody* GetRigidbody() const { return rigidbody; }
 	AnimatorController* GetAnimatorController() const { return animatorController; }
     Transform* GetTransform() const { return transform; }
+	SpriteRenderer* GetSpriteRenderer() const { return spriteRenderer; }
 	void SetPlayerAttackArea(PlayerAttackArea* obj) { playerAttackArea = obj; }
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
