@@ -166,7 +166,7 @@ void WaveSystem::Update()
     if (m_gameManager)
     {
         m_gameManager->waveTime = m_waveDuration - m_waveElapsedTime; // 남은 시간 전달
-        m_gameManager->honCount = static_cast<int>(m_activeHons.size()); // 활성 혼 개수 업데이트
+        //m_gameManager->honCount = static_cast<int>(m_activeHons.size()); // 활성 혼 개수 업데이트
         
         // Debug GameManager communication every 2 seconds
         static float debugTimer = 0.0f;
