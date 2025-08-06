@@ -63,8 +63,11 @@ void BulletTime_State::Update(MovementFSM* fsm)
     Vector2 playerPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
     Vector2 mousePos = fsm->GetPlayerFSM()->MouseWorldPos;
 
-    if (mousePos.x < playerPos.x) fsm->GetPlayerFSM()->SetisBulletFlipX(true);  // ¿ÞÂÊ
-    else fsm->GetPlayerFSM()->SetisBulletFlipX(false);
+    //if (mousePos.x < playerPos.x) fsm->GetPlayerFSM()->SetisBulletFlipX(true);  // ¿ÞÂÊ
+    //else fsm->GetPlayerFSM()->SetisBulletFlipX(false);
+
+    if (mousePos.x < playerPos.x) fsm->GetPlayerFSM()->SetisBulletFlipX(false);  
+    else fsm->GetPlayerFSM()->SetisBulletFlipX(true);
 
 
 
