@@ -339,7 +339,8 @@ void PlayUI::AllSkillCheat()
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
-		skillButton->RefreshText();
+		skillButton->RefreshCurrentLevelText();
+		skillButton->RefreshLevelUPHonCountText();
 	}
 }
 
@@ -348,7 +349,8 @@ void PlayUI::ResetAllSkillCheat()
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-		skillButton->RefreshText();
+		skillButton->RefreshCurrentLevelText();
+		skillButton->RefreshLevelUPHonCountText();
 	}
 }
 
