@@ -28,7 +28,7 @@ WaveSystem::WaveSystem()
     m_destroyedCount = 0;
     m_activeBoss = nullptr;
     m_gameManager = nullptr;
-    
+
     // Initialize random generator
     auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     m_randomGen = std::mt19937(static_cast<unsigned int>(seed));
@@ -66,18 +66,18 @@ void WaveSystem::Update()
     // Start wave when GameManager signals
     if (m_waveStartCheck && m_gameManager->isWave)
     {
-		StartWave(m_gameManager->waveCount);
-	    m_waveStartCheck = false;
+        StartWave(m_gameManager->waveCount);
+        m_waveStartCheck = false;
     }
-    
+
     // Update wave elapsed time
     m_waveElapsedTime += Time::GetDeltaTime();
-    
+
     // Handle spawning
     if (m_currentSpawnIndex < m_currentSpawnPattern.size())
     {
         const SpawnData& spawnData = m_currentSpawnPattern[m_currentSpawnIndex];
-        
+
         if (m_waveElapsedTime >= spawnData.delayTime)
         {
             SpawnHon(spawnData.honType, spawnData.x, spawnData.y);
@@ -85,13 +85,13 @@ void WaveSystem::Update()
             m_lastSpawnTime = m_waveElapsedTime;
         }
     }
-    
+
     // Check active hons positions (destroy when reaching ground)
     // Use reverse iteration with bounds checking to safely handle deletions
     for (int i = static_cast<int>(m_activeHons.size()) - 1; i >= 0 && i < static_cast<int>(m_activeHons.size()); --i)
     {
         if (i >= static_cast<int>(m_activeHons.size())) continue;  // Additional safety check
-        
+
         GameObject* hon = m_activeHons[i];
         if (!hon || !hon->IsActive())
         {
@@ -99,7 +99,7 @@ void WaveSystem::Update()
             m_destroyedCount++;
             continue;
         }
-        
+
         Transform* transform = hon->GetComponent<Transform>();
         if (transform)
         {
@@ -119,30 +119,30 @@ void WaveSystem::Update()
             //}
         }
     }
-    
+
     // Check wave completion
     if (m_waveElapsedTime >= m_waveDuration)
     {
         char debugMsg[256];
         sprintf_s(debugMsg, "Wave %d time expired! Notifying GameManager.\n", static_cast<int>(m_currentWaveState));
         OutputDebugStringA(debugMsg);
-        
+
         // Clean up remaining hons
         OutputDebugStringA("Starting wave cleanup...\n");
-        
+
         int remainingHons = static_cast<int>(m_activeHons.size());
         char debugMsg2[256];
         sprintf_s(debugMsg2, "Cleaning up %d remaining hons\n", remainingHons);
         OutputDebugStringA(debugMsg2);
-        
+
         // Clear the vector
         m_activeHons.clear();
-        
+
         // Find and deactivate all Hon objects using tag
         auto hons = GameObject::FindAllWithTag("Hon");
         sprintf_s(debugMsg2, "Found %d Hon objects to deactivate\n", static_cast<int>(hons.size()));
         OutputDebugStringA(debugMsg2);
-        
+
         for (auto* hon : hons)
         {
             if (hon && hon->IsActive())
@@ -150,9 +150,9 @@ void WaveSystem::Update()
                 hon->SetActive(false);
             }
         }
-        
+
         OutputDebugStringA("Wave cleanup completed.\n");
-        
+
         // Notify GameManager that wave is complete
         if (m_gameManager)
         {
@@ -161,16 +161,16 @@ void WaveSystem::Update()
         }
         m_currentWaveState = WaveState::IDLE;
         m_waveStartCheck = true;
-        
+
         OutputDebugStringA("Wave ended. Waiting for GameManager to start next wave.\n");
     }
-    
+
     // Send state to GameManager
     if (m_gameManager)
     {
         m_gameManager->waveTime = m_waveDuration - m_waveElapsedTime; // 남은 시간 전달
         //m_gameManager->honCount = static_cast<int>(m_activeHons.size()); // 활성 혼 개수 업데이트
-        
+
         // Debug GameManager communication every 2 seconds
         static float debugTimer = 0.0f;
         debugTimer += Time::GetDeltaTime();
@@ -192,43 +192,43 @@ void WaveSystem::StartWave(int waveNumber)
 {
     // Clean up any remaining hons from previous wave
     StopWave();
-    
+
     switch (waveNumber)
     {
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
         //m_waveDuration = 70.0f;        
-        m_waveDuration = 2.0f;        
+        m_waveDuration = 70.0f;
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;
-        
+
     case 2:
         m_currentWaveState = WaveState::WAVE_2;
-        m_waveDuration = 2.0f;        
+        m_waveDuration = 70.0f;
         SetupWave2Pattern();
         OutputDebugStringA("Wave 2 Started - Chain Reaction (HonA, HonB, HonC)\n");
         break;
-        
+
     case 3:
         m_currentWaveState = WaveState::WAVE_3;
-        m_waveDuration = 2.0f;        
+        m_waveDuration = 70.0f;
         SetupWave3Pattern();
         OutputDebugStringA("Wave 3 Started - Increased Difficulty (All Hons)\n");
         break;
-        
+
     case 4:
         m_currentWaveState = WaveState::WAVE_BOSS;
-        m_waveDuration = 80.0f;        
+        m_waveDuration = 80.0f;
         SetupBossPattern();
         OutputDebugStringA("Boss Wave Started!\n");
         break;
-        
+
     default:
         OutputDebugStringA("Invalid wave number!\n");
         return;
     }
-    
+
     m_waveElapsedTime = 0.0f;
     m_currentSpawnIndex = 0;
     m_lastSpawnTime = 0.0f;
@@ -240,7 +240,7 @@ void WaveSystem::StopWave()
 {
     // Clear the vector
     m_activeHons.clear();
-    
+
     // Find and deactivate all Hon objects using tag
     auto hons = GameObject::FindAllWithTag("Hon");
     for (auto* hon : hons)
@@ -250,14 +250,14 @@ void WaveSystem::StopWave()
             hon->SetActive(false);
         }
     }
-    
+
     // Clean up boss
     if (m_activeBoss && m_activeBoss->IsActive())
     {
         m_activeBoss->SetActive(false);
         m_activeBoss = nullptr;
     }
-    
+
     m_currentWaveState = WaveState::IDLE;
     m_currentSpawnPattern.clear();
 }
@@ -276,16 +276,16 @@ void WaveSystem::ResetWaveSystem()
 void WaveSystem::OnHonDestroyed(GameObject* hon)
 {
     if (!hon) return;
-    
+
     // Remove from active list (only if exists)
     auto it = std::find(m_activeHons.begin(), m_activeHons.end(), hon);
     if (it != m_activeHons.end())
     {
         m_activeHons.erase(it);
         m_destroyedCount++;
-        
+
         char debugMsg[256];
-        sprintf_s(debugMsg, "Hon manually destroyed. Active: %d, Destroyed: %d/%d\n", 
+        sprintf_s(debugMsg, "Hon manually destroyed. Active: %d, Destroyed: %d/%d\n",
             static_cast<int>(m_activeHons.size()), m_destroyedCount, m_spawnedCount);
         OutputDebugStringA(debugMsg);
     }
@@ -294,107 +294,106 @@ void WaveSystem::OnHonDestroyed(GameObject* hon)
 void WaveSystem::SetupWave1Pattern()
 {
     m_currentSpawnPattern.clear();
-    
-    // Wave 1: Tutorial - low density HonA and HonB only
-    float spawnInterval = 3.5f;
-    
+
+    // Wave 1: Tutorial - 공중 충돌 방지, 2초 간격으로 통일
+    float spawnInterval = 2.0f;
+
+    // 스폰 위치를 미리 계산해서 겹치지 않게 배치
+    std::vector<float> spawnPositions = {
+        -800.0f, -600.0f, -400.0f, -200.0f, 0.0f, 200.0f, 400.0f, 600.0f, 800.0f
+    };
+
     for (int i = 0; i < 20; i++)
     {
-        // 한 번에 3개씩 스폰
-        for (int j = 0; j < 3; j++)
-        {
-            SpawnData data;
-            data.x = GetRandomSpawnX();
-            data.y = SPAWN_Y;
-            data.honType = (m_randomGen() % 2 == 0) ? 0 : 1;  // Random 1:1 HonA and HonB
-            data.delayTime = i * spawnInterval;  // 같은 시간에 3개 스폰
-            
-            m_currentSpawnPattern.push_back(data);
-        }
+        // 한 번에 하나씩 스폰하되 위치를 겹치지 않게 배치
+        SpawnData data;
+        data.x = spawnPositions[i % spawnPositions.size()]; // 순차적으로 위치 배치
+        data.y = SPAWN_Y;
+        data.honType = (i % 2 == 0) ? 0 : 1;  // A, B 번갈아가며 스폰
+        data.delayTime = i * spawnInterval;
+
+        m_currentSpawnPattern.push_back(data);
     }
 }
 
 void WaveSystem::SetupWave2Pattern()
 {
     m_currentSpawnPattern.clear();
-    
-    // Wave 2: Chain utilization - add HonC for increased chain reactions
-    float spawnInterval = 2.8f;
-    
+
+    // Wave 2: 공중 충돌 방지, 2초 간격으로 통일
+    float spawnInterval = 2.0f;
+
+    // 스폰 위치를 미리 계산해서 겹치지 않게 배치
+    std::vector<float> spawnPositions = {
+        -900.0f, -700.0f, -500.0f, -300.0f, -100.0f, 100.0f, 300.0f, 500.0f, 700.0f, 900.0f
+    };
+
     for (int i = 0; i < 25; i++)
     {
-        // 한 번에 3개씩 스폰
-        for (int j = 0; j < 3; j++)
-        {
-            SpawnData data;
-            data.x = GetRandomSpawnX();
-            data.y = SPAWN_Y;
-            
-            // HonA, HonB, HonC 균등 분배 (1:1:1)
-            int rand = m_randomGen() % 3;
-            data.honType = rand;  // 0: HonA, 1: HonB, 2: HonC
-                
-            data.delayTime = i * spawnInterval;  // 같은 시간에 3개 스폰
-            m_currentSpawnPattern.push_back(data);
-        }
+        // 한 번에 하나씩 스폰하되 위치를 겹치지 않게 배치
+        SpawnData data;
+        data.x = spawnPositions[i % spawnPositions.size()]; // 순차적으로 위치 배치
+        data.y = SPAWN_Y;
+
+        // HonA, HonB, HonC 순환 패턴
+        data.honType = i % 3;  // 0: HonA, 1: HonB, 2: HonC
+
+        data.delayTime = i * spawnInterval;
+        m_currentSpawnPattern.push_back(data);
     }
 }
 
 void WaveSystem::SetupWave3Pattern()
 {
     m_currentSpawnPattern.clear();
-    
-    // Wave 3: Increased difficulty - all hon types, high density
-    float spawnInterval = 2.2f;
-    
+
+    // Wave 3: 공중 충돌 방지, 2초 간격으로 통일
+    float spawnInterval = 2.0f;
+
+    // 더 넓은 스폰 위치로 겹치지 않게 배치
+    std::vector<float> spawnPositions = {
+        -960.0f, -800.0f, -640.0f, -480.0f, -320.0f, -160.0f, 0.0f, 160.0f, 320.0f, 480.0f, 640.0f, 800.0f, 960.0f
+    };
+
     for (int i = 0; i < 30; i++)
     {
-        // 한 번에 3개씩 스폰
-        for (int j = 0; j < 3; j++)
-        {
-            SpawnData data;
-            data.x = GetRandomSpawnX();
-            data.y = SPAWN_Y;
-            
-            // 0.8:1:1:1 비율로 설정 (총 3.8)
-            // HonD: 0.8/3.8 = 21%, A,B,C: 1/3.8 = 26.3%씩
-            int rand = m_randomGen() % 100;
-            if (rand < 25)  // 25% 확률로 HonD (충돌 손실 고려하여 높게 설정)
-            {
-                data.honType = 3;  // HonD
-            }
-            else
-            {
-                // 나머지 75%를 A, B, C가 균등 분배 (각각 25%)
-                int honType = (rand - 25) % 3;
-                data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
-            }
-                
-            data.delayTime = i * spawnInterval;  // 같은 시간에 3개 스폰
-            
-            m_currentSpawnPattern.push_back(data);
+        // 한 번에 하나씩 스폰하되 위치를 겹치지 않게 배치
+        SpawnData data;
+        data.x = spawnPositions[i % spawnPositions.size()]; // 순차적으로 위치 배치
+        data.y = SPAWN_Y;
+
+        // 모든 타입 포함한 순환 패턴
+        if (i % 4 == 3) {
+            data.honType = 3;  // HonD (25% 비율)
         }
+        else {
+            data.honType = i % 3;  // HonA, HonB, HonC (75% 비율)
+        }
+
+        data.delayTime = i * spawnInterval;
+
+        m_currentSpawnPattern.push_back(data);
     }
 }
 
 void WaveSystem::SetupBossPattern()
 {
     m_currentSpawnPattern.clear();
-    
+
     // Boss wave: 1 boss + continuous hon spawning
     SpawnBoss();
-    
+
     // Hons that spawn with boss
     float spawnInterval = 3.0f;
     float bossWidth = 400.0f; // 보스 크기 고려한 안전 거리
-    
+
     for (int i = 0; i < 20; i++)
     {
         // 한 번에 3개씩 스폰
         for (int j = 0; j < 3; j++)
         {
             SpawnData data;
-            
+
             // 보스를 피해 좌우로만 스폰
             float randomX = GetRandomSpawnX();
             if (std::abs(randomX) < bossWidth)
@@ -406,9 +405,9 @@ void WaveSystem::SetupBossPattern()
             {
                 data.x = randomX;
             }
-            
+
             data.y = SPAWN_Y;
-            
+
             // 0.8:1:1:1 비율로 설정 (총 3.8)
             // HonD: 0.8/3.8 = 21%, A,B,C: 1/3.8 = 26.3%씩
             int rand = m_randomGen() % 100;
@@ -422,9 +421,9 @@ void WaveSystem::SetupBossPattern()
                 int honType = (rand - 21) % 3;
                 data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
             }
-            
+
             data.delayTime = 5.0f + (i * spawnInterval);  // Start after 5 seconds
-            
+
             m_currentSpawnPattern.push_back(data);
         }
     }
@@ -434,9 +433,9 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
 {
     auto scene = SceneManager::Get().GetCurrentScene();
     if (!scene) return;
-    
+
     GameObject* newHon = nullptr;
-    
+
     switch (honType)
     {
     case 0:
@@ -454,7 +453,7 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
     default:
         return;
     }
-    
+
     if (newHon)
     {
         // Set position
@@ -463,7 +462,7 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
         {
             transform->SetPosition(x, y);
         }
-        
+
         // Physics setup - controllers handle descent directly
         auto* rb = newHon->GetComponent<Rigidbody>();
         if (rb)
@@ -471,14 +470,14 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
             rb->useGravity = false;
             rb->isKinematic = true;
         }
-        
+
         // Set descent speed based on hon type
         /*auto* controller = newHon->GetComponent<HonController>();
         if (controller)
         {
             float fallDistance = SPAWN_Y + 400.0f;  // 2560 + 400 = 2960
             float targetFallTime;
-            
+
             if (honType == 3)  // HonD is 2x faster
             {
                 targetFallTime = 20.0f;  // Half the time = double speed
@@ -487,15 +486,15 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
             {
                 targetFallTime = 30.0f;
             }
-            
+
             controller->SetDescentSpeed(fallDistance / targetFallTime);
         }*/
-        
+
         m_activeHons.push_back(newHon);
         m_spawnedCount++;
-        
+
         char debugMsg[256];
-        sprintf_s(debugMsg, "Spawned Hon Type %d at (%.1f, %.1f) - Total: %d\n", 
+        sprintf_s(debugMsg, "Spawned Hon Type %d at (%.1f, %.1f) - Total: %d\n",
             honType, x, y, m_spawnedCount);
         OutputDebugStringA(debugMsg);
     }
@@ -505,9 +504,9 @@ void WaveSystem::SpawnBoss()
 {
     auto scene = SceneManager::Get().GetCurrentScene();
     if (!scene) return;
-    
+
     m_activeBoss = scene->CreateObject<Boss>();
-    
+
     if (m_activeBoss)
     {
         // Boss spawns at center
@@ -516,17 +515,17 @@ void WaveSystem::SpawnBoss()
         {
             transform->SetPosition(0.0f, BOSS_SPAWN_Y);
         }
-        
+
         // Boss physics setup
-        auto* rb = m_activeBoss->GetComponent<Rigidbody>();
-        if (rb)
-        {
-            rb->useGravity = true;
-            rb->isKinematic = false;
-            // Boss falls slowly
-            rb->gravityScale = 0.1f;
-        }
-        
+        //auto* rb = m_activeBoss->GetComponent<Rigidbody>();
+        //if (rb)
+        //{
+        //    rb->useGravity = true;
+        //    rb->isKinematic = false;
+        //    // Boss falls slowly
+        //    rb->gravityScale = 0.1f;
+        //}
+
         OutputDebugStringA("Boss spawned at center!\n");
     }
 }

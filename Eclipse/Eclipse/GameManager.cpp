@@ -1,5 +1,7 @@
 #include "GameManager.h"
 #include "PlayUI.h"
+#include "Quest.h"
+
 
 void GameManager::UnInit()
 {
@@ -17,6 +19,7 @@ void GameManager::ReSetData()
 	cainCount = 0;
 	lunaKillCount = 0;
 	bossKillCount = 0;
+	questCount = 0;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;		
@@ -34,6 +37,7 @@ void GameManager::WaveStart()
 	cainCount = 0;
 	lunaKillCount = 0;
 	bossKillCount = 0;
+	questCount = 0;
 }
 
 void GameManager::SkillReset()
@@ -43,17 +47,17 @@ void GameManager::SkillReset()
 	skillText.clear();
 
 	//스킬 트리 초기화
-	skillTree[SkillType::KnockbackDistanceUp] = { false, 0, 3, SkillType::COUNT, 0, {5,8,10} };
-	skillTree[SkillType::DoubleJump] = { false, 0, 1, SkillType::KnockbackDistanceUp, 3, {10} };
-	skillTree[SkillType::WallJump] = { false, 0, 1, SkillType::DoubleJump, 1, { 15 } };
+	skillTree[SkillType::KnockbackDistanceUp] = { false, 0, 3, SkillType::COUNT, 0, {15,20,30} };
+	skillTree[SkillType::DoubleJump] = { false, 0, 1, SkillType::KnockbackDistanceUp, 3, {25} };
+	skillTree[SkillType::WallJump] = { false, 0, 1, SkillType::DoubleJump, 1, { 30 } };
 
-	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::COUNT, 0,{5,10} };
-	skillTree[SkillType::JumpAttackExtra] = { false, 0, 1, SkillType::SkillCooldownDown, 1,{10} };
-	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::JumpAttackExtra, 1,{15} };
+	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::COUNT, 0,{15,30} };
+	skillTree[SkillType::JumpAttackExtra] = { false, 0, 1, SkillType::SkillCooldownDown, 1,{25} };
+	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::JumpAttackExtra, 1,{ 30 } };
 
-	skillTree[SkillType::MoveSpeedUp] = { false, 0, 3, SkillType::COUNT, 0,{5,8,10} };
-	skillTree[SkillType::AttackRangeUp] = { false, 0, 3, SkillType::MoveSpeedUp, 3,{5,8,10} };
-	skillTree[SkillType::Dash] = { false, 0, 1, SkillType::AttackRangeUp, 3,{15} };
+	skillTree[SkillType::MoveSpeedUp] = { false, 0, 3, SkillType::COUNT, 0,{15,20,30} };
+	skillTree[SkillType::AttackRangeUp] = { false, 0, 3, SkillType::MoveSpeedUp, 3,{15,20,30} };
+	skillTree[SkillType::Dash] = { false, 0, 1, SkillType::AttackRangeUp, 3,{ 30 } };
 
 	//스킬값 초기화
 	skillValue[SkillType::KnockbackDistanceUp] = { 1.05f,1.1f,1.15f };
@@ -157,6 +161,7 @@ void GameManager::AllSkillUnlock()
 void GameManager::ChangeHonCount(int num)
 {
 	honCount += num;
+	if (honCount < 0) honCount = 0;
 	g_playUI->ChangeHonCountText();
 }
 
@@ -187,4 +192,34 @@ void GameManager::UseRelease()
 void GameManager::FinishWaveTimeText()
 {
 	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
+}
+
+void GameManager::ChangeQuestCount(int waveidx)
+{
+	questCount ++;
+	if (waveidx == waveCount)
+	{
+		g_playUI->quest->RefreshQuestCountText(questCount);
+	}
+}
+
+
+
+float GameManager::GetSkillBonus(SkillType type)
+{
+	auto it = skillTree.find(type);
+	if (it == skillTree.end()) return 0.0f;
+
+	int level = it->second.unlockLevel;
+
+	auto valIt = skillValue.find(type);
+	if (valIt == skillValue.end()) return 0.0f;
+
+	const std::vector<float>& values = valIt->second;
+
+	if (level <= 0 || values.empty()) return 0.0f;
+
+	// 배열 범위 초과하지 않도록
+	int index = clamp(level - 1, 0, static_cast<int>(values.size()) - 1);
+	return values[index];
 }

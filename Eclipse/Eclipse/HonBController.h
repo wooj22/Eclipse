@@ -10,6 +10,10 @@
 
 class HonBController : public HonController
 {
+private:
+	// hon C-B °ãÄ§ x
+	Vector2 honBC_dir;
+
 public:
 	HonBController()
 	{
@@ -31,6 +35,7 @@ public:
 
 	// trigger event
 	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
+	void OnTriggerStay(ICollider* other, const ContactInfo& contact) override;
 
 	// player attack
 	void TakeDamageByPlayer() override;

@@ -13,8 +13,34 @@ void PlayUI::Awake()
 
 void PlayUI::SceneStart()
 {
-
-	// NPC
+	//해당 씬에 게임 오브젝트 생성
+	timer_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	stop_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
+	quest_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	quest_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	questCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	chat_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	chat_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	chat_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
+	hon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	hon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skill1_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skill1_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	tooltip_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
+	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	
 	// 웨이브 타이머 UI
 	timer_Text->rectTransform->SetPosition(0, 500);
@@ -43,6 +69,7 @@ void PlayUI::SceneStart()
 	
 	// 퀘스트 창 UI
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
+	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Image->rectTransform->SetPosition(800, 0);
 	quest_Image->rectTransform->SetSize(300, 500);
 	auto questImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Quest.png");
@@ -50,7 +77,11 @@ void PlayUI::SceneStart()
 	quest_Text->rectTransform->SetSize(200, 0);
 	quest_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	quest_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
-	quest_Text->AddComponent<Quest>();
+	questCount_Text->rectTransform->SetPosition(0, -50);
+	questCount_Text->rectTransform->SetSize(200, 0);
+	questCount_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
+	questCount_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
+	quest = quest_Image->AddComponent<Quest>();
 
 	// 대화창 UI
 	chat_Text->rectTransform->SetParent(chat_Image->rectTransform);
@@ -261,19 +292,6 @@ void PlayUI::Update()
 		GameManager::Get().canUseRelease = false;
 	}
 
-	//if (GameManager::Get().isWave)
-	//{
-	//	if (GameManager::Get().waveTime <= 0)
-	//	{
-	//		GameManager::Get().isWave = false;
-	//		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);//TODOMO : 퀘스트 완료에 대한 추가 구현
-	//	}
-	//	else
-	//		GameManager::Get().waveTime -= Time::GetDeltaTime();
-	//}
-	//else
-	//	GameManager::Get().waveTime = 2;
-
 	if (GameManager::Get().absorbCoolTime > 0)
 		GameManager::Get().absorbCoolTime -= Time::GetDeltaTime();
 	else
@@ -297,6 +315,8 @@ void PlayUI::ClickChatButton() {
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
 	StartWaveInfo(GameManager::Get().waveCount);
+	quest->RefreshQuestText();
+	quest->RefreshQuestCountText(0);
 	if (skillWindow_Image->IsActive()) skillWindow_Image->SetActive(false);
 }
 

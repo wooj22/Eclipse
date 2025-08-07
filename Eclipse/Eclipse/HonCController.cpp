@@ -148,6 +148,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().cainCount++;
 
 			// collision action
+			// hon b °ãÄ§ x
+			honCB_dir = other->gameObject->transform->GetWorldPosition() - tr->GetWorldPosition();
+
 			TakeDamage();
 			otherController->TakeDamage();
 			break;
@@ -181,6 +184,17 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		default:
 			break;
 		}
+	}
+}
+
+// Hon B-C °ãÄ§ ºÒ°¡
+void HonCController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
+{
+	// hon b¶û °ãÃÄÀÖÀ¸¸é °üÅë½ÃÅ°±â
+	if (other->gameObject->name == "HonB")
+	{
+		honCB_dir = honCB_dir.Normalized();
+		tr->Translate(honCB_dir * collisionSpeed * 1.3 * Time::GetDeltaTime());
 	}
 }
 
