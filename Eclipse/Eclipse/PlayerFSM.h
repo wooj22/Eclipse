@@ -47,7 +47,7 @@ private:
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 280.0f;
-	float dashSpeed = 550.0f;
+	float dashSpeed = 0.0f;
 	float jumpForce = 700.0f;
 
 	float speedDownRate = 1.0; 
@@ -191,11 +191,6 @@ public:
 	bool CanAttack();					// 공격 가능 조건 판별
 	void OnAirAttack();					// 공격 시 현재 가능한 점프 타입의 플래그 false
 
-	// speed 
-	float GetMoveSpeedBonus() const;
-
-	// attack 
-	float GetAttackRangeBonus() const;
 
 	bool isAttackIgnore = false; // 어택 일정시간 무시 
 
@@ -232,10 +227,14 @@ private:
 	void SpeedSetting();
 	void FlipXSetting();
 
-	// [ Animator State ]
-	void UpdateCurrentAnimationByReleaseState();
-
 	// [ Q Skill ]
 	void AttractionTargetHon();
+
+
+public:
+	// [ GameManager - Skill ] 
+
+	float GetMoveSpeedBonus() const; // speed 
+	float GetAttackRangeBonus() const; // attack 
 };
 

@@ -152,12 +152,12 @@ void PlayerFSM::SpeedSetting()
 
 	if (isA || isD)
 	{
-		curSpeed = (walkSpeed + GetMoveSpeedBonus()) * speedDownRate; // 스킬 해금에 따른 추가 이동 속도
+		curSpeed = (walkSpeed * GetMoveSpeedBonus()) * speedDownRate; // 스킬 해금에 따른 추가 이동 속도
 	}
 	else curSpeed = 0;
 
-	// std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
-	// OutputDebugStringA(debugStr.c_str());
+	 std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
+	 OutputDebugStringA(debugStr.c_str());
 }
 
 
@@ -233,30 +233,30 @@ void PlayerFSM::ResetDashCooldown() // 대시 후 쿨타임 초기화
 }
 
 
-// speed 
-float PlayerFSM::GetMoveSpeedBonus() const 
-{
-	static const float speedBonusTable[] = { 0.0f, 50.0f, 150.0f, 250.0f }; // 0, 1, 3, 5, 
-	int level = GameManager::Get().skillTree.at(SkillType::MoveSpeedUp).unlockLevel;
-
-	// 안전 처리
-	if (level < 0) level = 0; if (level > 3) level = 3;
-
-	return speedBonusTable[level];
-}
-
-// attack
-float PlayerFSM::GetAttackRangeBonus() const
-{
-	int level = GameManager::Get().skillTree[SkillType::AttackRangeUp].unlockLevel;
-	switch (level)
-	{
-	case 1: return 50.0f;   // 0.5f;
-	case 2: return 100.0f;  // 1.0f;
-	case 3: return 150.0f;  // 1.5f;
-	default: return 0.0f;
-	}
-}
+//// speed 
+//float PlayerFSM::GetMoveSpeedBonus() const 
+//{
+//	static const float speedBonusTable[] = { 0.0f, 50.0f, 150.0f, 250.0f }; // 0, 1, 3, 5, 
+//	int level = GameManager::Get().skillTree.at(SkillType::MoveSpeedUp).unlockLevel;
+//
+//	// 안전 처리
+//	if (level < 0) level = 0; if (level > 3) level = 3;
+//
+//	return speedBonusTable[level];
+//}
+//
+//// attack
+//float PlayerFSM::GetAttackRangeBonus() const
+//{
+//	int level = GameManager::Get().skillTree[SkillType::AttackRangeUp].unlockLevel;
+//	switch (level)
+//	{
+//	case 1: return 50.0f;   // 0.5f;
+//	case 2: return 100.0f;  // 1.0f;
+//	case 3: return 150.0f;  // 1.5f;
+//	default: return 0.0f;
+//	}
+//}
 
 // [ Q E skill ]
 void PlayerFSM::TryUseAbsorb() // [ 흡수 ] 
@@ -457,3 +457,26 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 		if (contact.normal.x == -1)  isWallRight = false;
 	}
 }
+
+
+// *-------------- [ GameManager - Skill ] ------------------*
+
+float PlayerFSM::GetMoveSpeedBonus() const
+{
+	return GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp); // 1.0f, 1.05f, 1.1f
+}
+
+float PlayerFSM::GetAttackRangeBonus() const
+{
+	return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp); // 1.0f, 1.1f, 1.2f
+}
+
+// 쿨타임 
+
+
+
+//// 사거리 적용
+//float range = baseAttackRange * GetAttackRangeBonus();
+//
+//// 쿨다운 적용
+//dashTimer = GetDashCooldown();
