@@ -6,12 +6,25 @@
 
 MapBackGround::MapBackGround()
 {
+	// componet
 	transform = AddComponent<Transform>();
 	spriteRenderer = AddComponent<SpriteRenderer>();
-}
 
-void MapBackGround::SceneStart()
-{
+	// create child
+	backGround00_Sky = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround00_Sky>();
+	backGround01_Moon = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround01_Moon>();
+	backGround02_Mount = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround02_Mount>();
+	backGround03_Tree = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround03_Tree>();
+
+	backGround04_Grass = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround04_Grass>();
+	backGround05_Ground = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround05_Ground>();
+	backGround06_House = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround06_House>();
+	backGround07_Trash = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround07_Trash>();
+
+	backGround08_Light = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround08_Light>();
+	backGround09_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<BackGround09_Shadow>();
+
+	// parent
 	backGround00_Sky->transform->SetParent(transform);
 	backGround01_Moon->transform->SetParent(transform);
 	backGround02_Mount->transform->SetParent(transform);

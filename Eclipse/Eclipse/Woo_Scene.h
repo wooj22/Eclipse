@@ -59,9 +59,9 @@ private:
 	GameObject* wall_r;
 	GameObject* wall_l;
 
-	Player* player;						// Parent
-	GameObject* playerAttack_Parent;	// Parent - Child
-	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
+	Player* player;	
+	GameObject* playerAttack_Parent;
+	PlayerAttackArea* playerAttackArea; 
 
 	// component 
 	BoxCollider* wall_r_col;

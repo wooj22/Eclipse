@@ -43,7 +43,6 @@ public:
 
 public:
 	MapBackGround();
-	void SceneStart();
 };
 
 
