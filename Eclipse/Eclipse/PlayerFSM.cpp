@@ -48,29 +48,11 @@ void PlayerFSM::Start()
 	// [ 스킬 해금 ] 테스트 위해서 
 	GameManager::Get().honCount = 1000;
 
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
-	GameManager::Get().LevelUpSkill(SkillType::WallJump);
-
-	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
-	GameManager::Get().LevelUpSkill(SkillType::FastFall);
-
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::Dash);
+	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
 {
-	
 	InputSetting(); // input 키값 확인
 
 	// [ Q E 스킬 ]

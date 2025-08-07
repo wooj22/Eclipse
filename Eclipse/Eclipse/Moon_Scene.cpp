@@ -26,6 +26,9 @@ void Moon_Scene::Awake()
 	title_text->screenTextRenderer->SetText(L"Moon Scene");
 
 
+	// [ player Shadow ] : player보다 먼저 생성 
+	shadow = CreateObject<Shadow>();
+
 	// [ player ] 
 	player = CreateObject<Player>();
 
@@ -43,6 +46,8 @@ void Moon_Scene::Awake()
 	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false); 
 
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+
+	
 
 	// [ ground ]
 	ground = CreateObject<GameObject>();

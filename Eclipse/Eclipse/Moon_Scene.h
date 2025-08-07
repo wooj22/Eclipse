@@ -15,6 +15,7 @@
 #include "HonB.h"
 #include "HonC.h"
 #include "HonD.h"
+#include "Shadow.h"
 
 
 class Moon_Scene : public Scene
@@ -34,6 +35,7 @@ private:
 	GameObject* playerAttack_Parent;	// Parent - Child
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
 
+	Shadow* shadow;
 
 	// [ UI ]
 	 NPC* npc;
