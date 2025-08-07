@@ -16,10 +16,6 @@ public:
     void SetSkillAvailable(bool available) { isSkillAvailable = available; }
     bool GetSkillAvailable() const { return isSkillAvailable; }
 
-    //std::string GetCurrentPrefix() const {
-    //    return isSkillAvailable ? "Y_" : "N_";
-    //}
-
 public:
     // Clips
     PlayerIdleClip* idleClip = nullptr;
@@ -134,11 +130,6 @@ public:
         delete dashState_Y;
     }
 
-    //void SetSkillSensitiveBool(const std::string& baseName, bool value)
-    //{
-    //    std::string fullName = (isSkillAvailable ? "Y_" : "N_") + baseName;
-    //    SetBool(fullName, value);
-    //}
 
     void PlaySkillSensitiveAnimation(const std::string& baseName)
     {

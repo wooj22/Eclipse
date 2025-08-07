@@ -70,7 +70,5 @@ void Hanging_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = 80;
 
-    fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
-
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Hanging", false);
 }
