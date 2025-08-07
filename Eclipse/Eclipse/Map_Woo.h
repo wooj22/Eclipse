@@ -15,7 +15,9 @@ public:
 	{
 		transform = AddComponent<Transform>();
 		collider = AddComponent<BoxCollider>();
-		collider->size = { 2560, 100 };
+		collider->size = { 500, 50 };
+
+		collider->isFlatform = true;
 	}
 
 	void Update() override

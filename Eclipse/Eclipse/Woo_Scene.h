@@ -48,7 +48,8 @@ private:
 
 	// ground endline
 	Map_Woo* ground;
-
+	Map_Woo* ground2;
+	Map_Woo* ground3;
 
 	/* À±¸ğÇÜ ¿ÀºêÁ§Æ® */
 	// UI
