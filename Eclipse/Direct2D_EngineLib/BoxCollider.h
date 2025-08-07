@@ -30,9 +30,9 @@ public:
     Vector2 offset = Vector2::zero;
     Vector2 size = { 10,10 };
 
-    // Flatform :: normal.y == 1일때만 충돌 인식
-    bool isFlatform = false;
-    float flatformDepthThreshold = 25;
+    // Flatform
+    bool isFlatform = false;                //  normal.y == 1일때만 충돌 인식
+    float flatformDepthThreshold = 35;      //  flatformDepthThreshold
     
 public:
     // component cycle
