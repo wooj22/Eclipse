@@ -34,7 +34,6 @@ public:
 	shared_ptr<Sprite> sprite;				// 공유 자원  
 	FillType fillType = FillType::None;
 	float fillAmount = 1.0f;
-	float alpha = 1.0f;						// TODO :: 삭제!
 
 private:
 	// Fill Box (Empty Sprite)

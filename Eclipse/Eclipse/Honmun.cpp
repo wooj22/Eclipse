@@ -210,7 +210,7 @@ void Honmun::SetAlpha(float alpha)
 {
 	if (spriteRenderer)
 	{
-		spriteRenderer->alpha = alpha;
+		//spriteRenderer->alpha = alpha;
 	}
 }
 
@@ -218,7 +218,7 @@ void Honmun::ResetAlpha()
 {
 	if (spriteRenderer)
 	{
-		spriteRenderer->alpha = 1.0f;
+		//spriteRenderer->alpha = 1.0f;
 	}
 }
 
