@@ -40,6 +40,12 @@ void Woo_Scene::Awake()
 	mapBackGround->backGround01_Moon = CreateObject<BackGround01_Moon>();
 	mapBackGround->backGround02_Mount = CreateObject<BackGround02_Mount>();
 	mapBackGround->backGround03_Tree = CreateObject<BackGround03_Tree>();
+	mapBackGround->backGround04_Grass = CreateObject<BackGround04_Grass>();
+	mapBackGround->backGround05_Ground = CreateObject<BackGround05_Ground>();
+	mapBackGround->backGround06_House = CreateObject<BackGround06_House>();
+	mapBackGround->backGround07_Trash = CreateObject<BackGround07_Trash>();
+	mapBackGround->backGround08_Light = CreateObject<BackGround08_Light>();
+	mapBackGround->backGround09_Shadow = CreateObject<BackGround09_Shadow>();
 
 	// [Ground Sample]
 	ground = CreateObject<Map_Woo>({ 0, -900 });
