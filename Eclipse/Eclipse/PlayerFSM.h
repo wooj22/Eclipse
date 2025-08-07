@@ -5,6 +5,9 @@
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/ICollider.h"
 
+#include "../Direct2D_EngineLib/RaycastHit.h"
+#include "../Direct2D_EngineLib/ColliderSystem.h"
+
 // FSM 
 #include "MovementFSM.h"
 #include "ActionFSM.h"
@@ -31,6 +34,9 @@ class PlayerAnimatorController;
 
 class PlayerFSM : public Script
 {
+	Ray ray;
+	RaycastHit hit;
+
 private:
 	// FSM 
 	std::unique_ptr<MovementFSM> movementFSM;

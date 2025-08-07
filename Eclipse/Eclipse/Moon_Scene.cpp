@@ -27,7 +27,7 @@ void Moon_Scene::Awake()
 
 
 	// [ player Shadow ] : player보다 먼저 생성 
-	shadow = CreateObject<Shadow>();
+	//shadow = CreateObject<Shadow>();
 
 	// [ player ] 
 	player = CreateObject<Player>();
@@ -62,7 +62,6 @@ void Moon_Scene::Awake()
 	ground_col = ground->AddComponent<BoxCollider>();
 	ground_col->size = { 1920.0f, 90.0f };
 	ground_col->isFlatform = true;
-
 
 	// [ wall_r ]
 	wall_r = CreateObject<GameObject>();
@@ -106,7 +105,7 @@ void Moon_Scene::Awake()
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
 	platform2->tag = "platform2";
-	platform2->AddComponent<Transform>()->SetPosition(200.0f, -620.0f);
+	platform2->AddComponent<Transform>()->SetPosition(200.0f, -420.0f);
 	platform2->GetComponent<Transform>()->SetScale(0.6f, 0.6f);
 
 	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
@@ -134,15 +133,15 @@ void Moon_Scene::Awake()
 
 
 	// [ Hon ]
-	honA1 = CreateObject<HonA>({ -200, -100 });
-	honA2 = CreateObject<HonA>({ -500, 100 });
-	honB1 = CreateObject<HonB>({ 0, -100 });
-	honB2 = CreateObject<HonB>({ 200, 100 });
-	honC1 = CreateObject<HonC>({ -100, 300 });
+	honA1 = CreateObject<HonA>({ -200, 300 });
+	honA2 = CreateObject<HonA>({ -500, 300 });
+	honB1 = CreateObject<HonB>({ 0, 300 });
+	honB2 = CreateObject<HonB>({ 200, 300 });
+	/*honC1 = CreateObject<HonC>({ -100, 300 });
 	honC2 = CreateObject<HonC>({ -200, 300 });
 	honC3 = CreateObject<HonC>({ -200, 600});
 	honD1 = CreateObject<HonD>({ 100, 800 });
-	honD2 = CreateObject<HonD>({ -100, 800 });
+	honD2 = CreateObject<HonD>({ -100, 800 });*/
 }
 
 void Moon_Scene::Start()

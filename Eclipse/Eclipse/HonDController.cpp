@@ -95,7 +95,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		// collision acttion
 		otherController->isCollisionD = true;
 		otherController->TakeDamage(1);
-		this->gameObject->Destroy();
+		TakeDamage(1);
 	}
 }
 

@@ -12,6 +12,7 @@
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
 #include "AfterImage.h"
+#include "Shadow.h"
 
 
 class Player : public GameObject
@@ -20,6 +21,8 @@ class Player : public GameObject
 	RaycastHit hit;
 
 public:
+	
+
 	// [ components ]
 	Transform* transform;
 	SpriteRenderer* spriteRenderer;
@@ -57,6 +60,9 @@ public:
 
 		playerFSM = AddComponent<PlayerFSM>();
 
+		// 그림자 여기서 생성함!
+		player_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<Shadow>();
+
 	}
 	~Player() override
 	{
@@ -69,7 +75,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(200, -400);
+		transform->SetPosition(200, 200);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -81,9 +87,9 @@ public:
 		rigidbody->mass = 1.3f;
 
 		// [ Shadow ]
-		player_Shadow = GameObject::FindWithTag("Shadow");
+		/*player_Shadow = GameObject::FindWithTag("Shadow");
 		std::string debugStr = "[Player] player_Shadow = " + player_Shadow->name + "\n";
-		OutputDebugStringA(debugStr.c_str());
+		OutputDebugStringA(debugStr.c_str());*/
 
 
 		shadow_transform = player_Shadow->GetComponent<Transform>();
