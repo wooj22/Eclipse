@@ -12,6 +12,7 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 	skillColor1_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skillColor2_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skillColor3_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skillLevelUpHonCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 
 	skillIcon_Button->rectTransform->SetParent(this->rectTransform);
 	skillLevel_Text->rectTransform->SetParent(this->rectTransform);
@@ -20,11 +21,12 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 	skillColor1_Text->rectTransform->SetParent(this->rectTransform);
 	skillColor2_Text->rectTransform->SetParent(this->rectTransform);
 	skillColor3_Text->rectTransform->SetParent(this->rectTransform);
+	skillLevelUpHonCount_Text->rectTransform->SetParent(this->rectTransform);
 
 	skillIcon_Button->rectTransform->SetSize(100,100); //이미지 크기
 	skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 	skillIcon_Button->imageRenderer->SetColor(0.4, 0.4, 0.4);
-	RefreshText();
+	RefreshCurrentLevelText();
 }
 
 void SkillWindowButton::SceneStart()
@@ -58,6 +60,12 @@ void SkillWindowButton::SceneStart()
 	skillName_Text->screenTextRenderer->SetText(skilltext.skillname);
 	skillDesc_Text->screenTextRenderer->SetText(skilltext.skillDesc);
 
+	skillLevelUpHonCount_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
+	skillLevelUpHonCount_Text->rectTransform->SetSize(300, 50);
+	skillLevelUpHonCount_Text->rectTransform->SetPosition(GetWidthSize(skillLevelUpHonCount_Text->rectTransform->GetSize(), skillIcon_Button->rectTransform->GetSize()), -65);
+
+	skillLevelUpHonCount_Text->screenTextRenderer->SetText(skilltext.skillname);
+	RefreshLevelUPHonCountText();
 
 	if (skillName == SkillType::SkillCooldownDown)
 	{
@@ -119,12 +127,12 @@ std::wstring SkillWindowButton::ToWString(float value)
 	}
 }
 
-void SkillWindowButton::RefreshText()
+void SkillWindowButton::RefreshCurrentLevelText()
 {
-	const auto& info = GameManager::Get().skillTree[skillName];
+	const auto& skillinfo = GameManager::Get().skillTree[skillName];
 	// 텍스트 갱신
 	skillLevel_Text->screenTextRenderer->SetText(
-		to_wstring(info.unlockLevel) + L"/" + to_wstring(maxSkillLevel));
+		to_wstring(skillinfo.unlockLevel) + L"/" + to_wstring(maxSkillLevel));
 
 	// 먼저 전부 초기화 (FloralWhite)
 	skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
@@ -132,12 +140,21 @@ void SkillWindowButton::RefreshText()
 	skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
 
 	// 현재 레벨 칸만 빨간색
-	if (info.unlockLevel == 1)
+	if (skillinfo.unlockLevel == 1)
 		skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-	else if (info.unlockLevel == 2)
+	else if (skillinfo.unlockLevel == 2)
 		skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
-	else if (info.unlockLevel == 3)
+	else if (skillinfo.unlockLevel == 3)
 		skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+}
+
+void SkillWindowButton::RefreshLevelUPHonCountText()
+{
+	const auto& skillInfo = GameManager::Get().skillTree[skillName];
+	if (skillInfo.unlockLevel != skillInfo.maxLevel)
+		skillLevelUpHonCount_Text->screenTextRenderer->SetText(L"필요 혼 : " + to_wstring(skillInfo.skillCost[skillInfo.unlockLevel]));
+	else
+		skillLevelUpHonCount_Text->screenTextRenderer->SetText(L"");
 }
 
 void SkillWindowButton::OnClickSkillButton()
@@ -150,7 +167,8 @@ void SkillWindowButton::OnClickSkillButton()
 		else
 			skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
 
-		RefreshText();
+		RefreshCurrentLevelText();
+		RefreshLevelUPHonCountText();
 	}
 }
 

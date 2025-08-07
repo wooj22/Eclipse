@@ -17,6 +17,8 @@ public:
 	void RefreshQuestText();
 	void RefreshQuestCountText(int num);
 	int GetQuestMaxCount() { return questMaxCount[GameManager::Get().waveCount]; }
-	void QuestSuccessCheck();
+	void QuestSuccess();
+	void QuestFail();
+	int QuestReward() { return questReward[GameManager::Get().waveCount];}
 };
 

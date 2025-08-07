@@ -37,13 +37,14 @@ void Quest::RefreshQuestCountText(int num)
 	GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetText(L"[   "+ to_wstring(num) + L"    /    " + to_wstring(questMaxCount[GameManager::Get().waveCount]) + L"   ]");
 }
 
-void Quest::QuestSuccessCheck()
+void Quest::QuestSuccess()
 {
-	if (GameManager::Get().questState == ChatCondition::Success)
-	{
-		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Green));
-		GameManager::Get().ChangeHonCount(questReward[GameManager::Get().waveCount]);
-	}
-	else
-		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+	GameManager::Get().questState = ChatCondition::Success;
+	GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Green));
+}
+
+void Quest::QuestFail()
+{
+	GameManager::Get().questState = ChatCondition::Fail;
+	GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
 }
