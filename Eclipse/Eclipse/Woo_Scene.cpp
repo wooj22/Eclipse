@@ -36,22 +36,22 @@ void Woo_Scene::Awake()
 	//cam->transform->SetPosition(player->transform->GetPosition());
 
 	// boss
-	boss = CreateObject<Boss>();
+	//boss = CreateObject<Boss>();
 
 	// hon
-	honA1 = CreateObject<HonA>({ -200, -500 });
-	honA2 = CreateObject<HonA>({ -500, -300 });
-	honB1 = CreateObject<HonB>({ 0, -500 });
-	honB2 = CreateObject<HonB>({ 200, -300 });
-	honC1 = CreateObject<HonC>({ -100, -100 });
-	honC2 = CreateObject<HonC>({ -200, -100 });
-	honC3 = CreateObject<HonC>({ -200, 200});
-	honD1 = CreateObject<HonD>({ 100, 400 });
-	honD2 = CreateObject<HonD>({ -100, 400 });
+	//honA1 = CreateObject<HonA>({ -200, -500 });
+	//honA2 = CreateObject<HonA>({ -500, -300 });
+	honB1 = CreateObject<HonB>({ 0, 200 });
+	//honB2 = CreateObject<HonB>({ 200, -300 });
+	honC1 = CreateObject<HonC>({ 0, -400 });
+	//honC2 = CreateObject<HonC>({ -200, -100 });
+	//honC3 = CreateObject<HonC>({ -200, 200});
+	//honD1 = CreateObject<HonD>({ 100, 400 });
+	//honD2 = CreateObject<HonD>({ -100, 400 });
 
 	// map sample
 	map_woo = CreateObject<Map_Woo>({ 0, -900 });
-	ground1 = CreateObject<Map_Woo>({ 100, -700 });
+	/*ground1 = CreateObject<Map_Woo>({ 100, -700 });
 	ground2 = CreateObject<Map_Woo>({ -300, -700 });
 	ground3 = CreateObject<Map_Woo>({ 300, -500 });
 	ground1->collider->size = {100,20};
@@ -60,7 +60,7 @@ void Woo_Scene::Awake()
 
 	ground1->collider->isFlatform = true;
 	ground2->collider->isFlatform = true;
-	ground3->collider->isFlatform = true;
+	ground3->collider->isFlatform = true;*/
 
 	// ui test
 	/*parent = CreateObject<UI_Image>();
