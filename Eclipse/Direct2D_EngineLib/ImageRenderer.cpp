@@ -57,10 +57,36 @@ void ImageRenderer::Render()
             // render
             if (sprite)
             {
+                D2D1_RECT_F srcRect = sprite->sourceRect;
+
+                // fill type
+                D2D1_RECT_F adjustedSrcRect = srcRect;
+                D2D1_RECT_F adjustedDstRect = destRect;
+
+                switch (fillType)
+                {
+                case FillType::Horizontal:
+                    adjustedSrcRect.right = srcRect.left + (srcRect.right - srcRect.left) * fillAmount;
+                    adjustedDstRect.right = destRect.left + (destRect.right - destRect.left) * fillAmount;
+                    break;
+
+                case FillType::Vertical:
+                    adjustedSrcRect.top = srcRect.bottom - (srcRect.bottom - srcRect.top) * fillAmount;
+                    adjustedDstRect.top = destRect.bottom - (destRect.bottom - destRect.top) * fillAmount;
+                    break;
+
+                case FillType::None:
+                    break;
+                default:
+                    break;
+                }
+
                 RenderSystem::Get().renderTarget->DrawBitmap(
                     sprite->texture->texture2D.Get(),
-                    destRect,
-                    colorMultiplier.a
+                    adjustedDstRect,
+                    colorMultiplier.a,
+                    D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+                    adjustedSrcRect
                 );
             }
             else

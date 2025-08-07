@@ -954,7 +954,7 @@ void HonmunCollisionScript::DestroyThis()
 		// \uc2a4\ud504\ub77c\uc774\ud2b8 \ube44\ud65c\uc131\ud654\ub85c \uc2dc\uac01\uc801 \uc228\uae40
 		if (spriteRenderer)
 		{
-			spriteRenderer->alpha = 0.0f;
+			//spriteRenderer->alpha = 0.0f;
 		}
 		
 		// \uac1d\uccb4 \ube44\ud65c\uc131\ud654

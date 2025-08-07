@@ -16,30 +16,34 @@
 #include "HonC.h"
 #include "HonD.h"
 #include "Shadow.h"
+#include "MapBackGround.h"
 
+#include "Platform_Short.h"
 
 class Moon_Scene : public Scene
 {
 private:
-	// 일부 오브젝트는 현재 씬에서 모두 처리 중. 추후 스크립트 할당 예정 
-	GameObject* cam;
-	UI_Text* title_text;
+	// background
+	MapBackGround* mapBackGround;
 
-	GameObject* ground;
-	GameObject* wall_r;
-	GameObject* wall_l;
-	GameObject* platform1;
-	GameObject* platform2;
-
+	// player
 	Player* player;						// Parent
 	GameObject* playerAttack_Parent;	// Parent - Child
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
-
 	Shadow* shadow;
 
+	// object 
+	GameObject* cam;
+	GameObject* ground;
+
+	Platform_Short* platform_short1;
+
+
+
 	// [ UI ]
-	 NPC* npc;
-	 PlayUI* playUI;
+	NPC* npc;
+	UI_Text* title_text;
+	PlayUI* playUI;
 
 	// component 
 	BoxCollider* ground_col;

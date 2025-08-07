@@ -78,7 +78,6 @@ private:
 	// boss contoll func
 	void Move();
 
-
 	// boss attack func
 	void AttackHandler();
 	void Attack(int attackIndex);
@@ -91,5 +90,8 @@ private:
 public: void TakeDamage(int damage);
 private: void Die();
 
+public:
+	float GetBossMaxHp() { return MAX_HP; }
+	float GetBossHp() { return hp; }
 };
 

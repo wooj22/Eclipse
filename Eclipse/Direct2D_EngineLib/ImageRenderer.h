@@ -31,8 +31,9 @@ private:
 	RectTransform* rectTransform;
 
 public:
-	shared_ptr<Sprite> sprite;		// 공유 자원  
-	float alpha = 1.0f;				// TODO :: 삭제!
+	shared_ptr<Sprite> sprite;				// 공유 자원  
+	FillType fillType = FillType::None;
+	float fillAmount = 1.0f;
 
 private:
 	// Fill Box (Empty Sprite)
