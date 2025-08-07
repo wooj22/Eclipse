@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "PlayUI.h"
+#include "Quest.h"
 
 void GameManager::UnInit()
 {
@@ -17,6 +18,7 @@ void GameManager::ReSetData()
 	cainCount = 0;
 	lunaKillCount = 0;
 	bossKillCount = 0;
+	questCount = 0;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;		
@@ -34,6 +36,7 @@ void GameManager::WaveStart()
 	cainCount = 0;
 	lunaKillCount = 0;
 	bossKillCount = 0;
+	questCount = 0;
 }
 
 void GameManager::SkillReset()
@@ -188,4 +191,13 @@ void GameManager::UseRelease()
 void GameManager::FinishWaveTimeText()
 {
 	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
+}
+
+void GameManager::ChangeQuestCount(int waveidx)
+{
+	questCount ++;
+	if (waveidx == waveCount)
+	{
+		g_playUI->quest->RefreshQuestCountText(questCount);
+	}
 }
