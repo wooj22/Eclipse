@@ -212,7 +212,7 @@ void WaveSystem::StartWave(int waveNumber)
         
     case 3:
         m_currentWaveState = WaveState::WAVE_3;
-        m_waveDuration = 2.0f;        
+        m_waveDuration = 20.0f;        
         SetupWave3Pattern();
         OutputDebugStringA("Wave 3 Started - Increased Difficulty (All Hons)\n");
         break;
@@ -518,14 +518,14 @@ void WaveSystem::SpawnBoss()
         }
         
         // Boss physics setup
-        auto* rb = m_activeBoss->GetComponent<Rigidbody>();
-        if (rb)
-        {
-            rb->useGravity = true;
-            rb->isKinematic = false;
-            // Boss falls slowly
-            rb->gravityScale = 0.1f;
-        }
+        //auto* rb = m_activeBoss->GetComponent<Rigidbody>();
+        //if (rb)
+        //{
+        //    rb->useGravity = true;
+        //    rb->isKinematic = false;
+        //    // Boss falls slowly
+        //    rb->gravityScale = 0.1f;
+        //}
         
         OutputDebugStringA("Boss spawned at center!\n");
     }
