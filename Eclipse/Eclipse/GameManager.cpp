@@ -16,10 +16,6 @@ void GameManager::ReSetData()
 {
 	honCount = 0;
 	waveCount = 0;
-	honKillCount = 0;
-	cainCount = 0;
-	lunaKillCount = 0;
-	bossKillCount = 0;
 	questCount = 0;
 	questState = ChatCondition::None;
 	isWave = false;
@@ -35,10 +31,6 @@ void GameManager::WaveStart()
 	isWave = true;
 	waveCount++;
 
-	honKillCount = 0;
-	cainCount = 0;
-	lunaKillCount = 0;
-	bossKillCount = 0;
 	questCount = 0;
 }
 
