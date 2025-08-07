@@ -157,6 +157,7 @@ void GameManager::AllSkillUnlock()
 void GameManager::ChangeHonCount(int num)
 {
 	honCount += num;
+	if (honCount < 0) honCount = 0;
 	g_playUI->ChangeHonCountText();
 }
 
