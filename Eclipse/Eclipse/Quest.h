@@ -9,6 +9,7 @@ class Quest : public Script
 private:
 	std::vector<std::wstring> questLines;
 	std::vector<int> questMaxCount;
+	std::vector<int> questReward;
 public:
 	void Awake() override;
 	void Update() override;

@@ -14,6 +14,12 @@ void Quest::Awake()
 	questMaxCount.push_back(30);
 	questMaxCount.push_back(5);
 	questMaxCount.push_back(1);
+
+	questReward.push_back(0);//웨이브 카운터와 동일한 인덱스용
+	questReward.push_back(10);
+	questReward.push_back(15);
+	questReward.push_back(20);
+	questReward.push_back(0);
 }
 
 void Quest::Update()
@@ -33,8 +39,11 @@ void Quest::RefreshQuestCountText(int num)
 
 void Quest::QuestSuccessCheck()
 {
-	if(GameManager::Get().questState == ChatCondition::Success)
+	if (GameManager::Get().questState == ChatCondition::Success)
+	{
 		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Green));
+		GameManager::Get().ChangeHonCount(questReward[GameManager::Get().waveCount]);
+	}
 	else
 		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
 }
