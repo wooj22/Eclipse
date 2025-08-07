@@ -2,7 +2,7 @@
 #include "EclipseApp.h"
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
-
+#include "Map_Woo.h"
 
 void Moon_Scene::Awake()
 {
@@ -11,11 +11,17 @@ void Moon_Scene::Awake()
 	cam->AddComponent<Transform>();
 	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
 
+	// [BackGround Map]
+	mapBackGround = CreateObject<MapBackGround>();
+
+	// [Ground Sample]
+	// ground = CreateObject<Map_Woo>({ 0, -800 });
+
 	// [ BackGround ]
-	auto backGround = CreateObject<GameObject>();
-	backGround->AddComponent<Transform>()->SetPosition(0.0f, 0.0f);;
-	auto background_sr = backGround->AddComponent<SpriteRenderer>();
-	background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background_1.png"), "Background_Moon_1");
+	//auto backGround = CreateObject<GameObject>();
+	//backGround->AddComponent<Transform>()->SetPosition(0.0f, 0.0f);;
+	//auto background_sr = backGround->AddComponent<SpriteRenderer>();
+	//background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background_1.png"), "Background_Moon_1");
 
 	// [ title ]
 	title_text = CreateObject<UI_Text>();

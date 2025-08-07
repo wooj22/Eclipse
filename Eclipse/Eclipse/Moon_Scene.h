@@ -16,12 +16,14 @@
 #include "HonC.h"
 #include "HonD.h"
 #include "Shadow.h"
-
+#include "MapBackGround.h"
 
 class Moon_Scene : public Scene
 {
 private:
-	// 일부 오브젝트는 현재 씬에서 모두 처리 중. 추후 스크립트 할당 예정 
+	// background
+	MapBackGround* mapBackGround;
+
 	GameObject* cam;
 	UI_Text* title_text;
 
