@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "PlayUI.h"
 #include "Quest.h"
+#include "Chat.h"
 
 
 void GameManager::UnInit()
@@ -20,6 +21,7 @@ void GameManager::ReSetData()
 	lunaKillCount = 0;
 	bossKillCount = 0;
 	questCount = 0;
+	questState = ChatCondition::None;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;		
@@ -189,17 +191,25 @@ void GameManager::UseRelease()
 	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 }
 
-void GameManager::FinishWaveTimeText()
+void GameManager::FinishWave()
 {
 	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
+	if (questState != ChatCondition::Success) questState = ChatCondition::Fail;
+	g_playUI->quest->QuestSuccessCheck();
+	g_playUI->chat->SetCondition(questState);
 }
 
 void GameManager::ChangeQuestCount(int waveidx)
 {
-	questCount ++;
 	if (waveidx == waveCount)
 	{
+		questCount++;
 		g_playUI->quest->RefreshQuestCountText(questCount);
+		if (questCount >= g_playUI->quest->GetQuestMaxCount())
+		{
+			questState = ChatCondition::Success;
+			g_playUI->quest->QuestSuccessCheck();
+		}
 	}
 }
 
