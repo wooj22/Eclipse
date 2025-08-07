@@ -118,6 +118,7 @@ bool GameManager::LevelUpSkill(SkillType skill, bool check )
 		honCount -= info.skillCost[info.unlockLevel];
 		info.unlocked = true;
 		info.unlockLevel = 1;
+		if (g_playUI != nullptr) g_playUI->ChangeHonCountText();
 		return true;
 	}
 

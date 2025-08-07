@@ -4,23 +4,23 @@
 #include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
 
-// player
 #include "Player.h"
 #include "playerAttackArea.h"
+#include "NPC.h"
 
-// honmun
-#include "Honmun.h"
-#include "HonmunCollisionScript.h"
-#include "HonmunAFSM.h"
-#include "HonmunAAnimatorController.h"
-#include "HonmunBFSM.h"
-#include "HonmunBAnimatorController.h"
-#include "HonmunCFSM.h"
-#include "HonmunCAnimatorController.h"
+#include "PlayUI.h"
+#include "SkillWindowButton.h"
+#include "WaveSystem.h"
+
+#include "HonA.h"
+#include "HonB.h"
+#include "HonC.h"
+#include "HonD.h"
 
 class Yunmo_Scene : public Scene
 {
 private:
+	// 일부 오브젝트는 현재 씬에서 모두 처리 중. 추후 스크립트 할당 예정 
 	GameObject* cam;
 	UI_Text* title_text;
 
@@ -29,10 +29,21 @@ private:
 	GameObject* wall_l;
 	GameObject* platform1;
 	GameObject* platform2;
+	GameObject* platform3;
+	GameObject* platform4;
 
 	Player* player;						// Parent
 	GameObject* playerAttack_Parent;	// Parent - Child
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
+
+
+	// [ UI ]
+	NPC* npc;
+	PlayUI* playUI;
+
+	// [ Wave ] 
+	GameObject* waveSystemObj;
+	WaveSystem* waveSystem;
 
 	// component 
 	BoxCollider* ground_col;
@@ -40,19 +51,20 @@ private:
 	BoxCollider* wall_l_col;
 	BoxCollider* platform1_col;
 	BoxCollider* platform2_col;
+	BoxCollider* platform3_col;
+	BoxCollider* platform4_col;
 	BoxCollider* playerAttack_col;
 
-	// honmun
-	Honmun* honmun_a;
-	Honmun* honmun_a2;
-	Honmun* honmun_a3;
-	Honmun* honmun_a4;
-	Honmun* honmun_b;
-	Honmun* honmun_b2;
-	Honmun* honmun_b3;
-	Honmun* honmun_b4;
-
-
+	// Hon
+	HonA* honA1;
+	HonA* honA2;
+	HonB* honB1;
+	HonB* honB2;
+	HonC* honC1;
+	HonC* honC2;
+	HonC* honC3;
+	HonD* honD1;
+	HonD* honD2;
 
 public:
 	Yunmo_Scene() = default;

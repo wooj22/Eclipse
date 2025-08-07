@@ -4,13 +4,13 @@
 
 void NPCInteraction::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
-	if (other->gameObject->name == "Player" && !GameManager::Get().g_playUI->ChatActiveCheck() && !GameManager::Get().isWave)
+	if (!GameManager::Get().isWave && other->gameObject->name == "Player" && !GameManager::Get().g_playUI->ChatActiveCheck())
 		interactionImage->SetActive(true);
 }
 
 void NPCInteraction::OnTriggerExit(ICollider* other, const ContactInfo& contact)
 {
-	if (other->gameObject->name == "Player")
+	if (!GameManager::Get().isWave &&other->gameObject->name == "Player")
 		interactionImage->SetActive(false);
 }
 

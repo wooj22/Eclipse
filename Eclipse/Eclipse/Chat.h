@@ -17,7 +17,7 @@ private:
 	std::vector<WaveChatGroup> chatGroups;
 	std::vector<std::wstring> currentLines;
 	ChatCondition chatCondition;
-	int chatCount = 0;				// 대화 카운트 
+	int chatCount;				// 대화 카운트 
 	bool finished = false;
 	UI_Text* chatText;
 
