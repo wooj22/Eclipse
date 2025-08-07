@@ -23,7 +23,7 @@ void Woo_Scene::Awake()
 	//boss = CreateObject<Boss>();
 
 	// [Hon]
-	/*honA1 = CreateObject<HonA>({ -200, -500 });
+	honA1 = CreateObject<HonA>({ -200, -500 });
 	honA2 = CreateObject<HonA>({ -500, -300 });
 	honB1 = CreateObject<HonB>({ 0, 200 });
 	honB2 = CreateObject<HonB>({ 200, -300 });
@@ -31,15 +31,14 @@ void Woo_Scene::Awake()
 	honC2 = CreateObject<HonC>({ -200, -100 });
 	honC3 = CreateObject<HonC>({ -200, 200});
 	honD1 = CreateObject<HonD>({ 100, 400 });
-	honD2 = CreateObject<HonD>({ -100, 400 });*/
+	honD2 = CreateObject<HonD>({ -100, 400 });
 
 	// [BackGround Map]
 	mapBackGround = CreateObject<MapBackGround>();
 
 	// [Ground Sample]
 	ground = CreateObject<Map_Woo>({ 0, -800 });
-	ground2 = CreateObject<Map_Woo>({ 100, -500 });
-	ground3 = CreateObject<Map_Woo>({ -100, -200 });
+
 
 	/*--------------------------------------------------*/
 	/* º±πŒ¿Ã≤® */
