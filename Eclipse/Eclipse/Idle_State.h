@@ -5,6 +5,8 @@ class MovementFSM;
 
 class Idle_State : public MovementStateBase
 {
+
+
 public:
     void Enter(MovementFSM* fsm) override;
     void Update(MovementFSM* fsm) override;

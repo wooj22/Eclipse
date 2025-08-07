@@ -10,6 +10,7 @@
 #include "../Direct2D_EngineLib/Vector2.h"
 
 #include "Fall_State.h"
+#include "../Direct2D_EngineLib/Input.h"
 
 void Attack_State::Enter(MovementFSM* fsm)
 {
@@ -97,8 +98,8 @@ void Attack_State::Exit(MovementFSM* fsm)
 
     if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false);
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false);
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false); 
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false); 
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", false);
 }

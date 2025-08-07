@@ -43,27 +43,26 @@ void PlayerFSM::Awake()
 void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
-	// for (int i = 0; i < 3; ++i) 
-	//GameManager::Get().honCount = 1000;
+	GameManager::Get().honCount = 1000;
 
-	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
-	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	//GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
-	//GameManager::Get().LevelUpSkill(SkillType::WallJump);
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
+	GameManager::Get().LevelUpSkill(SkillType::WallJump);
 
-	//GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	//GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	//GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
-	//GameManager::Get().LevelUpSkill(SkillType::FastFall);
+	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
+	GameManager::Get().LevelUpSkill(SkillType::FastFall);
 
-	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	//GameManager::Get().LevelUpSkill(SkillType::Dash);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::Dash);
 }
 
 void PlayerFSM::Update()
@@ -272,7 +271,6 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 	if (targetHon)
 	{
 		targetHon->GetComponent<HonController>()->Absorption(); // 흡수 시작할 때 호출 
-		// targetHon->Destroy(); // 흡수(제거)
 
 		isAbsorbSkillActive = true; // 혼 끌어당기기 시작 
 		hasAbsorbedSoul = true;
@@ -291,6 +289,8 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 
 void PlayerFSM::TryUseRelease() // [ 방출 ] 
 {
+	if (!hasAbsorbedSoul) return;
+
 	if (!CanUseRelease())
 	{
 		OutputDebugStringA("[Skill] E 방출 실패 - 저장된 영혼 없음\n");
@@ -301,7 +301,7 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 	int removedCount = 0;
 	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
-		if (!obj) continue;
+		if (!obj || obj == targetHon) continue; // targetHon 제외
 
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist <= releaseEffectRange)

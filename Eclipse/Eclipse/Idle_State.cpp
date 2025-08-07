@@ -20,6 +20,7 @@ void Idle_State::Enter(MovementFSM* fsm)
     OutputDebugStringA("[Idle_State] Player의 Idle_State 진입 \n");
 
     // 초기화 
+    fsm->GetPlayerFSM()->timer = 0.0f;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
 
@@ -34,6 +35,9 @@ void Idle_State::Enter(MovementFSM* fsm)
 void Idle_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
+
+    // 공격 입력 무시 
+    if(fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->timer > 0.3f) fsm->GetPlayerFSM()->isAttackIgnore = false;
 
     // DubleJump / Hanging 초기화
     if (fsm->GetPlayerFSM()->GetIsGround())
@@ -57,7 +61,7 @@ void Idle_State::Update(MovementFSM* fsm)
     }
 
     // [ Attack / Bullet ]
-    if (fsm->GetPlayerFSM()->GetIsGround() && Input::GetKey(VK_LBUTTON))
+    if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->GetIsGround() && Input::GetKey(VK_LBUTTON))
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f;  }
 
@@ -69,7 +73,7 @@ void Idle_State::Update(MovementFSM* fsm)
     else
     {
         // [ Attack ]
-        if (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+        if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
 
         // 초기화
         fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
