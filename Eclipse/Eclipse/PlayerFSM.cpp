@@ -332,6 +332,8 @@ GameObject* PlayerFSM::FindNearestSoulInRange(float range)
 
 	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
+		if( obj->name == "HonD" ) continue;
+
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist < range && dist < closestDist)
 		{
