@@ -97,14 +97,16 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
+		HonController* otherController = otherGameObject->GetComponent<HonController>();
+		HonType honType = otherController->honType;
 
 		// collision acttion
-		// 연쇄반응 B-B
-		if (otherGameObject->name == "HonB")
+		switch (honType)
+		{
+		case HonType::B :		// 연쇄 반응 B-B
 		{
 			// hp check
 			TakeDamage();
-			HonBController* otherController = otherGameObject->GetComponent<HonBController>();
 			otherController->TakeDamage();
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
@@ -139,6 +141,21 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherGameObject->Destroy();
 			gameObject->Destroy();
 		}
+		case HonType::C:		// 연쇄 반응 B-C (C쪽에서 처리해서 자기 보정만 담당)
+		{
+			honBC_dir = other->gameObject->transform->GetWorldPosition() - tr->GetWorldPosition();
+		}
+		}
+	}
+}
+
+// Hon B-C 겹침 불가
+void HonBController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
+{
+	if (other->gameObject->name == "HonC")
+	{
+		honBC_dir = honBC_dir.Normalized();
+		tr->Translate(honBC_dir * collisionSpeed * 1.3 * Time::GetDeltaTime());
 	}
 }
 
