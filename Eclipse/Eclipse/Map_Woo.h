@@ -11,7 +11,7 @@ public:
 	Transform* transform;
 	BoxCollider* collider;
 
-	Map_Woo() : GameObject("Ground")
+	Map_Woo() : GameObject("Ground", "EndLine")
 	{
 		transform = AddComponent<Transform>();
 		collider = AddComponent<BoxCollider>();

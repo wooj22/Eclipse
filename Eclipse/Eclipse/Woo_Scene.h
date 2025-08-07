@@ -13,6 +13,8 @@
 #include "HonC.h"
 #include "HonD.h"
 
+#include "MapBackGround.h"
+
 #include "Player.h"
 #include "playerAttackArea.h"
 
@@ -27,9 +29,6 @@ private:
 	GameObject* cam;
 	UI_Text* title_text;
 
-	// ground endline
-	Map_Woo* ground;
-	
 	// Boss
 	Boss* boss;
 
@@ -43,6 +42,13 @@ private:
 	HonC* honC3;
 	HonD* honD1;
 	HonD* honD2;
+
+	// background
+	MapBackGround* mapBackGround;
+
+	// ground endline
+	Map_Woo* ground;
+
 
 	/* À±¸ðÇÜ ¿ÀºêÁ§Æ® */
 	// UI
