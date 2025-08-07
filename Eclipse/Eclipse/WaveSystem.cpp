@@ -198,7 +198,7 @@ void WaveSystem::StartWave(int waveNumber)
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
         //m_waveDuration = 70.0f;        
-        m_waveDuration = 2.0f;
+        m_waveDuration = 70.0f;
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;
