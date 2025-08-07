@@ -1,6 +1,8 @@
 #pragma once
 #include "../Direct2D_EngineLib/GameObject.h"
 
+class ParallaxLayer;
+
 class Transform;
 class SpriteRenderer;
 class BackGround00_Sky;
@@ -24,6 +26,7 @@ public:
 
 public:
 	MapBackGround();
+	void SceneStart();
 };
 
 
@@ -36,6 +39,7 @@ class BackGround00_Sky : public GameObject
 public:
 	Transform* transform;
 	SpriteRenderer* spriteRenderer;
+	ParallaxLayer* parallax;
 
 public:
 	BackGround00_Sky();
@@ -47,6 +51,7 @@ class BackGround01_Moon : public GameObject
 public:
 	Transform* transform;
 	SpriteRenderer* spriteRenderer;
+	ParallaxLayer* parallax;
 
 public:
 	BackGround01_Moon();
@@ -58,6 +63,7 @@ class BackGround02_Mount : public GameObject
 public:
 	Transform* transform;
 	SpriteRenderer* spriteRenderer;
+	ParallaxLayer* parallax;
 
 public:
 	BackGround02_Mount();
@@ -69,6 +75,7 @@ class BackGround03_Tree : public GameObject
 public:
 	Transform* transform;
 	SpriteRenderer* spriteRenderer;
+	ParallaxLayer* parallax;
 
 public:
 	BackGround03_Tree();
