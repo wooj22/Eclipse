@@ -122,7 +122,8 @@ void Moon_Scene::Awake()
 
 	// [ UI ] 
 
-	/*npc = CreateObject<NPC>();
+	npc = CreateObject<NPC>({ 0,-800 });
+
 
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
@@ -138,22 +139,21 @@ void Moon_Scene::Awake()
 	playUI->skill1_Image = CreateObject<UI_Image>();
 	playUI->skill1_Text = CreateObject<UI_Text>();
 	playUI->skill2_Image = CreateObject<UI_Image>();
-	playUI->skill2_Text = CreateObject<UI_Text>();
 	playUI->waveInfo_Text = CreateObject<UI_Text>();
 	playUI->tooltip_Image = CreateObject<UI_Image>();
 
 	playUI->skillWindow_Image = CreateObject<UI_Image>();
-	playUI->skillbutton1 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp);
-	playUI->skillbutton2 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump);
-	playUI->skillbutton3 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump);
-	playUI->skillbutton4 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown);
-	playUI->skillbutton5 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra);
-	playUI->skillbutton6 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall);
-	playUI->skillbutton7 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp);
-	playUI->skillbutton8 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp);
-	playUI->skillbutton9 = CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash);
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
+	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
 	playUI->skillHon_Image = CreateObject<UI_Image>();
-	playUI->skillHon_Text = CreateObject<UI_Text>();*/
+	playUI->skillHon_Text = CreateObject<UI_Text>();
 
 
 	// [ Hon ]

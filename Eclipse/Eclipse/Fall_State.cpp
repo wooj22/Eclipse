@@ -24,6 +24,7 @@ void Fall_State::Enter(MovementFSM* fsm)
     OutputDebugStringA("[Fall_State] Player의 Fall_State 진입 \n");
 
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
+    fsm->GetPlayerFSM()->timer = 0.0f;
 
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
@@ -31,6 +32,11 @@ void Fall_State::Enter(MovementFSM* fsm)
 
 void Fall_State::Update(MovementFSM* fsm)
 {
+    fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
+
+    // 공격 입력 무시 
+    if (fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->timer > 0.3f) fsm->GetPlayerFSM()->isAttackIgnore = false;
+
     // [ Idle ]
     if (fsm->GetPlayerFSM()->GetIsGround())
     {
@@ -76,7 +82,7 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Attack / Bullet ]
-    if (fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON) && !fsm->GetPlayerFSM()->canFallAttack)
+    if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON) && !fsm->GetPlayerFSM()->canFallAttack)
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 
@@ -90,7 +96,7 @@ void Fall_State::Update(MovementFSM* fsm)
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
         }
     }
-    else if(!fsm->GetPlayerFSM()->canFallAttack)
+    else if(!fsm->GetPlayerFSM()->isAttackIgnore && !fsm->GetPlayerFSM()->canFallAttack)
     {
         // [ Attack ]
         if (fsm->GetPlayerFSM()->CanAttack() &&

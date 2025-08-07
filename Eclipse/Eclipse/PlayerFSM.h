@@ -197,6 +197,8 @@ public:
 	// attack 
 	float GetAttackRangeBonus() const;
 
+	bool isAttackIgnore = false; // 어택 일정시간 무시 
+
 	// dash 
 	void UpdateDashCooldown(); 
 	bool CanDash() const;
