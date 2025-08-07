@@ -201,7 +201,7 @@ public:
 
 	// Q 흡수 
 	bool isAbsorbSkillActive = false;
-	float absorbCooldown = 5.0f;		// 쿨타임 
+	float absorbCooldown = 10.0f;		// 기본 쿨타임 
 	float absorbCooldownTimer = 0.0f;
 	float absorbRange = 300.0f;			// 흡수 범위 
 	bool hasAbsorbedSoul = false;       // 저장 여부
@@ -236,5 +236,7 @@ public:
 
 	float GetMoveSpeedBonus() const; // speed 
 	float GetAttackRangeBonus() const; // attack 
+	float GetSkillCooldown() const; // skill CoolTime 
+
 };
 

@@ -74,6 +74,7 @@ void PlayerFSM::Update()
 	if (isQ) { TryUseAbsorb(); }
 	if (isE) { TryUseRelease(); }
 	if (isF) { GameManager::Get().g_playUI->PlayerInteraction(); }
+
 	movementFSM->Update();
 
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
@@ -142,7 +143,7 @@ void PlayerFSM::FlipXSetting()
 		}
 		else   spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
 	}
-	else { OutputDebugStringA("isBulletFliping = true \n"); spriteRenderer->flipX = isBulletFlipX; } // BulletTime_State 에서 변수값 조정 
+	else { spriteRenderer->flipX = isBulletFlipX; } // BulletTime_State 에서 변수값 조정 
 }
 
 void PlayerFSM::SpeedSetting()
@@ -248,9 +249,10 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 		isAbsorbSkillActive = true; // 혼 끌어당기기 시작 
 		hasAbsorbedSoul = true;
 		isReleaseSkillAvailable = true;
-		absorbCooldownTimer = absorbCooldown;
+		absorbCooldownTimer = GetSkillCooldown();
 
-		// UpdateCurrentAnimationByReleaseState(); // 애니메이션 바로 전환 
+		std::string debugStr = "[PlayerFSM] Q 스킬 쿨타임 = " + std::to_string(absorbCooldownTimer) + "\n";
+		OutputDebugStringA(debugStr.c_str());
 
 		OutputDebugStringA("[Skill] Q 흡수 성공 - 영혼 저장됨\n");
 	}
@@ -262,15 +264,13 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 
 void PlayerFSM::TryUseRelease() // [ 방출 ] 
 {
-	if (!hasAbsorbedSoul) return;
-
 	if (!CanUseRelease())
 	{
 		OutputDebugStringA("[Skill] E 방출 실패 - 저장된 영혼 없음\n");
 		return;
 	}
 
-	// Honmun 탐색 & 제거 : 일단 냅다 다 삭제할게유! 추후 점수제로 변경 필요 
+	// Honmun 탐색 & 제거 
 	int removedCount = 0;
 	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
@@ -436,10 +436,17 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 
 float PlayerFSM::GetMoveSpeedBonus() const
 {
-	return GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp); // 1.0f, 1.05f, 1.1f
+	return GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp); 
 }
 
 float PlayerFSM::GetAttackRangeBonus() const
 {
-	return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp); // 1.0f, 1.1f, 1.2f
+	return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
 }
+
+float PlayerFSM::GetSkillCooldown() const
+{
+	float baseCooldown = absorbCooldown; // 기본 쿨타임
+	float cooldownReduction = GameManager::Get().GetSkillBonus(SkillType::SkillCooldownDown); 
+	return (((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction)); // std::max
+} 
