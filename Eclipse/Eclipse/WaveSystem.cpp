@@ -157,7 +157,7 @@ void WaveSystem::Update()
         if (m_gameManager)
         {
             m_gameManager->isWave = false;
-            m_gameManager->g_playUI->chat->SetCondition(ChatCondition::Success);
+			m_gameManager->FinishWave();
         }
         m_currentWaveState = WaveState::IDLE;
         m_waveStartCheck = true;
@@ -198,7 +198,7 @@ void WaveSystem::StartWave(int waveNumber)
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
         //m_waveDuration = 70.0f;        
-        m_waveDuration = 70.0f;
+        m_waveDuration = 2.0f;
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;

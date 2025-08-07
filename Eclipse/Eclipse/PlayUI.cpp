@@ -194,7 +194,7 @@ void PlayUI::Update()
 {
 	if (GameManager::Get().isWave)
 	{
-		std::wstring timeText = (GameManager::Get().waveTime < 10 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().waveTime)));
+		std::wstring timeText = (GameManager::Get().waveTime < 9 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().waveTime)));
 		timer_Text->screenTextRenderer->SetText(timeText);
 	}
 
@@ -317,6 +317,7 @@ void PlayUI::ClickChatButton() {
 	StartWaveInfo(GameManager::Get().waveCount);
 	quest->RefreshQuestText();
 	quest->RefreshQuestCountText(0);
+	questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	if (skillWindow_Image->IsActive()) skillWindow_Image->SetActive(false);
 }
 
