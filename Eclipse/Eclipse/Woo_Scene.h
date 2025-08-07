@@ -26,11 +26,9 @@ class Woo_Scene : public Scene
 private:
 	GameObject* cam;
 	UI_Text* title_text;
-	GameObject* map;
-	Map_Woo* map_woo;
-	Map_Woo* ground1;
-	Map_Woo* ground2;
-	Map_Woo* ground3;
+
+	// ground endline
+	Map_Woo* ground;
 	
 	// Boss
 	Boss* boss;
@@ -46,19 +44,10 @@ private:
 	HonD* honD1;
 	HonD* honD2;
 
+	/* ¿±∏«‹ ø¿∫Í¡ß∆Æ */
 	// UI
 	NPC* npc;
 	PlayUI* playUI;
-
-	// player sample
-	//Player_Woo* player;
-
-	// rect parent pivot test
-	/*UI_Image* parent;
-	UI_Image* child;*/
-
-	// button new event test
-	//UI_Button* button;
 
 	/* º±πŒ¿Ã ø¿∫Í¡ß∆Æ */
 	GameObject* wall_r;
