@@ -12,7 +12,7 @@ class HonCController : public HonController
 {
 private:
 	// hon C-B °ãÄ§ x
-	Vector2 honCD_dir;
+	Vector2 honCB_dir;
 
 public:
 	HonCController()

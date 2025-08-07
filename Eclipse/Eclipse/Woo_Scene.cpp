@@ -41,7 +41,7 @@ void Woo_Scene::Awake()
 	// hon
 	//honA1 = CreateObject<HonA>({ -200, -500 });
 	//honA2 = CreateObject<HonA>({ -500, -300 });
-	honB1 = CreateObject<HonB>({ 0, 100 });
+	honB1 = CreateObject<HonB>({ 0, 200 });
 	//honB2 = CreateObject<HonB>({ 200, -300 });
 	honC1 = CreateObject<HonC>({ 0, -400 });
 	//honC2 = CreateObject<HonC>({ -200, -100 });
