@@ -4,26 +4,26 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/BoxCollider.h"
 
-class Platform_Short : public GameObject
+class Platform_Middle : public GameObject
 {
 public:
-    Transform * transform;
+    Transform* transform;
     SpriteRenderer* spriteRenderer;
     BoxCollider* collider;
 
-    Platform_Short() : GameObject("Ground", "Platform_Short")
+    Platform_Middle() : GameObject("Ground", "Platform_Middle")
     {
         transform = AddComponent<Transform>();
         spriteRenderer = AddComponent<SpriteRenderer>();
         collider = AddComponent<BoxCollider>();
     }
-    ~Platform_Short() override {};
+    ~Platform_Middle() override {};
 
     void Awake() override
     {
         transform->SetScale(0.5, 0.5);
 
-        spriteRenderer->sprite 
+        spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/short_platform.png"), "short_platform");
         spriteRenderer->layer = 1;
 

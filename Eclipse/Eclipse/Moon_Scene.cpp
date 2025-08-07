@@ -3,6 +3,7 @@
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "Map_Woo.h"
+#include "Platform_Short.h"
 
 void Moon_Scene::Awake()
 {
@@ -55,43 +56,17 @@ void Moon_Scene::Awake()
 	ground_col->size = { 1920.0f, 90.0f };
 	ground_col->isFlatform = true;
 
-	// [ wall_r ]
-	wall_r = CreateObject<GameObject>();
-	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(1000.0f, -300.0f);;
-
-	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
-	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
-
-	wall_r_col = wall_r->AddComponent<BoxCollider>();
-	wall_r_col->size = { 50.0f, 1400.0f };
 
 
-	// [ wall_l ]
-	wall_l = CreateObject<GameObject>();
-	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-1000.0f, -300.0f);;
+	// [ Platform ]
+	platform_short1 = CreateObject<Platform_Short>();
+	platform_short1->GetComponent<Transform>()->SetPosition(0.0f, -200.0f);
 
-	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
-	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
-	wall_l_col = wall_l->AddComponent<BoxCollider>();
-	wall_l_col->size = { 50.0f, 1400.0f };
-	
 
-	// [ Platform2 ]
-	platform2 = CreateObject<GameObject>();
-	platform2->name = "Ground";
-	platform2->tag = "platform2";
-	platform2->AddComponent<Transform>()->SetPosition(200.0f, -420.0f);
-	platform2->GetComponent<Transform>()->SetScale(0.6f, 0.6f);
 
-	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
-	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/short_platform.png"), "Platform");
 
-	platform2_col = platform2->AddComponent<BoxCollider>();
-	platform2_col->size = { 500.0f, 95.0f };
-	platform2_col->isFlatform = true;
+
 	
 	// boundary condition
 	Rect mapRect;
@@ -111,15 +86,15 @@ void Moon_Scene::Awake()
 
 
 	// [ Hon ]
-	//honA1 = CreateObject<HonA>({ -200, 300 });
-	//honA2 = CreateObject<HonA>({ -500, 300 });
-	//honB1 = CreateObject<HonB>({ 0, 300 });
-	//honB2 = CreateObject<HonB>({ 200, 300 });
-	//honC1 = CreateObject<HonC>({ -100, 300 });
-	//honC2 = CreateObject<HonC>({ -200, 300 });
-	//honC3 = CreateObject<HonC>({ -200, 600});
-	//honD1 = CreateObject<HonD>({ 100, 800 });
-	//honD2 = CreateObject<HonD>({ -100, 800 });
+	honA1 = CreateObject<HonA>({ -200, 300 });
+	honA2 = CreateObject<HonA>({ -500, 300 });
+	honB1 = CreateObject<HonB>({ 0, 300 });
+	honB2 = CreateObject<HonB>({ 200, 300 });
+	honC1 = CreateObject<HonC>({ -100, 300 });
+	honC2 = CreateObject<HonC>({ -200, 300 });
+	honC3 = CreateObject<HonC>({ -200, 600});
+	honD1 = CreateObject<HonD>({ 100, 800 });
+	honD2 = CreateObject<HonD>({ -100, 800 });
 }
 
 void Moon_Scene::Start()
@@ -166,8 +141,8 @@ void Moon_Scene::Update()
 
 	// AABB ±×¸®±â 
 	// ground_col->DebugColliderDraw();
-	wall_r_col->DebugColliderDraw();
-	wall_l_col->DebugColliderDraw();
+	// wall_r_col->DebugColliderDraw();
+	// wall_l_col->DebugColliderDraw();
 	// platform1_col->DebugColliderDraw();
 	// platform2_col->DebugColliderDraw();
 	// playerAttack_col->DebugColliderDraw();

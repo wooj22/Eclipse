@@ -77,7 +77,7 @@ void PlayerFSM::Update()
 		
 		if(!playerAnimatorController->GetSkillAvailable()) playerAnimatorController->SetSkillAvailable(true);
 	} 
-	
+
 	if (isSpeedDown)
 	{
 		speedDownTimer -= Time::GetDeltaTime();
@@ -97,7 +97,6 @@ void PlayerFSM::Update()
 	//	std::string name = typeid(*currentState).name();  // »óÅÂ ÀÌ¸§ È®ÀÎ
 	//	OutputDebugStringA(("ÇöÀç »óÅÂ: " + name + "\n").c_str());
 	//}
-
 }
 
 void PlayerFSM::FixedUpdate()
@@ -244,14 +243,18 @@ void PlayerFSM::TryUseAbsorb() // [ Èí¼ö ]
 		targetHon->GetComponent<HonController>()->Absorption(); // Èí¼ö ½ÃÀÛÇÒ ¶§ È£Ãâ 
 
 		isAbsorbSkillActive = true; // È¥ ²ø¾î´ç±â±â ½ÃÀÛ 
-		hasAbsorbedSoul = true;
-		isReleaseSkillAvailable = true;
+		// hasAbsorbedSoul = true;
+		// isReleaseSkillAvailable = true;
+
 		absorbCooldownTimer = GetSkillCooldown();
 
 		std::string debugStr = "[PlayerFSM] Q ½ºÅ³ ÄðÅ¸ÀÓ = " + std::to_string(absorbCooldownTimer) + "\n";
 		OutputDebugStringA(debugStr.c_str());
 
 		OutputDebugStringA("[Skill] Q Èí¼ö ¼º°ø - ¿µÈ¥ ÀúÀåµÊ\n");
+
+		GameManager::Get().UseAbsorb();
+		GameManager::Get().CanRelease();
 	}
 	else
 	{
@@ -294,6 +297,9 @@ void PlayerFSM::TryUseRelease() // [ ¹æÃâ ]
 
 	std::string debugStr = "[Skill] E ¹æÃâ ¼º°ø - " + std::to_string(removedCount) + "°³ È¥ Á¦°ÅµÊ\n";
 	OutputDebugStringA(debugStr.c_str());
+
+	GameManager::Get().UseRelease();
+
 }
 
 GameObject* PlayerFSM::FindNearestSoulInRange(float range)
@@ -346,17 +352,26 @@ void PlayerFSM::AttractionTargetHon()
 	targetHon->GetComponent<Transform>()->SetScale(newScale);
 
 	float distanceToPlayer = (targetPosition - currentPosition).Magnitude(); 
-	float removeDistanceThreshold = 10.0f;  
+	float removeDistanceThreshold = 70.0f;  
 	if (distanceToPlayer < removeDistanceThreshold || honTimer >= honQLifetime)
 	{
 		targetHon->Destroy();  // È¥ Á¦°Å
+
 		isAbsorbSkillActive = false;
+
+		hasAbsorbedSoul = true;
+		isReleaseSkillAvailable = true;
 	}
 }
 
 void PlayerFSM::UpdateSkillCooldowns()
 {
-	if (absorbCooldownTimer > 0.0f) absorbCooldownTimer -= Time::GetDeltaTime();
+	if (absorbCooldownTimer > 0.0f)
+	{
+		GameManager::Get().absorbCoolTime = (absorbCooldownTimer -= Time::GetDeltaTime());
+	}
+	else if(GameManager::Get().canUseAbsorb == false)
+		GameManager::Get().CanAbsorb();
 }
 
 bool PlayerFSM::CanUseAbsorb() const

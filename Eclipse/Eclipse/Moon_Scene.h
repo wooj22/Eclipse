@@ -18,29 +18,31 @@
 #include "Shadow.h"
 #include "MapBackGround.h"
 
+#include "Platform_Short.h"
+
 class Moon_Scene : public Scene
 {
 private:
 	// background
 	MapBackGround* mapBackGround;
 
-	GameObject* cam;
-	UI_Text* title_text;
-
-	GameObject* ground;
-	GameObject* wall_r;
-	GameObject* wall_l;
-	GameObject* platform1;
-	GameObject* platform2;
-
+	// player
 	Player* player;						// Parent
 	GameObject* playerAttack_Parent;	// Parent - Child
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
-
 	Shadow* shadow;
+
+	// object 
+	GameObject* cam;
+	GameObject* ground;
+
+	Platform_Short* platform_short1;
+
+
 
 	// [ UI ]
 	NPC* npc;
+	UI_Text* title_text;
 	PlayUI* playUI;
 
 	// component 
