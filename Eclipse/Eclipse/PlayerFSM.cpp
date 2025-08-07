@@ -10,6 +10,9 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Camera.h"
 
+#include "../Direct2D_EngineLib/RaycastHit.h"
+#include "../Direct2D_EngineLib/ColliderSystem.h"
+
 #include "Dash_State.h"
 
 #include "GameManager.h"
@@ -18,6 +21,7 @@
 #include "HonController.h"
 
 #include "PlayerAnimatorController.h"
+
 
 
 // 컴포넌트 활성화 시점
@@ -45,28 +49,29 @@ void PlayerFSM::Start()
 	// [ 스킬 해금 ] 테스트 위해서 
 	GameManager::Get().honCount = 1000;
 
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
-	GameManager::Get().LevelUpSkill(SkillType::WallJump);
-
-	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
-	GameManager::Get().LevelUpSkill(SkillType::FastFall);
-
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	GameManager::Get().LevelUpSkill(SkillType::Dash);
+	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
 {
+
+	//D2D1_POINT_2F start = { 0, 0 };
+	//D2D1_POINT_2F end = { 0, -240 };
+	//RenderSystem::Get().DebugDrawLine(start, end, transform->GetScreenMatrix(), 2.0f);
+
+	// ray 
+	//ray.direction = { Vector2::down };
+	//ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
+	//hit = ColliderSystem::Get().Raycast(ray, 300);
+
+	//if (hit.collider)
+	//{
+	//	hit.point.y
+	//	std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->tag + "\n";
+	//	OutputDebugStringA(debugStr.c_str());
+	//}
+
+
 	InputSetting(); // input 키값 확인
 
 	// [ Q E 스킬 ]
@@ -74,6 +79,7 @@ void PlayerFSM::Update()
 	if (isQ) { TryUseAbsorb(); }
 	if (isE) { TryUseRelease(); }
 	if (isF) { GameManager::Get().g_playUI->PlayerInteraction(); }
+
 	movementFSM->Update();
 
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
@@ -91,6 +97,17 @@ void PlayerFSM::Update()
 		if(!playerAnimatorController->GetSkillAvailable()) playerAnimatorController->SetSkillAvailable(true);
 	} 
 	
+	if (isSpeedDown)
+	{
+		speedDownTimer -= Time::GetDeltaTime();
+		if (speedDownTimer <= 0.0f)
+		{
+			speedDownRate = 1.0f; // 원래 속도로 복귀
+			isSpeedDown = false;
+
+			OutputDebugStringA("[PlayerFSM] 속도 감소 해제\n");
+		}
+	}
 	
 	// [ FSM 상태 ] 
 	//MovementStateBase* currentState = GetMovementFSM()->GetCurrentState();
@@ -99,6 +116,8 @@ void PlayerFSM::Update()
 	//	std::string name = typeid(*currentState).name();  // 상태 이름 확인
 	//	OutputDebugStringA(("현재 상태: " + name + "\n").c_str());
 	//}
+
+
 }
 
 void PlayerFSM::FixedUpdate()
@@ -142,7 +161,7 @@ void PlayerFSM::FlipXSetting()
 		}
 		else   spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
 	}
-	else { OutputDebugStringA("isBulletFliping = true \n"); spriteRenderer->flipX = isBulletFlipX; } // BulletTime_State 에서 변수값 조정 
+	else { spriteRenderer->flipX = isBulletFlipX; } // BulletTime_State 에서 변수값 조정 
 }
 
 void PlayerFSM::SpeedSetting()
@@ -152,12 +171,12 @@ void PlayerFSM::SpeedSetting()
 
 	if (isA || isD)
 	{
-		curSpeed = (walkSpeed + GetMoveSpeedBonus()) * speedDownRate; // 스킬 해금에 따른 추가 이동 속도
+		curSpeed = (walkSpeed * GetMoveSpeedBonus()) * speedDownRate; // 스킬 해금에 따른 추가 이동 속도
 	}
 	else curSpeed = 0;
 
-	// std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
-	// OutputDebugStringA(debugStr.c_str());
+	 //std::string debugStr = "[PlayerFSM] Current Speed: " + std::to_string(curSpeed) + "\n";
+	 //OutputDebugStringA(debugStr.c_str());
 }
 
 
@@ -232,32 +251,6 @@ void PlayerFSM::ResetDashCooldown() // 대시 후 쿨타임 초기화
 	dashCooldownTimer = dashCooldown;
 }
 
-
-// speed 
-float PlayerFSM::GetMoveSpeedBonus() const 
-{
-	static const float speedBonusTable[] = { 0.0f, 50.0f, 150.0f, 250.0f }; // 0, 1, 3, 5, 
-	int level = GameManager::Get().skillTree.at(SkillType::MoveSpeedUp).unlockLevel;
-
-	// 안전 처리
-	if (level < 0) level = 0; if (level > 3) level = 3;
-
-	return speedBonusTable[level];
-}
-
-// attack
-float PlayerFSM::GetAttackRangeBonus() const
-{
-	int level = GameManager::Get().skillTree[SkillType::AttackRangeUp].unlockLevel;
-	switch (level)
-	{
-	case 1: return 50.0f;   // 0.5f;
-	case 2: return 100.0f;  // 1.0f;
-	case 3: return 150.0f;  // 1.5f;
-	default: return 0.0f;
-	}
-}
-
 // [ Q E skill ]
 void PlayerFSM::TryUseAbsorb() // [ 흡수 ] 
 {
@@ -274,9 +267,10 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 		isAbsorbSkillActive = true; // 혼 끌어당기기 시작 
 		hasAbsorbedSoul = true;
 		isReleaseSkillAvailable = true;
-		absorbCooldownTimer = absorbCooldown;
+		absorbCooldownTimer = GetSkillCooldown();
 
-		// UpdateCurrentAnimationByReleaseState(); // 애니메이션 바로 전환 
+		std::string debugStr = "[PlayerFSM] Q 스킬 쿨타임 = " + std::to_string(absorbCooldownTimer) + "\n";
+		OutputDebugStringA(debugStr.c_str());
 
 		OutputDebugStringA("[Skill] Q 흡수 성공 - 영혼 저장됨\n");
 	}
@@ -288,15 +282,13 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 
 void PlayerFSM::TryUseRelease() // [ 방출 ] 
 {
-	if (!hasAbsorbedSoul) return;
-
 	if (!CanUseRelease())
 	{
 		OutputDebugStringA("[Skill] E 방출 실패 - 저장된 영혼 없음\n");
 		return;
 	}
 
-	// Honmun 탐색 & 제거 : 일단 냅다 다 삭제할게유! 추후 점수제로 변경 필요 
+	// Honmun 탐색 & 제거 
 	int removedCount = 0;
 	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
@@ -408,7 +400,6 @@ void PlayerFSM::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 void PlayerFSM::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 	// mo_dev
-
 	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck()
 		&& !GameManager::Get().isWave && Input::GetKey('F'))
 	{
@@ -457,3 +448,23 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 		if (contact.normal.x == -1)  isWallRight = false;
 	}
 }
+
+
+// *-------------- [ GameManager - Skill ] ------------------*
+
+float PlayerFSM::GetMoveSpeedBonus() const
+{
+	return GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp); 
+}
+
+float PlayerFSM::GetAttackRangeBonus() const
+{
+	return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
+}
+
+float PlayerFSM::GetSkillCooldown() const
+{
+	float baseCooldown = absorbCooldown; // 기본 쿨타임
+	float cooldownReduction = GameManager::Get().GetSkillBonus(SkillType::SkillCooldownDown); 
+	return (((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction)); // std::max
+} 

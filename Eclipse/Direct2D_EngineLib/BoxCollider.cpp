@@ -140,10 +140,13 @@ bool BoxCollider::CheckAABBCollision(BoxCollider* other, ContactInfo& contact)
         BoxCollider* flatform = isFlatform ? this : other;
         BoxCollider* otherBox = (flatform == this) ? other : this;
 
-        // this±âÁØ nomal
+        // normal.y -1 x
         Vector2 platformNormal = (flatform == this) ? contact.normal : -contact.normal;
-
         if (platformNormal != Vector2(0, -1))
+            return false;
+
+        // flatformDepthThreshold
+        if (overlapY > flatformDepthThreshold)
             return false;
     }
 
@@ -190,7 +193,12 @@ bool BoxCollider::CheckCircleCollision(CircleCollider* other, ContactInfo& conta
     // ÇÃ·§Æû Ã³¸®
     if (isFlatform)
     {
+        /// normal.y -1
         if (contact.normal != Vector2(0, -1))
+            return false;
+
+        // flatformDepthThreshold
+        if (contact.depth > flatformDepthThreshold)
             return false;
     }
 

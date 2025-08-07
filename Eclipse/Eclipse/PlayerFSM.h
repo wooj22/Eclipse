@@ -5,11 +5,15 @@
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/ICollider.h"
 
+#include "../Direct2D_EngineLib/RaycastHit.h"
+#include "../Direct2D_EngineLib/ColliderSystem.h"
+
 // FSM 
 #include "MovementFSM.h"
 #include "ActionFSM.h"
 
 #include "GameManager.h"
+
 
 enum class JumpPhase
 {
@@ -30,6 +34,9 @@ class PlayerAnimatorController;
 
 class PlayerFSM : public Script
 {
+	Ray ray;
+	RaycastHit hit;
+
 private:
 	// FSM 
 	std::unique_ptr<MovementFSM> movementFSM;
@@ -47,10 +54,10 @@ private:
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 280.0f;
-	float dashSpeed = 550.0f;
+	float dashSpeed = 0.0f;
 	float jumpForce = 700.0f;
 
-	float speedDownRate = 1.0; 
+	bool isSpeedDownRate = false;
 
 	bool isInvincible = false;	// dash 무적 상태 
 
@@ -65,13 +72,8 @@ private:
 	bool isWallRight = false;
 	bool isWall = false;
 
-
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE; // moon_dev
-
-public:
-	// key
-	bool isF; // mo_dev 
+	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE, isF; // moon_dev
 
 private:
 	// ref component
@@ -110,6 +112,11 @@ public:
 	float maxAttackDistance = 300.0f;       // 공격 시, 최대 이동 거리
 	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
 
+	// boss
+	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머
+	float speedDownDuration = 2.0f;  // 속도 감소 지속 시간 (고정)
+	float speedDownRate = 1.0f;      // 곱해질 속도 비율 
+	bool isSpeedDown = false;
 
 public:
 	// getter
@@ -126,11 +133,16 @@ public:
 	float GetInputX() const { return inputX; }
 	float GetCurSpeed() const { return curSpeed; }
 	float GetWalkSpeed() const { return walkSpeed; }
-	// float GetSpeed() const { return walkSpeed + GetMoveSpeedBonus(); }
 
-	// TODO : 매개변수로 감속율 받는 함수 (우정)
-	// 감속률만 받도록.  쿨타임 후, 원래 속도 복원 
-	void SetSpeedDownRate(float speed) { speedDownRate = speed; }
+	// 이동속도 감소
+	void SetSpeedDownRate(float rate)
+	{
+		speedDownTimer = speedDownDuration; // 고정된 지속 시간으로 초기화
+		speedDownRate = rate;               
+		isSpeedDown = true;
+
+		OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
+	}
 
 	bool GetIsWall() const { return isWall; }
 	bool GetIsWallLeft() const { return isWallLeft; }
@@ -191,12 +203,6 @@ public:
 	bool CanAttack();					// 공격 가능 조건 판별
 	void OnAirAttack();					// 공격 시 현재 가능한 점프 타입의 플래그 false
 
-	// speed 
-	float GetMoveSpeedBonus() const;
-
-	// attack 
-	float GetAttackRangeBonus() const;
-
 	bool isAttackIgnore = false; // 어택 일정시간 무시 
 
 	// dash 
@@ -206,7 +212,7 @@ public:
 
 	// Q 흡수 
 	bool isAbsorbSkillActive = false;
-	float absorbCooldown = 5.0f;		// 쿨타임 
+	float absorbCooldown = 10.0f;		// 기본 쿨타임 
 	float absorbCooldownTimer = 0.0f;
 	float absorbRange = 300.0f;			// 흡수 범위 
 	bool hasAbsorbedSoul = false;       // 저장 여부
@@ -232,10 +238,14 @@ private:
 	void SpeedSetting();
 	void FlipXSetting();
 
-	// [ Animator State ]
-	void UpdateCurrentAnimationByReleaseState();
-
 	// [ Q Skill ]
 	void AttractionTargetHon();
+
+public:
+	// [ GameManager - Skill ] 
+
+	float GetMoveSpeedBonus() const; // speed 
+	float GetAttackRangeBonus() const; // attack 
+	float GetSkillCooldown() const; // skill CoolTime 
 };
 

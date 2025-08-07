@@ -18,7 +18,7 @@ void Attack_State::Enter(MovementFSM* fsm)
 
     // 초기화 : 스킬 해금 레벨에 따라 보정
     float skillBonus = fsm->GetPlayerFSM()->GetAttackRangeBonus();
-    baseMaxDistance = fsm->GetPlayerFSM()->maxAttackDistance + skillBonus;
+    baseMaxDistance = fsm->GetPlayerFSM()->maxAttackDistance * skillBonus;
     desiredTime = fsm->GetPlayerFSM()->attackDesiredTime;
 
     std::string dbg = "[Attack_State] Attack MaxDist: " + std::to_string(baseMaxDistance) + "\n";

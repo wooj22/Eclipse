@@ -11,9 +11,6 @@
 class HonAController : public HonController
 {
 public:
-	float is2A;
-
-public:
 	HonAController()
 	{
 		honType = HonType::A;

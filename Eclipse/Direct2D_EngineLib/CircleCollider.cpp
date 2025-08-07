@@ -183,8 +183,15 @@ bool CircleCollider::CheckBoxCollision(BoxCollider* other, ContactInfo& contact)
     if (other->isFlatform)
     {
         Vector2 platformNormal = -contact.normal;
+
+        // normal.y -1
         if (platformNormal != Vector2(0, -1))
             return false;
+
+        // flatformDepthThreshold
+        if (contact.depth > other->flatformDepthThreshold)
+            return false;
+
     }
 
     return true;

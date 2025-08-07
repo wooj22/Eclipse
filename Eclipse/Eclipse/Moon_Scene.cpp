@@ -26,6 +26,9 @@ void Moon_Scene::Awake()
 	title_text->screenTextRenderer->SetText(L"Moon Scene");
 
 
+	// [ player Shadow ] : player보다 먼저 생성 
+	//shadow = CreateObject<Shadow>();
+
 	// [ player ] 
 	player = CreateObject<Player>();
 
@@ -44,19 +47,21 @@ void Moon_Scene::Awake()
 
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
+	
+
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
+	ground->tag = "Ground";
 	ground->AddComponent<Transform>()->SetPosition(0.0f, -800.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
-	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
+	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/long_platform_grass.png"), "Ground");
 	ground_sr->layer = 0;
 
 	ground_col = ground->AddComponent<BoxCollider>();
-	ground_col->size = { 1920.0f, 50.0f };
+	ground_col->size = { 1920.0f, 90.0f };
 	ground_col->isFlatform = true;
-
 
 	// [ wall_r ]
 	wall_r = CreateObject<GameObject>();
@@ -99,13 +104,15 @@ void Moon_Scene::Awake()
 	// [ Platform2 ]
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
+	platform2->tag = "platform2";
 	platform2->AddComponent<Transform>()->SetPosition(200.0f, -420.0f);
+	platform2->GetComponent<Transform>()->SetScale(0.6f, 0.6f);
 
 	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
-	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/short_platform.png"), "Platform");
 
 	platform2_col = platform2->AddComponent<BoxCollider>();
-	platform2_col->size = { 200.0f, 30.0f };
+	platform2_col->size = { 500.0f, 95.0f };
 	platform2_col->isFlatform = true;
 	
 	// boundary condition
@@ -126,15 +133,15 @@ void Moon_Scene::Awake()
 
 
 	// [ Hon ]
-	honA1 = CreateObject<HonA>({ -200, -100 });
-	honA2 = CreateObject<HonA>({ -500, 100 });
-	honB1 = CreateObject<HonB>({ 0, -100 });
-	honB2 = CreateObject<HonB>({ 200, 100 });
-	honC1 = CreateObject<HonC>({ -100, 300 });
+	honA1 = CreateObject<HonA>({ -200, 300 });
+	honA2 = CreateObject<HonA>({ -500, 300 });
+	honB1 = CreateObject<HonB>({ 0, 300 });
+	honB2 = CreateObject<HonB>({ 200, 300 });
+	/*honC1 = CreateObject<HonC>({ -100, 300 });
 	honC2 = CreateObject<HonC>({ -200, 300 });
 	honC3 = CreateObject<HonC>({ -200, 600});
 	honD1 = CreateObject<HonD>({ 100, 800 });
-	honD2 = CreateObject<HonD>({ -100, 800 });
+	honD2 = CreateObject<HonD>({ -100, 800 });*/
 }
 
 void Moon_Scene::Start()
@@ -180,7 +187,7 @@ void Moon_Scene::Update()
 	}
 
 	// AABB 그리기 
-	ground_col->DebugColliderDraw();
+	// ground_col->DebugColliderDraw();
 	wall_r_col->DebugColliderDraw();
 	wall_l_col->DebugColliderDraw();
 	// platform1_col->DebugColliderDraw();

@@ -110,8 +110,8 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::A:		// ¿¬¼â ¹ÝÀÀ C-A
 		{
 			// hp cheak
-			TakeDamage();
-			otherController->TakeDamage();
+			TakeDamage(1);
+			otherController->TakeDamage(1);
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
 			// score
@@ -151,8 +151,8 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hon b °ãÄ§ x
 			honCB_dir = other->gameObject->transform->GetWorldPosition() - tr->GetWorldPosition();
 
-			TakeDamage();
-			otherController->TakeDamage();
+			TakeDamage(1);
+			otherController->TakeDamage(1);
 			break;
 		}
 		case HonType::C:		// ¿¬¼â ¹ÝÀÀ C-C
@@ -177,8 +177,8 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				}
 			}
 
-			if (!other->gameObject->IsDestroyed()) other->gameObject->Destroy();
-			gameObject->Destroy();
+			if (!other->gameObject->IsDestroyed()) otherController->TakeDamage(3);
+			TakeDamage(3);
 			break;
 		}
 		default:
@@ -202,11 +202,8 @@ void HonCController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 // Player Attack
 void HonCController::TakeDamageByPlayer()
 {
-	// score
-	if (hp == 1) GameManager::Get().ChangeHonCount(1);
-
 	// collision acttion
 	CollisionStart();
 	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-	TakeDamage();
+	TakeDamage(1);
 }
