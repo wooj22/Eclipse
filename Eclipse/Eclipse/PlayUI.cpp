@@ -267,12 +267,7 @@ void PlayUI::Update()
 
 	// TODOMO : 아래 입력 삭제 
 
-	if (Input::GetKeyDown('Q') && GameManager::Get().canUseAbsorb)
-	{
-		GameManager::Get().absorbCoolTime = 9;
-		GameManager::Get().canUseAbsorb = false;
-		GameManager::Get().canUseRelease = true;
-	}
+
 
 	if (Input::GetKeyDown(VK_TAB))
 	{
@@ -285,17 +280,6 @@ void PlayUI::Update()
 			skillWindow_Image->SetActive(true);
 		}
 	}
-
-	if (Input::GetKeyDown('E') && GameManager::Get().canUseRelease)
-	{
-		GameManager::Get().canUseRelease = false;
-	}
-
-	if (GameManager::Get().absorbCoolTime > 0)
-		GameManager::Get().absorbCoolTime -= Time::GetDeltaTime();
-	else
-		GameManager::Get().canUseAbsorb = true;
-	
 
 }
 

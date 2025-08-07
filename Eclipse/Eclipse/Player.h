@@ -22,7 +22,6 @@ class Player : public GameObject
 
 public:
 	
-
 	// [ components ]
 	Transform* transform;
 	SpriteRenderer* spriteRenderer;

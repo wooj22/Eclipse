@@ -48,30 +48,11 @@ void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
 	GameManager::Get().honCount = 1000;
-
 	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
 {
-
-	//D2D1_POINT_2F start = { 0, 0 };
-	//D2D1_POINT_2F end = { 0, -240 };
-	//RenderSystem::Get().DebugDrawLine(start, end, transform->GetScreenMatrix(), 2.0f);
-
-	// ray 
-	//ray.direction = { Vector2::down };
-	//ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
-	//hit = ColliderSystem::Get().Raycast(ray, 300);
-
-	//if (hit.collider)
-	//{
-	//	hit.point.y
-	//	std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->tag + "\n";
-	//	OutputDebugStringA(debugStr.c_str());
-	//}
-
-
 	InputSetting(); // input 키값 확인
 
 	// [ Q E 스킬 ]
@@ -96,7 +77,7 @@ void PlayerFSM::Update()
 		
 		if(!playerAnimatorController->GetSkillAvailable()) playerAnimatorController->SetSkillAvailable(true);
 	} 
-	
+
 	if (isSpeedDown)
 	{
 		speedDownTimer -= Time::GetDeltaTime();
@@ -116,8 +97,6 @@ void PlayerFSM::Update()
 	//	std::string name = typeid(*currentState).name();  // 상태 이름 확인
 	//	OutputDebugStringA(("현재 상태: " + name + "\n").c_str());
 	//}
-
-
 }
 
 void PlayerFSM::FixedUpdate()
@@ -155,7 +134,6 @@ void PlayerFSM::FlipXSetting()
 	{
 		if (abs(rigidbody->velocity.x) > 0.01f)   // 정지 상태가 아닐 때만 방향 반영
 		{
-			// spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
 			spriteRenderer->flipX = rigidbody->velocity.x > 0.0f;  // 오른쪽으로 이동 중이면 flip
 			lastFlipX = spriteRenderer->flipX;
 		}
@@ -265,14 +243,18 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 		targetHon->GetComponent<HonController>()->Absorption(); // 흡수 시작할 때 호출 
 
 		isAbsorbSkillActive = true; // 혼 끌어당기기 시작 
-		hasAbsorbedSoul = true;
-		isReleaseSkillAvailable = true;
+		// hasAbsorbedSoul = true;
+		// isReleaseSkillAvailable = true;
+
 		absorbCooldownTimer = GetSkillCooldown();
 
 		std::string debugStr = "[PlayerFSM] Q 스킬 쿨타임 = " + std::to_string(absorbCooldownTimer) + "\n";
 		OutputDebugStringA(debugStr.c_str());
 
 		OutputDebugStringA("[Skill] Q 흡수 성공 - 영혼 저장됨\n");
+
+		GameManager::Get().UseAbsorb();
+		GameManager::Get().CanRelease();
 	}
 	else
 	{
@@ -315,6 +297,9 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 
 	std::string debugStr = "[Skill] E 방출 성공 - " + std::to_string(removedCount) + "개 혼 제거됨\n";
 	OutputDebugStringA(debugStr.c_str());
+
+	GameManager::Get().UseRelease();
+
 }
 
 GameObject* PlayerFSM::FindNearestSoulInRange(float range)
@@ -367,17 +352,26 @@ void PlayerFSM::AttractionTargetHon()
 	targetHon->GetComponent<Transform>()->SetScale(newScale);
 
 	float distanceToPlayer = (targetPosition - currentPosition).Magnitude(); 
-	float removeDistanceThreshold = 10.0f;  
+	float removeDistanceThreshold = 70.0f;  
 	if (distanceToPlayer < removeDistanceThreshold || honTimer >= honQLifetime)
 	{
 		targetHon->Destroy();  // 혼 제거
+
 		isAbsorbSkillActive = false;
+
+		hasAbsorbedSoul = true;
+		isReleaseSkillAvailable = true;
 	}
 }
 
 void PlayerFSM::UpdateSkillCooldowns()
 {
-	if (absorbCooldownTimer > 0.0f) absorbCooldownTimer -= Time::GetDeltaTime();
+	if (absorbCooldownTimer > 0.0f)
+	{
+		GameManager::Get().absorbCoolTime = (absorbCooldownTimer -= Time::GetDeltaTime());
+	}
+	else if(GameManager::Get().canUseAbsorb == false)
+		GameManager::Get().CanAbsorb();
 }
 
 bool PlayerFSM::CanUseAbsorb() const

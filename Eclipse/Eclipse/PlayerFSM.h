@@ -4,7 +4,6 @@
 #include "../Direct2D_EngineLib/Script.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/ICollider.h"
-
 #include "../Direct2D_EngineLib/RaycastHit.h"
 #include "../Direct2D_EngineLib/ColliderSystem.h"
 
@@ -34,9 +33,6 @@ class PlayerAnimatorController;
 
 class PlayerFSM : public Script
 {
-	Ray ray;
-	RaycastHit hit;
-
 private:
 	// FSM 
 	std::unique_ptr<MovementFSM> movementFSM;
@@ -53,9 +49,9 @@ public:
 private:
 	// stat
 	float curSpeed = 0;
-	float walkSpeed = 280.0f;
+	float walkSpeed = 400.0f;
 	float dashSpeed = 0.0f;
-	float jumpForce = 700.0f;
+	float jumpForce = 900.0f;
 
 	bool isSpeedDownRate = false;
 
