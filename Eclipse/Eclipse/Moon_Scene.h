@@ -40,8 +40,8 @@ private:
 	Shadow* shadow;
 
 	// [ UI ]
-	 NPC* npc;
-	 PlayUI* playUI;
+	NPC* npc;
+	PlayUI* playUI;
 
 	// component 
 	BoxCollider* ground_col;

@@ -14,15 +14,6 @@ void Moon_Scene::Awake()
 	// [BackGround Map]
 	mapBackGround = CreateObject<MapBackGround>();
 
-	// [Ground Sample]
-	// ground = CreateObject<Map_Woo>({ 0, -800 });
-
-	// [ BackGround ]
-	//auto backGround = CreateObject<GameObject>();
-	//backGround->AddComponent<Transform>()->SetPosition(0.0f, 0.0f);;
-	//auto background_sr = backGround->AddComponent<SpriteRenderer>();
-	//background_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Background_1.png"), "Background_Moon_1");
-
 	// [ title ]
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
@@ -30,10 +21,6 @@ void Moon_Scene::Awake()
 	title_text->screenTextRenderer->SetFontSize(50);
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::LightPink));
 	title_text->screenTextRenderer->SetText(L"Moon Scene");
-
-
-	// [ player Shadow ] : player보다 먼저 생성 
-	//shadow = CreateObject<Shadow>();
 
 	// [ player ] 
 	player = CreateObject<Player>();
@@ -54,11 +41,10 @@ void Moon_Scene::Awake()
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 	
-
 	// [ ground ]
 	ground = CreateObject<GameObject>();
-	ground->name = "Ground";
-	ground->tag = "Ground";
+	ground->name = "Ground"; 
+	ground->tag = "Ground"; 
 	ground->AddComponent<Transform>()->SetPosition(0.0f, -800.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
@@ -93,20 +79,6 @@ void Moon_Scene::Awake()
 	wall_l_col->size = { 50.0f, 1400.0f };
 	
 
-	// [ Platform1 ]
-	//platform1 = CreateObject<GameObject>();
-	//platform1->name = "Ground";
-	//platform1->AddComponent<Transform>()->SetPosition(-300.0f, -700.0f);
-
-	//auto platform1_sr = platform1->AddComponent<SpriteRenderer>();
-	//platform1_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
-
-	//platform1_col = platform1->AddComponent<BoxCollider>();
-	//platform1_col->offset = { 0.0f, 12.0f };
-	//platform1_col->size = { 200.0f, 5.0f };
-	//platform1_col->isFlatform = true;
-	
-
 	// [ Platform2 ]
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
@@ -139,15 +111,15 @@ void Moon_Scene::Awake()
 
 
 	// [ Hon ]
-	honA1 = CreateObject<HonA>({ -200, 300 });
-	honA2 = CreateObject<HonA>({ -500, 300 });
-	honB1 = CreateObject<HonB>({ 0, 300 });
-	honB2 = CreateObject<HonB>({ 200, 300 });
-	/*honC1 = CreateObject<HonC>({ -100, 300 });
-	honC2 = CreateObject<HonC>({ -200, 300 });
-	honC3 = CreateObject<HonC>({ -200, 600});
-	honD1 = CreateObject<HonD>({ 100, 800 });
-	honD2 = CreateObject<HonD>({ -100, 800 });*/
+	//honA1 = CreateObject<HonA>({ -200, 300 });
+	//honA2 = CreateObject<HonA>({ -500, 300 });
+	//honB1 = CreateObject<HonB>({ 0, 300 });
+	//honB2 = CreateObject<HonB>({ 200, 300 });
+	//honC1 = CreateObject<HonC>({ -100, 300 });
+	//honC2 = CreateObject<HonC>({ -200, 300 });
+	//honC3 = CreateObject<HonC>({ -200, 600});
+	//honD1 = CreateObject<HonD>({ 100, 800 });
+	//honD2 = CreateObject<HonD>({ -100, 800 });
 }
 
 void Moon_Scene::Start()

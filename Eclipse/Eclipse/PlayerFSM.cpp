@@ -48,30 +48,11 @@ void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
 	GameManager::Get().honCount = 1000;
-
 	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
 {
-
-	//D2D1_POINT_2F start = { 0, 0 };
-	//D2D1_POINT_2F end = { 0, -240 };
-	//RenderSystem::Get().DebugDrawLine(start, end, transform->GetScreenMatrix(), 2.0f);
-
-	// ray 
-	//ray.direction = { Vector2::down };
-	//ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
-	//hit = ColliderSystem::Get().Raycast(ray, 300);
-
-	//if (hit.collider)
-	//{
-	//	hit.point.y
-	//	std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->tag + "\n";
-	//	OutputDebugStringA(debugStr.c_str());
-	//}
-
-
 	InputSetting(); // input 키값 확인
 
 	// [ Q E 스킬 ]
@@ -117,7 +98,6 @@ void PlayerFSM::Update()
 	//	OutputDebugStringA(("현재 상태: " + name + "\n").c_str());
 	//}
 
-
 }
 
 void PlayerFSM::FixedUpdate()
@@ -155,7 +135,6 @@ void PlayerFSM::FlipXSetting()
 	{
 		if (abs(rigidbody->velocity.x) > 0.01f)   // 정지 상태가 아닐 때만 방향 반영
 		{
-			// spriteRenderer->flipX = rigidbody->velocity.x < 0.0f;  // 왼쪽으로 이동 중이면 flip
 			spriteRenderer->flipX = rigidbody->velocity.x > 0.0f;  // 오른쪽으로 이동 중이면 flip
 			lastFlipX = spriteRenderer->flipX;
 		}
