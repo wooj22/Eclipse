@@ -23,40 +23,10 @@ void PlayScene::Awake()
 	waveSystemObj->SetActive(true);  // GameObject 활성화
 	waveSystem = waveSystemObj->AddComponent<WaveSystem>();
 
-	npc = CreateObject<NPC>();
-
 	player = CreateObject<Player_Test>();
 
 	playUI = CreateObject<PlayUI>();
-	GameManager::Get().g_playUI = playUI;
-	playUI->timer_Text = CreateObject<UI_Text>();
-	playUI->stop_Button = CreateObject<UI_Button>();
-	playUI->quest_Image = CreateObject<UI_Image>();
-	playUI->quest_Text = CreateObject<UI_Text>();
-	playUI->chat_Image = CreateObject<UI_Image>();
-	playUI->chat_Text = CreateObject<UI_Text>();
-	playUI->chat_Button= CreateObject<UI_Button>();
-	playUI->hon_Image = CreateObject<UI_Image>();
-	playUI->hon_Text = CreateObject<UI_Text>();
-	playUI->skill1_Image = CreateObject<UI_Image>();
-	playUI->skill1_Text = CreateObject<UI_Text>();
-	playUI->skill2_Image = CreateObject<UI_Image>();
-	playUI->waveInfo_Text = CreateObject<UI_Text>();
-	playUI->tooltip_Image = CreateObject<UI_Image>();
-
-	playUI->skillWindow_Image = CreateObject<UI_Image>();
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
-	playUI->skillHon_Image = CreateObject<UI_Image>();
-	playUI->skillHon_Text= CreateObject<UI_Text>();
-	
+	GameManager::Get().g_playUI = playUI;	
 }
 
 void PlayScene::Start()
