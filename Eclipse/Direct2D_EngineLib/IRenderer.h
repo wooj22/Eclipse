@@ -15,6 +15,14 @@ enum class TextVerticalAlign {
 	Bottom
 };
 
+/* Fill Type */
+enum class FillType
+{
+	None, 
+	Horizontal, 
+	Vertical,
+};
+
 /* Color Matrix member */
 struct ColorRGBA
 {
