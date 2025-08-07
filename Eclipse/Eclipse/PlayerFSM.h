@@ -50,7 +50,7 @@ private:
 	float dashSpeed = 0.0f;
 	float jumpForce = 700.0f;
 
-	float speedDownRate = 1.0; 
+	bool isSpeedDownRate = false;
 
 	bool isInvincible = false;	// dash 무적 상태 
 
@@ -65,13 +65,8 @@ private:
 	bool isWallRight = false;
 	bool isWall = false;
 
-
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE; // moon_dev
-
-public:
-	// key
-	bool isF; // mo_dev 
+	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE, isF; // moon_dev
 
 private:
 	// ref component
@@ -110,6 +105,11 @@ public:
 	float maxAttackDistance = 300.0f;       // 공격 시, 최대 이동 거리
 	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
 
+	// boss
+	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머
+	float speedDownDuration = 2.0f;  // 속도 감소 지속 시간 (고정)
+	float speedDownRate = 1.0f;      // 곱해질 속도 비율 
+	bool isSpeedDown = false;
 
 public:
 	// getter
@@ -126,11 +126,16 @@ public:
 	float GetInputX() const { return inputX; }
 	float GetCurSpeed() const { return curSpeed; }
 	float GetWalkSpeed() const { return walkSpeed; }
-	// float GetSpeed() const { return walkSpeed + GetMoveSpeedBonus(); }
 
-	// TODO : 매개변수로 감속율 받는 함수 (우정)
-	// 감속률만 받도록.  쿨타임 후, 원래 속도 복원 
-	void SetSpeedDownRate(float speed) { speedDownRate = speed; }
+	// 이동속도 감소
+	void SetSpeedDownRate(float rate)
+	{
+		speedDownTimer = speedDownDuration; // 고정된 지속 시간으로 초기화
+		speedDownRate = rate;               
+		isSpeedDown = true;
+
+		OutputDebugStringA("[Debuff] 속도 감소 적용\n");
+	}
 
 	bool GetIsWall() const { return isWall; }
 	bool GetIsWallLeft() const { return isWallLeft; }
@@ -191,7 +196,6 @@ public:
 	bool CanAttack();					// 공격 가능 조건 판별
 	void OnAirAttack();					// 공격 시 현재 가능한 점프 타입의 플래그 false
 
-
 	bool isAttackIgnore = false; // 어택 일정시간 무시 
 
 	// dash 
@@ -230,13 +234,11 @@ private:
 	// [ Q Skill ]
 	void AttractionTargetHon();
 
-
 public:
 	// [ GameManager - Skill ] 
 
 	float GetMoveSpeedBonus() const; // speed 
 	float GetAttackRangeBonus() const; // attack 
 	float GetSkillCooldown() const; // skill CoolTime 
-
 };
 

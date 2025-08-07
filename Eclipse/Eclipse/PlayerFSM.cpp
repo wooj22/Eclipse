@@ -92,6 +92,17 @@ void PlayerFSM::Update()
 		if(!playerAnimatorController->GetSkillAvailable()) playerAnimatorController->SetSkillAvailable(true);
 	} 
 	
+	if (isSpeedDown)
+	{
+		speedDownTimer -= Time::GetDeltaTime();
+		if (speedDownTimer <= 0.0f)
+		{
+			speedDownRate = 1.0f; // 원래 속도로 복귀
+			isSpeedDown = false;
+
+			OutputDebugStringA("[Debuff] 속도 감소 해제\n");
+		}
+	}
 	
 	// [ FSM 상태 ] 
 	//MovementStateBase* currentState = GetMovementFSM()->GetCurrentState();
