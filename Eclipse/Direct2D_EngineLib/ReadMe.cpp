@@ -256,7 +256,7 @@ class ColliderSystem;
 class RenderSystem;
 class IRenderer;
 class SpriteRenderer;
-class ImageRenderer;
+class ImageRenderer;			// ImageRenderer는 추가로 Filltype 지정이 가능하다
 
 // RenderType에 따라 GameObject를 먼저 그리고 UI를 그린다.
 // RenderMode에 따라 다른 렌더 체인을 제공하며 기본은 Unlit이다.
