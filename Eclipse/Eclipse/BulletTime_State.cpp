@@ -42,10 +42,10 @@ void BulletTime_State::Update(MovementFSM* fsm)
         // 만약 마우스 왼쪽 누르고 있었으면 무시상태  
         if (Input::GetKey(VK_LBUTTON)) fsm->GetPlayerFSM()->isAttackIgnore = true;
 
-        if (fsm->GetPlayerFSM()->GetIsGround()) fsm->ChangeState(std::make_unique<Idle_State>());
+        if (fsm->GetPlayerFSM()->GetIsGround()) { fsm->ChangeState(std::make_unique<Idle_State>()); return; }
         else
         {
-            fsm->ChangeState(std::make_unique<Fall_State>());
+            fsm->ChangeState(std::make_unique<Fall_State>()); return;
         }
     }
 
@@ -57,10 +57,10 @@ void BulletTime_State::Update(MovementFSM* fsm)
         // 만약 마우스 왼쪽 누르고 있었으면 무시상태  
         if (Input::GetKey(VK_LBUTTON)) fsm->GetPlayerFSM()->isAttackIgnore = true;
 
-        if (fsm->GetPlayerFSM()->GetIsGround()) fsm->ChangeState(std::make_unique<Idle_State>());
+        if (fsm->GetPlayerFSM()->GetIsGround()) { fsm->ChangeState(std::make_unique<Idle_State>()); return; }
         else
         {
-            fsm->ChangeState(std::make_unique<Fall_State>());
+            fsm->ChangeState(std::make_unique<Fall_State>()); return;
         }
     }
 
@@ -124,6 +124,6 @@ void BulletTime_State::Exit(MovementFSM* fsm)
     OutputDebugStringA("[BulletTime_State] (( 종료 - 불릿 타임 끝 )) \n");
 
     // 복구 
+    Time::SetTimeScale(1.0f);
     fsm->GetPlayerFSM()->SetisBulletFliping(false);
-    Time::SetTimeScale(1.0f); 
 }
