@@ -8,11 +8,6 @@
 
 void PlayUI::Awake()
 {  
-
-}
-
-void PlayUI::SceneStart()
-{
 	//해당 씬에 게임 오브젝트 생성
 	timer_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	stop_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
@@ -41,6 +36,10 @@ void PlayUI::SceneStart()
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+}
+
+void PlayUI::SceneStart()
+{
 	
 	// 웨이브 타이머 UI
 	timer_Text->rectTransform->SetPosition(0, 500);
@@ -194,7 +193,7 @@ void PlayUI::Update()
 {
 	if (GameManager::Get().isWave)
 	{
-		std::wstring timeText = (GameManager::Get().waveTime < 10 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().waveTime)));
+		std::wstring timeText = (GameManager::Get().waveTime < 9 ? L"0" : L"") + std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().waveTime)));
 		timer_Text->screenTextRenderer->SetText(timeText);
 	}
 
@@ -317,6 +316,7 @@ void PlayUI::ClickChatButton() {
 	StartWaveInfo(GameManager::Get().waveCount);
 	quest->RefreshQuestText();
 	quest->RefreshQuestCountText(0);
+	questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	if (skillWindow_Image->IsActive()) skillWindow_Image->SetActive(false);
 }
 
@@ -339,7 +339,8 @@ void PlayUI::AllSkillCheat()
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
-		skillButton->RefreshText();
+		skillButton->RefreshCurrentLevelText();
+		skillButton->RefreshLevelUPHonCountText();
 	}
 }
 
@@ -348,7 +349,8 @@ void PlayUI::ResetAllSkillCheat()
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-		skillButton->RefreshText();
+		skillButton->RefreshCurrentLevelText();
+		skillButton->RefreshLevelUPHonCountText();
 	}
 }
 

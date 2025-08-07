@@ -21,13 +21,14 @@ private:
 	float glowspeed = 3.0f;
 
 public:
-	UI_Button* skillIcon_Button;	// 스킬 아이콘 버튼
-	UI_Text* skillLevel_Text;		// 스킬 레벨 텍스트
-	UI_Text* skillName_Text;		// 스킬 이름 텍스트
-	UI_Text* skillDesc_Text;		// 스킬 설명 텍스트
-	UI_Text* skillColor1_Text;		// 스킬 레벨 별 컬러1 텍스트
-	UI_Text* skillColor2_Text;		// 스킬 레벨 별 컬러2 텍스트
-	UI_Text* skillColor3_Text;		// 스킬 레벨 별 컬러3 텍스트
+	UI_Button* skillIcon_Button;			// 스킬 아이콘 버튼
+	UI_Text* skillLevel_Text;				// 스킬 레벨 텍스트
+	UI_Text* skillName_Text;				// 스킬 이름 텍스트
+	UI_Text* skillDesc_Text;				// 스킬 설명 텍스트
+	UI_Text* skillColor1_Text;				// 스킬 레벨 별 컬러1 텍스트
+	UI_Text* skillColor2_Text;				// 스킬 레벨 별 컬러2 텍스트
+	UI_Text* skillColor3_Text;				// 스킬 레벨 별 컬러3 텍스트
+	UI_Text* skillLevelUpHonCount_Text;		// 스킬 레벨업 비용
 
 	SkillWindowButton(SkillType name);
 	~SkillWindowButton() override {}
@@ -43,6 +44,7 @@ public:
 	void OnPointEnterButton();
 	void OnPointExitButton();
 
-	void RefreshText();
+	void RefreshCurrentLevelText();
+	void RefreshLevelUPHonCountText();
 };
 

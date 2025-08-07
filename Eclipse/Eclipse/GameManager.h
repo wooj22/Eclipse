@@ -97,6 +97,7 @@ public:
 	int lunaKillCount;				// 3웨이브	D 체력 0 일때 
 	int bossKillCount;				// 4웨이브	TODOMO : 추후 보스에서 사용
 	int questCount;
+	ChatCondition questState;
 
 	//플레이어 스킬
 	float absorbCoolTime;		// Q 흡수 쿨타임				PlayerFSM -> absorbCooldownTimer
@@ -133,11 +134,14 @@ public:
 	void ChangeHonCount(int num);
 
 	// 웨이브 관련 함수
-	void FinishWaveTimeText();
+	void FinishWave();
 
 	// 퀘스트 관련 함수
 	void ChangeQuestCount(int waveidx);
 
 	// 스킬 수치 값 
 	float GetSkillBonus(SkillType type);
+
+	// NPC 관련 함수 - 퀘스트 보상 및 대화창 오픈
+	void OnNPCInteraction();
 };

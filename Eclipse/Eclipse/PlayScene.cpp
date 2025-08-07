@@ -115,7 +115,7 @@ void PlayScene::Update()
 	if (Input::GetKeyDown(VK_F11))
 	{
 		GameManager::Get().isWave = false;
-		GameManager::Get().FinishWaveTimeText();
+		GameManager::Get().FinishWave();
 	}
 }
 

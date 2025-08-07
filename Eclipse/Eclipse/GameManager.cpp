@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "PlayUI.h"
 #include "Quest.h"
+#include "Chat.h"
 
 
 void GameManager::UnInit()
@@ -20,6 +21,7 @@ void GameManager::ReSetData()
 	lunaKillCount = 0;
 	bossKillCount = 0;
 	questCount = 0;
+	questState = ChatCondition::None;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;		
@@ -189,17 +191,29 @@ void GameManager::UseRelease()
 	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 }
 
-void GameManager::FinishWaveTimeText()
+void GameManager::FinishWave()
 {
-	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
+	//g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
+
+	if (questState != ChatCondition::Success)
+		g_playUI->quest->QuestFail();
+	else
+		g_playUI->quest->QuestSuccess();
+
+	g_playUI->chat->SetCondition(questState);
 }
 
 void GameManager::ChangeQuestCount(int waveidx)
 {
-	questCount ++;
 	if (waveidx == waveCount)
 	{
+		questCount++;
 		g_playUI->quest->RefreshQuestCountText(questCount);
+		if (questCount >= g_playUI->quest->GetQuestMaxCount())
+		{
+			questState = ChatCondition::Success;
+			g_playUI->quest->QuestSuccess();
+		}
 	}
 }
 
@@ -222,4 +236,11 @@ float GameManager::GetSkillBonus(SkillType type)
 	// 배열 범위 초과하지 않도록
 	int index = clamp(level - 1, 0, static_cast<int>(values.size()) - 1);
 	return values[index];
+}
+
+void GameManager::OnNPCInteraction()
+{
+	g_playUI->ChatSetActive(true);
+	if(questState == ChatCondition::Success)
+		GameManager::Get().ChangeHonCount(g_playUI->quest->QuestReward());
 }

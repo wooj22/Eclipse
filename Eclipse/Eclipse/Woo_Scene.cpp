@@ -7,10 +7,10 @@ void Woo_Scene::Awake()
 	// camera init
 	cam = CreateObject<GameObject>();
 	cam->AddComponent<Transform>();
-	cam->AddComponent<Camera>(1920, 1080);
+	cam->AddComponent<Camera>(1920, 1080); 
 
-	// create gameobject
-	// title sample
+	// gameobject
+	// [Title Sample]
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
 	title_text->rectTransform->SetSize(500, 100);
@@ -18,63 +18,32 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
 	title_text->screenTextRenderer->SetText(L"WooScene ´ö¿Â°øÁÖÃ¼");
 	title_text->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
-	//title_text->screenTextRenderer->SetAlpha(0.5);
 
-	// background sample
-	map = CreateObject<GameObject>();
-	map->AddComponent<Transform>();
-	auto sr = map->AddComponent<SpriteRenderer>();
-	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/MapBackground.jpg");
-	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "MapBackground");
-	sr->sprite = new_sprite;
-	sr->layer = -1;
-	map->transform->Scaleing(2.5, 2.5);
-	map->transform->SetPosition(0, -500);
-
-	// player sample
-	//player = CreateObject<Player_Woo>({ 0, -500 });
-	//cam->transform->SetPosition(player->transform->GetPosition());
-
-	// boss
+	// [Boss]
 	//boss = CreateObject<Boss>();
 
-	// hon
-	//honA1 = CreateObject<HonA>({ -200, -500 });
-	//honA2 = CreateObject<HonA>({ -500, -300 });
+	// [Hon]
+	honA1 = CreateObject<HonA>({ -200, -500 });
+	honA2 = CreateObject<HonA>({ -500, -300 });
 	honB1 = CreateObject<HonB>({ 0, 200 });
-	//honB2 = CreateObject<HonB>({ 200, -300 });
+	honB2 = CreateObject<HonB>({ 200, -300 });
 	honC1 = CreateObject<HonC>({ 0, -400 });
-	//honC2 = CreateObject<HonC>({ -200, -100 });
-	//honC3 = CreateObject<HonC>({ -200, 200});
-	//honD1 = CreateObject<HonD>({ 100, 400 });
-	//honD2 = CreateObject<HonD>({ -100, 400 });
+	honC2 = CreateObject<HonC>({ -200, -100 });
+	honC3 = CreateObject<HonC>({ -200, 200});
+	honD1 = CreateObject<HonD>({ 100, 400 });
+	honD2 = CreateObject<HonD>({ -100, 400 });
 
-	// map sample
-	map_woo = CreateObject<Map_Woo>({ 0, -900 });
-	/*ground1 = CreateObject<Map_Woo>({ 100, -700 });
-	ground2 = CreateObject<Map_Woo>({ -300, -700 });
-	ground3 = CreateObject<Map_Woo>({ 300, -500 });
-	ground1->collider->size = {100,20};
-	ground2->collider->size = { 100,20 };
-	ground3->collider->size = { 100,20 };
+	// [BackGround Map]
+	mapBackGround = CreateObject<MapBackGround>();
 
-	ground1->collider->isFlatform = true;
-	ground2->collider->isFlatform = true;
-	ground3->collider->isFlatform = true;*/
+	// [Ground Sample]
+	ground = CreateObject<Map_Woo>({ 0, -800 });
 
-	// ui test
-	/*parent = CreateObject<UI_Image>();
-	child = CreateObject<UI_Image>();
-	parent->rectTransform->SetPosition(100, 0);
-	child->rectTransform->SetParent(parent->rectTransform);
-	child->rectTransform->SetPosition(100, 0);
 
-	child->imageRenderer->SetAlpha(0.1);*/
-
-	//button = CreateObject<UI_Button>();
-
+	/*--------------------------------------------------*/
+	/* ¼±¹ÎÀÌ²¨ */
 	// [ player ] 
-	player = CreateObject<Player>();
+	player = CreateObject<Player>({300,0});
 
 	// [ playerAttack_Parent ]
 	playerAttack_Parent = CreateObject<GameObject>();
@@ -89,29 +58,6 @@ void Woo_Scene::Awake()
 	playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // ÇÃ·¹ÀÌ¾î FSM¿¡ ¿¬°á
 
-	// [ wall_r ]
-	wall_r = CreateObject<GameObject>();
-	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(850.0f, -500.0f);;
-
-	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
-	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
-
-	wall_r_col = wall_r->AddComponent<BoxCollider>();
-	wall_r_col->size = { 30.0f, 750.0f };
-
-
-	// [ wall_l ]
-	wall_l = CreateObject<GameObject>();
-	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-850.0f, -500.0f);;
-
-	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
-	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
-
-	wall_l_col = wall_l->AddComponent<BoxCollider>();
-	wall_l_col->size = { 30.0f, 750.0f };
-
 	// camera tartget
 	Camera* camera = cam->GetComponent<Camera>();
 	camera->SetTarget(player->transform);
@@ -124,38 +70,9 @@ void Woo_Scene::Awake()
 	mapRect.size = { 2560, 1920 }; // map position
 	camera->SetMapCondition(mapRect);
 
-	// yunmo!
-	npc = CreateObject<NPC>();
-
+	/* À±¸ðÇÜ²¨ */
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
-	playUI->timer_Text = CreateObject<UI_Text>();
-	playUI->stop_Button = CreateObject<UI_Button>();
-	playUI->quest_Image = CreateObject<UI_Image>();
-	playUI->quest_Text = CreateObject<UI_Text>();
-	playUI->chat_Image = CreateObject<UI_Image>();
-	playUI->chat_Text = CreateObject<UI_Text>();
-	playUI->chat_Button = CreateObject<UI_Button>();
-	playUI->hon_Image = CreateObject<UI_Image>();
-	playUI->hon_Text = CreateObject<UI_Text>();
-	playUI->skill1_Image = CreateObject<UI_Image>();
-	playUI->skill1_Text = CreateObject<UI_Text>();
-	playUI->skill2_Image = CreateObject<UI_Image>();
-	playUI->waveInfo_Text = CreateObject<UI_Text>();
-	playUI->tooltip_Image = CreateObject<UI_Image>();
-
-	playUI->skillWindow_Image = CreateObject<UI_Image>();
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
-	playUI->skillHon_Image = CreateObject<UI_Image>();
-	playUI->skillHon_Text = CreateObject<UI_Text>();
 }
 
 void Woo_Scene::Start()
@@ -169,11 +86,6 @@ void Woo_Scene::Update()
 {
 	// game object -> Update()
 	__super::Update();
-
-	// camera test
-	// ÀÌ·± ´À³¦¿¡´Ù°¡ offset, offset limit ÁÖ±â
-	//Vector2 dir = (player->transform->GetPosition() - cam->transform->GetPosition()).Normalized();
-	//cam->transform->Translate(dir * 100 * Time::GetDeltaTime());
 
 	// scene change
 	if (Input::GetKeyDown('1'))
@@ -204,10 +116,6 @@ void Woo_Scene::Update()
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
-
-	// AABB ±×¸®±â 
-	wall_r_col->DebugColliderDraw();
-	wall_l_col->DebugColliderDraw();
 }
 
 void Woo_Scene::Exit()

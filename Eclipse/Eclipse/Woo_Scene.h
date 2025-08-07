@@ -13,6 +13,8 @@
 #include "HonC.h"
 #include "HonD.h"
 
+#include "MapBackGround.h"
+
 #include "Player.h"
 #include "playerAttackArea.h"
 
@@ -26,12 +28,7 @@ class Woo_Scene : public Scene
 private:
 	GameObject* cam;
 	UI_Text* title_text;
-	GameObject* map;
-	Map_Woo* map_woo;
-	Map_Woo* ground1;
-	Map_Woo* ground2;
-	Map_Woo* ground3;
-	
+
 	// Boss
 	Boss* boss;
 
@@ -46,27 +43,25 @@ private:
 	HonD* honD1;
 	HonD* honD2;
 
+	// background
+	MapBackGround* mapBackGround;
+
+	// ground endline
+	Map_Woo* ground;
+
+
+	/* ¿±∏«‹ ø¿∫Í¡ß∆Æ */
 	// UI
 	NPC* npc;
 	PlayUI* playUI;
-
-	// player sample
-	//Player_Woo* player;
-
-	// rect parent pivot test
-	/*UI_Image* parent;
-	UI_Image* child;*/
-
-	// button new event test
-	//UI_Button* button;
 
 	/* º±πŒ¿Ã ø¿∫Í¡ß∆Æ */
 	GameObject* wall_r;
 	GameObject* wall_l;
 
-	Player* player;						// Parent
-	GameObject* playerAttack_Parent;	// Parent - Child
-	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
+	Player* player;	
+	GameObject* playerAttack_Parent;
+	PlayerAttackArea* playerAttackArea; 
 
 	// component 
 	BoxCollider* wall_r_col;

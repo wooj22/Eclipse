@@ -110,15 +110,15 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::A:		// 연쇄 반응 C-A
 		{
 			// hp cheak
-			TakeDamage();
-			otherController->TakeDamage();
+			TakeDamage(1);
+			otherController->TakeDamage(1);
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
 			// score
 			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
-			GameManager::Get().cainCount++;
+			GameManager::Get().ChangeQuestCount(2);
 
 			// collision move start (reset)
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
@@ -145,14 +145,14 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
-			GameManager::Get().cainCount++;
+			GameManager::Get().ChangeQuestCount(2);
 
 			// collision action
 			// hon b 겹침 x
 			honCB_dir = other->gameObject->transform->GetWorldPosition() - tr->GetWorldPosition();
 
-			TakeDamage();
-			otherController->TakeDamage();
+			TakeDamage(1);
+			otherController->TakeDamage(1);
 			break;
 		}
 		case HonType::C:		// 연쇄 반응 C-C
@@ -161,7 +161,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
-			GameManager::Get().cainCount++;
+			GameManager::Get().ChangeQuestCount(2);
 
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();
@@ -177,8 +177,8 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				}
 			}
 
-			if (!other->gameObject->IsDestroyed()) other->gameObject->Destroy();
-			gameObject->Destroy();
+			if (!other->gameObject->IsDestroyed()) otherController->TakeDamage(3);
+			TakeDamage(3);
 			break;
 		}
 		default:
@@ -202,11 +202,8 @@ void HonCController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 // Player Attack
 void HonCController::TakeDamageByPlayer()
 {
-	// score
-	if (hp == 1) GameManager::Get().ChangeHonCount(1);
-
 	// collision acttion
 	CollisionStart();
 	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-	TakeDamage();
+	TakeDamage(1);
 }

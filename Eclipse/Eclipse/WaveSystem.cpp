@@ -157,7 +157,7 @@ void WaveSystem::Update()
         if (m_gameManager)
         {
             m_gameManager->isWave = false;
-            m_gameManager->g_playUI->chat->SetCondition(ChatCondition::Success);
+			m_gameManager->FinishWave();
         }
         m_currentWaveState = WaveState::IDLE;
         m_waveStartCheck = true;
