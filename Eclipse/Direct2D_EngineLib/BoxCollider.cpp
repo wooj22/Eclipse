@@ -140,9 +140,9 @@ bool BoxCollider::CheckAABBCollision(BoxCollider* other, ContactInfo& contact)
         BoxCollider* flatform = isFlatform ? this : other;
         BoxCollider* otherBox = (flatform == this) ? other : this;
 
-        // normal.y -1 x
+        // normal.y -1
         Vector2 platformNormal = (flatform == this) ? contact.normal : -contact.normal;
-        if (platformNormal != Vector2(0, -1))
+        if (platformNormal.y > 0)
             return false;
 
         // flatformDepthThreshold
@@ -194,7 +194,7 @@ bool BoxCollider::CheckCircleCollision(CircleCollider* other, ContactInfo& conta
     if (isFlatform)
     {
         /// normal.y -1
-        if (contact.normal != Vector2(0, -1))
+        if (contact.normal.y >0)
             return false;
 
         // flatformDepthThreshold
