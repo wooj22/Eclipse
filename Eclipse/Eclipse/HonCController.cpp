@@ -112,7 +112,12 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hp cheak
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed())
+			{
+				// score
+				GameManager::Get().ChangeHonCount(1);
+				return;
+			}
 
 			// score
 			GameManager::Get().ChangeHonCount(1);
