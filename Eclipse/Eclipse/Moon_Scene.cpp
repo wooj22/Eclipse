@@ -121,10 +121,6 @@ void Moon_Scene::Awake()
 
 
 	// [ UI ] 
-
-	npc = CreateObject<NPC>({ 0,-800 });
-
-
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
 

@@ -2,6 +2,7 @@
 #include "PlayUI.h"
 #include "Quest.h"
 
+
 void GameManager::UnInit()
 {
 	g_playUI = nullptr;
@@ -200,4 +201,25 @@ void GameManager::ChangeQuestCount(int waveidx)
 	{
 		g_playUI->quest->RefreshQuestCountText(questCount);
 	}
+}
+
+
+
+float GameManager::GetSkillBonus(SkillType type)
+{
+	auto it = skillTree.find(type);
+	if (it == skillTree.end()) return 0.0f;
+
+	int level = it->second.unlockLevel;
+
+	auto valIt = skillValue.find(type);
+	if (valIt == skillValue.end()) return 0.0f;
+
+	const std::vector<float>& values = valIt->second;
+
+	if (level <= 0 || values.empty()) return 0.0f;
+
+	// 배열 범위 초과하지 않도록
+	int index = clamp(level - 1, 0, static_cast<int>(values.size()) - 1);
+	return values[index];
 }

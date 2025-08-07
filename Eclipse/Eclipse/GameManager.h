@@ -137,4 +137,7 @@ public:
 
 	// 퀘스트 관련 함수
 	void ChangeQuestCount(int waveidx);
+
+	// 스킬 수치 값 
+	float GetSkillBonus(SkillType type);
 };
