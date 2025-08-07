@@ -9,8 +9,8 @@ void Woo_Scene::Awake()
 	cam->AddComponent<Transform>();
 	cam->AddComponent<Camera>(1920, 1080);
 
-	// create gameobject
-	// title sample
+	// gameobject
+	// [Title Sample]
 	title_text = CreateObject<UI_Text>();
 	title_text->rectTransform->SetPosition(0, 500);
 	title_text->rectTransform->SetSize(500, 100);
@@ -18,27 +18,11 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::MediumPurple));
 	title_text->screenTextRenderer->SetText(L"WooScene ´ö¿Â°øÁÖÃ¼");
 	title_text->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
-	//title_text->screenTextRenderer->SetAlpha(0.5);
 
-	// background sample
-	map = CreateObject<GameObject>();
-	map->AddComponent<Transform>();
-	auto sr = map->AddComponent<SpriteRenderer>();
-	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/MapBackground.jpg");
-	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "MapBackground");
-	sr->sprite = new_sprite;
-	sr->layer = -1;
-	map->transform->Scaleing(2.5, 2.5);
-	map->transform->SetPosition(0, -500);
-
-	// player sample
-	//player = CreateObject<Player_Woo>({ 0, -500 });
-	//cam->transform->SetPosition(player->transform->GetPosition());
-
-	// boss
+	// [Boss]
 	//boss = CreateObject<Boss>();
 
-	// hon
+	// [Hon]
 	//honA1 = CreateObject<HonA>({ -200, -500 });
 	//honA2 = CreateObject<HonA>({ -500, -300 });
 	honB1 = CreateObject<HonB>({ 0, 200 });
@@ -49,30 +33,26 @@ void Woo_Scene::Awake()
 	//honD1 = CreateObject<HonD>({ 100, 400 });
 	//honD2 = CreateObject<HonD>({ -100, 400 });
 
-	// map sample
-	map_woo = CreateObject<Map_Woo>({ 0, -900 });
-	/*ground1 = CreateObject<Map_Woo>({ 100, -700 });
-	ground2 = CreateObject<Map_Woo>({ -300, -700 });
-	ground3 = CreateObject<Map_Woo>({ 300, -500 });
-	ground1->collider->size = {100,20};
-	ground2->collider->size = { 100,20 };
-	ground3->collider->size = { 100,20 };
 
-	ground1->collider->isFlatform = true;
-	ground2->collider->isFlatform = true;
-	ground3->collider->isFlatform = true;*/
+	// [BackGround Map]
+	mapBackGround = CreateObject<MapBackGround>();
+	mapBackGround->backGround00_Sky = CreateObject<BackGround00_Sky>();
+	mapBackGround->backGround01_Moon = CreateObject<BackGround01_Moon>();
+	mapBackGround->backGround02_Mount = CreateObject<BackGround02_Mount>();
+	mapBackGround->backGround03_Tree = CreateObject<BackGround03_Tree>();
+	mapBackGround->backGround04_Grass = CreateObject<BackGround04_Grass>();
+	mapBackGround->backGround05_Ground = CreateObject<BackGround05_Ground>();
+	mapBackGround->backGround06_House = CreateObject<BackGround06_House>();
+	mapBackGround->backGround07_Trash = CreateObject<BackGround07_Trash>();
+	mapBackGround->backGround08_Light = CreateObject<BackGround08_Light>();
+	mapBackGround->backGround09_Shadow = CreateObject<BackGround09_Shadow>();
 
-	// ui test
-	/*parent = CreateObject<UI_Image>();
-	child = CreateObject<UI_Image>();
-	parent->rectTransform->SetPosition(100, 0);
-	child->rectTransform->SetParent(parent->rectTransform);
-	child->rectTransform->SetPosition(100, 0);
+	// [Ground Sample]
+	ground = CreateObject<Map_Woo>({ 0, -900 });
 
-	child->imageRenderer->SetAlpha(0.1);*/
 
-	//button = CreateObject<UI_Button>();
-
+	/*--------------------------------------------------*/
+	/* ¼±¹ÎÀÌ²¨ */
 	// [ player ] 
 	player = CreateObject<Player>();
 
@@ -89,28 +69,27 @@ void Woo_Scene::Awake()
 	playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // ÇÃ·¹ÀÌ¾î FSM¿¡ ¿¬°á
 
-	// [ wall_r ]
-	wall_r = CreateObject<GameObject>();
-	wall_r->name = "Wall";
-	wall_r->AddComponent<Transform>()->SetPosition(850.0f, -500.0f);;
+	//// [ wall_r ]
+	//wall_r = CreateObject<GameObject>();
+	//wall_r->name = "Wall";
+	//wall_r->AddComponent<Transform>()->SetPosition(850.0f, -500.0f);;
 
-	auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
-	wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
+	//auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
+	//wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
-	wall_r_col = wall_r->AddComponent<BoxCollider>();
-	wall_r_col->size = { 30.0f, 750.0f };
+	//wall_r_col = wall_r->AddComponent<BoxCollider>();
+	//wall_r_col->size = { 30.0f, 750.0f };
 
+	//// [ wall_l ]
+	//wall_l = CreateObject<GameObject>();
+	//wall_l->name = "Wall";
+	//wall_l->AddComponent<Transform>()->SetPosition(-850.0f, -500.0f);;
 
-	// [ wall_l ]
-	wall_l = CreateObject<GameObject>();
-	wall_l->name = "Wall";
-	wall_l->AddComponent<Transform>()->SetPosition(-850.0f, -500.0f);;
+	//auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
+	//wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
 
-	auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
-	wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
-
-	wall_l_col = wall_l->AddComponent<BoxCollider>();
-	wall_l_col->size = { 30.0f, 750.0f };
+	//wall_l_col = wall_l->AddComponent<BoxCollider>();
+	//wall_l_col->size = { 30.0f, 750.0f };
 
 	// camera tartget
 	Camera* camera = cam->GetComponent<Camera>();
@@ -124,8 +103,8 @@ void Woo_Scene::Awake()
 	mapRect.size = { 2560, 1920 }; // map position
 	camera->SetMapCondition(mapRect);
 
-	// yunmo!
-	npc = CreateObject<NPC>();
+	/* À±¸ðÇÜ²¨ */
+	npc = CreateObject<NPC>({ -600, -700 });
 
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
@@ -206,8 +185,8 @@ void Woo_Scene::Update()
 	}
 
 	// AABB ±×¸®±â 
-	wall_r_col->DebugColliderDraw();
-	wall_l_col->DebugColliderDraw();
+	//wall_r_col->DebugColliderDraw();
+	//wall_l_col->DebugColliderDraw();
 }
 
 void Woo_Scene::Exit()
