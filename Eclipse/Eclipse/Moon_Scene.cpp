@@ -56,11 +56,11 @@ void Moon_Scene::Awake()
 	ground->AddComponent<Transform>()->SetPosition(0.0f, -800.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
-	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Ground.png"), "Ground");
+	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/long_platform_grass.png"), "Ground");
 	ground_sr->layer = 0;
 
 	ground_col = ground->AddComponent<BoxCollider>();
-	ground_col->size = { 1920.0f, 50.0f };
+	ground_col->size = { 1920.0f, 90.0f };
 	ground_col->isFlatform = true;
 
 
@@ -106,13 +106,14 @@ void Moon_Scene::Awake()
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
 	platform2->tag = "platform2";
-	platform2->AddComponent<Transform>()->SetPosition(200.0f, -420.0f);
+	platform2->AddComponent<Transform>()->SetPosition(200.0f, -620.0f);
+	platform2->GetComponent<Transform>()->SetScale(0.6f, 0.6f);
 
 	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();
-	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform.png"), "Platform");
+	platform2_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/short_platform.png"), "Platform");
 
 	platform2_col = platform2->AddComponent<BoxCollider>();
-	platform2_col->size = { 200.0f, 30.0f };
+	platform2_col->size = { 500.0f, 95.0f };
 	platform2_col->isFlatform = true;
 	
 	// boundary condition
@@ -187,7 +188,7 @@ void Moon_Scene::Update()
 	}
 
 	// AABB ±×¸®±â 
-	ground_col->DebugColliderDraw();
+	// ground_col->DebugColliderDraw();
 	wall_r_col->DebugColliderDraw();
 	wall_l_col->DebugColliderDraw();
 	// platform1_col->DebugColliderDraw();

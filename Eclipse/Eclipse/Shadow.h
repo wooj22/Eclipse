@@ -18,11 +18,11 @@ public:
 
     void Awake() override
     {
-        transform-> SetScale(0.6, 0.5);
+        transform-> SetScale(0.6, 0.6);
         spriteRenderer->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Shadow.png"), "Shadow");
         spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
         spriteRenderer->layer = 2; 
-        spriteRenderer->SetAlpha(0.5f);
+        // spriteRenderer->SetAlpha(0.5f);
     }
 
     void Update() override

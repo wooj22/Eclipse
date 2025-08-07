@@ -133,14 +133,14 @@ public:
 		if (!player_Shadow->GetComponent<SpriteRenderer>()->IsEnabled())
 			player_Shadow->GetComponent<SpriteRenderer>()->SetEnabled(true);
 
-		float alpha = 0.5f - (distance / maxDistance);
-		alpha = clamp(alpha, 0.0f, 0.5f);
+		float alpha = 1.0f - (distance / maxDistance);
+		alpha = clamp(alpha, 0.0f, 1.0f);
 
 		
 		player_Shadow->GetComponent<SpriteRenderer>()->SetAlpha(alpha);
 
-		if(spriteRenderer->flipX)  player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x - 15.0f , hit.point.y - 5.0f });
-		else player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x + 15.0f , hit.point.y - 5.0f });
+		if(spriteRenderer->flipX)  player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x - 15.0f , hit.point.y - 7.0f });
+		else player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x + 15.0f , hit.point.y - 7.0f });
 
 	}
 };
