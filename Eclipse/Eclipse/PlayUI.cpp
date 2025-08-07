@@ -8,11 +8,6 @@
 
 void PlayUI::Awake()
 {  
-
-}
-
-void PlayUI::SceneStart()
-{
 	//해당 씬에 게임 오브젝트 생성
 	timer_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	stop_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
@@ -41,6 +36,10 @@ void PlayUI::SceneStart()
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+}
+
+void PlayUI::SceneStart()
+{
 	
 	// 웨이브 타이머 UI
 	timer_Text->rectTransform->SetPosition(0, 500);
