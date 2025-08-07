@@ -1,5 +1,6 @@
 #include "BulletTime_State.h"
 #include "Attack_State.h"
+#include "Fall_State.h"
 #include "MovementFSM.h"
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
@@ -9,6 +10,7 @@
 #include "../Direct2D_EngineLib/RenderSystem.h"
 #include "../Direct2D_EngineLib/Vector2.h"
 #include "../Direct2D_EngineLib/Camera.h"
+
 
 void BulletTime_State::Enter(MovementFSM* fsm)
 {
@@ -37,10 +39,13 @@ void BulletTime_State::Update(MovementFSM* fsm)
     // [ Idle ] 공격 취소 
     if (fsm->GetPlayerFSM()->GetIsRButton()) 
     { 
-        if (fsm->GetPlayerFSM()->GetIsGround()) fsm->ChangeState(std::make_unique<Idle_State>());
+        // 만약 마우스 왼쪽 누르고 있었으면 무시상태  
+        if (Input::GetKey(VK_LBUTTON)) fsm->GetPlayerFSM()->isAttackIgnore = true;
+
+        if (fsm->GetPlayerFSM()->GetIsGround()) { fsm->ChangeState(std::make_unique<Idle_State>()); return; }
         else
         {
-            // Fall 상태
+            fsm->ChangeState(std::make_unique<Fall_State>()); return;
         }
     }
 
@@ -49,10 +54,13 @@ void BulletTime_State::Update(MovementFSM* fsm)
     {
         Time::SetTimeScale(1.0f); // 시간 복구
 
-        if (fsm->GetPlayerFSM()->GetIsGround()) fsm->ChangeState(std::make_unique<Idle_State>());
+        // 만약 마우스 왼쪽 누르고 있었으면 무시상태  
+        if (Input::GetKey(VK_LBUTTON)) fsm->GetPlayerFSM()->isAttackIgnore = true;
+
+        if (fsm->GetPlayerFSM()->GetIsGround()) { fsm->ChangeState(std::make_unique<Idle_State>()); return; }
         else
         {
-            // Fall 상태
+            fsm->ChangeState(std::make_unique<Fall_State>()); return;
         }
     }
 
@@ -116,6 +124,6 @@ void BulletTime_State::Exit(MovementFSM* fsm)
     OutputDebugStringA("[BulletTime_State] (( 종료 - 불릿 타임 끝 )) \n");
 
     // 복구 
+    Time::SetTimeScale(1.0f);
     fsm->GetPlayerFSM()->SetisBulletFliping(false);
-    Time::SetTimeScale(1.0f); 
 }

@@ -43,27 +43,26 @@ void PlayerFSM::Awake()
 void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
-	// for (int i = 0; i < 3; ++i) 
-	//GameManager::Get().honCount = 1000;
+	GameManager::Get().honCount = 1000;
 
-	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
-	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	//GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
-	//GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
-	//GameManager::Get().LevelUpSkill(SkillType::WallJump);
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp); 
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	GameManager::Get().LevelUpSkill(SkillType::KnockbackDistanceUp);
+	GameManager::Get().LevelUpSkill(SkillType::DoubleJump);
+	GameManager::Get().LevelUpSkill(SkillType::WallJump);
 
-	//GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	//GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
-	//GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
-	//GameManager::Get().LevelUpSkill(SkillType::FastFall);
+	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	GameManager::Get().LevelUpSkill(SkillType::SkillCooldownDown);
+	GameManager::Get().LevelUpSkill(SkillType::JumpAttackExtra);
+	GameManager::Get().LevelUpSkill(SkillType::FastFall);
 
-	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	//GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
-	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	//GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
-	//GameManager::Get().LevelUpSkill(SkillType::Dash);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::MoveSpeedUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::AttackRangeUp);
+	GameManager::Get().LevelUpSkill(SkillType::Dash);
 }
 
 void PlayerFSM::Update()
@@ -143,8 +142,7 @@ void PlayerFSM::FlipXSetting()
 		}
 		else   spriteRenderer->flipX = lastFlipX;  // 속도가 거의 0이면 이전 방향 유지
 	}
-	else   spriteRenderer->flipX = isBulletFlipX;  // BulletTime_State 에서 변수값 조정
-
+	else { OutputDebugStringA("isBulletFliping = true \n"); spriteRenderer->flipX = isBulletFlipX; } // BulletTime_State 에서 변수값 조정 
 }
 
 void PlayerFSM::SpeedSetting()
@@ -272,7 +270,6 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 	if (targetHon)
 	{
 		targetHon->GetComponent<HonController>()->Absorption(); // 흡수 시작할 때 호출 
-		// targetHon->Destroy(); // 흡수(제거)
 
 		isAbsorbSkillActive = true; // 혼 끌어당기기 시작 
 		hasAbsorbedSoul = true;
@@ -291,6 +288,8 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 
 void PlayerFSM::TryUseRelease() // [ 방출 ] 
 {
+	if (!hasAbsorbedSoul) return;
+
 	if (!CanUseRelease())
 	{
 		OutputDebugStringA("[Skill] E 방출 실패 - 저장된 영혼 없음\n");
@@ -301,7 +300,7 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 	int removedCount = 0;
 	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
-		if (!obj) continue;
+		if (!obj || obj == targetHon) continue; // targetHon 제외
 
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist <= releaseEffectRange)
@@ -333,6 +332,8 @@ GameObject* PlayerFSM::FindNearestSoulInRange(float range)
 
 	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
+		if( obj->name == "HonD" ) continue;
+
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist < range && dist < closestDist)
 		{
@@ -454,34 +455,5 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 		isWall = false;
 		if (contact.normal.x == 1)   isWallLeft = false;
 		if (contact.normal.x == -1)  isWallRight = false;
-	}
-}
-
-
-// --- Animator State ----
-void PlayerFSM::UpdateCurrentAnimationByReleaseState()
-{
-	auto anim = GetAnimatorController();
-
-	// 현재 어떤 애니메이션 Bool이 활성화되어 있는지 확인
-	if (isReleaseSkillAvailable)
-	{
-		// 흡수된 상태이므로 Y_Player_ 애니메이션으로 전환
-		if (anim->GetBool("N_Player_Idle")) { anim->SetBool("N_Player_Idle", false); anim->SetBool("Y_Player_Idle", true); }
-		else if (anim->GetBool("N_Player_Walk")) { anim->SetBool("N_Player_Walk", false); anim->SetBool("Y_Player_Walk", true); }
-		else if (anim->GetBool("N_Player_Jump")) { anim->SetBool("N_Player_Jump", false); anim->SetBool("Y_Player_Jump", true); }
-		else if (anim->GetBool("N_Player_Dash")) { anim->SetBool("N_Player_Dash", false); anim->SetBool("Y_Player_Dash", true); }
-		else if (anim->GetBool("N_Player_Hanging")) { anim->SetBool("N_Player_Hanging", false); anim->SetBool("Y_Player_Hanging", true); }
-		else if (anim->GetBool("N_Player_Attack")) { anim->SetBool("N_Player_Attack", false); anim->SetBool("Y_Player_Attack", true); }
-	}
-	else
-	{
-		// 방출 상태 또는 초기 상태 → N_Player_ 애니메이션으로 전환
-		if (anim->GetBool("Y_Player_Idle")) { anim->SetBool("Y_Player_Idle", false); anim->SetBool("N_Player_Idle", true); }
-		else if (anim->GetBool("Y_Player_Walk")) { anim->SetBool("Y_Player_Walk", false); anim->SetBool("N_Player_Walk", true); }
-		else if (anim->GetBool("Y_Player_Jump")) { anim->SetBool("Y_Player_Jump", false); anim->SetBool("N_Player_Jump", true); }
-		else if (anim->GetBool("Y_Player_Dash")) { anim->SetBool("Y_Player_Dash", false); anim->SetBool("N_Player_Dash", true); }
-		else if (anim->GetBool("Y_Player_Hanging")) { anim->SetBool("Y_Player_Hanging", false); anim->SetBool("N_Player_Hanging", true); }
-		else if (anim->GetBool("Y_Player_Attack")) { anim->SetBool("Y_Player_Attack", false); anim->SetBool("N_Player_Attack", true); }
 	}
 }
