@@ -96,7 +96,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
     // 
     float baseMaxDist = fsm->GetPlayerFSM()->maxAttackDistance;
     float bonus = fsm->GetPlayerFSM()->GetAttackRangeBonus(); // 해금 레벨에 따른 거리 증가 
-    float maxDistance = baseMaxDist + bonus;
+    float maxDistance = baseMaxDist * bonus;
 
     Vector2 toMouse = mousePos - playerPos;
     Vector2 direction = toMouse.Normalized();
