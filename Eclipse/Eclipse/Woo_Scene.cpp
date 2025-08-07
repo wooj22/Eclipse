@@ -20,32 +20,21 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	// [Boss]
-	//boss = CreateObject<Boss>();
+	boss = CreateObject<Boss>();
 
 	// [Hon]
-	//honA1 = CreateObject<HonA>({ -200, -500 });
-	//honA2 = CreateObject<HonA>({ -500, -300 });
+	honA1 = CreateObject<HonA>({ -200, -500 });
+	honA2 = CreateObject<HonA>({ -500, -300 });
 	honB1 = CreateObject<HonB>({ 0, 200 });
-	//honB2 = CreateObject<HonB>({ 200, -300 });
+	honB2 = CreateObject<HonB>({ 200, -300 });
 	honC1 = CreateObject<HonC>({ 0, -400 });
-	//honC2 = CreateObject<HonC>({ -200, -100 });
-	//honC3 = CreateObject<HonC>({ -200, 200});
-	//honD1 = CreateObject<HonD>({ 100, 400 });
-	//honD2 = CreateObject<HonD>({ -100, 400 });
-
+	honC2 = CreateObject<HonC>({ -200, -100 });
+	honC3 = CreateObject<HonC>({ -200, 200});
+	honD1 = CreateObject<HonD>({ 100, 400 });
+	honD2 = CreateObject<HonD>({ -100, 400 });
 
 	// [BackGround Map]
 	mapBackGround = CreateObject<MapBackGround>();
-	mapBackGround->backGround00_Sky = CreateObject<BackGround00_Sky>();
-	mapBackGround->backGround01_Moon = CreateObject<BackGround01_Moon>();
-	mapBackGround->backGround02_Mount = CreateObject<BackGround02_Mount>();
-	mapBackGround->backGround03_Tree = CreateObject<BackGround03_Tree>();
-	mapBackGround->backGround04_Grass = CreateObject<BackGround04_Grass>();
-	mapBackGround->backGround05_Ground = CreateObject<BackGround05_Ground>();
-	mapBackGround->backGround06_House = CreateObject<BackGround06_House>();
-	mapBackGround->backGround07_Trash = CreateObject<BackGround07_Trash>();
-	mapBackGround->backGround08_Light = CreateObject<BackGround08_Light>();
-	mapBackGround->backGround09_Shadow = CreateObject<BackGround09_Shadow>();
 
 	// [Ground Sample]
 	ground = CreateObject<Map_Woo>({ 0, -900 });
@@ -69,28 +58,6 @@ void Woo_Scene::Awake()
 	playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
-	//// [ wall_r ]
-	//wall_r = CreateObject<GameObject>();
-	//wall_r->name = "Wall";
-	//wall_r->AddComponent<Transform>()->SetPosition(850.0f, -500.0f);;
-
-	//auto wall_r_sr = wall_r->AddComponent<SpriteRenderer>();
-	//wall_r_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
-
-	//wall_r_col = wall_r->AddComponent<BoxCollider>();
-	//wall_r_col->size = { 30.0f, 750.0f };
-
-	//// [ wall_l ]
-	//wall_l = CreateObject<GameObject>();
-	//wall_l->name = "Wall";
-	//wall_l->AddComponent<Transform>()->SetPosition(-850.0f, -500.0f);;
-
-	//auto wall_l_sr = wall_l->AddComponent<SpriteRenderer>();
-	//wall_l_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Wall.png"), "Wall");
-
-	//wall_l_col = wall_l->AddComponent<BoxCollider>();
-	//wall_l_col->size = { 30.0f, 750.0f };
-
 	// camera tartget
 	Camera* camera = cam->GetComponent<Camera>();
 	camera->SetTarget(player->transform);
@@ -104,37 +71,8 @@ void Woo_Scene::Awake()
 	camera->SetMapCondition(mapRect);
 
 	/* 윤모햄꺼 */
-	npc = CreateObject<NPC>({ -600, -700 });
-
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
-	playUI->timer_Text = CreateObject<UI_Text>();
-	playUI->stop_Button = CreateObject<UI_Button>();
-	playUI->quest_Image = CreateObject<UI_Image>();
-	playUI->quest_Text = CreateObject<UI_Text>();
-	playUI->chat_Image = CreateObject<UI_Image>();
-	playUI->chat_Text = CreateObject<UI_Text>();
-	playUI->chat_Button = CreateObject<UI_Button>();
-	playUI->hon_Image = CreateObject<UI_Image>();
-	playUI->hon_Text = CreateObject<UI_Text>();
-	playUI->skill1_Image = CreateObject<UI_Image>();
-	playUI->skill1_Text = CreateObject<UI_Text>();
-	playUI->skill2_Image = CreateObject<UI_Image>();
-	playUI->waveInfo_Text = CreateObject<UI_Text>();
-	playUI->tooltip_Image = CreateObject<UI_Image>();
-
-	playUI->skillWindow_Image = CreateObject<UI_Image>();
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
-	playUI->skillButtons.push_back(CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
-	playUI->skillHon_Image = CreateObject<UI_Image>();
-	playUI->skillHon_Text = CreateObject<UI_Text>();
 }
 
 void Woo_Scene::Start()
@@ -148,11 +86,6 @@ void Woo_Scene::Update()
 {
 	// game object -> Update()
 	__super::Update();
-
-	// camera test
-	// 이런 느낌에다가 offset, offset limit 주기
-	//Vector2 dir = (player->transform->GetPosition() - cam->transform->GetPosition()).Normalized();
-	//cam->transform->Translate(dir * 100 * Time::GetDeltaTime());
 
 	// scene change
 	if (Input::GetKeyDown('1'))
@@ -183,10 +116,6 @@ void Woo_Scene::Update()
 	{
 		SceneManager::Get().ChangeScene(EclipseApp::END);
 	}
-
-	// AABB 그리기 
-	//wall_r_col->DebugColliderDraw();
-	//wall_l_col->DebugColliderDraw();
 }
 
 void Woo_Scene::Exit()
