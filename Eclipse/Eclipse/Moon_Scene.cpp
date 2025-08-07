@@ -47,6 +47,7 @@ void Moon_Scene::Awake()
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground";
+	ground->tag = "Ground";
 	ground->AddComponent<Transform>()->SetPosition(0.0f, -800.0f);
 
 	auto ground_sr = ground->AddComponent<SpriteRenderer>();
@@ -99,6 +100,7 @@ void Moon_Scene::Awake()
 	// [ Platform2 ]
 	platform2 = CreateObject<GameObject>();
 	platform2->name = "Ground";
+	platform2->tag = "platform2";
 	platform2->AddComponent<Transform>()->SetPosition(200.0f, -420.0f);
 
 	auto platform2_sr = platform2->AddComponent<SpriteRenderer>();

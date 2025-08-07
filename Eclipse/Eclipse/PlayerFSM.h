@@ -11,6 +11,7 @@
 
 #include "GameManager.h"
 
+
 enum class JumpPhase
 {
 	// None,       // 공중에 안뜬 상태
@@ -134,7 +135,7 @@ public:
 		speedDownRate = rate;               
 		isSpeedDown = true;
 
-		OutputDebugStringA("[Debuff] 속도 감소 적용\n");
+		OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
 	}
 
 	bool GetIsWall() const { return isWall; }

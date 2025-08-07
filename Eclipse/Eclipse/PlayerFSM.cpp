@@ -10,6 +10,9 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Camera.h"
 
+#include "../Direct2D_EngineLib/RaycastHit.h"
+#include "../Direct2D_EngineLib/ColliderSystem.h"
+
 #include "Dash_State.h"
 
 #include "GameManager.h"
@@ -67,6 +70,7 @@ void PlayerFSM::Start()
 
 void PlayerFSM::Update()
 {
+	
 	InputSetting(); // input 키값 확인
 
 	// [ Q E 스킬 ]
@@ -100,7 +104,7 @@ void PlayerFSM::Update()
 			speedDownRate = 1.0f; // 원래 속도로 복귀
 			isSpeedDown = false;
 
-			OutputDebugStringA("[Debuff] 속도 감소 해제\n");
+			OutputDebugStringA("[PlayerFSM] 속도 감소 해제\n");
 		}
 	}
 	
@@ -111,6 +115,8 @@ void PlayerFSM::Update()
 	//	std::string name = typeid(*currentState).name();  // 상태 이름 확인
 	//	OutputDebugStringA(("현재 상태: " + name + "\n").c_str());
 	//}
+
+
 }
 
 void PlayerFSM::FixedUpdate()

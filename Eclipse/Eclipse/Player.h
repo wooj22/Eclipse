@@ -14,6 +14,9 @@
 
 class Player : public GameObject
 {
+	Ray ray;
+	RaycastHit hit;
+
 public:
 	// [ components ]
 	Transform* transform;
@@ -72,6 +75,22 @@ public:
 
 	void Update() override
 	{
+		D2D1_POINT_2F start = { 0, 0 };
+		D2D1_POINT_2F end = { 0, -240 };
+		RenderSystem::Get().DebugDrawLine(start, end, transform->GetScreenMatrix(), 2.0f);
+
+		// ray 
+		ray.direction = { Vector2::down };
+		ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
+		hit = ColliderSystem::Get().Raycast(ray, 300);
+
+		if (hit.collider)
+		{
+			// hit.point.y;
+			std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->tag + "\n";
+			OutputDebugStringA(debugStr.c_str());
+		}
+
 		// AABB ¿µ¿ª 
 		collider->DebugColliderDraw();
 	}
