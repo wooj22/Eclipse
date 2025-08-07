@@ -193,9 +193,13 @@ void GameManager::UseRelease()
 
 void GameManager::FinishWave()
 {
-	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
-	if (questState != ChatCondition::Success) questState = ChatCondition::Fail;
-	g_playUI->quest->QuestSuccessCheck();
+	//g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
+
+	if (questState != ChatCondition::Success)
+		g_playUI->quest->QuestFail();
+	else
+		g_playUI->quest->QuestSuccess();
+
 	g_playUI->chat->SetCondition(questState);
 }
 
@@ -208,7 +212,7 @@ void GameManager::ChangeQuestCount(int waveidx)
 		if (questCount >= g_playUI->quest->GetQuestMaxCount())
 		{
 			questState = ChatCondition::Success;
-			g_playUI->quest->QuestSuccessCheck();
+			g_playUI->quest->QuestSuccess();
 		}
 	}
 }
@@ -232,4 +236,11 @@ float GameManager::GetSkillBonus(SkillType type)
 	// 배열 범위 초과하지 않도록
 	int index = clamp(level - 1, 0, static_cast<int>(values.size()) - 1);
 	return values[index];
+}
+
+void GameManager::OnNPCInteraction()
+{
+	g_playUI->ChatSetActive(true);
+	if(questState == ChatCondition::Success)
+		GameManager::Get().ChangeHonCount(g_playUI->quest->QuestReward());
 }

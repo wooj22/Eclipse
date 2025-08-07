@@ -141,4 +141,7 @@ public:
 
 	// 스킬 수치 값 
 	float GetSkillBonus(SkillType type);
+
+	// NPC 관련 함수 - 퀘스트 보상 및 대화창 오픈
+	void OnNPCInteraction();
 };
