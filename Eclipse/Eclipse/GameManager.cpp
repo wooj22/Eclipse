@@ -43,17 +43,17 @@ void GameManager::SkillReset()
 	skillText.clear();
 
 	//스킬 트리 초기화
-	skillTree[SkillType::KnockbackDistanceUp] = { false, 0, 3, SkillType::COUNT, 0, {5,8,10} };
-	skillTree[SkillType::DoubleJump] = { false, 0, 1, SkillType::KnockbackDistanceUp, 3, {10} };
-	skillTree[SkillType::WallJump] = { false, 0, 1, SkillType::DoubleJump, 1, { 15 } };
+	skillTree[SkillType::KnockbackDistanceUp] = { false, 0, 3, SkillType::COUNT, 0, {15,20,30} };
+	skillTree[SkillType::DoubleJump] = { false, 0, 1, SkillType::KnockbackDistanceUp, 3, {25} };
+	skillTree[SkillType::WallJump] = { false, 0, 1, SkillType::DoubleJump, 1, { 30 } };
 
-	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::COUNT, 0,{5,10} };
-	skillTree[SkillType::JumpAttackExtra] = { false, 0, 1, SkillType::SkillCooldownDown, 1,{10} };
-	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::JumpAttackExtra, 1,{15} };
+	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::COUNT, 0,{15,30} };
+	skillTree[SkillType::JumpAttackExtra] = { false, 0, 1, SkillType::SkillCooldownDown, 1,{25} };
+	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::JumpAttackExtra, 1,{ 30 } };
 
-	skillTree[SkillType::MoveSpeedUp] = { false, 0, 3, SkillType::COUNT, 0,{5,8,10} };
-	skillTree[SkillType::AttackRangeUp] = { false, 0, 3, SkillType::MoveSpeedUp, 3,{5,8,10} };
-	skillTree[SkillType::Dash] = { false, 0, 1, SkillType::AttackRangeUp, 3,{15} };
+	skillTree[SkillType::MoveSpeedUp] = { false, 0, 3, SkillType::COUNT, 0,{15,20,30} };
+	skillTree[SkillType::AttackRangeUp] = { false, 0, 3, SkillType::MoveSpeedUp, 3,{15,20,30} };
+	skillTree[SkillType::Dash] = { false, 0, 1, SkillType::AttackRangeUp, 3,{ 30 } };
 
 	//스킬값 초기화
 	skillValue[SkillType::KnockbackDistanceUp] = { 1.05f,1.1f,1.15f };
