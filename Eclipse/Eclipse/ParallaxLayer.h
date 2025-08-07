@@ -1,7 +1,7 @@
 #pragma once
 #include "../Direct2D_EngineLib/Script.h"
 
-// 배경 원경 레이어 패럴럭스 스크롤링
+ /* 맵 전경 원경 패럴랙스 스크롤링 컴포넌트 */
 
 class Transform;
 class Camera;

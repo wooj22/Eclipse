@@ -118,7 +118,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
-			GameManager::Get().cainCount++;
+			GameManager::Get().ChangeQuestCount(2);
 
 			// collision move start (reset)
 			// x기준으로 왼쪽애는 left, 오른쪽애는 right로 direction 설정
@@ -145,7 +145,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
-			GameManager::Get().cainCount++;
+			GameManager::Get().ChangeQuestCount(2);
 
 			// collision action
 			// hon b 겹침 x
@@ -161,7 +161,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
-			GameManager::Get().cainCount++;
+			GameManager::Get().ChangeQuestCount(2);
 
 			// pull position
 			Vector2 pullingPos = tr->GetWorldPosition();

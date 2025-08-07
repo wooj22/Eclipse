@@ -114,7 +114,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
-			GameManager::Get().cainCount++;
+			GameManager::Get().ChangeQuestCount(2);
 
 			// position
 			std::vector<Vector2> offsets = {

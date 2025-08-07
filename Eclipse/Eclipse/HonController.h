@@ -81,7 +81,7 @@ public:
 		hp--;
 		if (hp <= 0) 
 		{
-			GameManager::Get().honKillCount++;		// wave1 quest
+			GameManager::Get().ChangeQuestCount(1);		// wave1 quest
 			gameObject->Destroy();
 		}
 	}

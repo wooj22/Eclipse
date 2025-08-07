@@ -69,7 +69,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	if (other->gameObject->tag == "EndLine")
 	{
 		// wave3 quest
-		GameManager::Get().lunaKillCount++;
+		GameManager::Get().ChangeQuestCount(3);
 
 		gameObject->Destroy();
 	}

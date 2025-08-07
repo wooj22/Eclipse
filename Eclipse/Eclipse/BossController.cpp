@@ -208,7 +208,7 @@ void BossController::Die()
 	isDie = true;
 
 	// wave4 quest
-	GameManager::Get().bossKillCount++;
+	GameManager::Get().ChangeQuestCount(4);
 
 	// TODO :: GameManager 게임 성공 전달
 	// TODO :: die animation? or 연출 or Destroy
