@@ -7,7 +7,7 @@ void Woo_Scene::Awake()
 	// camera init
 	cam = CreateObject<GameObject>();
 	cam->AddComponent<Transform>();
-	cam->AddComponent<Camera>(1920, 1080);
+	cam->AddComponent<Camera>(1920, 1080); 
 
 	// gameobject
 	// [Title Sample]
