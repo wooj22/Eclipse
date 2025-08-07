@@ -106,12 +106,9 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::B :		// ¿¬¼â ¹ÝÀÀ B-B
 		{
 			// hp check
-			TakeDamage();
-			otherController->TakeDamage();
+			TakeDamage(1);
+			otherController->TakeDamage(1);
 			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
-
-			// score
-			GameManager::Get().ChangeHonCount(1);
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
@@ -163,11 +160,8 @@ void HonBController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 // Player Attack
 void HonBController::TakeDamageByPlayer()
 {
-	// score
-	if (hp == 1) GameManager::Get().ChangeHonCount(1);
-
 	// collision acttion
 	CollisionStart();
 	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-	TakeDamage();
+	TakeDamage(1);
 }

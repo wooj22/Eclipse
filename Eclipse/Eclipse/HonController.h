@@ -20,6 +20,8 @@ class HonController : public Script
 {
 public:
 	HonType honType = HonType::NONE;
+	float is2A = false;
+	float isCollisionD = false;
 
 protected:
 	// hon stat
@@ -76,14 +78,41 @@ public:
 	// hp
 	void SetHp(int h) { hp = h; }
 	int GetHp() { return hp; }
-	void TakeDamage()
+	void TakeDamage(int damage)
 	{
-		hp--;
+		hp -= damage;
 		if (hp <= 0) 
 		{
-			GameManager::Get().ChangeQuestCount(1);		// wave1 quest
+			// wave1 quest
+			GameManager::Get().ChangeQuestCount(1);
+			
+			// hon score
+			if (honType == HonType::A)
+			{
+				if(isCollisionD)  GameManager::Get().ChangeHonCount(-1);
+				else if(is2A) GameManager::Get().ChangeHonCount(3);
+				else GameManager::Get().ChangeHonCount(1);
+			}
+			else if (honType == HonType::B)
+			{
+				if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
+				else GameManager::Get().ChangeHonCount(1);
+			}
+			else if (honType == HonType::C)
+			{
+				if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
+				else GameManager::Get().ChangeHonCount(1);
+			}
+			else if (honType == HonType::D) 
+			{
+				GameManager::Get().ChangeHonCount(-1);
+			}
+
 			gameObject->Destroy();
 		}
+
+		// reset
+		isCollisionD = false;
 	}
 
 	// player attack

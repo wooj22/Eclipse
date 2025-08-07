@@ -89,14 +89,12 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
+		HonController* otherController = otherGameObject->GetComponent<HonController>();
 		string honType = otherGameObject->name;
 
-		// score
-		GameManager::Get().ChangeHonCount(-1);
-
 		// collision acttion
-		if(honType == "HonD") otherGameObject->Destroy();
-		else otherGameObject->GetComponent<HonController>()->TakeDamage();
+		otherController->isCollisionD = true;
+		otherController->TakeDamage(1);
 		this->gameObject->Destroy();
 	}
 }
@@ -105,8 +103,5 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 // Player Attack
 void HonDController::TakeDamageByPlayer()
 {
-	// score
-	GameManager::Get().ChangeHonCount(-1);
-
-	gameObject->Destroy();
+	TakeDamage(1);
 }

@@ -20,7 +20,7 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
 
 	// [Boss]
-	boss = CreateObject<Boss>();
+	//boss = CreateObject<Boss>();
 
 	// [Hon]
 	honA1 = CreateObject<HonA>({ -200, -500 });
@@ -37,13 +37,13 @@ void Woo_Scene::Awake()
 	mapBackGround = CreateObject<MapBackGround>();
 
 	// [Ground Sample]
-	ground = CreateObject<Map_Woo>({ 0, -900 });
+	ground = CreateObject<Map_Woo>({ 0, -800 });
 
 
 	/*--------------------------------------------------*/
 	/* ¼±¹ÎÀÌ²¨ */
 	// [ player ] 
-	player = CreateObject<Player>();
+	player = CreateObject<Player>({300,0});
 
 	// [ playerAttack_Parent ]
 	playerAttack_Parent = CreateObject<GameObject>();
