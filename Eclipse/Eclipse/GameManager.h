@@ -92,10 +92,6 @@ public:
 	float waveTime;				// 웨이브에서 넘겨줄 웨이브 타임
 
 	//퀘스트
-	int honKillCount;				// 1웨이브	A,B 체력 0 일때만!
-	int cainCount;					// 2웨이브	A-A, B-B, C-C 연쇄 반응만
-	int lunaKillCount;				// 3웨이브	D 체력 0 일때 
-	int bossKillCount;				// 4웨이브	TODOMO : 추후 보스에서 사용
 	int questCount;
 	ChatCondition questState;
 
@@ -144,4 +140,7 @@ public:
 
 	// NPC 관련 함수 - 퀘스트 보상 및 대화창 오픈
 	void OnNPCInteraction();
+
+	// Boss 관련 함수
+	void ChangeBossHp(float hp);
 };

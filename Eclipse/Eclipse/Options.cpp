@@ -31,7 +31,8 @@ void Options::SceneStart()
 
 
 	window_Image->rectTransform->SetSize(811, 456);
-	window_Image->imageRenderer->layer = 2;
+	window_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(backImagenTexture, "OptionsBackGround");
+	window_Image->imageRenderer->layer = 20;
 
 	close_Button->rectTransform->SetPosition(500, 280);
 	close_Button->rectTransform->SetSize(150, 100);

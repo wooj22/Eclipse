@@ -36,6 +36,7 @@ void PlayUI::Awake()
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
 }
 
 void PlayUI::SceneStart()

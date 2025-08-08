@@ -1,5 +1,7 @@
 #include "GameManager.h"
 #include "PlayUI.h"
+#include "Boss.h"
+#include "BossController.h"
 #include "Quest.h"
 #include "Chat.h"
 
@@ -16,10 +18,6 @@ void GameManager::ReSetData()
 {
 	honCount = 0;
 	waveCount = 0;
-	honKillCount = 0;
-	cainCount = 0;
-	lunaKillCount = 0;
-	bossKillCount = 0;
 	questCount = 0;
 	questState = ChatCondition::None;
 	isWave = false;
@@ -35,10 +33,6 @@ void GameManager::WaveStart()
 	isWave = true;
 	waveCount++;
 
-	honKillCount = 0;
-	cainCount = 0;
-	lunaKillCount = 0;
-	bossKillCount = 0;
 	questCount = 0;
 }
 
@@ -193,7 +187,7 @@ void GameManager::UseRelease()
 
 void GameManager::FinishWave()
 {
-	//g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
+	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
 
 	if (questState != ChatCondition::Success)
 		g_playUI->quest->QuestFail();
@@ -243,4 +237,12 @@ void GameManager::OnNPCInteraction()
 	g_playUI->ChatSetActive(true);
 	if(questState == ChatCondition::Success)
 		GameManager::Get().ChangeHonCount(g_playUI->quest->QuestReward());
+}
+
+void GameManager::ChangeBossHp(float hp)
+{
+	if(hp>0)
+		g_playUI->bossHP->RefreshBossHp(hp);
+	else
+		g_playUI->bossHP->RefreshBossHp(0);
 }
