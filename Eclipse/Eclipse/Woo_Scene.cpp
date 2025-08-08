@@ -1,6 +1,7 @@
 #include "Woo_Scene.h"
 #include "EclipseApp.h"
 #include "../Direct2D_EngineLib/SceneManager.h"
+#include "../Direct2D_EngineLib/GameApp.h"
 
 void Woo_Scene::Awake()
 {

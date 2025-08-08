@@ -1,6 +1,9 @@
 #include "GameApp.h"
 #include "Singleton.h"
 
+// static member init
+bool GameApp::isLoop = true;
+
 /// 윈도우 프로시저
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {

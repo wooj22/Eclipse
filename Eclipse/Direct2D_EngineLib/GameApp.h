@@ -57,9 +57,9 @@ protected:
 	SceneManager sceneManager;
 	ResourceManager resourceManager;
 
-public:
-	bool isLoop = true;
+	static bool isLoop;
 
+public:
 	GameApp(int inputWidth = 1920, int inputHeight = 1080) :
 		width(inputWidth), height(inputHeight), hInstance(nullptr), hWnd(nullptr) { };
 	virtual ~GameApp() = default;
@@ -73,5 +73,10 @@ public:
 	virtual void UnInit();
 
 	virtual void MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+	static void Quit()
+	{
+		isLoop = false;
+	}
 };
 
