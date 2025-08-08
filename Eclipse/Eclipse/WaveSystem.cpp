@@ -298,16 +298,11 @@ void WaveSystem::SetupWave1Pattern()
     // Wave 1: Tutorial - 공중 충돌 방지, 2초 간격으로 통일
     float spawnInterval = 2.0f;
 
-    // 스폰 위치를 미리 계산해서 겹치지 않게 배치
-    std::vector<float> spawnPositions = {
-        -1100.0f, -880.0f, -660.0f, -440.0f, -220.0f, 0.0f, 220.0f, 440.0f, 660.0f, 880.0f, 1100.0f
-    };
-
     for (int i = 0; i < 20; i++)
     {
-        // 한 번에 하나씩 스폰하되 위치를 겹치지 않게 배치
+        // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
         SpawnData data;
-        data.x = spawnPositions[i % spawnPositions.size()]; // 순차적으로 위치 배치
+        data.x = GetRandomSpawnX(); // 랜덤 위치 사용
         data.y = SPAWN_Y;
         data.honType = (i % 2 == 0) ? 0 : 1;  // A, B 번갈아가며 스폰
         data.delayTime = i * spawnInterval;
@@ -323,16 +318,11 @@ void WaveSystem::SetupWave2Pattern()
     // Wave 2: 공중 충돌 방지, 2초 간격으로 통일
     float spawnInterval = 2.0f;
 
-    // 스폰 위치를 미리 계산해서 겹치지 않게 배치
-    std::vector<float> spawnPositions = {
-        -1200.0f, -960.0f, -720.0f, -480.0f, -240.0f, 0.0f, 240.0f, 480.0f, 720.0f, 960.0f, 1200.0f
-    };
-
     for (int i = 0; i < 25; i++)
     {
-        // 한 번에 하나씩 스폰하되 위치를 겹치지 않게 배치
+        // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
         SpawnData data;
-        data.x = spawnPositions[i % spawnPositions.size()]; // 순차적으로 위치 배치
+        data.x = GetRandomSpawnX(); // 랜덤 위치 사용
         data.y = SPAWN_Y;
 
         // HonA, HonB, HonC 순환 패턴
@@ -350,16 +340,11 @@ void WaveSystem::SetupWave3Pattern()
     // Wave 3: 공중 충돌 방지, 2초 간격으로 통일
     float spawnInterval = 2.0f;
 
-    // 더 넓은 스폰 위치로 겹치지 않게 배치
-    std::vector<float> spawnPositions = {
-        -1280.0f, -1120.0f, -960.0f, -800.0f, -640.0f, -480.0f, -320.0f, -160.0f, 0.0f, 160.0f, 320.0f, 480.0f, 640.0f, 800.0f, 960.0f, 1120.0f, 1280.0f
-    };
-
     for (int i = 0; i < 30; i++)
     {
-        // 한 번에 하나씩 스폰하되 위치를 겹치지 않게 배치
+        // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
         SpawnData data;
-        data.x = spawnPositions[i % spawnPositions.size()]; // 순차적으로 위치 배치
+        data.x = GetRandomSpawnX(); // 랜덤 위치 사용
         data.y = SPAWN_Y;
 
         // 모든 타입 포함한 순환 패턴
@@ -470,25 +455,7 @@ void WaveSystem::SpawnHon(int honType, float x, float y)
             rb->useGravity = false;
             rb->isKinematic = true;
         }
-
-        // Set descent speed based on hon type
-        /*auto* controller = newHon->GetComponent<HonController>();
-        if (controller)
-        {
-            float fallDistance = SPAWN_Y + 400.0f;  // 2560 + 400 = 2960
-            float targetFallTime;
-
-            if (honType == 3)  // HonD is 2x faster
-            {
-                targetFallTime = 20.0f;  // Half the time = double speed
-            }
-            else  // HonA, HonB, HonC normal speed
-            {
-                targetFallTime = 30.0f;
-            }
-
-            controller->SetDescentSpeed(fallDistance / targetFallTime);
-        }*/
+               
 
         m_activeHons.push_back(newHon);
         m_spawnedCount++;
