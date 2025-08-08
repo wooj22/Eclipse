@@ -2,9 +2,11 @@
 #include "PlayUI.h"
 #include "Chat.h"
 #include "Quest.h"
+#include "NPC.h"
 #include "EclipseApp.h"
 #include <algorithm>
 #include "../Direct2D_EngineLib/Input.h"
+
 void PlayUI::Awake()
 {  
 	//해당 씬에 게임 오브젝트 생성
@@ -39,6 +41,7 @@ void PlayUI::Awake()
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
+	npc = SceneManager::Get().GetCurrentScene()->CreateObject<NPC>({ 0,-800 });
 }
 
 void PlayUI::SceneStart()

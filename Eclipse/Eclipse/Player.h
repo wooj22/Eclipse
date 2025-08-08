@@ -56,6 +56,7 @@ public:
 		animator = AddComponent<Animator>();
 
 		spriteRenderer->layer = 4;
+		rigidbody->collisionDetection = CollisionDetection::Continuous;
 
 		playerFSM = AddComponent<PlayerFSM>();
 

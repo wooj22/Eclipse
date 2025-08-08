@@ -4,29 +4,57 @@
 
 void PlayScene::Awake()
 {
-	// camera init
-	cam = CreateObject<GameObject>();
-	cam->AddComponent<Transform>();
-	cam->AddComponent<Camera>(1920, 1080);
+	// camera
+	camera = CreateObject<GameObject>();
+	camera->AddComponent<Transform>();
+	auto camCompo = camera->AddComponent<Camera>(1920, 1080);
 
-	// create gameobject
-	backGround = CreateObject<GameObject>();
-	backGround->AddComponent<Transform>();
-	backGround->AddComponent<SpriteRenderer>();
-	auto playbg = ResourceManager::Get().CreateTexture2D("../Resource/mo/PlayBackGround.png");
-	backGround->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(playbg, "PlayBackGround");
-	backGround->GetComponent<Transform>()->SetScale(3, 3);
+	// create object
+	mapBackGround = CreateObject<MapBackGround>();
+
+	// UI
+	playUI = CreateObject<PlayUI>();
+	GameManager::Get().g_playUI = playUI;
+
+	// [ player ] 
+	player = CreateObject<Player>();
+
+	// [ playerAttack_Parent ]
+	playerAttack_Parent = CreateObject<GameObject>();
+	auto playerAttack_Parent_tr = playerAttack_Parent->AddComponent<Transform>();
+	playerAttack_Parent_tr->SetParent(player->transform);
+	playerAttack_Parent_tr->SetPosition(0.0f, 0.0f);
+	player->playerFSM->SetPlayerAttackParent(playerAttack_Parent);
+
+	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
+	playerAttackArea = CreateObject<PlayerAttackArea>();
+	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
+	playerAttackArea->GetComponent<SpriteRenderer>()->SetEnabled(false);
+	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false);
+
+	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+
+	// [ Platform ]
+	platform_map = CreateObject<Platform>();
+
+	// boundary condition
+	Rect mapRect;
+	mapRect.size = { 2560, 1920 };
+
+	// camera target
+	camCompo->SetTarget(player->transform);
+	camCompo->SetTargetTraceSpeed(400.0f);
+	camCompo->SetTargetTraceLimitX(30.0f);
+	camCompo->SetTargetTraceLimitY(100.0f);
+	camCompo->SetMapCondition(mapRect);
 
 	//wave
 	waveSystemObj = CreateObject<GameObject>();
 	waveSystemObj->name = "WaveSystem";
 	waveSystemObj->SetActive(true);  // GameObject 활성화
 	waveSystem = waveSystemObj->AddComponent<WaveSystem>();
+	
 
-	player = CreateObject<Player_Test>();
-
-	playUI = CreateObject<PlayUI>();
-	GameManager::Get().g_playUI = playUI;	
 }
 
 void PlayScene::Start()
@@ -41,82 +69,7 @@ void PlayScene::Update()
 	// game object -> Update()
 	__super::Update();
 
-	// scene change
-	if (Input::GetKeyDown('1'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::MOON);
-	}
-	if (Input::GetKeyDown('2'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::YUNMO);
-	}
-	if (Input::GetKeyDown('3'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::ARON);
-	}
-	if (Input::GetKeyDown('4'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::WOO);
-	}
-	if (Input::GetKeyDown('5'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::MENU);
-	}
-	if (Input::GetKeyDown('6'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::PLAY);
-	}
-	if (Input::GetKeyDown('7'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::END);
-	}
-
-	if (Input::GetKeyDown(VK_F3))
-	{
-		GameManager::Get().ChangeHonCount(149); // ȥ ġƮ
-	}
-
-	if (Input::GetKeyDown(VK_F4))
-	{
-		GameManager::Get().ChangeHonCount(1); // ȥ ġƮ
-	}
-
-	if (Input::GetKeyDown(VK_F5))
-	{
-		GameManager::Get().AllSkillUnlock(); // ��� ��ų �ر� ġƮ
-	}
-
-	if (Input::GetKeyDown(VK_F6))
-	{
-		GameManager::Get().SkillReset();
-	}
-
-	if (Input::GetKeyDown(VK_F7))
-	{
-		GameManager::Get().CanAbsorb();
-	}
-
-	if (Input::GetKeyDown(VK_F8))
-	{
-		GameManager::Get().UseAbsorb();
-		GameManager::Get().absorbCoolTime = 5;
-	}
-
-	if (Input::GetKeyDown(VK_F9))
-	{
-		GameManager::Get().CanRelease();
-	}
-
-	if (Input::GetKeyDown(VK_F10))
-	{
-		GameManager::Get().UseRelease();
-	}
-
-	if (Input::GetKeyDown(VK_F11))
-	{
-		GameManager::Get().isWave = false;
-		GameManager::Get().FinishWave();
-	}
+	
 }
 
 void PlayScene::Exit()
@@ -124,9 +77,4 @@ void PlayScene::Exit()
 	// game object -> destroy()
 	GameManager::Get().ReSetData();
 	__super::Exit();
-}
-
-void PlayScene::ChagneEndScene()
-{
-	SceneManager::Get().ChangeScene(EclipseApp::END);
 }
