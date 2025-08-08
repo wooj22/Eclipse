@@ -59,7 +59,7 @@ void PlayUI::SceneStart()
 
 	// 일시 정지 버튼
 	stop_Button->rectTransform->SetPosition(870, 480);
-	stop_Button->rectTransform->SetSize(50, 50);
+	stop_Button->rectTransform->SetSize(60, 60);
 	auto stopButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/StopButton.png");
 	stop_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(stopButtonTexture, "StopButton");
 

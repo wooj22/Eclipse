@@ -18,43 +18,43 @@ void TitleUI::SceneStart()
 	credit_Button->rectTransform->SetParent(play_Button->rectTransform);
 	end_Button->rectTransform->SetParent(play_Button->rectTransform);
 
-	play_Button->rectTransform->SetPosition(0, 100);
-	play_Button->rectTransform->SetSize(200, 100);
+	play_Button->rectTransform->SetPosition(0, -200);
+	play_Button->rectTransform->SetSize(300, 100);
 	play_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
 	options_Button->rectTransform->SetPosition(0, -100);
-	options_Button->rectTransform->SetSize(200, 100);
+	options_Button->rectTransform->SetSize(300, 100);
 	options_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink,0));
 
 	credit_Button->rectTransform->SetPosition(0, -200);
-	credit_Button->rectTransform->SetSize(200, 100);
+	credit_Button->rectTransform->SetSize(300, 100);
 	credit_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
 	end_Button->rectTransform->SetPosition(0, -300);
-	end_Button->rectTransform->SetSize(200, 100);
+	end_Button->rectTransform->SetSize(300, 100);
 	end_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink,0));
 
 	//TODOMO : 이미지로하면 텍스트는 제거
-	play_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	play_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	play_Button->screenTextRenderer->SetText(L"게임 시작");
-	play_Button->screenTextRenderer->SetFontSize(30);
+	play_Button->screenTextRenderer->SetFontSize(60);
 	play_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
-	options_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	options_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	options_Button->screenTextRenderer->SetText(L"옵션");
-	options_Button->screenTextRenderer->SetFontSize(30);
+	options_Button->screenTextRenderer->SetFontSize(60);
 	options_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
-	credit_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	credit_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	credit_Button->screenTextRenderer->SetText(L"크레딧");
-	credit_Button->screenTextRenderer->SetFontSize(30);
+	credit_Button->screenTextRenderer->SetFontSize(60);
 	credit_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
-	end_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	end_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	end_Button->screenTextRenderer->SetText(L"게임 종료");
-	end_Button->screenTextRenderer->SetFontSize(30);
+	end_Button->screenTextRenderer->SetFontSize(60);
 	end_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 	// 밑줄 이미지
 	underscore_Image->rectTransform->SetPosition(0, -30); // TODOMO : 버튼 이미지 나오면 위치 수정
-	underscore_Image->rectTransform->SetSize(200, 150);
+	underscore_Image->rectTransform->SetSize(300, 150);
 	auto underScoreTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Underscore.png");
 	underscore_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(underScoreTexture, "Underscore");
 	underscore_Image->SetActive(false); // 초기에는 밑줄 이미지 비활성화
@@ -130,6 +130,7 @@ void TitleUI::OpenOptionUI()
 {
 	underscore_Image->rectTransform->SetParent(optionUI->sound_Button->rectTransform);
 	underscore_Image->SetActive(true);
+	underscore_Image->rectTransform->SetSize(130, 150);
 	optionUI->SetActive(true);
 	play_Button->SetActive(false);
 }
