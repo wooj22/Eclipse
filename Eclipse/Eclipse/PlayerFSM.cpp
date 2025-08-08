@@ -397,7 +397,8 @@ void PlayerFSM::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck()
 		&& !GameManager::Get().isWave && Input::GetKey('F'))
 	{
-		GameManager::Get().g_playUI->ChatSetActive(true);
+		// GameManager::Get().g_playUI->ChatSetActive(true);
+		GameManager::Get().OnNPCInteraction();
 	}
 }
 
