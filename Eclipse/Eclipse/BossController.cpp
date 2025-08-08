@@ -196,6 +196,7 @@ void BossController::Attack_DropShell()
 void BossController::TakeDamage(int damage)
 {
 	hp -= damage;
+	GameManager::Get().ChangeBossHp(hp / MAX_HP);
 	if (hp < 0)
 	{
 		hp = 0;

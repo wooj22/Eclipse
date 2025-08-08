@@ -140,4 +140,7 @@ public:
 
 	// NPC 관련 함수 - 퀘스트 보상 및 대화창 오픈
 	void OnNPCInteraction();
+
+	// Boss 관련 함수
+	void ChangeBossHp(float hp);
 };

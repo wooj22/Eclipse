@@ -7,6 +7,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "GameManager.h"
 #include "SkillWindowButton.h"
+#include "BossHp.h"
 
 class Chat;
 class Quest;
@@ -59,6 +60,8 @@ public:
 	std::vector<SkillWindowButton*> skillButtons;
 	UI_Image* skillHon_Image;		// 스킬창 혼 이미지
 	UI_Text* skillHon_Text;			// 스킬창 혼 개수 텍스트
+
+	BossHP* bossHP;
 
 public:
 	// game object cycle
