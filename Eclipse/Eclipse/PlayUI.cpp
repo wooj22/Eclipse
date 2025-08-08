@@ -294,7 +294,7 @@ void PlayUI::Update()
 
 
 
-	if (Input::GetKeyDown(VK_TAB))
+	if (Input::GetKeyDown(VK_TAB)&& chat_Image->IsActive() != true)
 	{
 		if (skillWindow_Image->IsActive())
 		{

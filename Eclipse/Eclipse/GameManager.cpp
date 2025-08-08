@@ -237,6 +237,8 @@ void GameManager::OnNPCInteraction()
 	g_playUI->ChatSetActive(true);
 	if(questState == ChatCondition::Success)
 		GameManager::Get().ChangeHonCount(g_playUI->quest->QuestReward());
+	if (g_playUI->skillWindow_Image->IsActive())
+		g_playUI->skillWindow_Image->SetActive(false);
 }
 
 void GameManager::ChangeBossHp(float hp)
