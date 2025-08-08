@@ -32,7 +32,7 @@ WaveSystem::WaveSystem()
     // Initialize random generator
     auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     m_randomGen = std::mt19937(static_cast<unsigned int>(seed));
-    m_xDistribution = std::uniform_real_distribution<float>(-960.0f + SPAWN_MARGIN, 960.0f - SPAWN_MARGIN);
+    m_xDistribution = std::uniform_real_distribution<float>(-1280.0f + SPAWN_MARGIN, 1280.0f - SPAWN_MARGIN);
 }
 
 WaveSystem::~WaveSystem()
@@ -300,7 +300,7 @@ void WaveSystem::SetupWave1Pattern()
 
     // 스폰 위치를 미리 계산해서 겹치지 않게 배치
     std::vector<float> spawnPositions = {
-        -800.0f, -600.0f, -400.0f, -200.0f, 0.0f, 200.0f, 400.0f, 600.0f, 800.0f
+        -1100.0f, -880.0f, -660.0f, -440.0f, -220.0f, 0.0f, 220.0f, 440.0f, 660.0f, 880.0f, 1100.0f
     };
 
     for (int i = 0; i < 20; i++)
@@ -325,7 +325,7 @@ void WaveSystem::SetupWave2Pattern()
 
     // 스폰 위치를 미리 계산해서 겹치지 않게 배치
     std::vector<float> spawnPositions = {
-        -900.0f, -700.0f, -500.0f, -300.0f, -100.0f, 100.0f, 300.0f, 500.0f, 700.0f, 900.0f
+        -1200.0f, -960.0f, -720.0f, -480.0f, -240.0f, 0.0f, 240.0f, 480.0f, 720.0f, 960.0f, 1200.0f
     };
 
     for (int i = 0; i < 25; i++)
@@ -352,7 +352,7 @@ void WaveSystem::SetupWave3Pattern()
 
     // 더 넓은 스폰 위치로 겹치지 않게 배치
     std::vector<float> spawnPositions = {
-        -960.0f, -800.0f, -640.0f, -480.0f, -320.0f, -160.0f, 0.0f, 160.0f, 320.0f, 480.0f, 640.0f, 800.0f, 960.0f
+        -1280.0f, -1120.0f, -960.0f, -800.0f, -640.0f, -480.0f, -320.0f, -160.0f, 0.0f, 160.0f, 320.0f, 480.0f, 640.0f, 800.0f, 960.0f, 1120.0f, 1280.0f
     };
 
     for (int i = 0; i < 30; i++)
