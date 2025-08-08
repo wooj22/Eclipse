@@ -1,4 +1,5 @@
 #include "PauseWindow.h"
+#include "../Direct2D_EngineLib/GameApp.h"
 
 void PauseWindow::Awake()
 {
@@ -53,12 +54,15 @@ void PauseWindow::SceneStart()
 	continuGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	continuGame_Button->screenTextRenderer->SetText(L"이어하기");
 	continuGame_Button->screenTextRenderer->SetFontSize(30);
+	continuGame_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 	newGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	newGame_Button->screenTextRenderer->SetText(L"처음으로");
 	newGame_Button->screenTextRenderer->SetFontSize(30);
+	newGame_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 	quitGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	quitGame_Button->screenTextRenderer->SetText(L"게임종료");
 	quitGame_Button->screenTextRenderer->SetFontSize(30);
+	quitGame_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 	// 밑줄 이미지
 	underscore_Image->rectTransform->SetPosition(0, -30); // TODOMO : 버튼 이미지 나오면 위치 수정
@@ -79,6 +83,8 @@ void PauseWindow::SceneStart()
 	newGame_Button->button->onClickListeners.AddListener(
 		this, [this]() { SceneManager::Get().ChangeScene(0); });
 
+	quitGame_Button->button->onClickListeners.AddListener(
+		this, []() { GameApp::Quit(); });
 	//추후 게임 종료 추가
 	/*quitGame_Button->button->onClickListeners.AddListener(
 		this, [this]() { SceneManager::Get().ChangeScene(0); });*/

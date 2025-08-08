@@ -51,10 +51,12 @@ void Options::SceneStart()
 	sound_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
 	sound_Button->screenTextRenderer->SetText(L"소리");
 	sound_Button->screenTextRenderer->SetFontSize(30);
+	sound_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 	key_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
 	key_Button->screenTextRenderer->SetText(L"조작");
 	key_Button->screenTextRenderer->SetFontSize(30);
+	key_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 }
 

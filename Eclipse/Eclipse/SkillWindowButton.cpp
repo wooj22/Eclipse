@@ -35,6 +35,7 @@ void SkillWindowButton::SceneStart()
 	const auto& skillvalue = GameManager::Get().skillValue[skillName];
 	const auto& skilltext = GameManager::Get().skillText[skillName];
 
+
 	//이미지 및 폰트 크기에따라 미세 조정 필요
 	skillLevel_Text->rectTransform->SetPosition(0,-50); 
 
@@ -42,6 +43,7 @@ void SkillWindowButton::SceneStart()
 	skillName_Text->screenTextRenderer->SetFontSize(24);
 	skillName_Text->rectTransform->SetSize(250, 50);
 	skillName_Text->rectTransform->SetPosition(GetWidthSize(skillName_Text->rectTransform->GetSize(), skillIcon_Button->rectTransform->GetSize()), 50);
+	skillName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	skillDesc_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillDesc_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);

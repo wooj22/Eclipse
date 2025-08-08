@@ -5,7 +5,6 @@
 #include "EclipseApp.h"
 #include <algorithm>
 #include "../Direct2D_EngineLib/Input.h"
-
 void PlayUI::Awake()
 {  
 	//해당 씬에 게임 오브젝트 생성
@@ -13,6 +12,7 @@ void PlayUI::Awake()
 	stop_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	pauseWindow = SceneManager::Get().GetCurrentScene()->CreateObject<PauseWindow>();
 	quest_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	questName_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	quest_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	questCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	chat_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -26,6 +26,7 @@ void PlayUI::Awake()
 	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	tooltip_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skillWindowName_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
@@ -48,11 +49,13 @@ void PlayUI::SceneStart()
 	timer_Text->rectTransform->SetPosition(0, 500);
 	timer_Text->rectTransform->SetSize(500, 40);
 	timer_Text->screenTextRenderer->SetFontSize(50);
+	timer_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 	waveInfo_Text->rectTransform->SetPosition(0, 400);
 	waveInfo_Text->rectTransform->SetSize(500, 40);
 	waveInfo_Text->screenTextRenderer->SetFontSize(50);
 	waveInfo_Text->SetActive(false);
+	waveInfo_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 	// 일시 정지 버튼
 	stop_Button->rectTransform->SetPosition(870, 480);
@@ -69,13 +72,18 @@ void PlayUI::SceneStart()
 	tooltip_Image->SetActive(false);
 	
 	// 퀘스트 창 UI
+	questName_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Image->rectTransform->SetPosition(800, 0);
 	quest_Image->rectTransform->SetSize(300, 500);
 	auto questImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Quest.png");
 	quest_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(questImageTexture, "Quest");
-	quest_Text->rectTransform->SetSize(200, 0);
+	questName_Text->rectTransform->SetSize(300, 50);
+	questName_Text->rectTransform->SetPosition(0, 50);
+	questName_Text->screenTextRenderer->SetText(L"목표");
+	questName_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	quest_Text->rectTransform->SetSize(200, 50);
 	quest_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	quest_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
 	questCount_Text->rectTransform->SetPosition(0, -50);
@@ -83,6 +91,7 @@ void PlayUI::SceneStart()
 	questCount_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	questCount_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
 	quest = quest_Image->AddComponent<Quest>();
+
 
 	// 대화창 UI
 	chat_Text->rectTransform->SetParent(chat_Image->rectTransform);
@@ -156,6 +165,7 @@ void PlayUI::SceneStart()
 	}
 	skillHon_Image->rectTransform->SetParent(skillWindow_Image->rectTransform);
 	skillHon_Text->rectTransform->SetParent(skillWindow_Image->rectTransform);
+	skillWindowName_Text->rectTransform->SetParent(skillWindow_Image->rectTransform);
 
 	skillWindow_Image->SetActive(false);
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
@@ -189,6 +199,12 @@ void PlayUI::SceneStart()
 	skillHon_Text->screenTextRenderer->SetFontSize(50);
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillHon_Text->screenTextRenderer->SetText(L"x 0");
+
+
+	// 스킬창 제목
+	skillWindowName_Text->rectTransform->SetPosition(-300, 300);
+	skillWindowName_Text->screenTextRenderer->SetText(L"성장");
+	skillWindowName_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 	
 	for (UI_Button* btn : pauseCheckButtos)
@@ -278,7 +294,7 @@ void PlayUI::Update()
 
 
 
-	if (Input::GetKeyDown(VK_TAB))
+	if (Input::GetKeyDown(VK_TAB)&& chat_Image->IsActive() != true)
 	{
 		if (skillWindow_Image->IsActive())
 		{
@@ -298,11 +314,17 @@ void PlayUI::Destroyed()
 }
 
 void PlayUI::ClickChatButton() {
-	if (GameManager::Get().waveCount == 4)
+
+	switch (GameManager::Get().waveCount)
 	{
+	case 3:
+		bossHP->SetActive(true);
+		break;
+	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
+
 	GameManager::Get().WaveStart();
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
