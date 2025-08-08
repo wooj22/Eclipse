@@ -24,7 +24,7 @@ private:
 	// text
 	std::wstring text = L"";
 	float fontSize = 32.0f;
-	std::wstring fontName = L"¸¼Àº °íµñ";
+	std::wstring fontName = L"Noto Serif KR";
 	D2D1_COLOR_F textColor = D2D1::ColorF(D2D1::ColorF::White);
 	int width = 100;
 	int height = 100;

@@ -23,7 +23,7 @@ private:
 	// text
 	std::wstring text = L"";
 	float fontSize = 18.0f;
-	std::wstring fontName = L"Georgia";
+	std::wstring fontName = L"Noto Serif KR";
 	D2D1_COLOR_F textColor = D2D1::ColorF(D2D1::ColorF::White);
 	float alpha = 1.0f;
 
