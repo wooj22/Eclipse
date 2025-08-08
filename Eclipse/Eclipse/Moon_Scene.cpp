@@ -9,7 +9,7 @@ void Moon_Scene::Awake()
 {
 	// [ camera ]
 	cam = CreateObject<GameObject>();
-	cam->AddComponent<Transform>();
+	cam->AddComponent<Transform>()->SetPosition(0.0f, -200.0f);
 	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
 
 	// [BackGround Map]
@@ -41,30 +41,52 @@ void Moon_Scene::Awake()
 
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
-	
 	// [ ground ]
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground"; 
 	ground->tag = "Ground"; 
-	ground->AddComponent<Transform>()->SetPosition(0.0f, -800.0f);
-
-	auto ground_sr = ground->AddComponent<SpriteRenderer>();
-	ground_sr->sprite = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/long_platform_grass.png"), "Ground");
-	ground_sr->layer = 0;
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -1000.0f);
 
 	ground_col = ground->AddComponent<BoxCollider>();
-	ground_col->size = { 1920.0f, 90.0f };
+	ground_col->size = { 2560.0f, 300.0f };
 	ground_col->isFlatform = true;
 
 
+	// 맵 바깥 경계 
+	mapEdge_l = CreateObject<GameObject>();
+	mapEdge_l->AddComponent<Transform>()->SetPosition(-1280.0f - 150.0f, 0.0f);
+	mapEdge_l_col = mapEdge_l->AddComponent<BoxCollider>();
+	mapEdge_l_col->size = { 300.0f, 1920.0f };
 
-	// [ Platform ]
-	platform_short1 = CreateObject<Platform_Short>();
-	platform_short1->GetComponent<Transform>()->SetPosition(0.0f, -200.0f);
+	mapEdge_r = CreateObject<GameObject>();
+	mapEdge_r->AddComponent<Transform>()->SetPosition(1280.0f + 150.0f, 0.0f);
+	mapEdge_r_col = mapEdge_l->AddComponent<BoxCollider>();
+	mapEdge_r_col->size = { 300.0f, 1920.0f };
 
 
 
+	// [ Platform ] 
 
+	platform_long1 = CreateObject<Platform_Long>();
+	platform_long1->GetComponent<Transform>()->SetPosition(-800.0f, -600.0f);
+
+
+	//platform_short1 = CreateObject<Platform_Short>();
+	//platform_short1->GetComponent<Transform>()->SetPosition(-400.0f, -700.0f);
+
+	//platform_middle1 = CreateObject<Platform_Middle>();
+	//platform_middle1->GetComponent<Transform>()->SetPosition(0.0f, -700.0f);
+
+
+
+	//platform_short_grass1 = CreateObject<Platform_Short_Grass>();
+	//platform_short_grass1->GetComponent<Transform>()->SetPosition(-400.0f, -400.0f);
+
+	//platform_middle_grass1 = CreateObject<Platform_Middle_Grass>();
+	//platform_middle_grass1->GetComponent<Transform>()->SetPosition(0.0f, -400.0f);
+
+	//platform_long_grass1 = CreateObject<Platform_Long_Grass>();
+	//platform_long_grass1->GetComponent<Transform>()->SetPosition(600.0f, -100.0f);
 
 
 	
@@ -84,17 +106,18 @@ void Moon_Scene::Awake()
 	playUI = CreateObject<PlayUI>();
 	GameManager::Get().g_playUI = playUI;
 
+	playUI->SetActive(false);
 
 	// [ Hon ]
-	honA1 = CreateObject<HonA>({ -200, 300 });
-	honA2 = CreateObject<HonA>({ -500, 300 });
-	honB1 = CreateObject<HonB>({ 0, 300 });
-	honB2 = CreateObject<HonB>({ 200, 300 });
-	honC1 = CreateObject<HonC>({ -100, 300 });
-	honC2 = CreateObject<HonC>({ -200, 300 });
-	honC3 = CreateObject<HonC>({ -200, 600});
-	honD1 = CreateObject<HonD>({ 100, 800 });
-	honD2 = CreateObject<HonD>({ -100, 800 });
+	//honA1 = CreateObject<HonA>({ -200, 300 });
+	//honA2 = CreateObject<HonA>({ -500, 300 });
+	//honB1 = CreateObject<HonB>({ 0, 300 });
+	//honB2 = CreateObject<HonB>({ 200, 300 });
+	//honC1 = CreateObject<HonC>({ -100, 300 });
+	//honC2 = CreateObject<HonC>({ -200, 300 });
+	//honC3 = CreateObject<HonC>({ -200, 600});
+	//honD1 = CreateObject<HonD>({ 100, 800 });
+	//honD2 = CreateObject<HonD>({ -100, 800 });
 }
 
 void Moon_Scene::Start()
@@ -140,9 +163,9 @@ void Moon_Scene::Update()
 	}
 
 	// AABB 그리기 
-	// ground_col->DebugColliderDraw();
-	// wall_r_col->DebugColliderDraw();
-	// wall_l_col->DebugColliderDraw();
+	ground_col->DebugColliderDraw();
+	mapEdge_l_col->DebugColliderDraw();
+	mapEdge_r_col->DebugColliderDraw();
 	// platform1_col->DebugColliderDraw();
 	// platform2_col->DebugColliderDraw();
 	// playerAttack_col->DebugColliderDraw();

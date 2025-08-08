@@ -19,14 +19,19 @@
 #include "MapBackGround.h"
 
 #include "Platform_Short.h"
+#include "Platform_Middle.h"
+#include "Platform_Long.h"
+#include "Platform_Short_Grass.h"
+#include "Platform_Middle_Grass.h"
+#include "Platform_Long_Grass.h"
 
 class Moon_Scene : public Scene
 {
 private:
-	// background
+	// [ background ]
 	MapBackGround* mapBackGround;
 
-	// player
+	// [ player ]
 	Player* player;						// Parent
 	GameObject* playerAttack_Parent;	// Parent - Child
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
@@ -36,8 +41,20 @@ private:
 	GameObject* cam;
 	GameObject* ground;
 
+	GameObject* mapEdge_l;
+	GameObject* mapEdge_r;
+
 	Platform_Short* platform_short1;
 
+	Platform_Middle* platform_middle1;
+
+	Platform_Long* platform_long1;
+
+	Platform_Short_Grass* platform_short_grass1;
+
+	Platform_Middle_Grass* platform_middle_grass1;
+
+	Platform_Long_Grass* platform_long_grass1;
 
 
 	// [ UI ]
@@ -52,6 +69,9 @@ private:
 	BoxCollider* platform1_col;
 	BoxCollider* platform2_col;
 	BoxCollider* playerAttack_col;
+
+	BoxCollider* mapEdge_l_col;
+	BoxCollider* mapEdge_r_col;
 
 	// Hon
 	HonA* honA1;

@@ -24,10 +24,10 @@ public:
         transform->SetScale(0.5, 0.5);
 
         spriteRenderer->sprite 
-            = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/short_platform.png"), "short_platform");
+            = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Short.png"), "Platform_Short");
         spriteRenderer->layer = 1;
 
-        collider->size = { 580.0f, 95.0f };
+        collider->size = { 580.0f, 100.0f };
         collider->isFlatform = true;
     }
 
@@ -35,5 +35,4 @@ public:
     {
         collider->DebugColliderDraw();
     }
-
 };
