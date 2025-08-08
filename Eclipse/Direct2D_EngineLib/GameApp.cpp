@@ -115,7 +115,7 @@ void GameApp::Update()
 	animatorSystem.Update();
 	transformSystem.Update();
 
-	buttonSystem.Update();
+	uiSystem.Update();
 	renderSystem.Update();
 	cameraSystem.Update();
 	audioSystem.Update();

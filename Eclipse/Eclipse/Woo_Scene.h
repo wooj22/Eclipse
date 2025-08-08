@@ -22,6 +22,9 @@
 #include "SkillWindowButton.h"
 #include "PlayUI.h"
 
+// slider test
+#include "../Direct2D_EngineLib/UI_Slider.h"
+
 
 class Woo_Scene : public Scene
 {
@@ -48,6 +51,9 @@ private:
 
 	// ground endline
 	Map_Woo* ground;
+
+	// slider engine test
+	UI_Slider* ui_slider;
 
 
 	/* À±¸ðÇÜ ¿ÀºêÁ§Æ® */

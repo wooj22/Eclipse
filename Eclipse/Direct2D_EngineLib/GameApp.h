@@ -8,7 +8,7 @@
 #include "ColliderSystem.h"
 #include "PhysicsSystem.h"
 #include "AnimatorSystem.h"
-#include "ButtonSystem.h"
+#include "UISystem.h"
 #include "ScriptSystem.h"
 #include "AudioSystem.h"
 #include "SceneManager.h"
@@ -46,7 +46,7 @@ protected:
 	TransformSystem transformSystem;	// transform, rectTransfrom
 	RenderSystem renderSystem;			// sprite, image, worldText, screenText
 	AnimatorSystem animatorSystem;		// animator
-	ButtonSystem buttonSystem;			// button
+	UISystem uiSystem;					// ui
 	ScriptSystem scriptSystem;			// script
 	ColliderSystem colliderSystem;		// collider
 	PhysicsSystem physicsSystem;		// rigidbody
@@ -66,7 +66,7 @@ public:
 
 	/* Game Life Cycle */
 	virtual void Init();
-	void Update();			// input, time, buttonsystem, transformSystem, scene(gameObject), scriptsystem.Update(), animatorSystem, renderSystem.update, cameraSystem, audioSystem
+	void Update();			// input, time, uiystem, transformSystem, scene(gameObject), scriptsystem.Update(), animatorSystem, renderSystem.update, cameraSystem, audioSystem
 	void FixedUpdate();		// scriptsystem.FixedUpdate(), 물리 관련
 	void Render();			// renderSystem.render
 	void Loop();

@@ -1,7 +1,7 @@
 #pragma once
-#include "Component.h"
+#include "I_UI.h"
 #include "MultiDelegate.h"
-#include "ButtonSystem.h"
+#include "UISystem.h"
 
 /* [Button Conponent]
 * <UI>의 일정 영역의 OnClick() 이벤트를 감시하고 발생시키하는 컴포넌트
@@ -10,7 +10,7 @@
 */
 
 class RectTransform;
-class Button : public Component
+class Button : public I_UI
 {
 private:
     RectTransform* rectTransform; 

@@ -25,10 +25,5 @@ public:
 		button = AddComponent<Button>();
 	}
 	~UI_Button() override { }
-
-	void Awake() override {}
-	void SceneStart() override {}
-	void Update() override {}
-	void Destroyed() override {}
 };
 

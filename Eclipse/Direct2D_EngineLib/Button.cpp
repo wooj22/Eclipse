@@ -8,19 +8,19 @@
 
 void Button::OnEnable_Inner()
 {
-    ButtonSystem::Get().Regist(this);
+    UISystem::Get().Regist(this);
     rectTransform = this->gameObject->rectTransform;
 }
 
 void Button::OnDisable_Inner()
 {
-	ButtonSystem::Get().Unregist(this);
+	UISystem::Get().Unregist(this);
 	rectTransform = nullptr;
 }
 
 void Button::OnDestroy_Inner()
 {
-    ButtonSystem::Get().Unregist(this);
+    UISystem::Get().Unregist(this);
 }
 
 void Button::Update() 

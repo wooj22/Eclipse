@@ -19,10 +19,5 @@ public:
 		imageRenderer = AddComponent <ImageRenderer>(); 
 	}
 	~UI_Image() override {  }
-
-	void Awake() override {}
-	void SceneStart() override {}
-	void Update() override {}
-	void Destroyed() override {}
 };
 

@@ -109,8 +109,9 @@ class CircleCollider;
 class AnimatorSystem;		// animator system
 class Animator;
 
-class ButtonSystem;			// button system
+class UISystem;				// ui system
 class Button;
+class Slider;
 
 class AudioSystem;			// audio system
 class AudoiSource;

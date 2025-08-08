@@ -153,7 +153,7 @@
     <ClInclude Include="AudioSystem.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Button.h" />
-    <ClInclude Include="ButtonSystem.h" />
+    <ClInclude Include="UISystem.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraSystem.h" />
     <ClInclude Include="CircleCollider.h" />
@@ -164,6 +164,7 @@
     <ClInclude Include="ICollider.h" />
     <ClInclude Include="ImageRenderer.h" />
     <ClInclude Include="ITransform.h" />
+    <ClInclude Include="I_UI.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="MultiDelegate.h" />
     <ClInclude Include="Object.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="ScreenTextRenderer.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
+    <ClInclude Include="Slider.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="GameApp.h" />
@@ -188,6 +190,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="UI_Slider.h" />
     <ClInclude Include="UI_Text.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="WorldTextRenderer.h" />
@@ -207,7 +210,7 @@
     <ClCompile Include="AudioSystem.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="ButtonSystem.cpp" />
+    <ClCompile Include="UISystem.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
     <ClCompile Include="CircleCollider.cpp" />
@@ -218,6 +221,7 @@
     <ClCompile Include="ICollider.cpp" />
     <ClCompile Include="ImageRenderer.cpp" />
     <ClCompile Include="ITransform.cpp" />
+    <ClCompile Include="I_UI.cpp" />
     <ClCompile Include="MultiDelegate.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectTable.cpp" />
@@ -236,6 +240,7 @@
     <ClCompile Include="ScreenTextRenderer.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="GameApp.cpp" />
@@ -244,6 +249,7 @@
     <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="UI_Image.cpp" />
+    <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="WorldTextRenderer.cpp" />
