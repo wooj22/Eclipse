@@ -80,7 +80,7 @@ public:
     PlayerJumpClip()
     {
         name = "N_Player_Jump";
-        loop = false;
+        loop = true;
         duration = 1.6f;
 
         const std::string basePath = "../Resource/Moon/Texture/N_Player_Jump/";
@@ -280,7 +280,7 @@ public:
     PlayerJumpClip_Y()
     {
         name = "Y_Player_Jump";
-        loop = false;
+        loop = true;
         duration = 1.6f;
 
         const std::string basePath = "../Resource/Moon/Texture/Y_Player_Jump/";

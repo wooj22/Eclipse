@@ -51,7 +51,7 @@ private:
 	float curSpeed = 0;
 	float walkSpeed = 400.0f;
 	float dashSpeed = 0.0f;
-	float jumpForce = 800.0f;
+	float jumpForce = 900.0f; // 3000.0f; // 900 
 
 	bool isSpeedDownRate = false;
 
@@ -96,7 +96,7 @@ public:
 
  	bool isHolding = false;
 
-	const float bulletTimeThreshold = 0.4f;
+	const float bulletTimeThreshold = 0.2f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
 	const float defaultGravity = 100.0f;    // 기본 중력 
@@ -105,7 +105,7 @@ public:
 	Vector2 MouseWorldPos;					// 실시간 마우스 월드 좌표 
 
 	// attack 
-	float maxAttackDistance = 300.0f;       // 공격 시, 최대 이동 거리
+	float maxAttackDistance = 150.0f;       // 공격 시, 최대 이동 거리 
 	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
 
 	// boss
@@ -190,7 +190,7 @@ public:
 	int airAttackCount = 0;
 
 	// dash 
-	float dashCooldown = 2.0f;         // 대시 쿨타임 (2초)
+	float dashCooldown = 1.5f;         // 대시 쿨타임 (2초)
 	float dashCooldownTimer = 0.0f;    // 대시 쿨타임 타이머
 
 	// jump 

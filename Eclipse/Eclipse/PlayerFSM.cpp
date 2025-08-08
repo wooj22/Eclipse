@@ -48,7 +48,7 @@ void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
 	GameManager::Get().honCount = 1000;
-	// GameManager::Get().AllSkillUnlock();
+	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
@@ -412,7 +412,7 @@ void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		// OutputDebugStringA("Ground과 충돌 했습니다.\n");
+		OutputDebugStringA("Ground과 충돌 했습니다.\n");
 		isGround = true;
 	}
 	else if (other->gameObject->name == "Wall")
@@ -433,7 +433,7 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		// OutputDebugStringA("Ground 빠져나갔음 .\n");
+		OutputDebugStringA("Ground 빠져나갔음 .\n");
 		isGround = false;
 	}
 	else if (other->gameObject->name == "Wall")

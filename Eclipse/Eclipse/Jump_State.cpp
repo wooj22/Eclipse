@@ -76,7 +76,6 @@ void Jump_State::Update(MovementFSM* fsm)
             fsm->ChangeState(std::make_unique<Hanging_State>());
             return;
         }
-       
     }
 
     // [ Attack / Bullet ]
