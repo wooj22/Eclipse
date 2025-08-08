@@ -115,15 +115,15 @@ public:
 		// ray 
 		ray.direction = Vector2::down;
 		ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
-		hit = ColliderSystem::Get().Raycast(ray, 1000);
+		hit = ColliderSystem::Get().Raycast(ray, 5000);
 
-		if (!hit.collider)
+		if (!hit.collider || hit.collider->gameObject->tag == "Player")
 		{
 			player_Shadow->GetComponent<SpriteRenderer>()->SetEnabled(false);
 			return;
 		}
 
-		//std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->tag + " / hitÀÇ ray ÁÂÇ¥ = " + std::to_string(hit.point.y) + "\n";
+		//std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->name + " / hitÀÇ ray ÁÂÇ¥ = " + std::to_string(hit.point.y) + "\n";
 		//OutputDebugStringA(debugStr.c_str());
 
 		float distance = transform->GetWorldPosition().y - hit.point.y;
