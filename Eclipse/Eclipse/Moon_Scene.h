@@ -18,16 +18,7 @@
 #include "Shadow.h"
 #include "MapBackGround.h"
 
-#include "Platform_Short.h"
-#include "Platform_Middle.h"
-#include "Platform_Long.h"
-#include "Platform_Short_Grass.h"
-#include "Platform_Middle_Grass.h"
-#include "Platform_Long_Grass.h"
-#include "BoxObject.h"
-#include "Platform_Wall.h"
-#include "Platform_Wall_Grass.h"
-#include "Cemetery.h"
+#include "Platform.h"
 
 class Moon_Scene : public Scene
 {
@@ -48,21 +39,21 @@ private:
 	GameObject* mapEdge_l;
 	GameObject* mapEdge_r;
 
-	Platform_Short* platform_short1;
+	Platform_Short_Grass* platform_short1_grass;
 	Platform_Short* platform_short2;
 	Platform_Short* platform_short3;
 	Platform_Short* platform_short4;
 	Platform_Short* platform_short5;
 
 	Platform_Middle* platform_middle1;
-	Platform_Middle* platform_middle2;
-	Platform_Middle* platform_middle3;
-	Platform_Middle* platform_middle4;
+	Platform_Middle_Grass* platform_middle2_grass;
+	Platform_Middle_Grass* platform_middle3_grass;
+	Platform_Middle_Grass* platform_middle4_grass;
 	Platform_Middle* platform_middle5;
 	Platform_Middle* platform_middle6;
 
-	Platform_Long* platform_long1;
-	Platform_Long* platform_long2;
+	Platform_Long_Grass* platform_long1_grass;
+	Platform_Long_Grass* platform_long2_grass;
 
 	Platform_Short_Grass* platform_short_grass1;
 	Platform_Middle_Grass* platform_middle_grass1;
@@ -75,12 +66,13 @@ private:
 	BoxObject* box_object3;
 	BoxObject* box_object4;
 
-	Platform_Wall* platform_wall1;
 	Platform_Wall* platform_wall2;
-	Platform_Wall_Grass* platform_wall_grass1;
+	Platform_Wall_Grass* platform_wall1_grass;
 
 	Cemetery* cemetery1;
 	Cemetery* cemetery2;
+	Cemetery* cemetery3;
+
 
 	// [ UI ]
 	 NPC* npc;
