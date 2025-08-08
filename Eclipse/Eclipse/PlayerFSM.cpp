@@ -412,7 +412,7 @@ void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		// OutputDebugStringA("Ground과 충돌 했습니다.\n");
+		OutputDebugStringA("Ground과 충돌 했습니다.\n");
 		isGround = true;
 	}
 	else if (other->gameObject->name == "Wall")
@@ -433,7 +433,7 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		// OutputDebugStringA("Ground 빠져나갔음 .\n");
+		OutputDebugStringA("Ground 빠져나갔음 .\n");
 		isGround = false;
 	}
 	else if (other->gameObject->name == "Wall")
@@ -449,17 +449,21 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 
 float PlayerFSM::GetMoveSpeedBonus() const
 {
-	return GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp); 
+	float bonus = GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp);
+	return (bonus > 0.0f) ? bonus : 1.0f;
 }
 
 float PlayerFSM::GetAttackRangeBonus() const
 {
-	return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
+	// return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
+
+	float bonus = GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
+	return ((bonus) > (1.0f)) ? (bonus) : (1.0f);
 }
 
 float PlayerFSM::GetSkillCooldown() const
 {
 	float baseCooldown = absorbCooldown; // 기본 쿨타임
 	float cooldownReduction = GameManager::Get().GetSkillBonus(SkillType::SkillCooldownDown); 
-	return (((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction)); // std::max
+	return ((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction); // std::max
 } 

@@ -18,7 +18,7 @@ private:
 
     // ¿‹ªÛ
     float afterimageTimer = 0.0f;
-    float afterimageInterval = 0.02f;
+    float afterimageInterval = 0.01f;
 
 public:
     void Enter(MovementFSM* fsm) override;

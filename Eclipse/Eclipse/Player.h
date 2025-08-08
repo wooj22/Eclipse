@@ -83,7 +83,7 @@ public:
 
 		rigidbody->useGravity = true;
 		rigidbody->gravityScale = playerFSM->defaultGravity;
-		rigidbody->mass = 1.3f;
+		rigidbody->mass = 1.4f; // 3.0f; 
 
 		// [ Shadow ]
 		/*player_Shadow = GameObject::FindWithTag("Shadow");

@@ -43,13 +43,13 @@ public:
 		transform->SetScale(3.0f, 3.0f);
 
 		collider->offset = { 0.0f, 20.0f };
-		collider->radius = 60.0f;
+		collider->radius = 45.0f;
 		collider->isTrigger = true;
 	}
 
 	void Update() override
 	{
 		// AABB ¿µ¿ª 
-		// collider->DebugColliderDraw();
+		collider->DebugColliderDraw();
 	}
 };

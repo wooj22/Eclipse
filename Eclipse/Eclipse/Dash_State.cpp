@@ -26,7 +26,7 @@ void Dash_State::Enter(MovementFSM* fsm)
     
     // ´ë½Ã 
     moveBonus = fsm->GetPlayerFSM()->GetMoveSpeedBonus();
-    dashSpeed = (fsm->GetPlayerFSM()->GetWalkSpeed() + moveBonus) * 1.5f; // 150%
+    dashSpeed = (fsm->GetPlayerFSM()->GetWalkSpeed() + moveBonus) * 4.0f; 
 
     inputX = fsm->GetPlayerFSM()->GetInputX();
 

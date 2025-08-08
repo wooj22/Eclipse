@@ -47,10 +47,6 @@ class PlayerWalkClip : public AnimationClip
 public:
     PlayerWalkClip()
     {
-        /*auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Walk.png");
-        LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Walk_Sprites.json");
-        LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Walk_AniClip.json");*/
-
         name = "N_Player_Walk";
         loop = true;
         duration = 1.6f;
@@ -83,12 +79,8 @@ class PlayerJumpClip : public AnimationClip
 public:
     PlayerJumpClip()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Jump.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Jump_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Jump_AniClip.json");
-
         name = "N_Player_Jump";
-        loop = false;
+        loop = true;
         duration = 1.6f;
 
         const std::string basePath = "../Resource/Moon/Texture/N_Player_Jump/";
@@ -118,10 +110,6 @@ class PlayerHangingClip : public AnimationClip
 public:
     PlayerHangingClip()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Jump.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Jump_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Jump_AniClip.json");
-
         name = "N_Player_Hanging";
         loop = true;
         duration = 1.5f;
@@ -153,10 +141,6 @@ class PlayerAttackClip : public AnimationClip
 public:
     PlayerAttackClip()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Attack.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Attack_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Attack_AniClip.json");
-
         name = "N_Player_Attack";
         loop = true;
         duration = 1.0f;
@@ -200,10 +184,6 @@ class PlayerDashClip : public AnimationClip
 public:
     PlayerDashClip()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/N_Player_Dash.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/N_Player_Dash_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/N_Player_Dash_AniClip.json");
-
         name = "N_Player_Dash";
         loop = true;
         duration = 0.5f;
@@ -268,10 +248,6 @@ class PlayerWalkClip_Y : public AnimationClip
 public:
     PlayerWalkClip_Y()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Walk.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Walk_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Walk_AniClip.json");
-
         name = "Y_Player_Walk";
         loop = true;
         duration = 1.6f;
@@ -303,12 +279,8 @@ class PlayerJumpClip_Y : public AnimationClip
 public:
     PlayerJumpClip_Y()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Jump.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Jump_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Jump_AniClip.json");
-
         name = "Y_Player_Jump";
-        loop = false;
+        loop = true;
         duration = 1.6f;
 
         const std::string basePath = "../Resource/Moon/Texture/Y_Player_Jump/";
@@ -338,10 +310,6 @@ class PlayerHangingClip_Y : public AnimationClip
 public:
     PlayerHangingClip_Y()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Jump.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Jump_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Jump_AniClip.json");
-
         name = "Y_Player_Hanging";
         loop = true;
         duration = 1.5f;
@@ -373,10 +341,6 @@ class PlayerAttackClip_Y : public AnimationClip
 public:
     PlayerAttackClip_Y()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Attack.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Attack_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Attack_AniClip.json");
-
         name = "Y_Player_Attack";
         loop = true;
         duration = 1.0f;
@@ -408,10 +372,6 @@ class PlayerDashClip_Y : public AnimationClip
 public:
     PlayerDashClip_Y()
     {
-        //auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Moon/Texture/Y_Player_Dash.png");
-        //LoadSpriteSheetFromJson(texture, "../Resource/Moon/Data/SpriteSheet/Y_Player_Dash_Sprites.json");
-        //LoadAnimationClipFromJson(texture, "../Resource/Moon/Data/AnimationClip/Y_Player_Dash_AniClip.json");
-
         name = "Y_Player_Dash";
         loop = true;
         duration = 0.5f;
