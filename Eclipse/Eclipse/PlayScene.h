@@ -3,27 +3,37 @@
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
-
+#include "MapBackGround.h"
+#include "Player.h"
 #include "PlayUI.h"
-#include "EclipseApp.h"
-#include "NPC.h"
-#include "Player_Test.h"
-#include "SkillWindowButton.h"
+#include "Platform.h"
+#include "playerAttackArea.h"
 #include "WaveSystem.h"
 
 class PlayScene : public Scene
 {
 private:
-	GameObject* cam;
-	UI_Text* title_text;
-	GameObject* backGround;
-	Player_Test* player;
-	NPC* npc;
+	// camera
+	GameObject* camera;
 
-	GameObject* waveSystemObj = nullptr;
-	WaveSystem* waveSystem = nullptr;
+	// background
+	MapBackGround* mapBackGround;
 
+	// UI
 	PlayUI* playUI;
+
+	// player 
+	Player* player;						// Parent
+	GameObject* playerAttack_Parent;	// Parent - Child
+	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
+	Shadow* shadow;
+
+	// Platform 
+	Platform* platform_map;
+	
+	// WaveSystem
+	GameObject* waveSystemObj;
+	WaveSystem* waveSystem;
 
 public:
 	PlayScene() = default;
@@ -33,8 +43,5 @@ public:
 	void Start() override;
 	void Update() override;
 	void Exit() override;
-
-private:
-	void ChagneEndScene();
 };
 

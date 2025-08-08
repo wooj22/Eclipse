@@ -12,6 +12,7 @@
 
 class Chat;
 class Quest;
+class NPC;
 
 
 class PlayUI : public GameObject
@@ -67,6 +68,7 @@ public:
 	UI_Text* skillHon_Text;			// 스킬창 혼 개수 텍스트
 
 	BossHP* bossHP;
+	NPC* npc;
 
 public:
 	// game object cycle
