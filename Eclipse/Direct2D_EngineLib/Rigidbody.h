@@ -23,6 +23,7 @@ class Rigidbody : public Component
 {
 private:
     Transform* transform = nullptr;
+    Vector2 previousPosition = Vector2::zero;
 
 private:
     // ground gravity controll
@@ -62,7 +63,7 @@ private:
     // colliison position correct
     void CorrectPosition(const ContactInfo& contact);
 
-    // turnneling collision continuous detection
+    // CCD (turnneling continuous collision detection)
     void CollisionContinuousDetection();
 
 public:

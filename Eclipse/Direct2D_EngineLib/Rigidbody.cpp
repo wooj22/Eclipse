@@ -1,4 +1,4 @@
-#include "Rigidbody.h"
+﻿#include "Rigidbody.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Time.h"
@@ -23,6 +23,7 @@ void Rigidbody::OnDestroy_Inner()
 void Rigidbody::FixedUpdate()
 {
     if (!transform) return;
+    previousPosition = transform->GetWorldPosition();
 
     if (!isKinematic)
     {
@@ -42,20 +43,20 @@ void Rigidbody::FixedUpdate()
         if (isBlockedDown && velocity.y < 0) velocity.y = 0;
         if (isBlockedUp && velocity.y > 0) velocity.y = 0;
 
-        // collision detection
+        // position update
         switch (collisionDetection)
         {
         case CollisionDetection::Discrete:
+            transform->SetPosition(transform->GetWorldPosition() + velocity * Time::GetFixedDeltaTime());
             break;
+
         case CollisionDetection::Continuous:
             CollisionContinuousDetection();
             break;
+
         default:
             break;
         }
-
-        // position update
-        transform->SetPosition(transform->GetPosition() + velocity * Time::GetFixedDeltaTime());
 
         // reset
         impulse = Vector2::zero;
@@ -79,10 +80,54 @@ void Rigidbody::CorrectPosition(const ContactInfo& contact)
     }
 }
 
-// turnneling collision continuous detection
+// CCD (continuous collision detection)
 void Rigidbody::CollisionContinuousDetection()
 {
+    // Sweep Test
+    // 1. 이전 프레임 위치와 현재 프레임에 이동할 위치 사이를 가상으로 쓸고 지나간다. (+= Step)
+    // 2. ColliderSystem에서 모든 Colldier를 Get해와 해당 오브젝트가 충돌하는 콜라이더가 있는지 체크한다.
+    // 3. 만약 충돌하는 콜라이더가 있다면, 그 충돌한 지점 이전 지점으로 포지션을 지정한다.
 
+    // return
+    if (velocity.SqrMagnitude() < 0.0001f) return;
+
+    Vector2 startPos = previousPosition;
+    Vector2 endPos = startPos + velocity * Time::GetFixedDeltaTime();
+
+    ICollider* myCollider = this->gameObject->GetComponent<ICollider>();
+    if (!myCollider) return;
+
+    // step
+    const int maxSteps = 10;
+    Vector2 step = (endPos - startPos) / maxSteps;
+
+    // sweeeeeeeeep!
+    for (int i = 1; i <= maxSteps; ++i)
+    {
+        Vector2 testPos = startPos + step * i;
+        myCollider->gameObject->transform->SetPosition(testPos);
+        myCollider->UpdateBounds();
+
+        for (ICollider* other : ColliderSystem::Get().GetColliders())
+        {
+            if (other == myCollider || other->isTrigger) continue;
+
+            ContactInfo contact;
+            if (myCollider->isCollision(other, contact))
+            {
+                // 이동경로중에 충돌이 있을 때, 
+                // velocity와 반대 방향의 충돌일 때만 보정
+                if (Vector2::Dot(velocity, contact.normal) < 0)
+                {
+                    CorrectPosition(contact);
+                    return;
+                }
+            }
+        }
+    }
+
+    // 충돌이 없다면 이동하려면 endPos로 이동
+    myCollider->gameObject->transform->SetPosition(endPos);
 }
 
 void Rigidbody::AddForce(const Vector2& force)
