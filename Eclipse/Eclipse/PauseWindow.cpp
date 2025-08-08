@@ -1,4 +1,5 @@
 #include "PauseWindow.h"
+#include "../Direct2D_EngineLib/GameApp.h"
 
 void PauseWindow::Awake()
 {
@@ -79,6 +80,8 @@ void PauseWindow::SceneStart()
 	newGame_Button->button->onClickListeners.AddListener(
 		this, [this]() { SceneManager::Get().ChangeScene(0); });
 
+	quitGame_Button->button->onClickListeners.AddListener(
+		this, []() { GameApp::Quit(); });
 	//추후 게임 종료 추가
 	/*quitGame_Button->button->onClickListeners.AddListener(
 		this, [this]() { SceneManager::Get().ChangeScene(0); });*/

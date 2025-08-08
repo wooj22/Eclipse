@@ -5,7 +5,6 @@
 #include "EclipseApp.h"
 #include <algorithm>
 #include "../Direct2D_EngineLib/Input.h"
-
 void PlayUI::Awake()
 {  
 	//해당 씬에 게임 오브젝트 생성
@@ -298,11 +297,17 @@ void PlayUI::Destroyed()
 }
 
 void PlayUI::ClickChatButton() {
-	if (GameManager::Get().waveCount == 4)
+
+	switch (GameManager::Get().waveCount)
 	{
+	case 3:
+		bossHP->SetActive(true);
+		break;
+	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
+
 	GameManager::Get().WaveStart();
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);

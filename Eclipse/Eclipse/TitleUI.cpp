@@ -1,4 +1,5 @@
 #include "TitleUI.h"
+#include "../Direct2D_EngineLib/GameApp.h"
 
 void TitleUI::Awake()
 {
@@ -77,6 +78,9 @@ void TitleUI::SceneStart()
 
 	optionUI->close_Button->button->onClickListeners.AddListener(
 		this, [this]() { play_Button->SetActive(true); });
+
+	end_Button->button->onClickListeners.AddListener(
+		this, []() { GameApp::Quit(); });
 }
 
 void TitleUI::Update()
