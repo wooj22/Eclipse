@@ -35,6 +35,7 @@ public:
 	UI_Image* skill_Tree;			// 스킬 트리 이미지 추후 기능에 따라 변경 해야함
 
 	UI_Image* quest_Image;			// 퀘스트창 이미지
+	UI_Text* questName_Text;		// 퀘스트창 제목
 	UI_Text* quest_Text;			// 퀘스트창 텍스트
 	UI_Text* questCount_Text;		// 퀘스트 미션 카운트 텍스트
 	Quest* quest;					// 퀘스트 스크립트
@@ -60,6 +61,7 @@ public:
 	UI_Text* tooltipEx_Text;		// 툴팁 설명 텍스트
 
 	UI_Image* skillWindow_Image;	// 스킬 창 이미지
+	UI_Text* skillWindowName_Text;	// 스킬창 이름 텍스트
 	std::vector<SkillWindowButton*> skillButtons;
 	UI_Image* skillHon_Image;		// 스킬창 혼 이미지
 	UI_Text* skillHon_Text;			// 스킬창 혼 개수 텍스트

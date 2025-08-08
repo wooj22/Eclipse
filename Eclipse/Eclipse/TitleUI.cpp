@@ -20,8 +20,7 @@ void TitleUI::SceneStart()
 
 	play_Button->rectTransform->SetPosition(0, 100);
 	play_Button->rectTransform->SetSize(200, 100);
-	auto playButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/PlayButton.png");
-	play_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(playButtonTexture, "PlayButton");
+	play_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
 	options_Button->rectTransform->SetPosition(0, -100);
 	options_Button->rectTransform->SetSize(200, 100);
@@ -36,15 +35,22 @@ void TitleUI::SceneStart()
 	end_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink,0));
 
 	//TODOMO : 이미지로하면 텍스트는 제거
+	play_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	play_Button->screenTextRenderer->SetText(L"게임 시작");
+	play_Button->screenTextRenderer->SetFontSize(30);
+	play_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 	options_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
 	options_Button->screenTextRenderer->SetText(L"옵션");
 	options_Button->screenTextRenderer->SetFontSize(30);
+	options_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 	credit_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
 	credit_Button->screenTextRenderer->SetText(L"크레딧");
 	credit_Button->screenTextRenderer->SetFontSize(30);
+	credit_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 	end_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
 	end_Button->screenTextRenderer->SetText(L"게임 종료");
 	end_Button->screenTextRenderer->SetFontSize(30);
+	end_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
 
 	// 밑줄 이미지
 	underscore_Image->rectTransform->SetPosition(0, -30); // TODOMO : 버튼 이미지 나오면 위치 수정
