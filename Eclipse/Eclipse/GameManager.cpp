@@ -190,7 +190,14 @@ void GameManager::FinishWave()
 	g_playUI->timer_Text->screenTextRenderer->SetText(L"00");
 
 	if (questState != ChatCondition::Success)
+	{
 		g_playUI->quest->QuestFail();
+		if (waveCount == 4)
+		{
+			SceneManager::Get().ChangeScene(6);
+			return;
+		}
+	}
 	else
 		g_playUI->quest->QuestSuccess();
 

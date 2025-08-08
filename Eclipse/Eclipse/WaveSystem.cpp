@@ -99,25 +99,6 @@ void WaveSystem::Update()
             m_destroyedCount++;
             continue;
         }
-
-        Transform* transform = hon->GetComponent<Transform>();
-        if (transform)
-        {
-            Vector2 pos = transform->GetPosition();
-            // Check if reached ground (y < -400)
-            //if (pos.y < -400.0f)
-            //{
-            //    // Remove from vector first, then deactivate
-            //    m_activeHons.erase(m_activeHons.begin() + i);
-            //    m_destroyedCount++;
-            //    hon->SetActive(false);
-            //    
-            //    char debugMsg[256];
-            //    sprintf_s(debugMsg, "Hon reached ground. Active: %d, Destroyed: %d/%d\n", 
-            //        static_cast<int>(m_activeHons.size()), m_destroyedCount, m_spawnedCount);
-            //    OutputDebugStringA(debugMsg);
-            //}
-        }
     }
 
     // Check wave completion
@@ -298,7 +279,7 @@ void WaveSystem::SetupWave1Pattern()
     // Wave 1: Tutorial - 공중 충돌 방지, 2초 간격으로 통일
     float spawnInterval = 2.0f;
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 50; i++)
     {
         // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
         SpawnData data;
@@ -318,7 +299,7 @@ void WaveSystem::SetupWave2Pattern()
     // Wave 2: 공중 충돌 방지, 2초 간격으로 통일
     float spawnInterval = 2.0f;
 
-    for (int i = 0; i < 25; i++)
+    for (int i = 0; i < 50; i++)
     {
         // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
         SpawnData data;
@@ -340,7 +321,7 @@ void WaveSystem::SetupWave3Pattern()
     // Wave 3: 공중 충돌 방지, 2초 간격으로 통일
     float spawnInterval = 2.0f;
 
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < 50; i++)
     {
         // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
         SpawnData data;
