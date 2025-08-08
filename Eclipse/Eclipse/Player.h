@@ -74,7 +74,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(200, 200);
+		transform->SetPosition(-300, -500);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -141,12 +141,9 @@ public:
 		float alpha = 1.0f - (distance / maxDistance);
 		alpha = clamp(alpha, 0.0f, 1.0f);
 
-		
-		player_Shadow->GetComponent<SpriteRenderer>()->SetAlpha(alpha);
-
 		if(spriteRenderer->flipX)  player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x - 15.0f , hit.point.y - 7.0f });
 		else player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x + 15.0f , hit.point.y - 7.0f });
 
+		player_Shadow->GetComponent<SpriteRenderer>()->SetAlpha(alpha);
 	}
 };
-

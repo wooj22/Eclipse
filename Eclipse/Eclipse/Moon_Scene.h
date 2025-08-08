@@ -45,10 +45,20 @@ private:
 	GameObject* mapEdge_r;
 
 	Platform_Short* platform_short1;
+	Platform_Short* platform_short2;
+	Platform_Short* platform_short3;
+	Platform_Short* platform_short4;
+	Platform_Short* platform_short5;
 
 	Platform_Middle* platform_middle1;
+	Platform_Middle* platform_middle2;
+	Platform_Middle* platform_middle3;
+	Platform_Middle* platform_middle4;
+	Platform_Middle* platform_middle5;
+	Platform_Middle* platform_middle6;
 
 	Platform_Long* platform_long1;
+	Platform_Long* platform_long2;
 
 	Platform_Short_Grass* platform_short_grass1;
 
@@ -58,9 +68,9 @@ private:
 
 
 	// [ UI ]
-	NPC* npc;
-	UI_Text* title_text;
-	PlayUI* playUI;
+	 NPC* npc;
+	 UI_Text* title_text;
+	 PlayUI* playUI;
 
 	// component 
 	BoxCollider* ground_col;
