@@ -1,14 +1,14 @@
-#include "ButtonSystem.h"
-#include "Button.h"
+#include "UISystem.h"
+#include "I_UI.h"
 
 // component 등록
-void ButtonSystem::Regist(Button* component)
+void UISystem::Regist(I_UI* component)
 {
 	pending_components.push_back(component);
 }
 
 // component 등록 해제
-void ButtonSystem::Unregist(Button* component)
+void UISystem::Unregist(I_UI* component)
 {
 	// delete
 	for (auto it = components.begin(); it != components.end(); ++it) {
@@ -28,19 +28,19 @@ void ButtonSystem::Unregist(Button* component)
 }
 
 // component system
-void ButtonSystem::Update()
+void UISystem::Update()
 {
 	// pending_components push
-	for (Button* btn : pending_components)
+	for (I_UI* ui : pending_components)
 	{
-		components.push_back(btn);
+		components.push_back(ui);
 	}
 	pending_components.clear();
 
 
 	// update
-	for (Button* btn : components)
+	for (I_UI* ui : components)
 	{
-		btn->Update();
+		ui->Update();
 	}
 }

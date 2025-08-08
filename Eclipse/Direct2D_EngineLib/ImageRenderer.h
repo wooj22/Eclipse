@@ -32,8 +32,8 @@ private:
 
 public:
 	shared_ptr<Sprite> sprite;				// 공유 자원  
-	FillType fillType = FillType::None;
-	float fillAmount = 1.0f;
+	FillType fillType = FillType::None;		// Unlit Sprite만 가능
+	float fillAmount = 1.0f;				// Horizontal : 왼쪽~/ Vertical : 아래~
 
 private:
 	// Fill Box (Empty Sprite)

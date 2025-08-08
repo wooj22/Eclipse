@@ -195,7 +195,7 @@
     <ClInclude Include="Time.h">
       <Filter>헤더 파일\05. StaticSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonSystem.h">
+    <ClInclude Include="UISystem.h">
       <Filter>헤더 파일\04. ComponentSystem</Filter>
     </ClInclude>
     <ClInclude Include="UI_Button.h">
@@ -327,6 +327,12 @@
     <ClInclude Include="AudioSource.h">
       <Filter>헤더 파일\03. Component\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>헤더 파일\03. Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="I_UI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -353,7 +359,7 @@
     <ClCompile Include="Time.cpp">
       <Filter>소스 파일\05. StaticSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonSystem.cpp">
+    <ClCompile Include="UISystem.cpp">
       <Filter>소스 파일\04. ComponentSystem</Filter>
     </ClCompile>
     <ClCompile Include="UI_Button.cpp">
@@ -479,6 +485,12 @@
     </ClCompile>
     <ClCompile Include="AudioSource.cpp">
       <Filter>소스 파일\03. Component\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>소스 파일\03. Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="I_UI.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
