@@ -19,15 +19,6 @@ void MenuScene::Awake()
 	titleUI->underscore_Image = CreateObject<UI_Image>();
 
 	titleUI->optionUI = CreateObject<Options>();
-
-	// title sample
-	title_text = CreateObject<UI_Text>();
-	title_text->rectTransform->SetPosition(0, 500);
-	title_text->rectTransform->SetSize(500, 100);
-	title_text->screenTextRenderer->SetFontSize(50);
-	title_text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-	title_text->screenTextRenderer->SetText(L"Menu Scene");
-
 }
 
 void MenuScene::Start()
