@@ -170,7 +170,9 @@ class AnimationClip;				// "일반 Class" animation clip asset
 /*------------------------------------------------------------------*/
 class Rigidbody;
 
-
+// Collision Detection Mode
+// 1. Discrete(Defualt) : 프레임마다 단순 위치 체크 (빠르게 가면 뚫고갈 수 있음)
+// 2. Continuous : SweepTest를 이용하여 이전 프레임과 현재 프레임의 이동경로상으로 step씩 콜라이더를 밀면서 충돌 검사
 
 
 /*-------------------------------------------------------------------*/
