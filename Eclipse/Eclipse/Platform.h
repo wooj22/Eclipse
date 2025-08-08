@@ -4,6 +4,77 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/BoxCollider.h"
 
+class Platform_Long;
+class Platform_Long_Grass;
+class Platform_Middle;
+class Platform_Middle_Grass;
+class Platform_Short;
+class Platform_Short_Grass;
+class Platform_Wall;
+class Platform_Wall_Grass;
+class BoxObject;
+class Cemetery;
+
+
+class Platform : public GameObject
+{
+public:
+    GameObject* ground;
+
+    GameObject* mapEdge_l;
+    GameObject* mapEdge_r;
+
+    Platform_Short_Grass* platform_short1_grass;
+    Platform_Short* platform_short2;
+    Platform_Short* platform_short3;
+    Platform_Short* platform_short4;
+    Platform_Short* platform_short5;
+
+    Platform_Middle* platform_middle1;
+    Platform_Middle_Grass* platform_middle2_grass;
+    Platform_Middle_Grass* platform_middle3_grass;
+    Platform_Middle_Grass* platform_middle4_grass;
+    Platform_Middle* platform_middle5;
+    Platform_Middle* platform_middle6;
+
+    Platform_Long_Grass* platform_long1_grass;
+    Platform_Long_Grass* platform_long2_grass;
+
+    Platform_Short_Grass* platform_short_grass1;
+    Platform_Middle_Grass* platform_middle_grass1;
+    Platform_Middle_Grass* platform_middle_grass2;
+    Platform_Middle_Grass* platform_middle_grass3;
+    Platform_Long_Grass* platform_long_grass1;
+
+    BoxObject* box_object1;
+    BoxObject* box_object2;
+    BoxObject* box_object3;
+    BoxObject* box_object4;
+
+    Platform_Wall* platform_wall2;
+    Platform_Wall_Grass* platform_wall1_grass;
+
+    Cemetery* cemetery1;
+    Cemetery* cemetery2;
+    Cemetery* cemetery3;
+
+    // component 
+    BoxCollider* ground_col;
+    BoxCollider* wall_r_col;
+    BoxCollider* wall_l_col;
+    BoxCollider* platform1_col;
+    BoxCollider* platform2_col;
+    BoxCollider* playerAttack_col;
+
+    BoxCollider* mapEdge_l_col;
+    BoxCollider* mapEdge_r_col;
+
+
+public:
+    Platform();
+};
+
+
 class Platform_Long : public GameObject
 {
 public:
