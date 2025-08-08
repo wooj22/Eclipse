@@ -39,7 +39,7 @@ public:
 
 public:
     // funcs
-
+    float GetValue() { return value; }
 public:
     /* Event */
     MultiDelegate<> onValueChangedListeners;       // On Value Changed
