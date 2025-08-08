@@ -51,7 +51,7 @@ private:
 	float curSpeed = 0;
 	float walkSpeed = 400.0f;
 	float dashSpeed = 0.0f;
-	float jumpForce = 900.0f;
+	float jumpForce = 800.0f;
 
 	bool isSpeedDownRate = false;
 

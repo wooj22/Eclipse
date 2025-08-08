@@ -48,7 +48,7 @@ void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
 	GameManager::Get().honCount = 1000;
-	GameManager::Get().AllSkillUnlock();
+	// GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
@@ -449,17 +449,21 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 
 float PlayerFSM::GetMoveSpeedBonus() const
 {
-	return GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp); 
+	float bonus = GameManager::Get().GetSkillBonus(SkillType::MoveSpeedUp);
+	return (bonus > 0.0f) ? bonus : 1.0f;
 }
 
 float PlayerFSM::GetAttackRangeBonus() const
 {
-	return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
+	// return GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
+
+	float bonus = GameManager::Get().GetSkillBonus(SkillType::AttackRangeUp);
+	return ((bonus) > (1.0f)) ? (bonus) : (1.0f);
 }
 
 float PlayerFSM::GetSkillCooldown() const
 {
 	float baseCooldown = absorbCooldown; // 기본 쿨타임
 	float cooldownReduction = GameManager::Get().GetSkillBonus(SkillType::SkillCooldownDown); 
-	return (((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction)); // std::max
+	return ((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction); // std::max
 } 
