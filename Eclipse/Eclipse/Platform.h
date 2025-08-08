@@ -12,6 +12,7 @@ class Platform_Short;
 class Platform_Short_Grass;
 class Platform_Wall;
 class Platform_Wall_Grass;
+class Platform_Wall_Top;
 class BoxObject;
 class Cemetery;
 
@@ -48,6 +49,8 @@ public:
 
     Platform_Wall* platform_wall2;
     Platform_Wall_Grass* platform_wall1;
+    Platform_Wall_Top* platform_wall_top1;
+    Platform_Wall_Top* platform_wall_top2;
 
     Cemetery* cemetery1;
     Cemetery* cemetery2;
@@ -292,15 +295,14 @@ public:
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Wall.png"), "Platform_Wall");
         spriteRenderer->layer = 1;
 
-        collider->size = { 100.0f, 790.0f };
-        // collider->isFlatform = true;
+        collider->size = { 100.0f, 780.0f };
+        collider->offset = { 0.0f, -10.0f };
     }
 
     void Update() override
     {
         collider->DebugColliderDraw();
     }
-
 };
 
 class Platform_Wall_Grass : public GameObject
@@ -334,7 +336,32 @@ public:
     {
         collider->DebugColliderDraw();
     }
+};
 
+class Platform_Wall_Top : public GameObject
+{
+public:
+    Transform* transform;
+    BoxCollider* collider;
+
+    Platform_Wall_Top() : GameObject("Ground", "Platform_Wall_Top")
+    {
+        transform = AddComponent<Transform>();
+        collider = AddComponent<BoxCollider>();
+    }
+    ~Platform_Wall_Top() override {};
+
+    void Awake() override
+    {
+        // transform->SetScale(0.5, 0.5);
+        collider->size = { 100.0f, 10.0f };
+        collider->isFlatform = true;
+    }
+
+    void Update() override
+    {
+        collider->DebugColliderDraw();
+    }
 };
 
 

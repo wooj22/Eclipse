@@ -47,6 +47,8 @@ Platform::Platform()
 	platform_short1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short_Grass>({ -150.0f, -500.0f });
 	platform_middle2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 850.0f, -500.0f });
 	platform_wall1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall_Grass>({ 1050.0f, -280.0f });
+	platform_wall_top1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall_Top>({ 0.0f, 50.0f });
+	platform_wall_top1->GetComponent<Transform>()->SetParent(platform_wall1->transform);
 
 
 	// 4
@@ -64,6 +66,8 @@ Platform::Platform()
 	platform_wall2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall>({ -1110.0f, 80.0f });
 	platform_wall2->GetComponent<Transform>()->SetScale(0.5, 0.4);
 	platform_wall2->GetComponent<BoxCollider>()->size = { 100.0f, 720.0f };
+	platform_wall_top2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall_Top>({ 0.0f, 50.0f });
+	platform_wall_top2->GetComponent<Transform>()->SetParent(platform_wall2->transform);
 	platform_short4 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ 300.0f, -20.0f });
 
 
