@@ -51,9 +51,10 @@ void Rigidbody::FixedUpdate()
         // reset
         impulse = Vector2::zero;
         acceleration = Vector2::zero;
-    } 
+    }
 }
 
+// colliison position correct
 void Rigidbody::CorrectPosition(const ContactInfo& contact)
 {
     if (!isKinematic)
@@ -67,6 +68,12 @@ void Rigidbody::CorrectPosition(const ContactInfo& contact)
         if (contact.normal.y > 0)      isBlockedDown = true;
         else if (contact.normal.y < 0) isBlockedUp = true;
     }
+}
+
+// turnneling collision continuous detection
+void Rigidbody::CollisionContinuousDetection()
+{
+
 }
 
 void Rigidbody::AddForce(const Vector2& force)
