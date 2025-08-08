@@ -19,9 +19,4 @@ public:
 		screenTextRenderer = AddComponent <ScreenTextRenderer>();
 	}
 	~UI_Text() override { }
-
-	void Awake() override {}
-	void SceneStart() override {}
-	void Update() override {}
-	void Destroyed() override {}
 };
