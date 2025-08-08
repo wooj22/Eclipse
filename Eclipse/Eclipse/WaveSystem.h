@@ -83,8 +83,8 @@ private:
 	bool m_waveStartCheck = true;
 
     // Spawn parameters
-    static constexpr float SPAWN_Y = 1920.0f;
-    static constexpr float BOSS_SPAWN_Y = 1920.0f;
+    static constexpr float SPAWN_Y = 1800.0f;
+    static constexpr float BOSS_SPAWN_Y = 1800.0f;
     static constexpr float HUN_SIZE = 128.0f;
     static constexpr float BOSS_SIZE = 512.0f;
     static constexpr float SPAWN_MARGIN = 256.0f;
