@@ -117,7 +117,10 @@ public:
 		ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
 		hit = ColliderSystem::Get().Raycast(ray, 5000);
 
-		if (!hit.collider || hit.collider->gameObject->tag == "Player")
+		if (!hit.collider || 
+			hit.collider->gameObject->name == "Player" || 
+			hit.collider->gameObject->name == "Wall" ||
+			hit.collider->gameObject->tag == "BoxObject")
 		{
 			player_Shadow->GetComponent<SpriteRenderer>()->SetEnabled(false);
 			return;

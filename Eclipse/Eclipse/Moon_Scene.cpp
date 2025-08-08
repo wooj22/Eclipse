@@ -45,7 +45,7 @@ void Moon_Scene::Awake()
 	ground = CreateObject<GameObject>();
 	ground->name = "Ground"; 
 	ground->tag = "Ground"; 
-	ground->AddComponent<Transform>()->SetPosition(0.0f, -1000.0f);
+	ground->AddComponent<Transform>()->SetPosition(0.0f, -1050.0f); 
 
 	ground_col = ground->AddComponent<BoxCollider>();
 	ground_col->size = { 2560.0f, 300.0f };
@@ -67,38 +67,70 @@ void Moon_Scene::Awake()
 
 	// [ Platform ] : 왼쪽 하단부터
 
-	platform_long1 = CreateObject<Platform_Long>();
-	platform_long1->GetComponent<Transform>()->SetPosition(-800.0f, -600.0f);
+	box_object1 = CreateObject<BoxObject>();
+	box_object1->GetComponent<Transform>()->SetPosition(-700.0f, -835.0f);
+
+	box_object2 = CreateObject<BoxObject>();
+	box_object2->GetComponent<Transform>()->SetPosition(900.0f, -835.0f);
+
+	//platform_long1 = CreateObject<Platform_Long>();
+	//platform_long1->GetComponent<Transform>()->SetPosition(-800.0f, -600.0f);
+	platform_long_grass1 = CreateObject<Platform_Long_Grass>();
+	platform_long_grass1->GetComponent<Transform>()->SetPosition(-800.0f, -650.0f);
+	cemetery1 = CreateObject<Cemetery>();
+	cemetery1->GetComponent<Transform>()->SetPosition(-1000.0f, -550.0f);
 
 	platform_middle1 = CreateObject<Platform_Middle>();
-    platform_middle1->GetComponent<Transform>()->SetPosition(350.0f, -600.0f);
+    platform_middle1->GetComponent<Transform>()->SetPosition(350.0f, -650.0f);
 
-	platform_short1 = CreateObject<Platform_Short>();
-	platform_short1->GetComponent<Transform>()->SetPosition(-150.0f, -450.0f);
+	//platform_short1 = CreateObject<Platform_Short>();
+	//platform_short1->GetComponent<Transform>()->SetPosition(-150.0f, -450.0f);
+	platform_short_grass1 = CreateObject<Platform_Short_Grass>();
+    platform_short_grass1->GetComponent<Transform>()->SetPosition(-150.0f, -500.0f);
 
-	platform_middle2 = CreateObject<Platform_Middle>();
-	platform_middle2->GetComponent<Transform>()->SetPosition(850.0f, -450.0f);
+	// platform_middle2 = CreateObject<Platform_Middle>();
+	// platform_middle2->GetComponent<Transform>()->SetPosition(850.0f, -450.0f);
+	platform_middle_grass1 = CreateObject<Platform_Middle_Grass>();
+    platform_middle_grass1->GetComponent<Transform>()->SetPosition(850.0f, -500.0f);
+	//platform_wall1 = CreateObject<Platform_Wall>();
+	//platform_wall1->GetComponent<Transform>()->SetPosition(1050.0f, -230.0f);
+	platform_wall_grass1 = CreateObject<Platform_Wall_Grass>();
+	platform_wall_grass1->GetComponent<Transform>()->SetPosition(1050.0f, -280.0f);
 
-	platform_middle3 = CreateObject<Platform_Middle>();
-	platform_middle3->GetComponent<Transform>()->SetPosition(-600.0f, -280.0f);
+	//platform_middle3 = CreateObject<Platform_Middle>();
+	//platform_middle3->GetComponent<Transform>()->SetPosition(-600.0f, -280.0f);
+	platform_middle_grass2 = CreateObject<Platform_Middle_Grass>();
+	platform_middle_grass2->GetComponent<Transform>()->SetPosition(-600.0f, -320.0f);
 
-	platform_middle4 = CreateObject<Platform_Middle>();
-	platform_middle4->GetComponent<Transform>()->SetPosition(250.0f, -280.0f);
+	//platform_middle4 = CreateObject<Platform_Middle>();
+	//platform_middle4->GetComponent<Transform>()->SetPosition(250.0f, -280.0f);
+	platform_middle_grass3 = CreateObject<Platform_Middle_Grass>();
+	platform_middle_grass3->GetComponent<Transform>()->SetPosition(250.0f, -320.0f);
+	box_object3 = CreateObject<BoxObject>();
+	box_object3->GetComponent<Transform>()->SetPosition(110.0f, -249.0f);
 
 	platform_short2 = CreateObject<Platform_Short>();
-	platform_short2->GetComponent<Transform>()->SetPosition(750.0f, -120.0f);
+	platform_short2->GetComponent<Transform>()->SetPosition(750.0f, -170.0f);
 
 	platform_short3 = CreateObject<Platform_Short>();
-	platform_short3->GetComponent<Transform>()->SetPosition(-1000.0f, -50.0f);
+	platform_short3->GetComponent<Transform>()->SetPosition(-1000.0f, -100.0f);
+	platform_wall2 = CreateObject<Platform_Wall>();
+	platform_wall2->GetComponent<Transform>()->SetPosition(-1110.0f, 80.0f);
+	platform_wall2->GetComponent<Transform>()->SetScale(0.5, 0.4);
+	platform_wall2->GetComponent<BoxCollider>()->size = { 100.0f, 720.0f };
 
 	platform_short4 = CreateObject<Platform_Short>();
-	platform_short4->GetComponent<Transform>()->SetPosition(300.0f, 30.0f);
+	platform_short4->GetComponent<Transform>()->SetPosition(300.0f, -20.0f);
 
 	platform_middle5 = CreateObject<Platform_Middle>();
 	platform_middle5->GetComponent<Transform>()->SetPosition(-550.0f, 120.0f);
+	box_object4 = CreateObject<BoxObject>();
+	box_object4->GetComponent<Transform>()->SetPosition(-400.0f, 205.0f);
 
-	platform_long2 = CreateObject<Platform_Long>();
-	platform_long2->GetComponent<Transform>()->SetPosition(950.0f, 120.0f);
+	// platform_long2 = CreateObject<Platform_Long>();
+	// platform_long2->GetComponent<Transform>()->SetPosition(950.0f, 120.0f);
+	platform_long_grass1 = CreateObject<Platform_Long_Grass>();
+	platform_long_grass1->GetComponent<Transform>()->SetPosition(950.0f, 120.0f);
 
 	platform_short5 = CreateObject<Platform_Short>();
 	platform_short5->GetComponent<Transform>()->SetPosition(-850.0f, 350.0f);
@@ -116,6 +148,9 @@ void Moon_Scene::Awake()
 	//platform_long_grass1 = CreateObject<Platform_Long_Grass>();
 	//platform_long_grass1->GetComponent<Transform>()->SetPosition(600.0f, -100.0f);
 
+
+	// platform_short_grass1 = CreateObject<Platform_Short_Grass>();
+	// platform_short_grass1->GetComponent<Transform>()->SetPosition(-800.0f, -600.0f);
 
 	
 	// boundary condition
@@ -152,6 +187,8 @@ void Moon_Scene::Start()
 	// game object -> SceneStart()
 	__super::Start();
 
+	playUI->quest_Image->SetActive(false);
+	playUI->hon_Image->SetActive(false);
 }
 
 void Moon_Scene::Update()

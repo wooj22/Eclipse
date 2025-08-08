@@ -24,6 +24,10 @@
 #include "Platform_Short_Grass.h"
 #include "Platform_Middle_Grass.h"
 #include "Platform_Long_Grass.h"
+#include "BoxObject.h"
+#include "Platform_Wall.h"
+#include "Platform_Wall_Grass.h"
+#include "Cemetery.h"
 
 class Moon_Scene : public Scene
 {
@@ -61,11 +65,22 @@ private:
 	Platform_Long* platform_long2;
 
 	Platform_Short_Grass* platform_short_grass1;
-
 	Platform_Middle_Grass* platform_middle_grass1;
-
+	Platform_Middle_Grass* platform_middle_grass2;
+	Platform_Middle_Grass* platform_middle_grass3;
 	Platform_Long_Grass* platform_long_grass1;
 
+	BoxObject* box_object1;
+	BoxObject* box_object2;
+	BoxObject* box_object3;
+	BoxObject* box_object4;
+
+	Platform_Wall* platform_wall1;
+	Platform_Wall* platform_wall2;
+	Platform_Wall_Grass* platform_wall_grass1;
+
+	Cemetery* cemetery1;
+	Cemetery* cemetery2;
 
 	// [ UI ]
 	 NPC* npc;
