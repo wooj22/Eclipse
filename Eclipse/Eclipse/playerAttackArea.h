@@ -38,12 +38,12 @@ public:
 
 	void Awake() override
 	{
-		transform->SetPosition(0.0f, 30.0f);
+		transform->SetPosition(0.0f, 40.0f);
 		transform->SetRotation(0.0f);
-		transform->SetScale(3.0f, 3.0f);
+		transform->SetScale(2.5f, 2.5f); // 2.0 
 
 		collider->offset = { 0.0f, 20.0f };
-		collider->radius = 45.0f;
+		collider->radius = 60.0f; // 60
 		collider->isTrigger = true;
 	}
 
