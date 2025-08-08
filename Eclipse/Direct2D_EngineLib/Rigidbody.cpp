@@ -42,8 +42,17 @@ void Rigidbody::FixedUpdate()
         if (isBlockedDown && velocity.y < 0) velocity.y = 0;
         if (isBlockedUp && velocity.y > 0) velocity.y = 0;
 
-        // grounded -> gravity reset
-        //if (isGrounded && useGravity && velocity.y < 0) velocity.y = 0;
+        // collision detection
+        switch (collisionDetection)
+        {
+        case CollisionDetection::Discrete:
+            break;
+        case CollisionDetection::Continuous:
+            CollisionContinuousDetection();
+            break;
+        default:
+            break;
+        }
 
         // position update
         transform->SetPosition(transform->GetPosition() + velocity * Time::GetFixedDeltaTime());
