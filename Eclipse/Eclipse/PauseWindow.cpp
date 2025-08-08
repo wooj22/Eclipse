@@ -54,15 +54,15 @@ void PauseWindow::SceneStart()
 	continuGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	continuGame_Button->screenTextRenderer->SetText(L"이어하기");
 	continuGame_Button->screenTextRenderer->SetFontSize(30);
-	continuGame_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	continuGame_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 	newGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	newGame_Button->screenTextRenderer->SetText(L"처음으로");
 	newGame_Button->screenTextRenderer->SetFontSize(30);
-	newGame_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	newGame_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 	quitGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	quitGame_Button->screenTextRenderer->SetText(L"게임종료");
 	quitGame_Button->screenTextRenderer->SetFontSize(30);
-	quitGame_Button->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	quitGame_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	// 밑줄 이미지
 	underscore_Image->rectTransform->SetPosition(0, -30); // TODOMO : 버튼 이미지 나오면 위치 수정

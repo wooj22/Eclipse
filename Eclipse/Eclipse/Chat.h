@@ -22,6 +22,7 @@ private:
 	UI_Text* chatText;
 
 public:
+	Chat();
 	void Awake() override;
 	void Update() override;
 	void NextChat();

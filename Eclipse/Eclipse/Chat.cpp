@@ -1,7 +1,7 @@
 #include "Chat.h"
 #include "../Direct2D_EngineLib/Input.h"
 
-void Chat::Awake()
+Chat::Chat()
 {
 	chatText = GameManager::Get().g_playUI->chat_Text;
 	chatCondition = ChatCondition::None;
@@ -47,6 +47,10 @@ void Chat::Awake()
 
 	SetCondition(chatCondition);
 	chatText->screenTextRenderer->SetText(currentLines[chatCount]);
+}
+
+void Chat::Awake()
+{
 }
 void Chat::Update()
 {

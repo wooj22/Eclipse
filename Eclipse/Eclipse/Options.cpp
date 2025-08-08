@@ -53,12 +53,12 @@ void Options::SceneStart()
 	sound_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	sound_Button->screenTextRenderer->SetText(L"¼Ò¸®");
 	sound_Button->screenTextRenderer->SetFontSize(60);
-	sound_Button->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖ¿¾Ã¼");
+	sound_Button->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
 
 	key_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	key_Button->screenTextRenderer->SetText(L"Á¶ÀÛ");
 	key_Button->screenTextRenderer->SetFontSize(60);
-	key_Button->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖ¿¾Ã¼");
+	key_Button->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
 
 }
 

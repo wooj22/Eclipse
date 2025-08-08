@@ -14,9 +14,9 @@ void BossHP::Awake()
 void BossHP::SceneStart()
 {
 	hpBarFill->rectTransform->SetParent(hpBarEmpty->rectTransform);
-	hpBarEmpty->rectTransform->SetPosition(0, 400);
-	hpBarEmpty->rectTransform->SetSize(1400, 50);
-	hpBarFill->rectTransform->SetSize(1400, 50);
+	hpBarEmpty->rectTransform->SetPosition(0, 500);
+	hpBarEmpty->rectTransform->SetSize(1080, 50);
+	hpBarFill->rectTransform->SetSize(1080, 50);
 	auto bossHPEmptyTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BossHPEmpty.png");
 	hpBarEmpty->imageRenderer->sprite = ResourceManager::Get().CreateSprite(bossHPEmptyTexture, "BossHPEmptyTexture");
 	auto bossHPFillTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BossHPFill.png");

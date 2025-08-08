@@ -46,19 +46,19 @@ void PlayUI::SceneStart()
 	pauseCheckButtos = { stop_Button, pauseWindow->close_Button, pauseWindow->continuGame_Button };
 
 	// 웨이브 타이머 UI
-	timer_Text->rectTransform->SetPosition(0, 500);
+	timer_Text->rectTransform->SetPosition(0, 400);
 	timer_Text->rectTransform->SetSize(500, 40);
-	timer_Text->screenTextRenderer->SetFontSize(50);
-	timer_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	timer_Text->screenTextRenderer->SetFontSize(140);
+	timer_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 
-	waveInfo_Text->rectTransform->SetPosition(0, 400);
-	waveInfo_Text->rectTransform->SetSize(500, 40);
-	waveInfo_Text->screenTextRenderer->SetFontSize(50);
+	//waveInfo_Text->rectTransform->SetPosition(0, 400);
+	waveInfo_Text->rectTransform->SetSize(1920, 40);
+	waveInfo_Text->screenTextRenderer->SetFontSize(200);
 	waveInfo_Text->SetActive(false);
-	waveInfo_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	waveInfo_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	// 일시 정지 버튼
-	stop_Button->rectTransform->SetPosition(870, 480);
+	stop_Button->rectTransform->SetPosition(920, 500);
 	stop_Button->rectTransform->SetSize(60, 60);
 	auto stopButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/StopButton.png");
 	stop_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(stopButtonTexture, "StopButton");
@@ -75,21 +75,22 @@ void PlayUI::SceneStart()
 	questName_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
-	quest_Image->rectTransform->SetPosition(800, 0);
-	quest_Image->rectTransform->SetSize(300, 500);
+	quest_Image->rectTransform->SetPosition(850, 0);
+	quest_Image->rectTransform->SetSize(180, 200);
 	auto questImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Quest.png");
 	quest_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(questImageTexture, "Quest");
 	questName_Text->rectTransform->SetSize(300, 50);
-	questName_Text->rectTransform->SetPosition(0, 50);
+	questName_Text->rectTransform->SetPosition(0, 90);
 	questName_Text->screenTextRenderer->SetText(L"목표");
-	questName_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	questName_Text->screenTextRenderer->SetFontSize(30);
+	questName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 	quest_Text->rectTransform->SetSize(200, 50);
-	quest_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
-	quest_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
+	/*quest_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
+	quest_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);*/
 	questCount_Text->rectTransform->SetPosition(0, -50);
 	questCount_Text->rectTransform->SetSize(200, 0);
-	questCount_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
-	questCount_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
+	/*questCount_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
+	questCount_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);*/
 	quest = quest_Image->AddComponent<Quest>();
 
 
@@ -104,16 +105,16 @@ void PlayUI::SceneStart()
 	chat_Text->screenTextRenderer->layer = 2;
 	chat_Button->imageRenderer->layer = 3;
 	chat_Image->rectTransform->SetPosition(0, -400);
-	chat_Image->rectTransform->SetSize(1500, 200);
+	chat_Image->rectTransform->SetSize(800, 160);
 	auto chatImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Chat.png");
 	chat_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatImageTexture, "Chat");
 	
-	chat_Text->rectTransform->SetSize(700, 50);
+	chat_Text->rectTransform->SetSize(400, 50);
 	chat_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	chat_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
 
 	chat = chat_Text->AddComponent<Chat>();
-	chat_Button->rectTransform->SetPosition(600, -80);
+	chat_Button->rectTransform->SetPosition(300, -40);
 	chat_Button->rectTransform->SetSize(100, 50);
 	auto chatButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton.png");
 	chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonTexture, "ChatButton");
@@ -127,30 +128,30 @@ void PlayUI::SceneStart()
 
 	// 혼
 	hon_Image->rectTransform->SetPosition(-850, -300);
-	hon_Image->rectTransform->SetSize(50, 50);
+	hon_Image->rectTransform->SetSize(70, 70);
 	auto honImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Hon.png");
 	hon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
 	hon_Text->rectTransform->SetPosition(200, 0);
 	hon_Text->rectTransform->SetSize(330, 50);
 	hon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
-	hon_Text->screenTextRenderer->SetFontSize(50);
+	hon_Text->screenTextRenderer->SetFontSize(40);
 
 	hon_Text->screenTextRenderer->SetText(L"x 0") ;
 
 	// 스킬1
 	skill1_Text->rectTransform->SetParent(skill1_Image->rectTransform);
 
-	skill1_Image->rectTransform->SetPosition(20, -125);
-	skill1_Image->rectTransform->SetSize(200, 200);
+	skill1_Image->rectTransform->SetPosition(0, -125);
+	skill1_Image->rectTransform->SetSize(100, 100);
 	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill1.png");
 	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "Skill1");
 	skill1_Text->rectTransform->SetSize(150, 150);
 	skill1_Text->screenTextRenderer->SetFontSize(50);
 
 	// 스킬2
-	skill2_Image->rectTransform->SetPosition(200, -125);
-	skill2_Image->rectTransform->SetSize(200, 200);
+	skill2_Image->rectTransform->SetPosition(120, -125);
+	skill2_Image->rectTransform->SetSize(100, 100);
 	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill2.png");
 	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "Skill2");
 
@@ -204,7 +205,7 @@ void PlayUI::SceneStart()
 	// 스킬창 제목
 	skillWindowName_Text->rectTransform->SetPosition(-300, 300);
 	skillWindowName_Text->screenTextRenderer->SetText(L"성장");
-	skillWindowName_Text->screenTextRenderer->SetFontName(L"덕온공주옛체");
+	skillWindowName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	
 	for (UI_Button* btn : pauseCheckButtos)
@@ -337,7 +338,7 @@ void PlayUI::ClickChatButton() {
 
 void PlayUI::StartWaveInfo(int waveNumber)
 {
-	std::wstring waveText = waveNumber < 4 ? L"Wave " + std::to_wstring(waveNumber) : L"Boss" ;
+	std::wstring waveText = waveNumber < 5 ? L"공세 " + std::to_wstring(waveNumber) + L"막" : L"Boss";
 	waveInfo_Text->screenTextRenderer->SetText(waveText);
 	
 	waveInfoTimer = 0;
