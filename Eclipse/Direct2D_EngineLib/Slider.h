@@ -14,8 +14,8 @@ class Slider : public I_UI
 {
 public:
     // child component
+    RectTransform* handle = nullptr;
     ImageRenderer* gauge = nullptr;
-    ImageRenderer* handle = nullptr;
 
     // component cycle
     Slider() = default;

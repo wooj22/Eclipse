@@ -24,7 +24,6 @@ public:
 	GameObject* child_guage = nullptr;			// recttransform, imagerenderer(fill)
 	GameObject* child_handle = nullptr;			// recttransform, imagerenderer
 
-
 private:
 	RectTransform* child_background_Rect = nullptr;
 	RectTransform* child_guage_Rect = nullptr;
@@ -80,7 +79,7 @@ public:
 		
 		// slider compoent ref
 		slider->gauge = child_guage_Image;
-		slider->handle = child_handle_Image;
+		slider->handle = child_handle_Rect;
 	}
 	~UI_Slider() override {}
 
