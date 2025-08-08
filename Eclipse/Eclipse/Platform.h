@@ -24,27 +24,22 @@ public:
     GameObject* mapEdge_l;
     GameObject* mapEdge_r;
 
-    Platform_Short_Grass* platform_short1_grass;
+    Platform_Short_Grass* platform_short1;
     Platform_Short* platform_short2;
     Platform_Short* platform_short3;
     Platform_Short* platform_short4;
     Platform_Short* platform_short5;
 
     Platform_Middle* platform_middle1;
-    Platform_Middle_Grass* platform_middle2_grass;
-    Platform_Middle_Grass* platform_middle3_grass;
-    Platform_Middle_Grass* platform_middle4_grass;
+    Platform_Middle_Grass* platform_middle2;
+    Platform_Middle_Grass* platform_middle3;
+    Platform_Middle_Grass* platform_middle4;
     Platform_Middle* platform_middle5;
     Platform_Middle* platform_middle6;
 
-    Platform_Long_Grass* platform_long1_grass;
-    Platform_Long_Grass* platform_long2_grass;
+    Platform_Long_Grass* platform_long1;
+    Platform_Long_Grass* platform_long2;
 
-    Platform_Short_Grass* platform_short_grass1;
-    Platform_Middle_Grass* platform_middle_grass1;
-    Platform_Middle_Grass* platform_middle_grass2;
-    Platform_Middle_Grass* platform_middle_grass3;
-    Platform_Long_Grass* platform_long_grass1;
 
     BoxObject* box_object1;
     BoxObject* box_object2;
@@ -52,7 +47,7 @@ public:
     BoxObject* box_object4;
 
     Platform_Wall* platform_wall2;
-    Platform_Wall_Grass* platform_wall1_grass;
+    Platform_Wall_Grass* platform_wall1;
 
     Cemetery* cemetery1;
     Cemetery* cemetery2;
