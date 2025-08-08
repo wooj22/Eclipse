@@ -45,7 +45,7 @@ void Moon_Scene::Awake()
 
 	// camera target
 	camCompo->SetTarget(player->transform);
-	camCompo->SetTargetTraceSpeed(200.0f);
+	camCompo->SetTargetTraceSpeed(400.0f);
 	camCompo->SetTargetTraceLimitX(30.0f);
 	camCompo->SetTargetTraceLimitY(100.0f);
 	camCompo->SetMapCondition(mapRect);

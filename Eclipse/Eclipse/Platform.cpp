@@ -53,7 +53,7 @@ Platform::Platform()
 	platform_middle3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ -600.0f, -320.0f });
 	cemetery2 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ -750.0f, -220.0f });
 	platform_middle4 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 250.0f, -320.0f });
-	box_object3 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 110.0f, -249.0f });
+	box_object3 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 110.0f, -235.0f });
 
 
 	// 5
