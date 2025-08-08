@@ -3,8 +3,12 @@
 
 void BossHP::Awake()
 {
+	rectTransform = AddComponent<RectTransform>();
 	hpBarEmpty = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	hpBarFill = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+
+	hpBarEmpty->rectTransform->SetParent(rectTransform);
+	hpBarFill->rectTransform->SetParent(rectTransform);
 }
 
 void BossHP::SceneStart()
@@ -18,6 +22,9 @@ void BossHP::SceneStart()
 	auto bossHPFillTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BossHPFill.png");
 	hpBarFill->imageRenderer->sprite = ResourceManager::Get().CreateSprite(bossHPFillTexture, "BossHPFillTexture");
 	hpBarFill->imageRenderer->fillType = FillType::Horizontal;
+
+
+	SetActive(false);
 }
 
 void BossHP::Update()

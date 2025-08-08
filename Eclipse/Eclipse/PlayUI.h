@@ -7,6 +7,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "GameManager.h"
 #include "SkillWindowButton.h"
+#include "PauseWindow.h"
 #include "BossHp.h"
 
 class Chat;
@@ -28,6 +29,8 @@ public:
 	UI_Text* timer_Text;			// 웨이브 타이머
 
 	UI_Button* stop_Button;			// 일시 정지 버튼
+	PauseWindow* pauseWindow;
+	std::vector<UI_Button*> pauseCheckButtos;
 
 	UI_Image* skill_Tree;			// 스킬 트리 이미지 추후 기능에 따라 변경 해야함
 
@@ -95,4 +98,6 @@ public:
 	void PlayerInteraction();
 
 	void StartWaveInfo(int waveNumber);
+
+	void CheckPauseUI();
 };

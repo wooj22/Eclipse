@@ -11,6 +11,7 @@ void PlayUI::Awake()
 	//해당 씬에 게임 오브젝트 생성
 	timer_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	stop_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
+	pauseWindow = SceneManager::Get().GetCurrentScene()->CreateObject<PauseWindow>();
 	quest_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	quest_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	questCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
@@ -41,7 +42,8 @@ void PlayUI::Awake()
 
 void PlayUI::SceneStart()
 {
-	
+	pauseCheckButtos = { stop_Button, pauseWindow->close_Button, pauseWindow->continuGame_Button };
+
 	// 웨이브 타이머 UI
 	timer_Text->rectTransform->SetPosition(0, 500);
 	timer_Text->rectTransform->SetSize(500, 40);
@@ -58,14 +60,13 @@ void PlayUI::SceneStart()
 	auto stopButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/StopButton.png");
 	stop_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(stopButtonTexture, "StopButton");
 
+
 	// 툴팁 UI
 	tooltip_Image->rectTransform->SetPosition(-700, 75);
 	tooltip_Image->rectTransform->SetSize(450, 150);
 	auto tooltipTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Tooltip.png");
 	tooltip_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(tooltipTexture, "Tooltip");
 	tooltip_Image->SetActive(false);
-
-
 	
 	// 퀘스트 창 UI
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
@@ -188,6 +189,13 @@ void PlayUI::SceneStart()
 	skillHon_Text->screenTextRenderer->SetFontSize(50);
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillHon_Text->screenTextRenderer->SetText(L"x 0");
+
+	
+	for (UI_Button* btn : pauseCheckButtos)
+	{
+		btn->button->onClickListeners.AddListener(
+			this, std::bind(&PlayUI::CheckPauseUI, this));
+	}
 }
 
 void PlayUI::Update()
@@ -364,4 +372,12 @@ void PlayUI::DeactivateAbsorb()
 {
 	skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 	skill1_Text->SetActive(true);
+}
+
+void PlayUI::CheckPauseUI()
+{
+	bool check = !pauseWindow->IsActive();
+	pauseWindow->SetActive(check);
+	if (check) Time::SetTimeScale(0);
+	else Time::SetTimeScale(1);
 }
