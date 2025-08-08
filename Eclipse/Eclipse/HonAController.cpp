@@ -109,12 +109,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hp cheak
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed())
-			{
-				// score
-				GameManager::Get().ChangeHonCount(1);
-				return;
-			}
+			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
@@ -145,18 +140,13 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 		case HonType::B:		// ¿¬¼â¹ÝÀÀ A-B
 		{
+			// score
+			GameManager::Get().ChangeHonCount(1);
+
 			// hp cheak
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed())
-			{
-				// score
-				GameManager::Get().ChangeHonCount(1);
-				return;
-			}
-
-			// score
-			GameManager::Get().ChangeHonCount(1);
+			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
