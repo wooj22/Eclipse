@@ -41,7 +41,12 @@ void Woo_Scene::Awake()
 
 	// slider engine test
 	ui_slider = CreateObject<UI_Slider>();
+	ui_slider->SetSliderSize(1000,30);
+	ui_slider->SetHandleSize(40);
 
+	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/Boss_Bullet.png");
+	auto newSprite = ResourceManager::Get().CreateSprite(texture, "handle");
+	ui_slider->SetHandleImage(newSprite);
 
 	/*--------------------------------------------------*/
 	/* º±πŒ¿Ã≤® */
