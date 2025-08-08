@@ -9,12 +9,14 @@
 */
 
 class RectTransform;
+class ImageRenderer;
 class Slider : public I_UI
 {
-private:
-    // 아직 뭘 참조해서 만져줘야하는지 모르겠음
-
 public:
+    // child component
+    ImageRenderer* gauge = nullptr;
+    ImageRenderer* handle = nullptr;
+
     // component cycle
     Slider() = default;
     ~Slider() override = default;
@@ -27,8 +29,6 @@ public:
 public:
     /* Event */
     MultiDelegate<> onValueChangedListeners;       // On Value Changed
-
-private:
     void OnValueChanged();
 };
 

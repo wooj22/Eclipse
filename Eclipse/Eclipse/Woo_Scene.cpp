@@ -39,6 +39,9 @@ void Woo_Scene::Awake()
 	// [Ground Sample]
 	ground = CreateObject<Map_Woo>({ 0, -800 });
 
+	// slider engine test
+	ui_slider = CreateObject<UI_Slider>();
+
 
 	/*--------------------------------------------------*/
 	/* º±πŒ¿Ã≤® */
