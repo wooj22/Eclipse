@@ -74,7 +74,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(200, 200);
+		transform->SetPosition(-300, -500);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -115,15 +115,18 @@ public:
 		// ray 
 		ray.direction = Vector2::down;
 		ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
-		hit = ColliderSystem::Get().Raycast(ray, 1000);
+		hit = ColliderSystem::Get().Raycast(ray, 5000);
 
-		if (!hit.collider)
+		if (!hit.collider || 
+			hit.collider->gameObject->name == "Player" || 
+			hit.collider->gameObject->name == "Wall" ||
+			hit.collider->gameObject->tag == "BoxObject")
 		{
 			player_Shadow->GetComponent<SpriteRenderer>()->SetEnabled(false);
 			return;
 		}
 
-		//std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->tag + " / hitÀÇ ray ÁÂÇ¥ = " + std::to_string(hit.point.y) + "\n";
+		//std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->name + " / hitÀÇ ray ÁÂÇ¥ = " + std::to_string(hit.point.y) + "\n";
 		//OutputDebugStringA(debugStr.c_str());
 
 		float distance = transform->GetWorldPosition().y - hit.point.y;
@@ -141,12 +144,9 @@ public:
 		float alpha = 1.0f - (distance / maxDistance);
 		alpha = clamp(alpha, 0.0f, 1.0f);
 
-		
-		player_Shadow->GetComponent<SpriteRenderer>()->SetAlpha(alpha);
-
 		if(spriteRenderer->flipX)  player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x - 15.0f , hit.point.y - 7.0f });
 		else player_Shadow->GetComponent<Transform>()->SetPosition({ transform->GetWorldPosition().x + 15.0f , hit.point.y - 7.0f });
 
+		player_Shadow->GetComponent<SpriteRenderer>()->SetAlpha(alpha);
 	}
 };
-
