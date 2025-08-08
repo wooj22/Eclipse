@@ -25,6 +25,7 @@ public:
 	GameObject* child_handle = nullptr;			// recttransform, imagerenderer
 
 private:
+	// child set ref
 	RectTransform* child_background_Rect = nullptr;
 	RectTransform* child_guage_Rect = nullptr;
 	RectTransform* child_handle_Rect = nullptr;
@@ -78,6 +79,7 @@ public:
 		child_handle_Image->sprite = s3;
 		
 		// slider compoent ref
+		slider->slideArea = rectTransform;
 		slider->gauge = child_guage_Image;
 		slider->handle = child_handle_Rect;
 	}
