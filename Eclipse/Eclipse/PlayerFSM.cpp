@@ -47,7 +47,7 @@ void PlayerFSM::Awake()
 void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
-	//GameManager::Get().AllSkillUnlock();
+	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()

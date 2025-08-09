@@ -51,7 +51,7 @@ private:
 	float curSpeed = 0;
 	float walkSpeed = 400.0f;
 	float dashSpeed = 0.0f;
-	float jumpForce = 900.0f; // 3000.0f;
+	float jumpForce = 1400.0f; // 3000.0f;
 
 	bool isSpeedDownRate = false;
 
@@ -102,9 +102,12 @@ public:
 	const float bulletTimeThreshold = 0.2f;
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
-	const float defaultGravity = 100.0f;    // 기본 중력 
-	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
 
+	const float defaultGravity = 230.0f;    // 기본 중력 
+	const float fastFallGravity = 400.0f;   // 빠른 하강 시, 중력 
+	const float fastFallForce = -3000.0f;
+	bool didFastFall = false;   // 빠른 하강 1회 
+		 
 	Vector2 MouseWorldPos;					// 실시간 마우스 월드 좌표 
 
 	// attack 

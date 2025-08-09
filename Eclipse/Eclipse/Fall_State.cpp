@@ -25,6 +25,7 @@ void Fall_State::Enter(MovementFSM* fsm)
 
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
     fsm->GetPlayerFSM()->timer = 0.0f;
+    fsm->GetPlayerFSM()->didFastFall = false; 
 
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
@@ -117,6 +118,12 @@ void Fall_State::FixedUpdate(MovementFSM* fsm)
     // 빠른 하강 
     if (GameManager::Get().CheckUnlock(SkillType::FastFall) && fsm->GetPlayerFSM()->GetIsS())
     {
+        if (!fsm->GetPlayerFSM()->didFastFall)
+        {
+            // 즉시 큰 하강 속도 부여
+            fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = fsm->GetPlayerFSM()->fastFallForce;
+            fsm->GetPlayerFSM()->didFastFall = true;
+        }
         fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;
     }
 

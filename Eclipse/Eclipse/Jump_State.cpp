@@ -23,11 +23,10 @@ void Jump_State::Enter(MovementFSM* fsm)
     OutputDebugStringA("[Jump_State] Player의 Jump_State 진입 \n");
 
     // 초기화 
-    // fsm->GetPlayerFSM()->canDoubleJump = true;
     fsm->GetPlayerFSM()->holdTime = 0.0f;
     fsm->GetPlayerFSM()->isHolding = false;
-    // fsm->GetPlayerFSM()->canHanging = true;
     fsm->GetPlayerFSM()->timer = 0.0f;
+    fsm->GetPlayerFSM()->didFastFall = false; 
 
     fsm->GetPlayerFSM()->OnJump(JumpPhase::NormalJump);
 
@@ -126,9 +125,14 @@ void Jump_State::FixedUpdate(MovementFSM* fsm)
 {
     // [ 빠른 하강 ]
     if (GameManager::Get().CheckUnlock(SkillType::FastFall) &&
-        fsm->GetPlayerFSM()->GetRigidbody()->velocity.y < 0 && // 최고점 도달 이후
+        // fsm->GetPlayerFSM()->GetRigidbody()->velocity.y < 0 && // 최고점 도달 이후
         fsm->GetPlayerFSM()->GetIsS())
     {
+        if (!fsm->GetPlayerFSM()->didFastFall)
+        {
+            fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = fsm->GetPlayerFSM()->fastFallForce;
+            fsm->GetPlayerFSM()->didFastFall = true;
+        }
         fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;
     }
     else
