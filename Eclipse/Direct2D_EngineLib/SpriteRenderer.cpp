@@ -240,3 +240,17 @@ void SpriteRenderer::SetSaturation(float s)
 		0,                 0,               0,               colorMultiplier.a
 	};
 }
+
+// Set Brightness
+void SpriteRenderer::SetBrightness(float scale)
+{
+	brightnessScale = scale;
+
+	// color matrix
+	colorMatrix = {
+		brightnessScale, 0,                0,                0,
+		0,               brightnessScale,  0,                0,
+		0,               0,                brightnessScale,  0,
+		0,               0,                0,                colorMultiplier.a
+	};
+}

@@ -63,6 +63,9 @@ private:
 	float gw = 0.6094f;
 	float bw = 0.0820f;
 
+	// Brightness (Ένµµ)
+	float brightnessScale = 1.0f;
+
 	// Blur
 	float blurAmmount = 15.0f;
 
@@ -96,6 +99,10 @@ public:
 	// 0.6 ~ 1.0
 	void SetSaturation(float s);
 	float GetSaturation() { return saturation; }
+
+	// Brightness
+	void SetBrightness(float scale);
+	float GetBrightness() { return brightnessScale; }
 
 public:
 	// Glow (Blur)

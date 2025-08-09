@@ -21,7 +21,7 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	// [Boss]
-	//boss = CreateObject<Boss>();
+	boss = CreateObject<Boss>();
 
 	// [Hon]
 	honA1 = CreateObject<HonA>({ -400, -100 });
