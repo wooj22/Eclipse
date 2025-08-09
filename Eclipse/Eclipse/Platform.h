@@ -295,8 +295,7 @@ public:
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Wall.png"), "Platform_Wall");
         spriteRenderer->layer = 1;
 
-        collider->size = { 100.0f, 780.0f };
-        collider->offset = { 0.0f, -10.0f };
+        collider->size = { 100.0f, 790.0f };
     }
 
     void Update() override
@@ -329,7 +328,6 @@ public:
         spriteRenderer->layer = 1;
 
         collider->size = { 100.0f, 790.0f };
-        // collider->isFlatform = true;
     }
 
     void Update() override
@@ -353,8 +351,7 @@ public:
 
     void Awake() override
     {
-        // transform->SetScale(0.5, 0.5);
-        collider->size = { 100.0f, 10.0f };
+        collider->size = { 50.0f, 20.0f };
         collider->isFlatform = true;
     }
 

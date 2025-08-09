@@ -412,15 +412,25 @@ void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		OutputDebugStringA("Ground과 충돌 했습니다.\n");
+		// OutputDebugStringA("Ground과 충돌 했습니다.\n");
 		isGround = true;
 	}
 	else if (other->gameObject->name == "Wall")
 	{
-		// OutputDebugStringA("Wall과 충돌 했습니다.\n");
-		isWall = true;
-		if (contact.normal.x == 1) { isWallLeft = true; }
-		if (contact.normal.x == -1) { isWallRight = true; }
+		// 벽의 윗면과 플레이어 아랫면 충돌
+		if (contact.normal.y > 0.5)
+		{
+			// OutputDebugStringA("벽의 윗부분에 충돌했습니다.\n");
+			isGround = true;
+		}
+		else
+		{
+			// OutputDebugStringA("Wall과 충돌 했습니다.\n");
+			isWall = true;
+			if (contact.normal.x == 1) { isWallLeft = true; }
+			if (contact.normal.x == -1) { isWallRight = true; }
+		}
+		
 	}
 }
 
@@ -433,14 +443,22 @@ void PlayerFSM::OnCollisionExit(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
-		OutputDebugStringA("Ground 빠져나갔음 .\n");
+		// OutputDebugStringA("Ground 빠져나갔음 .\n");
 		isGround = false;
 	}
 	else if (other->gameObject->name == "Wall")
 	{
-		isWall = false;
-		if (contact.normal.x == 1)   isWallLeft = false;
-		if (contact.normal.x == -1)  isWallRight = false;
+		if (contact.normal.y > 0.5)
+		{
+			// OutputDebugStringA("벽의 윗부분 빠져나갔음.\n");
+			isGround = false;
+		}
+		else
+		{
+			isWall = false;
+			if (contact.normal.x == 1)   isWallLeft = false;
+			if (contact.normal.x == -1)  isWallRight = false;
+		}
 	}
 }
 
