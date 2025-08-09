@@ -110,7 +110,7 @@ public:
 
 	// boss
 	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머
-	float speedDownDuration = 2.0f;  // 속도 감소 지속 시간 (고정)
+	float speedDownDuration = 1.0f;  // 속도 감소 지속 시간 (고정)
 	float speedDownRate = 1.0f;      // 곱해질 속도 비율 
 	bool isSpeedDown = false;
 
