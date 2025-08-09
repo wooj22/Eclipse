@@ -26,6 +26,10 @@ public:
 	void FixedUpdate();
 
 public:
+	// to CCD
+	vector<ICollider*> GetColliders() { return components; }
+
+public:
 	// func
 	// ray hit collision
 	RaycastHit Raycast(const Ray& ray, float maxDistance);

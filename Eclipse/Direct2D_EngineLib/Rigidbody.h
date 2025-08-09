@@ -11,11 +11,19 @@
 * PhysicsSystem에 등록되어 FixedUpdate()주기로 로직을 처리한다.
 */
 
+// Collision Detection
+// Continuous는 빠르게 이동하는 물체의 터널링을 방지할 수 있다.
+enum class CollisionDetection
+{
+    Discrete, Continuous
+};
+
 class Transform;
 class Rigidbody : public Component
 {
 private:
     Transform* transform = nullptr;
+    Vector2 previousPosition = Vector2::zero;
 
 private:
     // ground gravity controll
@@ -36,6 +44,7 @@ public:
     float gravityScale = 1.0f;                  // 중력 보정값
     float drag = 0.0f;                          // 공기 저항, 마찰력 (클수록 속도 깎임)
     bool isKinematic = false;                   // kinematic 설정시 물리 연산과 충돌 보정 x
+    CollisionDetection collisionDetection = CollisionDetection::Discrete;
 
 private:
     Vector2 impulse = Vector2::zero;            // 추진력 (순간적인 힘)
@@ -51,7 +60,11 @@ public:
     void OnDestroy_Inner() override final;
 
 private:
+    // colliison position correct
     void CorrectPosition(const ContactInfo& contact);
+
+    // CCD (turnneling continuous collision detection)
+    void CollisionContinuousDetection();
 
 public:
     // func

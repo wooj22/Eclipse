@@ -28,7 +28,7 @@ void EclipseApp::Init()
 	sceneManager.CreateScene<MenuScene>();
 	sceneManager.CreateScene<PlayScene>();
 	sceneManager.CreateScene<EndScene>();
-	sceneManager.SetCurrentScene(MOON);
+	sceneManager.SetCurrentScene(MENU);
 	sceneManager.Init();
 }
 

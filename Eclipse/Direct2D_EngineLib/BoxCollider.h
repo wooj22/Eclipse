@@ -32,7 +32,7 @@ public:
 
     // Flatform
     bool isFlatform = false;                //  normal.y == 1일때만 충돌 인식
-    float flatformDepthThreshold = 35;      //  flatformDepthThreshold
+    float flatformDepthThreshold = 12;      //  flatformDepthThreshold
     
 public:
     // component cycle

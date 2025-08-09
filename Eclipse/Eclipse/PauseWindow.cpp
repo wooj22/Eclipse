@@ -1,4 +1,5 @@
 #include "PauseWindow.h"
+#include "EclipseApp.h"
 #include "../Direct2D_EngineLib/GameApp.h"
 
 void PauseWindow::Awake()
@@ -81,7 +82,7 @@ void PauseWindow::SceneStart()
 	}
 
 	newGame_Button->button->onClickListeners.AddListener(
-		this, [this]() { SceneManager::Get().ChangeScene(0); });
+		this, [this]() { SceneManager::Get().ChangeScene(EclipseApp::MENU); });
 
 	quitGame_Button->button->onClickListeners.AddListener(
 		this, []() { GameApp::Quit(); });

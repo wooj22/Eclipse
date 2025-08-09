@@ -47,8 +47,7 @@ void PlayerFSM::Awake()
 void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
-	GameManager::Get().honCount = 1000;
-	GameManager::Get().AllSkillUnlock();
+	//GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
@@ -285,7 +284,8 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 		{
 			obj->Destroy(); // 혼 제거
 			removedCount++;
-			GameManager::Get().honCount++;
+			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeQuestCount(1);
 		}
 	}
 

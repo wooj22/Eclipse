@@ -50,6 +50,8 @@ public:
 	virtual bool isCollision(ICollider* other, ContactInfo& contact) = 0;
 	virtual void FinalizeCollision() = 0;
 
+	// collision cheak
+	// Box, Circle은 하위 콜라이더에서
 	// ray cast hit
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& hitInfo) = 0;
 

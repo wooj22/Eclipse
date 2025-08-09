@@ -10,7 +10,7 @@ Platform::Platform()
 	// [ ground ]
 	ground = SceneManager::Get().GetCurrentScene()->CreateObject<GameObject>();
 	ground->name = "Ground";
-	ground->tag = "Ground";
+	ground->tag = "EndLine";
 	ground->AddComponent<Transform>()->SetPosition(0.0f, -1050.0f);
 
 	ground_col = ground->AddComponent<BoxCollider>();
