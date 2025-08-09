@@ -79,7 +79,7 @@ void Jump_State::Update(MovementFSM* fsm)
     }
 
     // [ Attack / Bullet ]
-    if (fsm->GetPlayerFSM()->CanAttack() && Input::GetKey(VK_LBUTTON))
+    if (fsm->GetPlayerFSM()->CanAttack() && fsm->GetPlayerFSM()->GetIsLButton())
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 

@@ -28,7 +28,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer += unscaledDelta;
 
     // [ Attack ] 마우스 왼쪽 버튼에서 손을 뗐을 때 → 공격
-    if (Input::GetKeyUp(VK_LBUTTON))
+    if (fsm->GetPlayerFSM()->GetIsLButton())
     {
         Time::SetTimeScale(1.0f); 
         fsm->GetPlayerFSM()->OnAirAttack();
@@ -40,7 +40,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
     if (fsm->GetPlayerFSM()->GetIsRButton()) 
     { 
         // 만약 마우스 왼쪽 누르고 있었으면 무시상태  
-        if (Input::GetKey(VK_LBUTTON)) fsm->GetPlayerFSM()->isAttackIgnore = true;
+        if (fsm->GetPlayerFSM()->GetIsLButton()) fsm->GetPlayerFSM()->isAttackIgnore = true;
 
         if (fsm->GetPlayerFSM()->GetIsGround()) { fsm->ChangeState(std::make_unique<Idle_State>()); return; }
         else
@@ -55,7 +55,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
         Time::SetTimeScale(1.0f); // 시간 복구
 
         // 만약 마우스 왼쪽 누르고 있었으면 무시상태  
-        if (Input::GetKey(VK_LBUTTON)) fsm->GetPlayerFSM()->isAttackIgnore = true;
+        if (fsm->GetPlayerFSM()->GetIsLButton()) fsm->GetPlayerFSM()->isAttackIgnore = true;
 
         if (fsm->GetPlayerFSM()->GetIsGround()) { fsm->ChangeState(std::make_unique<Idle_State>()); return; }
         else

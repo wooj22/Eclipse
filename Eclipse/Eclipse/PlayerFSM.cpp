@@ -122,8 +122,12 @@ void PlayerFSM::InputSetting()
 	isShift = Input::GetKey(VK_SHIFT);
 	isSpace = Input::GetKeyDown(VK_SPACE);
 
-	isLButton = Input::GetKeyDown(VK_LBUTTON);
-	isRButton = Input::GetKeyDown(VK_RBUTTON);
+	if (!isUIOn)
+	{
+		isLButton = Input::GetKeyDown(VK_LBUTTON);
+		isRButton = Input::GetKeyDown(VK_RBUTTON);
+	}
+	else { isLButton = false; isRButton = false; }
 
 	isF = Input::GetKeyDown('F');
 }

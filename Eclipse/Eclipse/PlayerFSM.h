@@ -71,6 +71,9 @@ private:
 	// key
 	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE, isF; // moon_dev
 
+	// ui
+	bool isUIOn = false;
+
 private:
 	// ref component
 	Transform* transform = nullptr;
