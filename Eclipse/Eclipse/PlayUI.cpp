@@ -26,7 +26,6 @@ void PlayUI::Awake()
 	skill1_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
-	tooltip_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowName_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
@@ -42,6 +41,8 @@ void PlayUI::Awake()
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
 	npc = SceneManager::Get().GetCurrentScene()->CreateObject<NPC>({ 0,-800 });
+	tooltip1 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
+	tooltip2 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
 }
 
 void PlayUI::SceneStart()
@@ -66,13 +67,6 @@ void PlayUI::SceneStart()
 	auto stopButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/StopButton.png");
 	stop_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(stopButtonTexture, "StopButton");
 
-
-	// 툴팁 UI
-	tooltip_Image->rectTransform->SetPosition(-700, 75);
-	tooltip_Image->rectTransform->SetSize(450, 150);
-	auto tooltipTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Tooltip.png");
-	tooltip_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(tooltipTexture, "Tooltip");
-	tooltip_Image->SetActive(false);
 	
 	// 퀘스트 창 UI
 	questName_Text->rectTransform->SetParent(quest_Image->rectTransform);
@@ -216,6 +210,7 @@ void PlayUI::SceneStart()
 		btn->button->onClickListeners.AddListener(
 			this, std::bind(&PlayUI::CheckPauseUI, this));
 	}
+	tooltipName = { L"index",L"Ignis",L"Dark",L"Luna",L"Nox"};
 }
 
 void PlayUI::Update()
@@ -262,21 +257,21 @@ void PlayUI::Update()
 		}
 	}
 
-	if (tooltip_Image->IsActive())
+	if (tooltip1->IsActive())
 	{
-		if (tolltipInfoTimer < tolltipInfoTime)
+		if (tooltipInfoTimer < tooltipInfoTime)
 		{
-			tolltipInfoTimer += Time::GetDeltaTime();
+			tooltipInfoTimer += Time::GetDeltaTime();
 
 			float alpha = 1.0f;
 
-			if (tolltipInfoTimer < fadeTime) // 페이드 인
+			if (tooltipInfoTimer < fadeTime) // 페이드 인
 			{
-				alpha = tolltipInfoTimer / fadeTime;
+				alpha = tooltipInfoTimer / fadeTime;
 			}
-			else if (tolltipInfoTimer > (tolltipInfoTime - fadeTime)) // 페이드 아웃
+			else if (tooltipInfoTimer > (tooltipInfoTime - fadeTime)) // 페이드 아웃
 			{
-				alpha = (tolltipInfoTime - tolltipInfoTimer) / fadeTime;
+				alpha = (tooltipInfoTime - tooltipInfoTimer) / fadeTime;
 			}
 			else // 알파 1 유지
 			{
@@ -284,13 +279,19 @@ void PlayUI::Update()
 			}
 
 			alpha = std::max(0.0f, std::min(1.0f, alpha));
-			tooltip_Image->imageRenderer->SetAlpha(alpha);
+			tooltip1->tooltipBackGround_Image->imageRenderer->SetAlpha(alpha);
+			if (tooltip2->IsActive()) tooltip2->tooltipBackGround_Image->imageRenderer->SetAlpha(alpha);
 		}
 		else
 		{
-			tolltipInfoTimer = 0;
-			tooltip_Image->imageRenderer->SetAlpha(0);
-			tooltip_Image->SetActive(false);
+			tooltipInfoTimer = 0;
+			tooltip1->tooltipBackGround_Image->imageRenderer->SetAlpha(0);
+			tooltip1->SetActive(false);
+			if (tooltip2->IsActive())
+			{
+				tooltip2->tooltipBackGround_Image->imageRenderer->SetAlpha(0);
+				tooltip2->SetActive(false);
+			}
 		}
 	}
 
@@ -348,9 +349,18 @@ void PlayUI::StartWaveInfo(int waveNumber)
 	waveInfo_Text->SetActive(true);
 	waveInfo_Text->screenTextRenderer->SetAlpha(0);
 
-	tolltipInfoTimer = 0;
-	tooltip_Image->SetActive(true);
-	tooltip_Image->imageRenderer->SetAlpha(0);
+	tooltipInfoTimer = 0;
+
+	tooltip1->SetActive(true);
+	tooltip1->ChangeInfo(tooltipName[waveNumber]);
+	tooltip1->tooltipBackGround_Image->imageRenderer->SetAlpha(0);
+
+	if (waveNumber == 1)
+	{
+		tooltip2->SetActive(true);
+		tooltip2->ChangeInfo(L"Umbra");
+		tooltip2->tooltipBackGround_Image->imageRenderer->SetAlpha(0);
+	}
 }
 
 void PlayUI::AllSkillCheat()

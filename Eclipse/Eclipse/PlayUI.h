@@ -9,6 +9,8 @@
 #include "SkillWindowButton.h"
 #include "PauseWindow.h"
 #include "BossHp.h"
+#include "tooltip.h"
+#include <vector>
 
 class Chat;
 class Quest;
@@ -21,10 +23,12 @@ private:
 	float waveInfoTimer = 0;
 	float waveIntoTime = 5;
 
-	float tolltipInfoTimer = 0;
-	float tolltipInfoTime = 10;
+	float tooltipInfoTimer = 0;
+	float tooltipInfoTime = 10;
 
 	float fadeTime = 2.5f;
+
+	std::vector<wstring> tooltipName; 
 
 public:
 	UI_Text* timer_Text;			// 웨이브 타이머
@@ -56,10 +60,8 @@ public:
 
 	UI_Text* waveInfo_Text;			// 웨이브 정보 텍스트
 
-	UI_Image* tooltip_Image;		// 툴팁 이미지 부모
-	UI_Image* tooltipHon_Image;		// 툴팁 혼 이미지
-	UI_Text* tooltipName_Text;		// 툴팁 이름 텍스트
-	UI_Text* tooltipEx_Text;		// 툴팁 설명 텍스트
+	tooltip* tooltip1;
+	tooltip* tooltip2;
 
 	UI_Image* skillWindow_Image;	// 스킬 창 이미지
 	UI_Text* skillWindowName_Text;	// 스킬창 이름 텍스트
