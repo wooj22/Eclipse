@@ -39,6 +39,11 @@ void Jump_State::Enter(MovementFSM* fsm)
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
 
+    // 오디오 
+    fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Jump);
+    // fsm->GetPlayerFSM()->GetAudioSource()->SetLoop(false);
+    // fsm->GetPlayerFSM()->GetAudioSource()->Play();
+    fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 }
 
 void Jump_State::Update(MovementFSM* fsm)
@@ -162,4 +167,5 @@ void Jump_State::FixedUpdate(MovementFSM* fsm)
 void Jump_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", false);
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
 }

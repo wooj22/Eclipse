@@ -6,6 +6,9 @@
 #include "../Direct2D_EngineLib/ICollider.h"
 #include "../Direct2D_EngineLib/RaycastHit.h"
 #include "../Direct2D_EngineLib/ColliderSystem.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
 
 // FSM 
 #include "MovementFSM.h"
@@ -75,18 +78,27 @@ private:
 	bool isUIOn = false;
 
 private:
-	// ref component
+	// component
 	Transform* transform = nullptr;
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
+	AudioSource* audioSource = nullptr;
 	AnimatorController* animatorController = nullptr;
-
+	
 	PlayerAttackArea* playerAttackArea = nullptr;
 	GameObject* playerAttackParent = nullptr;
 
 	GameObject* targetHon = nullptr;
 
 	PlayerAnimatorController* playerAnimatorController = nullptr;
+
+public:
+	// [ Audio ]
+	shared_ptr<AudioClip> SFX_Player_Move = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Jump = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Land = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Attack = nullptr;
+
 
 public:
 	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 
@@ -163,11 +175,13 @@ public:
 	AnimatorController* GetAnimatorController() const { return animatorController; }
     Transform* GetTransform() const { return transform; }
 	SpriteRenderer* GetSpriteRenderer() const { return spriteRenderer; }
+	AudioSource* GetAudioSource() const { return audioSource; }
+
 	void SetPlayerAttackArea(PlayerAttackArea* obj) { playerAttackArea = obj; }
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
 	GameObject* GetPlayerAttackParent() const { return playerAttackParent; }
-
+	
 
 public:
 	// script component cycle

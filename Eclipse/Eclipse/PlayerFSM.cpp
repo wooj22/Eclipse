@@ -5,23 +5,19 @@
 #include "../Direct2D_EngineLib/Animator.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "../Direct2D_EngineLib/ResourceManager.h"
 #include "../Direct2D_EngineLib/WorldTextRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Camera.h"
-
 #include "../Direct2D_EngineLib/RaycastHit.h"
 #include "../Direct2D_EngineLib/ColliderSystem.h"
 
+#include "PlayerAnimatorController.h"
 #include "Dash_State.h"
 
 #include "GameManager.h"
 #include "PlayUI.h"
 #include "Chat.h"
 #include "HonController.h"
-
-#include "PlayerAnimatorController.h"
-
 
 
 // 컴포넌트 활성화 시점
@@ -36,8 +32,14 @@ void PlayerFSM::Awake()
 	spriteRenderer = gameObject->GetComponent<SpriteRenderer>();
 	rigidbody = gameObject->GetComponent<Rigidbody>();
 	animatorController = gameObject->GetComponent<Animator>()->controller;
-
+	audioSource = gameObject->GetComponent<AudioSource>();
 	playerAnimatorController = dynamic_cast<PlayerAnimatorController*>(animatorController);
+
+	// [ AudioClip ] 
+	SFX_Player_Move = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+	SFX_Player_Jump = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+	SFX_Player_Land = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+	SFX_Player_Attack = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
 
 	// [ FSM 초기화 ]
 	movementFSM = std::make_unique<MovementFSM>();

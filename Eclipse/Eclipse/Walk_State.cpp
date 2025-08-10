@@ -24,6 +24,10 @@ void Walk_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer = 0.0f;
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Walk", true);
+
+    fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Move);
+    fsm->GetPlayerFSM()->GetAudioSource()->SetLoop(true);
+    fsm->GetPlayerFSM()->GetAudioSource()->Play();
 }
 
 void Walk_State::Update(MovementFSM* fsm)
@@ -78,4 +82,5 @@ void Walk_State::FixedUpdate(MovementFSM* fsm)
 void Walk_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Walk", false);
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
 }
