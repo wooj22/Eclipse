@@ -5,6 +5,9 @@
 #include "../Direct2D_EngineLib/Vector2.h"
 #include "../Direct2D_EngineLib/Transform.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 #include "GameManager.h"
 #include "PlayerFSM.h"
 #include "Attack_State.h"
@@ -47,15 +50,30 @@ protected:
 	float collisionMovingDelta = 0.0f;
 	float pullMovingDelta = 0.0f;
 
+	// asset
+	shared_ptr<AudioClip> SFX_Collision = nullptr;
+	shared_ptr<AudioClip> SFX_Destruction = nullptr;
+	shared_ptr<AudioClip> SFX_Division = nullptr;
+	shared_ptr<AudioClip> SFX_Union = nullptr;
+
 	// player 
-	Transform* playerTr;
+	Transform* playerTr = nullptr;
 	float palyer_deceleration = 0.2;
 
 	// ref component
 	Transform* tr = nullptr;
 	CircleCollider* collider = nullptr;
+	AudioSource* audioSource = nullptr;
 
 public:
+	HonController()
+	{
+		SFX_Collision = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+		SFX_Destruction = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+		SFX_Division = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+		SFX_Union = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+	}
+
 	// direction
 	void SetDirection(Vector2 dir) { moveDirection = dir; }
 	Vector2 Getdirection() { return moveDirection; }
@@ -108,6 +126,11 @@ public:
 				GameManager::Get().ChangeHonCount(-1);
 			}
 
+			// sound
+			audioSource->SetClip(SFX_Destruction);
+			audioSource->PlayOneShot();
+
+			// destroy
 			gameObject->Destroy();
 		}
 
