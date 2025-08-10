@@ -23,8 +23,10 @@ void PlayUI::Awake()
 	hon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	hon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skill1_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skill1CollTime_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skill1_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skill2_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowName_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
@@ -120,7 +122,7 @@ void PlayUI::SceneStart()
 	// È¥ & ½ºÅ³ UI
 	hon_Text->rectTransform->SetParent(hon_Image->rectTransform);
 	skill1_Image->rectTransform->SetParent(hon_Image->rectTransform);
-	skill1_Text->rectTransform->SetParent(hon_Image->rectTransform);
+	skill1CollTime_Text->rectTransform->SetParent(hon_Image->rectTransform);
 	skill2_Image->rectTransform->SetParent(hon_Image->rectTransform);
 
 	// È¥
@@ -137,20 +139,34 @@ void PlayUI::SceneStart()
 	hon_Text->screenTextRenderer->SetText(L"x 0") ;
 
 	// ½ºÅ³1
+	skill1CollTime_Text->rectTransform->SetParent(skill1_Image->rectTransform);
 	skill1_Text->rectTransform->SetParent(skill1_Image->rectTransform);
 
 	skill1_Image->rectTransform->SetPosition(0, -125);
 	skill1_Image->rectTransform->SetSize(100, 100);
 	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill1.png");
 	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "Skill1");
-	skill1_Text->rectTransform->SetSize(150, 150);
-	skill1_Text->screenTextRenderer->SetFontSize(50);
+
+	skill1_Text->rectTransform->SetPosition(0, 50);
+	skill1_Text->rectTransform->SetSize(50, 50);
+	skill1_Text->screenTextRenderer->SetFontSize(20);
+	skill1_Text->screenTextRenderer->SetText(L"Q");
+
+	skill1CollTime_Text->rectTransform->SetSize(150, 150);
+	skill1CollTime_Text->screenTextRenderer->SetFontSize(50);
 
 	// ½ºÅ³2
+	skill2_Text->rectTransform->SetParent(skill2_Image->rectTransform);
+
 	skill2_Image->rectTransform->SetPosition(120, -125);
 	skill2_Image->rectTransform->SetSize(100, 100);
 	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill2.png");
 	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "Skill2");
+
+	skill2_Text->rectTransform->SetPosition(0, 50);
+	skill2_Text->rectTransform->SetSize(50, 50);
+	skill2_Text->screenTextRenderer->SetFontSize(20);
+	skill2_Text->screenTextRenderer->SetText(L"E");
 
 	skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 	skill1_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
@@ -222,7 +238,7 @@ void PlayUI::Update()
 	}
 
 	if (!GameManager::Get().canUseAbsorb)
-		skill1_Text->screenTextRenderer->SetText(std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().absorbCoolTime))));
+		skill1CollTime_Text->screenTextRenderer->SetText(std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().absorbCoolTime))));
 
 	if (waveInfo_Text->IsActive())
 	{
@@ -401,13 +417,13 @@ void PlayUI::ChangeHonCountText()
 void PlayUI::ActivateAbsorb()
 {
 	skill1_Image->imageRenderer->renderMode = RenderMode::Unlit;
-	skill1_Text->SetActive(false);
+	skill1CollTime_Text->SetActive(false);
 }
 
 void PlayUI::DeactivateAbsorb()
 {
 	skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-	skill1_Text->SetActive(true);
+	skill1CollTime_Text->SetActive(true);
 }
 
 void PlayUI::CheckPauseUI()
