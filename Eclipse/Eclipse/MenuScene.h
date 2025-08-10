@@ -22,9 +22,6 @@ public:
 	void Start() override;
 	void Update() override;
 	void Exit() override;
-
-private:
-	void ChagnePlayScene();
 };
 
 

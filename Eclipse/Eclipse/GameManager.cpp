@@ -165,6 +165,7 @@ void GameManager::CanAbsorb()
 {
 	canUseAbsorb = true;
 	g_playUI->ActivateAbsorb();
+	g_playUI->SkillActiveSound();
 }
 
 void GameManager::UseAbsorb()

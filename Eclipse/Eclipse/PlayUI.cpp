@@ -45,6 +45,35 @@ void PlayUI::Awake()
 	npc = SceneManager::Get().GetCurrentScene()->CreateObject<NPC>({ 0,-800 });
 	tooltip1 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
 	tooltip2 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
+
+	// audio source 컴포넌트 생성
+	bgmSource = AddComponent<AudioSource>();
+	sfxSource = AddComponent<AudioSource>();
+
+	// audio clip 리소스 생성
+	bgmClip_Main = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Main.wav");
+	bgmClip_Wave = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Battle.wav");
+	bgmClip_Boss = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Boss.wav");
+	//bgmClip_Clear = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Clear.wav");
+	
+	sfxClip_Button1 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_1.wav");
+	sfxClip_Button2 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_2.wav");
+	sfxClip_SkillUI = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/SkillUI/s_SkillUI.wav");
+	sfxClip_SkillActive = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/SKillUI/s_Skillactive.wav");
+	//sfxClip_GameOver = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Scene/s_Defeat.wav");
+	//sfxClip_ChangeScene = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Scene/s_Fadeinout.wav");
+	
+
+	// audioSource 채널 그룹 지정 및 사운드 재생
+	bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
+	sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+	bgmSource->SetVolume(1);
+	bgmSource->SetLoop(true);
+	bgmSource->SetClip(bgmClip_Main);
+	bgmSource->Play();
+
+	sfxSource->SetLoop(false);
+	sfxSource->SetClip(sfxClip_Button1);
 }
 
 void PlayUI::SceneStart()
@@ -324,6 +353,8 @@ void PlayUI::Update()
 		else
 		{
 			skillWindow_Image->SetActive(true);
+			sfxSource->SetClip(sfxClip_SkillUI);
+			sfxSource->Play();
 		}
 	}
 
@@ -358,7 +389,17 @@ void PlayUI::ClickChatButton() {
 
 void PlayUI::StartWaveInfo(int waveNumber)
 {
-	std::wstring waveText = waveNumber < 5 ? L"공세 " + std::to_wstring(waveNumber) + L"막" : L"Boss";
+	std::wstring waveText;
+	if (waveNumber < 5)
+	{
+		waveText = L"공세 " + std::to_wstring(waveNumber) + L"막";
+		bgmSource->SetClip(bgmClip_Wave);
+	}
+	else
+	{
+		waveText = L"Boss";
+		bgmSource->SetClip(bgmClip_Boss);
+	}
 	waveInfo_Text->screenTextRenderer->SetText(waveText);
 	
 	waveInfoTimer = 0;
@@ -377,6 +418,7 @@ void PlayUI::StartWaveInfo(int waveNumber)
 		tooltip2->ChangeInfo(L"Umbra");
 		tooltip2->tooltipBackGround_Image->imageRenderer->SetAlpha(0);
 	}
+	bgmSource->Play();
 }
 
 void PlayUI::AllSkillCheat()
@@ -432,4 +474,23 @@ void PlayUI::CheckPauseUI()
 	pauseWindow->SetActive(check);
 	if (check) Time::SetTimeScale(0);
 	else Time::SetTimeScale(1);
+	ButtonClickSound();
+}
+
+void PlayUI::SkillActiveSound()
+{
+	sfxSource->SetClip(sfxClip_SkillActive);
+	sfxSource->Play();
+}
+
+void PlayUI::ButtonEnterSound()
+{
+	sfxSource->SetClip(sfxClip_Button1);
+	sfxSource->Play();
+}
+
+void PlayUI::ButtonClickSound()
+{
+	sfxSource->SetClip(sfxClip_Button2);
+	sfxSource->Play();
 }

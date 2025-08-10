@@ -25,9 +25,6 @@ void MenuScene::Start()
 {
 	// game object -> SceneStart()
 	__super::Start();
-
-	titleUI->play_Button->button->onClickListeners.AddListener(
-		this, std::bind(&MenuScene::ChagnePlayScene, this));
 }
 
 void MenuScene::Update()
@@ -70,9 +67,4 @@ void MenuScene::Exit()
 {
 	// game object -> destroy()
 	__super::Exit();
-}
-
-void MenuScene::ChagnePlayScene()
-{
-	SceneManager::Get().ChangeScene(EclipseApp::PLAY);
 }

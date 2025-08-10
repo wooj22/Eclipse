@@ -12,6 +12,12 @@
 #include "tooltip.h"
 #include <vector>
 
+// 사운드
+#include "../Direct2D_EngineLib/AudioSystem.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
+
 class Chat;
 class Quest;
 class NPC;
@@ -29,6 +35,18 @@ private:
 	float fadeTime = 2.5f;
 
 	std::vector<wstring> tooltipName; 
+
+	// audio
+	shared_ptr<AudioClip> bgmClip_Main = nullptr;
+	shared_ptr<AudioClip> bgmClip_Wave = nullptr;
+	shared_ptr<AudioClip> bgmClip_Boss = nullptr;
+	//shared_ptr<AudioClip> bgmClip_Clear = nullptr;
+	shared_ptr<AudioClip> sfxClip_Button1 = nullptr;
+	shared_ptr<AudioClip> sfxClip_Button2 = nullptr;
+	shared_ptr<AudioClip> sfxClip_SkillUI = nullptr;
+	shared_ptr<AudioClip> sfxClip_SkillActive = nullptr;
+	//shared_ptr<AudioClip> sfxClip_GameOver = nullptr;
+	shared_ptr<AudioClip> sfxClip_ChangeScene = nullptr;
 
 public:
 	UI_Text* timer_Text;			// 웨이브 타이머
@@ -74,6 +92,10 @@ public:
 	BossHP* bossHP;
 	NPC* npc;
 
+	//Audio
+	AudioSource* bgmSource = nullptr;
+	AudioSource* sfxSource = nullptr;
+
 public:
 	// game object cycle
 	PlayUI() : GameObject("PlayUI","PlayUI") {}
@@ -108,4 +130,8 @@ public:
 	void StartWaveInfo(int waveNumber);
 
 	void CheckPauseUI();
+
+	void SkillActiveSound();
+	void ButtonEnterSound();
+	void ButtonClickSound();
 };
