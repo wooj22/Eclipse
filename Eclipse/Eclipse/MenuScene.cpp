@@ -11,7 +11,9 @@ void MenuScene::Awake()
 
 	// create gameobject
 	titleUI = CreateObject<TitleUI>();
-	titleUI->backgroundImage = CreateObject<UI_Image>();
+	titleUI->backgroundImage = CreateObject<GameObject>();
+	titleUI->titleLogo_Image = CreateObject<GameObject>();
+	titleUI->titleSpell_Image = CreateObject<GameObject>();
 	titleUI->play_Button = CreateObject<UI_Button>();
 	titleUI->options_Button = CreateObject<UI_Button>();
 	titleUI->credit_Button = CreateObject<UI_Button>();

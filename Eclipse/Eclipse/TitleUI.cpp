@@ -33,10 +33,18 @@ void TitleUI::SceneStart()
 {
 	menuButtons = { play_Button, options_Button, credit_Button, end_Button };
 	optionButtons = { optionUI->sound_Button,optionUI->key_Button };
-	backgroundImage->rectTransform->SetPivot(0.5, 0.5);
-	backgroundImage->rectTransform->SetSize(1920, 1080);
+	backgroundImage->AddComponent<Transform>();
+	backgroundImage->AddComponent<SpriteRenderer>();
+	titleLogo_Image->AddComponent<Transform>();
+	titleLogo_Image->AddComponent<SpriteRenderer>();
+	titleSpell_Image->AddComponent<Transform>();
+	titleSpell_Image->AddComponent<SpriteRenderer>();
 	auto title = ResourceManager::Get().CreateTexture2D("../Resource/mo/TitleBackGround.png");
-	backgroundImage->imageRenderer->sprite = ResourceManager::Get().CreateSprite(title, "TitleBackGround");
+	backgroundImage->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(title, "TitleBackGround");
+	auto logo = ResourceManager::Get().CreateTexture2D("../Resource/mo/Title_Logo.png");
+	titleLogo_Image->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(logo, "Title_Logo");
+	auto spell = ResourceManager::Get().CreateTexture2D("../Resource/mo/Title_Spell.png");
+	titleSpell_Image->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(spell, "Title_Spell");
 
 	options_Button->rectTransform->SetParent(play_Button->rectTransform);
 	credit_Button->rectTransform->SetParent(play_Button->rectTransform);
@@ -131,7 +139,7 @@ void TitleUI::SceneStart()
 
 void TitleUI::Update()
 {
-
+	titleSpell_Image->transform->Rotate(0.05);
 }
 
 void TitleUI::Destroyed()

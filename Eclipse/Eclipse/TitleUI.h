@@ -3,6 +3,7 @@
 #include "../Direct2D_EngineLib/UI_Image.h"
 #include"../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/GameObject.h"
+#include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "Options.h"
 
 // »ç¿îµå
@@ -14,7 +15,10 @@
 class TitleUI : public GameObject
 {
 public:
-	UI_Image* backgroundImage;
+	GameObject* backgroundImage;
+	GameObject* titleLogo_Image;
+	GameObject* titleSpell_Image;
+
 	UI_Button* play_Button;
 	UI_Button* options_Button;
 	UI_Button* credit_Button;
