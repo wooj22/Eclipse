@@ -9,6 +9,7 @@ void HonAController::Awake()
 {
 	tr = gameObject->transform;
 	collider = gameObject->GetComponent<CircleCollider>();
+	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
 }
 
@@ -135,6 +136,10 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
 
+			// sound
+			audioSource->SetClip(SFX_Union);
+			audioSource->PlayOneShot();
+
 			break;
 		}
 
@@ -156,6 +161,11 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->SetDirection((otherGameObject->transform->GetWorldPosition() - tr->GetWorldPosition()).Normalized());
 			CollisionStart();
 			otherController->CollisionStart();
+
+			// sound
+			audioSource->SetClip(SFX_Collision);
+			audioSource->PlayOneShot();
+
 			break;
 		}
 
