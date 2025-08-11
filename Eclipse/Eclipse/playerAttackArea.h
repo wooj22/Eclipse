@@ -38,7 +38,6 @@ public:
 
 		spriteRenderer->layer = 2;
 		
-
 	}
 	~PlayerAttackArea() override
 	{
@@ -55,6 +54,8 @@ public:
 		collider->radius = 130.0f; 
 		collider->isTrigger = true;
 
+		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
+
 		// 초기 비활성화
 		spriteRenderer->SetEnabled(false);
 		collider->SetEnabled(false);
@@ -64,7 +65,8 @@ public:
 	{
 		// AABB 영역 
 		if(collider->IsEnabled()) collider->DebugColliderDraw();
-		
+
+		// collider->DebugColliderDraw();
 	}
 
 	// 어택 범위 활성화 + 애니메이션 실행

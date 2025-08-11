@@ -34,7 +34,7 @@ public:
 
     Platform_Middle* platform_middle1;
     Platform_Middle_Grass* platform_middle2;
-    Platform_Middle_Grass* platform_middle3;
+    Platform_Middle* platform_middle3;
     Platform_Middle_Grass* platform_middle4;
     Platform_Middle* platform_middle5;
     Platform_Middle* platform_middle6;

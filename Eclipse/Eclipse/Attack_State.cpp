@@ -68,7 +68,6 @@ void Attack_State::Enter(MovementFSM* fsm)
         }
     }
 
-
     // 이펙트 & 범위 활성화
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->Activate();
 

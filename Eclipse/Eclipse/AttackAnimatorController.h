@@ -12,10 +12,29 @@ public:
 	{
 		name = "Player_Attack_Effect";
 		loop = false;
-		duration = 0.8f;
+		duration = 0.3f;
 		const std::string basePath = "../Resource/Moon/Texture/Player_Attack_Effect/";
 		const int frameCount = 11;
-		const float frameTime = duration / frameCount;
+
+		// 프레임별 서로 다른 시간 비중 적용
+		float shortTime = 1.0f;  // 기본 가중치
+		float longTime = 3.0f;   // 느리게 보이는 가중치
+
+		// 각 프레임 가중치 배열 (총 11개)
+		std::vector<float> weights;
+		for (int i = 0; i < frameCount; ++i)
+		{
+			if (i < 4)         weights.push_back(longTime); // 앞 4프레임
+			else if (i > 6)    weights.push_back(longTime); // 뒤 4프레임
+			else               weights.push_back(shortTime); // 중간 3프레임
+		}
+
+		// 전체 가중치 합
+		float totalWeight = 0.0f;
+		for (float w : weights) totalWeight += w;
+
+		// 가중치 비율로 프레임 시간 계산
+		float accumulatedTime = 0.0f;
 		for (int i = 0; i < frameCount; ++i)
 		{
 			char filename[256];
@@ -26,7 +45,11 @@ public:
 
 			AnimationFrame frame;
 			frame.sprite = sprite;
-			frame.time = i * frameTime;
+			frame.time = accumulatedTime;
+
+			// 다음 프레임 시작 시간 갱신
+			accumulatedTime += (weights[i] / totalWeight) * duration;
+
 			frames.push_back(frame);
 		}
 	}
@@ -47,11 +70,11 @@ public:
 		// if (controller->GetBool("Player_Attack_Effect") == true)  controller->PlayAnimation("Player_Attack_Effect");
 
 		// 마지막 프레임까지 재생이 끝나면 종료
-		if (!clip->loop && clip->GetFrameIndexAtTime(controller->currentTime) == clip->frames.size() - 1)
-		{
-			controller->playing = false;
-			controller->ChangeAnimation(nullptr);  // 상태 초기화
-		}
+		//if (!clip->loop && clip->GetFrameIndexAtTime(controller->currentTime) == clip->frames.size() - 1)
+		//{
+		//	controller->playing = false;
+		//	controller->ChangeAnimation(nullptr);  // 상태 초기화
+		//}
 	}
 	void Exit() override {}
 };

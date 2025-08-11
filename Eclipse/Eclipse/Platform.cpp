@@ -33,22 +33,27 @@ Platform::Platform()
 	mapEdge_r_col->size = { 300.0f, 1920.0f };
 
 
-	// [ Platform ] : 왼쪽 하단부터
+	// [ Platform ] : 왼쪽 하단 순서 
 
 	// 0
-	box_object1 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -330.0f, -845.0f });
+	box_object1 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -370.0f, -845.0f });
 	cemetery1 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ 600.0f, -845.0f });
 	box_object2 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 900.0f, -845.0f });
 
 	// 1
 	platform_long1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Long_Grass>({ -630.0f, -700.0f });
 	cemetery2 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ -800.0f, -630.0f });
-	platform_middle1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ 550.0f, -700.0f });
+	platform_middle1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ 640.0f, -700.0f });
 
 	// 2
+	platform_short1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short_Grass>({ 220.0f, -640.0f });
 	platform_long2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Long_Grass>({ 1010.0f, -580.0f });
 
 	// 3
+	platform_middle2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ -1080.0f, -460.0f });
+	platform_middle3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ 640.0f, -460.0f });
+	box_object3 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 670.0f, -440.0f });
+
 	//platform_short1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short_Grass>({ -150.0f, -550.0f });
 	//platform_middle2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 850.0f, -550.0f });
 	//platform_wall1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall_Grass>({ 1050.0f, -280.0f });
