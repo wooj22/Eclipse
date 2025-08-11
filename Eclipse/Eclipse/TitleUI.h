@@ -14,6 +14,9 @@
 
 class TitleUI : public GameObject
 {
+private:
+	float glowtimer = 0;
+	float glowspeed = 1.8f;
 public:
 	GameObject* backgroundImage;
 	GameObject* titleLogo_Image;
