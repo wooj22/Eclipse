@@ -5,23 +5,19 @@
 #include "../Direct2D_EngineLib/Animator.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Time.h"
-#include "../Direct2D_EngineLib/ResourceManager.h"
 #include "../Direct2D_EngineLib/WorldTextRenderer.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Camera.h"
-
 #include "../Direct2D_EngineLib/RaycastHit.h"
 #include "../Direct2D_EngineLib/ColliderSystem.h"
 
+#include "PlayerAnimatorController.h"
 #include "Dash_State.h"
 
 #include "GameManager.h"
 #include "PlayUI.h"
 #include "Chat.h"
 #include "HonController.h"
-
-#include "PlayerAnimatorController.h"
-
 
 
 // 컴포넌트 활성화 시점
@@ -36,8 +32,18 @@ void PlayerFSM::Awake()
 	spriteRenderer = gameObject->GetComponent<SpriteRenderer>();
 	rigidbody = gameObject->GetComponent<Rigidbody>();
 	animatorController = gameObject->GetComponent<Animator>()->controller;
-
+	audioSource = gameObject->GetComponent<AudioSource>();
 	playerAnimatorController = dynamic_cast<PlayerAnimatorController*>(animatorController);
+
+	// [ AudioClip ] 
+	SFX_Player_Move1 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep1.wav");
+	SFX_Player_Move2 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep2.wav");
+	SFX_Player_Move3 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep3.wav");
+	SFX_Player_Move4 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep4.wav");
+	SFX_Player_Jump = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Jump.wav");
+	SFX_Player_Land = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Rending.wav");
+	SFX_Player_Attack = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Attack.wav");
+	SFX_Player_Dash = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Dash.wav");
 
 	// [ FSM 초기화 ]
 	movementFSM = std::make_unique<MovementFSM>();
@@ -123,10 +129,26 @@ void PlayerFSM::InputSetting()
 
 	if (!isUIOn)
 	{
-		isLButton = Input::GetKeyDown(VK_LBUTTON);
-		isRButton = Input::GetKeyDown(VK_RBUTTON);
+		// LMB
+		isLButton = Input::GetKey(VK_LBUTTON);
+		isLButtonDown = Input::GetKeyDown(VK_LBUTTON);
+		isLButtonUp = Input::GetKeyUp(VK_LBUTTON);
+
+		// RMB
+		isRButton = Input::GetKey(VK_RBUTTON);
+		isRButtonDown = Input::GetKeyDown(VK_RBUTTON);
+		isRButtonUp = Input::GetKeyUp(VK_RBUTTON);
 	}
-	else { isLButton = false; isRButton = false; }
+	else
+	{
+		isLButton = false;
+		isLButtonDown = false;
+		isLButtonUp = false;
+
+		isRButton = false;
+		isRButtonDown = false;
+		isRButtonUp = false;
+	}
 
 	isF = Input::GetKeyDown('F');
 }

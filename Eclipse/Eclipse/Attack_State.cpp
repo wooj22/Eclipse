@@ -16,6 +16,9 @@ void Attack_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Attack_State] Player의 Attack_State 진입 \n");
 
+    fsm->GetPlayerFSM()->GetRigidbody()->useGravity = false;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
+
     // 초기화 : 스킬 해금 레벨에 따라 보정
     float skillBonus = fsm->GetPlayerFSM()->GetAttackRangeBonus();
     baseMaxDistance = fsm->GetPlayerFSM()->maxAttackDistance * skillBonus;
@@ -52,6 +55,10 @@ void Attack_State::Enter(MovementFSM* fsm)
     // 공격 범위 활성화
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(true); 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(true); 
+
+    // 오디오 
+    fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Attack);
+    fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 }
 
 void Attack_State::Update(MovementFSM* fsm)
@@ -96,10 +103,14 @@ void Attack_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->OnAirAttack();
 
-    if (fsm->GetPlayerFSM()->GetRigidbody()) fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
+    fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
+    // fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false); 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false); 
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", false);
+
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
 }

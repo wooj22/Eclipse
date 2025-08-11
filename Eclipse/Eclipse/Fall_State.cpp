@@ -41,6 +41,9 @@ void Fall_State::Update(MovementFSM* fsm)
     // [ Idle ]
     if (fsm->GetPlayerFSM()->GetIsGround())
     {
+        fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Land);
+        fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
     }
@@ -83,7 +86,10 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Attack / Bullet ]
-    if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->CanAttack() && fsm->GetPlayerFSM()->GetIsLButton() && !fsm->GetPlayerFSM()->canFallAttack)
+    if (!fsm->GetPlayerFSM()->isAttackIgnore && 
+        fsm->GetPlayerFSM()->CanAttack() && 
+        fsm->GetPlayerFSM()->GetIsLButton() && 
+        !fsm->GetPlayerFSM()->canFallAttack)
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 
@@ -143,7 +149,9 @@ void Fall_State::FixedUpdate(MovementFSM* fsm)
     else
     {
         // 입력이 없으면 감속
-        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
+        float decelRate = airFriction + (abs(fsm->GetPlayerFSM()->GetRigidbody()->velocity.y) * 0.05f);
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x =
+            Lerp(curVelX, 0.0f, Time::GetDeltaTime() * decelRate);
     }
 }
 
@@ -152,4 +160,6 @@ void Fall_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", false);
+
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
 }

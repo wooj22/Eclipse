@@ -45,9 +45,12 @@ void Dash_State::Enter(MovementFSM* fsm)
     Vector2 newPos = Vector2(currentPos.x, targetYPosition);
     fsm->GetPlayerFSM()->GetTransform()->SetPosition(newPos);
 
-
     // 애니메이션
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Dash", true);
+
+    // 오디오 
+    fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Dash);
+    fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 }
 
 void Dash_State::Update(MovementFSM* fsm)
@@ -102,6 +105,8 @@ void Dash_State::Exit(MovementFSM* fsm)
 
     // 애니메이션 종료
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Dash", false);
+
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
 }
 
 

@@ -6,6 +6,9 @@
 #include "../Direct2D_EngineLib/ICollider.h"
 #include "../Direct2D_EngineLib/RaycastHit.h"
 #include "../Direct2D_EngineLib/ColliderSystem.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
 
 // FSM 
 #include "MovementFSM.h"
@@ -49,7 +52,7 @@ public:
 private:
 	// stat
 	float curSpeed = 0;
-	float walkSpeed = 400.0f;
+	float walkSpeed = 460.0f; // 400.0f;
 	float dashSpeed = 0.0f;
 	float jumpForce = 1400.0f; // 3000.0f;
 
@@ -69,24 +72,45 @@ private:
 	bool isWall = false;
 
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE, isF; // moon_dev
+	bool isA, isD, isS, isShift, isSpace, isQ, isE, isF; // moon_dev
+
+	bool isLButton;      // 현재 눌림 상태
+	bool isLButtonDown;  // 이번 프레임에 눌림
+	bool isLButtonUp;    // 이번 프레임에 뗌
+
+	bool isRButton;
+	bool isRButtonDown;
+	bool isRButtonUp;
 
 	// ui
 	bool isUIOn = false;
 
 private:
-	// ref component
+	// component
 	Transform* transform = nullptr;
 	SpriteRenderer* spriteRenderer = nullptr;
 	Rigidbody* rigidbody = nullptr;
+	AudioSource* audioSource = nullptr;
 	AnimatorController* animatorController = nullptr;
-
+	
 	PlayerAttackArea* playerAttackArea = nullptr;
 	GameObject* playerAttackParent = nullptr;
 
 	GameObject* targetHon = nullptr;
 
 	PlayerAnimatorController* playerAnimatorController = nullptr;
+
+public:
+	// [ Audio ]
+	shared_ptr<AudioClip> SFX_Player_Jump = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Land = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Attack = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Dash = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move1 = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move2 = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move3 = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move4 = nullptr;
+
 
 public:
 	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 
@@ -99,7 +123,7 @@ public:
 
  	bool isHolding = false;
 
-	const float bulletTimeThreshold = 0.2f;
+	const float bulletTimeThreshold = 0.2f; // 불릿 타임 시작 
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
 
@@ -112,7 +136,7 @@ public:
 
 	// attack 
 	float maxAttackDistance = 150.0f;       // 공격 시, 최대 이동 거리 
-	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
+	float attackDesiredTime = 0.7f;         // 도달 시간 0.3f -> 0.7f
 
 	// boss
 	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머
@@ -128,8 +152,14 @@ public:
 	bool GetIsA() const { return isA; }
 	bool GetIsD() const { return isD; }
 	bool GetIsS() const { return isS; }
+	
 	bool GetIsLButton() const { return isLButton; }
+	bool GetIsLButtonDown() const { return isLButtonDown; }
+	bool GetIsLButtonUp() const { return isLButtonUp; }
+
 	bool GetIsRButton() const { return isRButton; }
+	bool GetIsRButtonDown() const { return isRButtonDown; }
+	bool GetIsRButtonUp() const { return isRButtonUp; }
 
 	float GetJumpForce() const { return jumpForce; }
 	float GetInputX() const { return inputX; }
@@ -163,11 +193,13 @@ public:
 	AnimatorController* GetAnimatorController() const { return animatorController; }
     Transform* GetTransform() const { return transform; }
 	SpriteRenderer* GetSpriteRenderer() const { return spriteRenderer; }
+	AudioSource* GetAudioSource() const { return audioSource; }
+
 	void SetPlayerAttackArea(PlayerAttackArea* obj) { playerAttackArea = obj; }
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
 	GameObject* GetPlayerAttackParent() const { return playerAttackParent; }
-
+	
 
 public:
 	// script component cycle

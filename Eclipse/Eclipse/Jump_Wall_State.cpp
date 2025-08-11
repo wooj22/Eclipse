@@ -49,6 +49,10 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
 
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
+
+    // 오디오 
+    fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Jump);
+    fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 }
 
 void Jump_Wall_State::Update(MovementFSM* fsm)
@@ -68,6 +72,8 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
         OutputDebugStringA(" 더블 점프 합니다 \n");
         fsm->GetPlayerFSM()->OnJump(JumpPhase::DoubleJump);
         fsm->GetPlayerFSM()->canDoubleJump = false;
+
+        fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
     }
 
     // [ Hanging ] 
@@ -167,4 +173,5 @@ void Jump_Wall_State::FixedUpdate(MovementFSM* fsm)
 void Jump_Wall_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", false);
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
 }

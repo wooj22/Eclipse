@@ -24,6 +24,9 @@ void Walk_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer = 0.0f;
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Walk", true);
+
+    // 초기 재생 
+    PlayRandomFootstep(fsm);
 }
 
 void Walk_State::Update(MovementFSM* fsm)
@@ -67,6 +70,13 @@ void Walk_State::Update(MovementFSM* fsm)
         fsm->ChangeState(std::make_unique<Dash_State>());
         return;
     }
+
+    // --- 발소리 랜덤 재생 로직 ---
+    auto audioSource = fsm->GetPlayerFSM()->GetAudioSource();
+    if (!audioSource->IsPlaying())
+    {
+        PlayRandomFootstep(fsm);
+    }
 }
 
 void Walk_State::FixedUpdate(MovementFSM* fsm)
@@ -78,4 +88,35 @@ void Walk_State::FixedUpdate(MovementFSM* fsm)
 void Walk_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Walk", false);
+
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
+}
+
+
+
+// [ 발소리 랜덤 선택 ]
+void Walk_State::PlayRandomFootstep(MovementFSM* fsm)
+{
+    static bool seeded = false;
+    if (!seeded)
+    {
+        srand(static_cast<unsigned>(time(nullptr)));
+        seeded = true;
+    }
+
+    int choice = rand() % 4;
+    std::shared_ptr<AudioClip> clip;
+
+    switch (choice)
+    {
+    case 0: clip = fsm->GetPlayerFSM()->SFX_Player_Move1; break;
+    case 1: clip = fsm->GetPlayerFSM()->SFX_Player_Move2; break;
+    case 2: clip = fsm->GetPlayerFSM()->SFX_Player_Move3; break;
+    case 3: clip = fsm->GetPlayerFSM()->SFX_Player_Move4; break;
+    }
+
+    auto audioSource = fsm->GetPlayerFSM()->GetAudioSource();
+    audioSource->SetClip(clip);
+    audioSource->SetLoop(false); // 반복 아님
+    audioSource->PlayOneShot();
 }

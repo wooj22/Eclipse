@@ -28,7 +28,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer += unscaledDelta;
 
     // [ Attack ] 마우스 왼쪽 버튼에서 손을 뗐을 때 → 공격
-    if (fsm->GetPlayerFSM()->GetIsLButton())
+    if (fsm->GetPlayerFSM()->GetIsLButtonUp())
     {
         Time::SetTimeScale(1.0f); 
         fsm->GetPlayerFSM()->OnAirAttack();
@@ -37,7 +37,7 @@ void BulletTime_State::Update(MovementFSM* fsm)
     }
 
     // [ Idle ] 공격 취소 
-    if (fsm->GetPlayerFSM()->GetIsRButton()) 
+    if (fsm->GetPlayerFSM()->GetIsRButton())
     { 
         // 만약 마우스 왼쪽 누르고 있었으면 무시상태  
         if (fsm->GetPlayerFSM()->GetIsLButton()) fsm->GetPlayerFSM()->isAttackIgnore = true;

@@ -60,23 +60,46 @@ void Idle_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Walk_State>());
     }
 
-    // [ Attack / Bullet ]
-    if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->GetIsLButton())
+    // [ Attack / BulletTime ]
+    if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->GetIsGround())
     {
-        if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f;  }
+        // 버튼 눌린 순간 -> 홀드 시작
+        if (fsm->GetPlayerFSM()->GetIsLButtonDown())
+        {
+            fsm->GetPlayerFSM()->isHolding = true;
+            fsm->GetPlayerFSM()->holdTime = 0.0f;
+        }
 
-        fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
+        // 홀드 중이면 시간 누적
+        if (fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->GetIsLButton())
+        {
+            fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
 
-        // [ BulletTime ]
-        if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+            // 길게 눌렀으면 BulletTime
+            if (fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold)
+            {
+                fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+                return;
+            }
+        }
+
+        // 버튼 뗀 순간 -> 홀드 짧으면 Attack, 길면 이미 BulletTime으로 진입했음 
+        if (fsm->GetPlayerFSM()->GetIsLButtonUp() && fsm->GetPlayerFSM()->isHolding)
+        {
+            if (fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold)
+            {
+                fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+                return;
+            }
+            fsm->GetPlayerFSM()->isHolding = false;
+            fsm->GetPlayerFSM()->holdTime = 0.0f;
+        }
     }
     else
     {
-        // [ Attack ]
-        if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold) fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
-
-        // 초기화
-        fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
+        // UI 켜짐 등으로 입력 무효화 시 홀드 초기화
+        fsm->GetPlayerFSM()->isHolding = false;
+        fsm->GetPlayerFSM()->holdTime = 0.0f;
     }
 
 

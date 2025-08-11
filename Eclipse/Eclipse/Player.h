@@ -8,6 +8,9 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Scene.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
@@ -28,6 +31,7 @@ public:
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
 	Animator* animator;
+	AudioSource* audioSource;
 
 	// [ animation asset ]
 	PlayerAnimatorController* playerAnimatorController;
@@ -43,6 +47,7 @@ public:
 	Transform* shadow_transform = nullptr;
 	SpriteRenderer* shadow_spriteRenderer = nullptr;
 
+
 public:
 	float GetPlayerGravityScale() const { return playerGravityScale; }
 
@@ -54,14 +59,19 @@ public:
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<BoxCollider>();
 		animator = AddComponent<Animator>();
+		audioSource = AddComponent<AudioSource>();
 
 		spriteRenderer->layer = 4;
 		rigidbody->collisionDetection = CollisionDetection::Continuous;
 
 		playerFSM = AddComponent<PlayerFSM>();
 
-		// 그림자 여기서 생성함!
+		// 그림자 생성
 		player_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<Shadow>();
+
+		// [ Audio Chnnel ]
+		audioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+
 
 	}
 	~Player() override
@@ -80,7 +90,6 @@ public:
 
 		collider->offset = { 10.0f, -55.0f };
 		collider->size = { 140.0f, 350.0f };
-		// collider->isTrigger = false;
 
 		rigidbody->useGravity = true;
 		rigidbody->gravityScale = playerFSM->defaultGravity;
