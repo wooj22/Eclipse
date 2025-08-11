@@ -3,12 +3,16 @@
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
+#include "../Direct2D_EngineLib/Time.h"
+#include <vector>
 
 class EndScene : public Scene
 {
 private:
 	GameObject* cam;
-	UI_Text* title_text;
+	std::vector<UI_Text*> credits;
+	float scrollY = -1080.0f;
+	float scrollSpeed = 100.0f;
 
 public:
 	EndScene() = default;
