@@ -169,7 +169,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::B:		// ø¨º‚π›¿¿ A-B
 		{
 			// score
-			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeHonCount(10);
 
 			// hp cheak
 			TakeDamage(1);

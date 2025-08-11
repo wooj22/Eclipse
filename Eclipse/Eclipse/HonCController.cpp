@@ -130,7 +130,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::A:		// ø¨º‚ π›¿¿ C-A
 		{
 			// score
-			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeHonCount(10);
 
 			// hp cheak
 			TakeDamage(1);
@@ -167,7 +167,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::B:		// ø¨º‚ π›¿¿ C-B
 		{
 			// score
-			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeHonCount(10);
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
