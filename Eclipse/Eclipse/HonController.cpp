@@ -43,9 +43,6 @@ void HonController::TakeDamage(int damage)
 
 	// effect
 	sr->SetAlpha(alphaData[hp]);
-
-	// reset
-	isCollisionD = false;
 }
 
 void HonController::Die()
@@ -56,23 +53,20 @@ void HonController::Die()
 	// hon score
 	if (honType == HonType::A)
 	{
-		if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-		else if (is2A) GameManager::Get().ChangeHonCount(3);
+		if (is2A) GameManager::Get().ChangeHonCount(3);
 		else GameManager::Get().ChangeHonCount(1);
 	}
 	else if (honType == HonType::B)
 	{
-		if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-		else GameManager::Get().ChangeHonCount(1);
+		GameManager::Get().ChangeHonCount(1);
 	}
 	else if (honType == HonType::C)
 	{
-		if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-		else GameManager::Get().ChangeHonCount(1);
+		GameManager::Get().ChangeHonCount(1);
 	}
 	else if (honType == HonType::D)
 	{
-		GameManager::Get().ChangeHonCount(-1);
+		GameManager::Get().ChangeHonCount(-10);
 	}
 
 	// component off
