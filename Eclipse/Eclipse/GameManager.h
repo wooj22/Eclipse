@@ -110,7 +110,7 @@ public:
 	GameManager() = default;
 	~GameManager() = default;
 
-	void Init() { g_playUI = nullptr; ReSetData(); }
+	void Init();
 	void UnInit();
 	void ReSetData();
 	void WaveStart();
