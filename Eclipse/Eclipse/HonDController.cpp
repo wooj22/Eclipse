@@ -13,7 +13,7 @@ void HonDController::Awake()
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
 
-	sr->renderMode = RenderMode::Lit_Glow;
+	sr->renderMode = RenderMode::Lit_ColorTint;
 	sr->SetGlowAmmount(10);
 	
 	SetSize(size);
