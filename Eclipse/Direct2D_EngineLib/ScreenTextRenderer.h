@@ -4,6 +4,7 @@
 #include <string>
 #include "RenderSystem.h"
 #include "IRenderer.h"
+#include "FontLoaderUtil.h"
 
 /* [Screen Text Renderer Conponent]
 * <UI>의 Text 출력을 담당하는 Component로
@@ -13,6 +14,7 @@
 * render시 필요한 RectTransform은 이 컴포넌트가 등록된 오브젝트의 RectTransform의 포인터에 담아 활용한다
 */
 
+class FontLoaderUtil;
 class RectTransform;
 class ScreenTextRenderer : public IRenderer
 {
@@ -37,6 +39,7 @@ private:
 	ComPtr<IDWriteTextLayout> textLayout;
 
 	bool isTextDirty;
+	FontLoaderUtil fontUtil;
 
 public:
 	// component cycle
