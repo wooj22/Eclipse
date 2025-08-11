@@ -4,8 +4,8 @@
 #include "Quest.h"
 #include "NPC.h"
 #include "EclipseApp.h"
-#include <algorithm>
 #include "../Direct2D_EngineLib/Input.h"
+#include <algorithm>
 
 void PlayUI::Awake()
 {  
@@ -71,7 +71,7 @@ void PlayUI::Awake()
 	// audioSource 채널 그룹 지정 및 사운드 재생
 	bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
 	sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
-	bgmSource->SetVolume(1);
+	//bgmSource->SetVolume(1);
 	bgmSource->SetLoop(true);
 	bgmSource->SetClip(bgmClip_Main);
 	bgmSource->Play();
@@ -228,10 +228,10 @@ void PlayUI::SceneStart()
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
 	skillWindow_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowImageTexture, "SkillWindow");
-	auto skillWindowBackGroundImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindowBackGround.png");
-	skillWindowBackGround_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowBackGroundImageTexture, "SkillWindowBackGround");
-	auto skillWindowBackGroundImageGradientTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindowBackGroundImageGradient.png");
-	skillWindowBackGroundGradient_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowBackGroundImageGradientTexture, "SkillWindowBackGroundImageGradient");
+	auto skillWindowBackGroundImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/WindowBackGround.png");
+	skillWindowBackGround_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowBackGroundImageTexture, "WindowBackGround");
+	auto skillWindowBackGroundImageGradientTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/WindowBackGroundGradient.png");
+	skillWindowBackGroundGradient_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowBackGroundImageGradientTexture, "WindowBackGroundGradient");
 
 	for (int i = 0; i < skillButtons.size(); ++i)
 	{
@@ -375,7 +375,7 @@ void PlayUI::Update()
 
 
 
-	if (Input::GetKeyDown(VK_TAB)&& chat_Image->IsActive() != true)
+	if ((Input::GetKeyDown(VK_ESCAPE)||Input::GetKeyDown(VK_TAB))&& chat_Image->IsActive() != true)
 	{
 		if (skillWindowBackGround_Image->IsActive())
 		{

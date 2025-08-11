@@ -1,7 +1,6 @@
 #include "TitleUI.h"
 #include "../Direct2D_EngineLib/GameApp.h"
 #include "EclipseApp.h"
-#include <DirectXMath.h>
 
 void TitleUI::Awake()
 {
@@ -16,7 +15,11 @@ void TitleUI::Awake()
 
 	// audioSource 채널 그룹 지정 및 사운드 재생
 	bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
-	bgmSource->SetVolume(0);
+	bgmSource->SetVolume(1);
+	std::wostringstream oss;
+	oss << L"float = " << std::fixed << std::setprecision(2) << bgmSource->GetVolume() << L"\n"; // 2자리
+	OutputDebugStringW(oss.str().c_str());
+
 	bgmSource->SetClip(bgmClip);
 	bgmSource->SetLoop(true);
 	bgmSource->Play();
@@ -24,6 +27,8 @@ void TitleUI::Awake()
 	sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
 	sfxSource->SetClip(sfxClip_Button1);
 	sfxSource->SetLoop(false);
+
+	linecontroller = new LineController();
 }
 
 void TitleUI::SceneStart()
@@ -51,7 +56,7 @@ void TitleUI::SceneStart()
 	credit_Button->rectTransform->SetParent(play_Button->rectTransform);
 	end_Button->rectTransform->SetParent(play_Button->rectTransform);
 
-	play_Button->rectTransform->SetPosition(0, -200);
+	play_Button->rectTransform->SetPosition(0, -250);
 	play_Button->rectTransform->SetSize(300, 50);
 	play_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
@@ -69,7 +74,7 @@ void TitleUI::SceneStart()
 
 	//TODOMO : 이미지로하면 텍스트는 제거
 	play_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-	play_Button->screenTextRenderer->SetText(L"게임 시작");
+	play_Button->screenTextRenderer->SetText(L"새로하기");
 	play_Button->screenTextRenderer->SetFontSize(30);
 	play_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 	options_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
@@ -81,20 +86,23 @@ void TitleUI::SceneStart()
 	credit_Button->screenTextRenderer->SetFontSize(30);
 	credit_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 	end_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-	end_Button->screenTextRenderer->SetText(L"게임 종료");
+	end_Button->screenTextRenderer->SetText(L"나가기");
 	end_Button->screenTextRenderer->SetFontSize(30);
 	end_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	// 밑줄 이미지
-	underscore_Image->rectTransform->SetPosition(0, -30); // TODOMO : 버튼 이미지 나오면 위치 수정
+	underscore_Image->AddComponent<Animator>();
+	underscore_Image->GetComponent<Animator>()->SetController(linecontroller);
+	underscore_Image->rectTransform->SetPosition(0, -20);
 	underscore_Image->rectTransform->SetSize(150, 150);
-	auto underScoreTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Underscore.png");
-	underscore_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(underScoreTexture, "Underscore");
+	/*auto underScoreTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Underscore.png");
+	underscore_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(underScoreTexture, "Underscore");*/
 	underscore_Image->SetActive(false); // 초기에는 밑줄 이미지 비활성화
 
 	// 옵션 UI 생성
 	optionUI->SetActive(false);
 	optionUI->rectTransform->SetPosition(0, 0);
+
 
 	play_Button->button->onClickListeners.AddListener(
 		this, std::bind(&TitleUI::ChangePlayScene, this));
@@ -102,8 +110,11 @@ void TitleUI::SceneStart()
 	options_Button->button->onClickListeners.AddListener(
 		this, std::bind(&TitleUI::OpenOptionUI, this));
 
-	optionUI->close_Button->button->onClickListeners.AddListener(
-		this, std::bind(&TitleUI::OpenOptionUI, this));
+	/*optionUI->close_Button->button->onClickListeners.AddListener(
+		this, std::bind(&TitleUI::OpenOptionUI, this));*/
+
+	credit_Button->button->onClickListeners.AddListener(
+		this, std::bind(&TitleUI::OpenCreditUI, this));
 
 	for (UI_Button* btn : menuButtons)
 	{
@@ -128,8 +139,15 @@ void TitleUI::SceneStart()
 			play_Button->SetActive(true);
 			optionUI->SetActive(false);
 		});
-	/*optionUI->close_Button->button->onClickListeners.AddListener(
-		this, [this]() {underscore_Image->rectTransform->SetSize(150, 150); });*/
+
+
+	creditUI->close_Button->button->onClickListeners.AddListener(
+		this, [this]() {
+			sfxSource->SetClip(sfxClip_Button2);
+			sfxSource->Play();
+			play_Button->SetActive(true);
+			creditUI->creditWindowBackGround_Image->SetActive(false);
+		});
 
 	end_Button->button->onClickListeners.AddListener(
 		this, [this]() {
@@ -144,7 +162,6 @@ void TitleUI::Update()
 
 	glowtimer += Time::GetDeltaTime();  // 매 프레임 시간 누적
 
-	//float glow = ((sinf(glowtimer * glowspeed - DirectX::XM_PIDIV2) + 1.0f) / 2.0f) * 1000.0f;
 	float s = sinf(glowtimer * glowspeed) * 0.5f + 0.5f;
 	s = pow(s, 6.0f);
 	float glow = s * 150.0f;
@@ -154,7 +171,7 @@ void TitleUI::Update()
 
 void TitleUI::Destroyed()
 {
-
+	delete linecontroller;
 }
 
 void TitleUI::OnPointEnterButton(UI_Button* onButton)
@@ -166,6 +183,7 @@ void TitleUI::OnPointEnterButton(UI_Button* onButton)
 
 	sfxSource->SetClip(sfxClip_Button1);
 	sfxSource->Play();
+	linecontroller->PlayAnimation("UI_Line");
 }
 
 void TitleUI::OnPointExitButton(UI_Button* currButton)
@@ -196,6 +214,16 @@ void TitleUI::OpenOptionUI()
 	underscore_Image->SetActive(true);
 	//underscore_Image->rectTransform->SetSize(130, 150);
 	optionUI->SetActive(true);
+	play_Button->SetActive(false);
+	sfxSource->SetClip(sfxClip_Button2);
+	sfxSource->Play();
+}
+
+void TitleUI::OpenCreditUI()
+{
+	/*underscore_Image->rectTransform->SetParent(optionUI->sound_Button->rectTransform);
+	underscore_Image->SetActive(true);*/
+	creditUI->creditWindowBackGround_Image->SetActive(true);
 	play_Button->SetActive(false);
 	sfxSource->SetClip(sfxClip_Button2);
 	sfxSource->Play();
