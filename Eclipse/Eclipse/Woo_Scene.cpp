@@ -21,7 +21,7 @@ void Woo_Scene::Awake()
 	title_text->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
 
 	// [Boss]
-	boss = CreateObject<Boss>();
+	//boss = CreateObject<Boss>();
 
 	// [Hon]
 	honA1 = CreateObject<HonA>({ -400, -100 });
@@ -48,6 +48,19 @@ void Woo_Scene::Awake()
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/Boss_Bullet.png");
 	auto newSprite = ResourceManager::Get().CreateSprite(texture, "handle");
 	ui_slider->SetHandleImage(newSprite);
+
+	// map border test
+	GameObject* mapBorder = CreateObject<GameObject>({-500,0});
+	mapBorder->AddComponent<Transform>();
+	c =  mapBorder->AddComponent<BoxCollider>();
+	Rigidbody* rb = mapBorder->AddComponent<Rigidbody>();
+
+	mapBorder->name = "MapBorder";
+	mapBorder->transform->SetPosition(-500, 0);
+	rb->isKinematic = true;
+	rb->useGravity = false;
+	c->size = { 30, 1500 };
+	c->isTrigger = true;
 
 	/*--------------------------------------------------*/
 	/* ¼±¹ÎÀÌ²¨ */
@@ -95,6 +108,9 @@ void Woo_Scene::Update()
 {
 	// game object -> Update()
 	__super::Update();
+
+	// test
+	c->DebugColliderDraw();
 
 	// scene change
 	if (Input::GetKeyDown('1'))

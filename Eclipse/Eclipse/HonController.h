@@ -34,13 +34,13 @@ protected:
 	// hon stat
 	int hp = 3;
 	float size = 1;
-	float descentSpeed = 85;						// 하강 speed
+	float descentSpeed = 90;						// 하강 speed
 	float collisionSpeed = 1000;					// 충돌 밀림 speed
 	const float collisionSpeedDefalut = 1000;		// 충돌 밀림 기본 speed
 
 	// data
 	float collisionMovingTime = 0.5f;		// 충돌 밀림 지속시간
-	float pullMovingTime = 0.15f;			// Hon C 끌어당김 지속시간
+	float pullMovingTime = 0.2f;			// Hon C 끌어당김 지속시간
 
 	// controll
 	Vector2 moveDirection = Vector2::zero;		// colliison move dir
@@ -71,107 +71,40 @@ public:	CircleCollider* collider = nullptr;
 protected: AudioSource* audioSource = nullptr;
 
 public:
-	HonController()
-	{
-		SFX_HonCollision = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Crash.wav");
-		SFX_HonDestroy = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Destroy.wav");
-		SFX_HonSplit = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Split.wav");
-		SFX_HonMerge = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Merge.wav");
-	}
+	HonController();
 
 	// direction
-	void SetDirection(Vector2 dir) { moveDirection = dir; }
-	Vector2 Getdirection() { return moveDirection; }
+	void SetDirection(Vector2 dir);
+	Vector2 Getdirection();
 
 	// size
-	void SetSize(float s) 
-	{
-		size = s;  
-		if(tr) tr->SetScale(size, size); 
-	}
-	float GetSize() { return size; }
+	void SetSize(float s);
+	float GetSize();
 
 	// collision move speed
-	void SetSpeedUpRate(float r) { collisionSpeed = collisionSpeedDefalut * r; }
+	void SetSpeedUpRate(float r);
 
 	// descent speed
-	void SetDescentSpeed(float s) { descentSpeed = s; }
-	float GetSDescentpeed() { return descentSpeed; }
+	void SetDescentSpeed(float s);
+	float GetSDescentpeed();
 
 	// hp
-	void SetHp(int h) { hp = h; }
-	int GetHp() { return hp; }
-	void TakeDamage(int damage)
-	{
-		if (destroyPending) return;
-
-		hp -= damage;
-		if (hp <= 0) 
-		{
-			Die();
-		}
-
-		// reset
-		isCollisionD = false;
-	}
-
-	void Die()
-	{
-		// wave1 quest
-		GameManager::Get().ChangeQuestCount(1);
-
-		// hon score
-		if (honType == HonType::A)
-		{
-			if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-			else if (is2A) GameManager::Get().ChangeHonCount(3);
-			else GameManager::Get().ChangeHonCount(1);
-		}
-		else if (honType == HonType::B)
-		{
-			if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-			else GameManager::Get().ChangeHonCount(1);
-		}
-		else if (honType == HonType::C)
-		{
-			if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-			else GameManager::Get().ChangeHonCount(1);
-		}
-		else if (honType == HonType::D)
-		{
-			GameManager::Get().ChangeHonCount(-1);
-		}
-
-		sr->SetEnabled(false);
-		collider->SetEnabled(false);
-
-		// sound
-		audioSource->SetClip(SFX_HonDestroy);
-		audioSource->PlayOneShot();
-
-		// destroy
-		destroyPending = true;
-	}
+	void SetHp(int h);
+	int GetHp();
+	void TakeDamage(int damage);
+	void Die();
 
 	// player attack
 	virtual void TakeDamageByPlayer() {}
 
 	// collision moving flag
-	void CollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
-	void CollisionStart() { isCollisionMoving = true; collisionMovingDelta = 0; }
+	void CollisionEnd();
+	void CollisionStart();
 
 	// HonC 끌어당기는 함수
-	void HonC_PullMe(Vector2 pos)
-	{
-		pullDirection = (pos - tr->GetWorldPosition()).Normalized();
-		isPullMoving = true;
-	}
+	void HonC_PullMe(Vector2 pos);
 
 	// 플레이어 흡수
-	void Absorption() 
-	{ 
-		isAbsorption = true;
-		if (collider) collider->SetEnabled(false);
-	}
+	void Absorption();
 };
 

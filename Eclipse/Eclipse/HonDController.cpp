@@ -13,6 +13,9 @@ void HonDController::Awake()
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
 
+	sr->renderMode = RenderMode::Lit_Glow;
+	sr->SetGlowAmmount(10);
+	
 	SetSize(size);
 }
 
@@ -82,6 +85,13 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		GameManager::Get().ChangeQuestCount(3);
 
 		gameObject->Destroy();
+	}
+
+	// [mapborder collision]
+	if (other->gameObject->name == "MapBorder")
+	{
+		CollisionStart();
+		moveDirection = contact.normal;
 	}
 
 	// [boss collision]
