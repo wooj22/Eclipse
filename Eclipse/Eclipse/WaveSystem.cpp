@@ -224,28 +224,28 @@ void WaveSystem::StartWave(int waveNumber)
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
         //m_waveDuration = 70.0f;        
-        m_waveDuration = 2.0f;
+        m_waveDuration = 70.0f;
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;
 
     case 2:
         m_currentWaveState = WaveState::WAVE_2;
-        m_waveDuration = 2.0f;
+        m_waveDuration = 70.0f;
         SetupWave2Pattern();
         OutputDebugStringA("Wave 2 Started - Chain Reaction (HonA, HonB, HonC)\n");
         break;
 
     case 3:
         m_currentWaveState = WaveState::WAVE_3;
-        m_waveDuration = 2.0f;
+        m_waveDuration = 70.0f;
         SetupWave3Pattern();
         OutputDebugStringA("Wave 3 Started - Increased Difficulty (All Hons)\n");
         break;
 
     case 4:
         m_currentWaveState = WaveState::WAVE_BOSS;
-        m_waveDuration = 3.0f;
+        m_waveDuration = 80.0f;
         SetupBossPattern();
         OutputDebugStringA("Boss Wave Started!\n");
         break;
