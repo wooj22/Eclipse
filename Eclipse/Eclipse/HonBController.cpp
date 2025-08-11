@@ -7,6 +7,7 @@
 void HonBController::Awake()
 {
 	tr = gameObject->transform;
+	sr = gameObject->GetComponent<SpriteRenderer>();
 	collider = gameObject->GetComponent<CircleCollider>();
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
@@ -19,6 +20,14 @@ void HonBController::Start()
 
 void HonBController::Update()
 {
+	// sound delay destroy
+	if (destroyPending)
+	{
+		if (!audioSource->IsPlaying()) gameObject->Destroy();
+		return;
+	}
+
+	// moving
 	if (isAbsorption) return;
 
 	if (isPullMoving)
@@ -93,12 +102,13 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
-		if (gameObject->IsDestroyed()) return;
+		if (gameObject->IsDestroyed() || destroyPending) return;
 
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
+		if (otherController->destroyPending) return;
 		HonType honType = otherController->honType;
 
 		// collision acttion
@@ -109,7 +119,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hp check
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+			if (destroyPending || otherController->destroyPending) return;
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
@@ -135,13 +145,19 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				}
 			}
 
+			sr->SetEnabled(false);
+			collider->SetEnabled(false);
+			otherController->sr->SetEnabled(false);
+			otherController->collider->SetEnabled(false);
+
 			// sound
-			audioSource->SetClip(SFX_Division);
+			audioSource->SetClip(SFX_HonSplit);
 			audioSource->PlayOneShot();
 
+			// sound dealy
 			// old HonB
-			otherGameObject->Destroy();
-			gameObject->Destroy();
+			otherController->destroyPending = true;
+			destroyPending = true;
 		}
 		case HonType::C:		// 연쇄 반응 B-C (C쪽에서 처리해서 자기 보정만 담당)
 		{

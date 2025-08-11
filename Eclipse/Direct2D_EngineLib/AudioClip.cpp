@@ -8,7 +8,16 @@ AudioClip::AudioClip(const std::string& filepath)
     if (system)
     {
         FMOD_RESULT result = system->createSound(filepath.c_str(), FMOD_DEFAULT, nullptr, &sound);
-        if (result != FMOD_OK) sound = nullptr;  
+        if (result == FMOD_OK && sound)
+        {
+            unsigned int lengthMS = 0;
+            sound->getLength(&lengthMS, FMOD_TIMEUNIT_MS);
+            length = lengthMS / 1000.0f;
+        }
+        else
+        {
+            sound = nullptr;
+        }
     }
 }
 
