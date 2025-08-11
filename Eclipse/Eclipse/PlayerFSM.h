@@ -72,7 +72,15 @@ private:
 	bool isWall = false;
 
 	// key
-	bool isA, isD, isS, isShift, isSpace, isLButton, isRButton, isQ, isE, isF; // moon_dev
+	bool isA, isD, isS, isShift, isSpace, isQ, isE, isF; // moon_dev
+
+	bool isLButton;      // 현재 눌림 상태
+	bool isLButtonDown;  // 이번 프레임에 눌림
+	bool isLButtonUp;    // 이번 프레임에 뗌
+
+	bool isRButton;
+	bool isRButtonDown;
+	bool isRButtonUp;
 
 	// ui
 	bool isUIOn = false;
@@ -115,7 +123,7 @@ public:
 
  	bool isHolding = false;
 
-	const float bulletTimeThreshold = 0.2f;
+	const float bulletTimeThreshold = 0.2f; // 불릿 타임 시작 
 	const float bulletTimeDuration = 2.0f;  // 불릿 유지 시간 
 	const float ignoreInputDuration = 1.5f; // 입력 무시
 
@@ -144,8 +152,14 @@ public:
 	bool GetIsA() const { return isA; }
 	bool GetIsD() const { return isD; }
 	bool GetIsS() const { return isS; }
+	
 	bool GetIsLButton() const { return isLButton; }
+	bool GetIsLButtonDown() const { return isLButtonDown; }
+	bool GetIsLButtonUp() const { return isLButtonUp; }
+
 	bool GetIsRButton() const { return isRButton; }
+	bool GetIsRButtonDown() const { return isRButtonDown; }
+	bool GetIsRButtonUp() const { return isRButtonUp; }
 
 	float GetJumpForce() const { return jumpForce; }
 	float GetInputX() const { return inputX; }

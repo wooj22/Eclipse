@@ -86,7 +86,10 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Attack / Bullet ]
-    if (!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->CanAttack() && fsm->GetPlayerFSM()->GetIsLButton() && !fsm->GetPlayerFSM()->canFallAttack)
+    if (!fsm->GetPlayerFSM()->isAttackIgnore && 
+        fsm->GetPlayerFSM()->CanAttack() && 
+        fsm->GetPlayerFSM()->GetIsLButton() && 
+        !fsm->GetPlayerFSM()->canFallAttack)
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 

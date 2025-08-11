@@ -129,10 +129,26 @@ void PlayerFSM::InputSetting()
 
 	if (!isUIOn)
 	{
-		isLButton = Input::GetKeyDown(VK_LBUTTON);
-		isRButton = Input::GetKeyDown(VK_RBUTTON);
+		// LMB
+		isLButton = Input::GetKey(VK_LBUTTON);
+		isLButtonDown = Input::GetKeyDown(VK_LBUTTON);
+		isLButtonUp = Input::GetKeyUp(VK_LBUTTON);
+
+		// RMB
+		isRButton = Input::GetKey(VK_RBUTTON);
+		isRButtonDown = Input::GetKeyDown(VK_RBUTTON);
+		isRButtonUp = Input::GetKeyUp(VK_RBUTTON);
 	}
-	else { isLButton = false; isRButton = false; }
+	else
+	{
+		isLButton = false;
+		isLButtonDown = false;
+		isLButtonUp = false;
+
+		isRButton = false;
+		isRButtonDown = false;
+		isRButtonUp = false;
+	}
 
 	isF = Input::GetKeyDown('F');
 }
