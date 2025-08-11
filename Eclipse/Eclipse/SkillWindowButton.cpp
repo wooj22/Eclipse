@@ -5,6 +5,7 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 {
 	rectTransform = AddComponent<RectTransform>();
 	maxSkillLevel = GameManager::Get().skillTree[skillName].maxLevel;
+	skillIcon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillIcon_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	skillLevel_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skillName_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
@@ -14,6 +15,7 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 	skillColor3_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skillLevelUpHonCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 
+	skillIcon_Image->rectTransform->SetParent(this->rectTransform);
 	skillIcon_Button->rectTransform->SetParent(this->rectTransform);
 	skillLevel_Text->rectTransform->SetParent(this->rectTransform);
 	skillName_Text->rectTransform->SetParent(this->rectTransform);
@@ -35,7 +37,8 @@ void SkillWindowButton::SceneStart()
 	const auto& skillvalue = GameManager::Get().skillValue[skillName];
 	const auto& skilltext = GameManager::Get().skillText[skillName];
 
-
+	auto skillIconTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillIcon.png");
+	skillIcon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 	//이미지 및 폰트 크기에따라 미세 조정 필요
 	skillLevel_Text->rectTransform->SetPosition(0,-50); 
 
