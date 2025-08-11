@@ -4,12 +4,16 @@ Options::Options() : GameObject("Optionts", "Optionts")
 {
 	rectTransform = AddComponent<RectTransform>();
 
+	optionWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	optionWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	background_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	window_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	close_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	sound_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	key_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 
+	optionWindowBackGround_Image->rectTransform->SetParent(this->rectTransform);
+	optionWindowBackGroundGradient_Image->rectTransform->SetParent(this->rectTransform);
 	background_Image->rectTransform->SetParent(this->rectTransform);
 	window_Image->rectTransform->SetParent(this->rectTransform);
 	close_Button->rectTransform->SetParent(this->rectTransform);
@@ -26,6 +30,14 @@ void Options::Awake()
 void Options::SceneStart()
 {
 	rectTransform->SetPosition(0, -150);
+	optionWindowBackGround_Image->rectTransform->SetSize(1920, 1080);
+	optionWindowBackGround_Image->rectTransform->SetPosition(0, 150);
+	optionWindowBackGroundGradient_Image->rectTransform->SetSize(1920, 1080);
+	optionWindowBackGroundGradient_Image->rectTransform->SetPosition(0, 150);
+	auto optionWindowBackGroundImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionWindowBackGround.png");
+	optionWindowBackGround_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(optionWindowBackGroundImageTexture, "OptionWindowBackGround");
+	auto optionWindowBackGroundGradientImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionWindowBackGroundGradient.png");
+	optionWindowBackGroundGradient_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(optionWindowBackGroundGradientImageTexture, "OptionWindowBackGroundGradient");
 	background_Image->rectTransform->SetSize(850, 600);
 	auto backImagenTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionsBackGround.png");
 	background_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(backImagenTexture, "OptionsBackGround");
