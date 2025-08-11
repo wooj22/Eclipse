@@ -11,7 +11,9 @@ void MenuScene::Awake()
 
 	// create gameobject
 	titleUI = CreateObject<TitleUI>();
-	titleUI->backgroundImage = CreateObject<UI_Image>();
+	titleUI->backgroundImage = CreateObject<GameObject>();
+	titleUI->titleLogo_Image = CreateObject<GameObject>();
+	titleUI->titleSpell_Image = CreateObject<GameObject>();
 	titleUI->play_Button = CreateObject<UI_Button>();
 	titleUI->options_Button = CreateObject<UI_Button>();
 	titleUI->credit_Button = CreateObject<UI_Button>();
@@ -25,9 +27,6 @@ void MenuScene::Start()
 {
 	// game object -> SceneStart()
 	__super::Start();
-
-	titleUI->play_Button->button->onClickListeners.AddListener(
-		this, std::bind(&MenuScene::ChagnePlayScene, this));
 }
 
 void MenuScene::Update()
@@ -70,9 +69,4 @@ void MenuScene::Exit()
 {
 	// game object -> destroy()
 	__super::Exit();
-}
-
-void MenuScene::ChagnePlayScene()
-{
-	SceneManager::Get().ChangeScene(EclipseApp::PLAY);
 }

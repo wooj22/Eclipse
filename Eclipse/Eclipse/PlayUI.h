@@ -12,6 +12,12 @@
 #include "tooltip.h"
 #include <vector>
 
+// 사운드
+#include "../Direct2D_EngineLib/AudioSystem.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
+
 class Chat;
 class Quest;
 class NPC;
@@ -29,6 +35,18 @@ private:
 	float fadeTime = 2.5f;
 
 	std::vector<wstring> tooltipName; 
+
+	// audio
+	shared_ptr<AudioClip> bgmClip_Main = nullptr;
+	shared_ptr<AudioClip> bgmClip_Wave = nullptr;
+	shared_ptr<AudioClip> bgmClip_Boss = nullptr;
+	//shared_ptr<AudioClip> bgmClip_Clear = nullptr;
+	shared_ptr<AudioClip> sfxClip_Button1 = nullptr;
+	shared_ptr<AudioClip> sfxClip_Button2 = nullptr;
+	shared_ptr<AudioClip> sfxClip_SkillUI = nullptr;
+	shared_ptr<AudioClip> sfxClip_SkillActive = nullptr;
+	//shared_ptr<AudioClip> sfxClip_GameOver = nullptr;
+	shared_ptr<AudioClip> sfxClip_ChangeScene = nullptr;
 
 public:
 	UI_Text* timer_Text;			// 웨이브 타이머
@@ -54,10 +72,12 @@ public:
 	UI_Text* hon_Text;				// 혼 개수 텍스트
 
 	UI_Image* skill1_Image;			// 스킬1 이미지
+	UI_Image* skill1Icon_Image;		// 스킬1 이미지
 	UI_Text* skill1_Text;			// 스킬1 텍스트
 	UI_Text* skill1CollTime_Text;	// 스킬1 쿨타임텍스트
 
 	UI_Image* skill2_Image;			// 스킬2 이미지
+	UI_Image* skill2Icon_Image;		// 스킬2 이미지
 	UI_Text* skill2_Text;			// 스킬1 텍스트
 
 	UI_Text* waveInfo_Text;			// 웨이브 정보 텍스트
@@ -65,14 +85,20 @@ public:
 	tooltip* tooltip1;
 	tooltip* tooltip2;
 
-	UI_Image* skillWindow_Image;	// 스킬 창 이미지
-	UI_Text* skillWindowName_Text;	// 스킬창 이름 텍스트
-	std::vector<SkillWindowButton*> skillButtons;
-	UI_Image* skillHon_Image;		// 스킬창 혼 이미지
-	UI_Text* skillHon_Text;			// 스킬창 혼 개수 텍스트
+	UI_Image* skillWindowBackGround_Image;			// 스킬 창 검은 화면 이미지
+	UI_Image* skillWindowBackGroundGradient_Image;	// 스킬 창 그라데이션 이미지
+	UI_Image* skillWindow_Image;					// 스킬 창 이미지
+	UI_Text* skillWindowName_Text;					// 스킬창 이름 텍스트
+	std::vector<SkillWindowButton*> skillButtons;	// 스킬 버튼 모음
+	UI_Image* skillHon_Image;						// 스킬창 혼 이미지
+	UI_Text* skillHon_Text;							// 스킬창 혼 개수 텍스트
 
 	BossHP* bossHP;
 	NPC* npc;
+
+	//Audio
+	AudioSource* bgmSource = nullptr;
+	AudioSource* sfxSource = nullptr;
 
 public:
 	// game object cycle
@@ -108,4 +134,8 @@ public:
 	void StartWaveInfo(int waveNumber);
 
 	void CheckPauseUI();
+
+	void SkillActiveSound();
+	void ButtonEnterSound();
+	void ButtonClickSound();
 };

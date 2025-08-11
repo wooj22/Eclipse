@@ -1,18 +1,50 @@
 #include "TitleUI.h"
 #include "../Direct2D_EngineLib/GameApp.h"
+#include "EclipseApp.h"
 
 void TitleUI::Awake()
 {
+	// audio source 컴포넌트 생성
+	bgmSource = AddComponent<AudioSource>();
+	sfxSource = AddComponent<AudioSource>();
+
+	// audio clip 리소스 생성
+	bgmClip = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Title.wav");
+	sfxClip_Button1 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_1.wav");
+	sfxClip_Button2 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_2.wav");
+
+	// audio system BGM 채널그룹 볼륨 설정
+	AudioSystem::Get().SetBGMVolume(0);
+	AudioSystem::Get().SetSFXVolume(1);
+
+	// audioSource 채널 그룹 지정 및 사운드 재생
+	bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
+	bgmSource->SetVolume(1);
+	bgmSource->SetClip(bgmClip);
+	bgmSource->SetLoop(true);
+	bgmSource->Play();
+
+	sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+	sfxSource->SetClip(sfxClip_Button1);
+	sfxSource->SetLoop(false);
 }
 
 void TitleUI::SceneStart()
 {
 	menuButtons = { play_Button, options_Button, credit_Button, end_Button };
 	optionButtons = { optionUI->sound_Button,optionUI->key_Button };
-	backgroundImage->rectTransform->SetPivot(0.5, 0.5);
-	backgroundImage->rectTransform->SetSize(1920, 1080);
+	backgroundImage->AddComponent<Transform>();
+	backgroundImage->AddComponent<SpriteRenderer>();
+	titleLogo_Image->AddComponent<Transform>();
+	titleLogo_Image->AddComponent<SpriteRenderer>();
+	titleSpell_Image->AddComponent<Transform>();
+	titleSpell_Image->AddComponent<SpriteRenderer>();
 	auto title = ResourceManager::Get().CreateTexture2D("../Resource/mo/TitleBackGround.png");
-	backgroundImage->imageRenderer->sprite = ResourceManager::Get().CreateSprite(title, "TitleBackGround");
+	backgroundImage->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(title, "TitleBackGround");
+	auto logo = ResourceManager::Get().CreateTexture2D("../Resource/mo/Title_Logo.png");
+	titleLogo_Image->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(logo, "Title_Logo");
+	auto spell = ResourceManager::Get().CreateTexture2D("../Resource/mo/Title_Spell.png");
+	titleSpell_Image->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(spell, "Title_Spell");
 
 	options_Button->rectTransform->SetParent(play_Button->rectTransform);
 	credit_Button->rectTransform->SetParent(play_Button->rectTransform);
@@ -63,6 +95,9 @@ void TitleUI::SceneStart()
 	optionUI->SetActive(false);
 	optionUI->rectTransform->SetPosition(0, 0);
 
+	play_Button->button->onClickListeners.AddListener(
+		this, std::bind(&TitleUI::ChangePlayScene, this));
+
 	options_Button->button->onClickListeners.AddListener(
 		this, std::bind(&TitleUI::OpenOptionUI, this));
 
@@ -86,17 +121,25 @@ void TitleUI::SceneStart()
 
 
 	optionUI->close_Button->button->onClickListeners.AddListener(
-		this, [this]() { play_Button->SetActive(true); });
+		this, [this]() {
+			sfxSource->SetClip(sfxClip_Button2);
+			sfxSource->Play(); 
+			play_Button->SetActive(true);
+			optionUI->SetActive(false);
+		});
 	/*optionUI->close_Button->button->onClickListeners.AddListener(
 		this, [this]() {underscore_Image->rectTransform->SetSize(150, 150); });*/
 
 	end_Button->button->onClickListeners.AddListener(
-		this, []() { GameApp::Quit(); });
+		this, [this]() {
+			sfxSource->SetClip(sfxClip_Button2);
+			sfxSource->Play(); 
+			GameApp::Quit(); });
 }
 
 void TitleUI::Update()
 {
-
+	titleSpell_Image->transform->Rotate(0.05);
 }
 
 void TitleUI::Destroyed()
@@ -110,6 +153,9 @@ void TitleUI::OnPointEnterButton(UI_Button* onButton)
 	onButton->imageRenderer->SetAlpha(1);
 	underscore_Image->rectTransform->SetParent(onButton->rectTransform);
 	underscore_Image->SetActive(true);
+
+	sfxSource->SetClip(sfxClip_Button1);
+	sfxSource->Play();
 }
 
 void TitleUI::OnPointExitButton(UI_Button* currButton)
@@ -129,6 +175,9 @@ void TitleUI::OnClickOptionUI(UI_Button* button)
 
 	if (target && underscore_Image->rectTransform->GetParent() != target)
 		underscore_Image->rectTransform->SetParent(target);
+
+	sfxSource->SetClip(sfxClip_Button2);
+	sfxSource->Play();
 }
 
 void TitleUI::OpenOptionUI()
@@ -138,4 +187,14 @@ void TitleUI::OpenOptionUI()
 	//underscore_Image->rectTransform->SetSize(130, 150);
 	optionUI->SetActive(true);
 	play_Button->SetActive(false);
+	sfxSource->SetClip(sfxClip_Button2);
+	sfxSource->Play();
+}
+
+
+void TitleUI::ChangePlayScene()
+{
+	sfxSource->SetClip(sfxClip_Button2);
+	sfxSource->Play();
+	SceneManager::Get().ChangeScene(EclipseApp::PLAY);
 }
