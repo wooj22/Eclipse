@@ -39,7 +39,6 @@ private:
 	ComPtr<IDWriteTextLayout> textLayout;
 
 	bool isTextDirty;
-	FontLoaderUtil fontUtil;
 
 public:
 	// component cycle

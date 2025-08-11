@@ -12,17 +12,17 @@ AmbientSoundManager::AmbientSoundManager() : GameObject("AmbientSoundManager", "
     
     // Wind sound
     windSound = AddComponent<AudioSource>();
-    windSound->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
+    windSound->SetChannelGroup(AudioSystem::Get().GetAMBGroup());
     auto windClip = ResourceManager::Get().CreateAudioClip("../Resource/Aron/AMB/s_Wind.wav");
     windSound->SetClip(windClip);
     windSound->SetLoop(true);
-    windSound->SetVolume(0.3f);
+    windSound->SetVolume(0.8f);
     
     // Owl sounds
     for (int i = 1; i <= 3; i++)
     {
         AudioSource* owlSource = AddComponent<AudioSource>();
-        owlSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+        owlSource->SetChannelGroup(AudioSystem::Get().GetAMBGroup());
         
         std::string filename = "../Resource/Aron/AMB/s_Owl";
         if (i > 1) filename += std::to_string(i);
@@ -31,7 +31,7 @@ AmbientSoundManager::AmbientSoundManager() : GameObject("AmbientSoundManager", "
         auto owlClip = ResourceManager::Get().CreateAudioClip(filename);
         owlSource->SetClip(owlClip);
         owlSource->SetLoop(false);
-        owlSource->SetVolume(0.5f);
+        owlSource->SetVolume(0.9f);
         owlSounds.push_back(owlSource);
     }
     
@@ -39,14 +39,14 @@ AmbientSoundManager::AmbientSoundManager() : GameObject("AmbientSoundManager", "
     for (int i = 1; i <= 2; i++)
     {
         AudioSource* wolfSource = AddComponent<AudioSource>();
-        wolfSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+        wolfSource->SetChannelGroup(AudioSystem::Get().GetAMBGroup());
         
         std::string filename = "../Resource/Aron/AMB/s_Wolf" + std::to_string(i) + ".wav";
         
         auto wolfClip = ResourceManager::Get().CreateAudioClip(filename);
         wolfSource->SetClip(wolfClip);
         wolfSource->SetLoop(false);
-        wolfSource->SetVolume(0.4f);
+        wolfSource->SetVolume(0.8f);
         wolfSounds.push_back(wolfSource);
     }
 }

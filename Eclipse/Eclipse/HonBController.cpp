@@ -152,6 +152,7 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 					controller->SetSize(size * 0.7f);
 					controller->SetDescentSpeed(descentSpeed * 1.2f);
 					controller->SetHp(1);
+					controller->sr->SetAlpha(alphaData[1]);
 				}
 			}
 
@@ -194,5 +195,5 @@ void HonBController::TakeDamageByPlayer()
 	// collision acttion
 	CollisionStart();
 	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-	TakeDamage(1);
+	TakeDamage(2);
 }

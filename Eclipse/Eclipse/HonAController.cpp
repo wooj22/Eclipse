@@ -145,6 +145,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				CollisionEnd();
 				SetDescentSpeed(descentSpeed * 0.6);
 				SetHp(1);
+				sr->SetAlpha(alphaData[hp]);
 				is2A = true;
 			}
 			else
@@ -153,6 +154,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				otherController->CollisionEnd();
 				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
 				otherController->SetHp(1);
+				otherController->sr->SetAlpha(alphaData[1]);
 				otherController->is2A = true;
 				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
 			}
@@ -167,7 +169,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::B:		// ¿¬¼â¹ÝÀÀ A-B
 		{
 			// score
-			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeHonCount(10);
 
 			// hp cheak
 			TakeDamage(1);
@@ -202,5 +204,5 @@ void HonAController::TakeDamageByPlayer()
 	// collision acttion
 	CollisionStart();
 	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-	TakeDamage(1);
+	TakeDamage(2);
 }

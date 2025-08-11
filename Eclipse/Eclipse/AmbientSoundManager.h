@@ -28,6 +28,12 @@ public:
     void SetOwlInterval(float interval) { owlInterval = interval; }
     void SetWolfInterval(float interval) { wolfInterval = interval; }
     
+    // Getter methods
+    float GetOwlInterval() const { return owlInterval; }
+    float GetWolfInterval() const { return wolfInterval; }
+    float GetOwlTimer() const { return owlTimer; }
+    float GetWolfTimer() const { return wolfTimer; }
+    
     void PlayWindSound();
     void StopWindSound();
     void PlayRandomOwlSound();
