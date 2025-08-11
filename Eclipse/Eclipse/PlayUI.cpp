@@ -173,8 +173,8 @@ void PlayUI::SceneStart()
 
 	skill1_Image->rectTransform->SetPosition(0, -125);
 	skill1_Image->rectTransform->SetSize(100, 100);
-	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill1.png");
-	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "Skill1");
+	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ.png");
+	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ");
 
 	skill1_Text->rectTransform->SetPosition(0, 50);
 	skill1_Text->rectTransform->SetSize(50, 50);
@@ -189,8 +189,8 @@ void PlayUI::SceneStart()
 
 	skill2_Image->rectTransform->SetPosition(120, -125);
 	skill2_Image->rectTransform->SetSize(100, 100);
-	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Skill2.png");
-	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "Skill2");
+	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE.png");
+	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE");
 
 	skill2_Text->rectTransform->SetPosition(0, 50);
 	skill2_Text->rectTransform->SetSize(50, 50);
