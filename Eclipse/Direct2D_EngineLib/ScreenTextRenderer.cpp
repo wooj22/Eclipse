@@ -1,6 +1,7 @@
 #include "ScreenTextRenderer.h"
 #include "RectTransform.h"
 #include "GameObject.h"
+#include "RenderSystem.h"
 
 void ScreenTextRenderer::OnEnable_Inner()
 {
@@ -10,6 +11,23 @@ void ScreenTextRenderer::OnEnable_Inner()
 	// brush 생성
 	RenderSystem::Get().renderTarget->CreateSolidColorBrush(textColor, brush.GetAddressOf());
 	isTextDirty = true;
+
+	// custom font
+	FontLoaderUtil fontUtil;
+	fontUtil.LoadFontFromFile(L"..\Resource\Font\DeogonPrincess.ttf");
+	IDWriteFontCollection* fontCollection = fontUtil.GetFontCollection();
+	if (fontCollection)
+	{
+		HRESULT hr = RenderSystem::Get().dWriteFactory->CreateTextFormat(
+			fontName.c_str(),  // ttf 내부 폰트 이름으로 정확히 넣어주세요
+			fontCollection,
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			16.0f,
+			L"en-US",
+			&textFormat);
+	}
 }
 
 void ScreenTextRenderer::OnDisable_Inner()
@@ -29,10 +47,12 @@ void ScreenTextRenderer::OnDestroy_Inner()
 void ScreenTextRenderer::Update()
 {
 	if (isTextDirty) {
+		IDWriteFontCollection* fontCollection = fontUtil.GetFontCollection();
+
 		// 텍스트 포맷 재생성
 		RenderSystem::Get().dWriteFactory->CreateTextFormat(
 			fontName.c_str(),              // 폰트
-			nullptr,                       // 커스텀 폰트 컬렉션 (null이면 시스템 기본)
+			fontCollection,                // 커스텀 폰트 컬렉션 (null이면 시스템 기본)
 			DWRITE_FONT_WEIGHT_NORMAL,     // 굵기
 			DWRITE_FONT_STYLE_NORMAL,      // 스타일(기울임 여부)
 			DWRITE_FONT_STRETCH_NORMAL,    // 스트레칭
