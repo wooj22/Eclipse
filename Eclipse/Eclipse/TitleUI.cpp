@@ -95,8 +95,7 @@ void TitleUI::SceneStart()
 	underscore_Image->GetComponent<Animator>()->SetController(linecontroller);
 	underscore_Image->rectTransform->SetPosition(0, -20);
 	underscore_Image->rectTransform->SetSize(150, 150);
-	/*auto underScoreTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Underscore.png");
-	underscore_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(underScoreTexture, "Underscore");*/
+	underscore_Image->imageRenderer->layer = 10;
 	underscore_Image->SetActive(false); // 초기에는 밑줄 이미지 비활성화
 
 	// 옵션 UI 생성
@@ -109,9 +108,6 @@ void TitleUI::SceneStart()
 
 	options_Button->button->onClickListeners.AddListener(
 		this, std::bind(&TitleUI::OpenOptionUI, this));
-
-	/*optionUI->close_Button->button->onClickListeners.AddListener(
-		this, std::bind(&TitleUI::OpenOptionUI, this));*/
 
 	credit_Button->button->onClickListeners.AddListener(
 		this, std::bind(&TitleUI::OpenCreditUI, this));
@@ -138,6 +134,8 @@ void TitleUI::SceneStart()
 			sfxSource->Play(); 
 			play_Button->SetActive(true);
 			optionUI->SetActive(false);
+			underscore_Image->rectTransform->SetPosition(0, -20);
+			underscore_Image->rectTransform->SetSize(150, 150);
 		});
 
 
@@ -147,6 +145,8 @@ void TitleUI::SceneStart()
 			sfxSource->Play();
 			play_Button->SetActive(true);
 			creditUI->creditWindowBackGround_Image->SetActive(false);
+			underscore_Image->rectTransform->SetPosition(0, -20);
+			underscore_Image->rectTransform->SetSize(150, 150);
 		});
 
 	end_Button->button->onClickListeners.AddListener(
@@ -197,13 +197,22 @@ void TitleUI::OnClickOptionUI(UI_Button* button)
 	RectTransform* target = nullptr;
 
 	if (button == optionUI->sound_Button)
+	{
 		target = optionUI->sound_Button->rectTransform;
+		optionUI->soundBase_Image->SetActive(true);
+		optionUI->controlKeyBase_Image->SetActive(false);
+	}
 	else if (button == optionUI->key_Button)
+	{
 		target = optionUI->key_Button->rectTransform;
+		optionUI->soundBase_Image->SetActive(false);
+		optionUI->controlKeyBase_Image->SetActive(true);
+	}
 
 	if (target && underscore_Image->rectTransform->GetParent() != target)
 		underscore_Image->rectTransform->SetParent(target);
 
+	linecontroller->PlayAnimation("UI_Line");
 	sfxSource->SetClip(sfxClip_Button2);
 	sfxSource->Play();
 }
@@ -212,8 +221,11 @@ void TitleUI::OpenOptionUI()
 {
 	underscore_Image->rectTransform->SetParent(optionUI->sound_Button->rectTransform);
 	underscore_Image->SetActive(true);
-	//underscore_Image->rectTransform->SetSize(130, 150);
+	underscore_Image->rectTransform->SetPosition(0, -30);
+	underscore_Image->rectTransform->SetSize(200, 150);
+
 	optionUI->SetActive(true);
+	optionUI->controlKeyBase_Image->SetActive(false);
 	play_Button->SetActive(false);
 	sfxSource->SetClip(sfxClip_Button2);
 	sfxSource->Play();
@@ -221,8 +233,11 @@ void TitleUI::OpenOptionUI()
 
 void TitleUI::OpenCreditUI()
 {
-	/*underscore_Image->rectTransform->SetParent(optionUI->sound_Button->rectTransform);
-	underscore_Image->SetActive(true);*/
+	underscore_Image->rectTransform->SetParent(creditUI->creditTitle_Text->rectTransform);
+	underscore_Image->SetActive(true);
+	underscore_Image->rectTransform->SetPosition(0, -30);
+	underscore_Image->rectTransform->SetSize(200, 150);
+
 	creditUI->creditWindowBackGround_Image->SetActive(true);
 	play_Button->SetActive(false);
 	sfxSource->SetClip(sfxClip_Button2);
