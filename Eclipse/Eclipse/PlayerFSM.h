@@ -52,7 +52,7 @@ public:
 private:
 	// stat
 	float curSpeed = 0;
-	float walkSpeed = 400.0f;
+	float walkSpeed = 460.0f; // 400.0f;
 	float dashSpeed = 0.0f;
 	float jumpForce = 1400.0f; // 3000.0f;
 
@@ -128,7 +128,7 @@ public:
 
 	// attack 
 	float maxAttackDistance = 150.0f;       // 공격 시, 최대 이동 거리 
-	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f
+	float attackDesiredTime = 0.7f;         // 도달 시간 0.3f -> 0.7f
 
 	// boss
 	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머

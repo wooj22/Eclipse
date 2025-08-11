@@ -143,7 +143,7 @@ public:
     {
         name = "N_Player_Attack";
         loop = true;
-        duration = 1.0f;
+        duration = 0.7f;
 
         const std::string basePath = "../Resource/Moon/Texture/N_Player_Attack/";
         const int frameCount = 20;
