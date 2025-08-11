@@ -66,7 +66,21 @@ Platform::Platform()
 
 	// 6
 	platform_long3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Long_Grass>({ -630.0f, -100.0f });
-	platform_short3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ 990.0f, -100.0f });
+	platform_short3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ 690.0f, -100.0f });
+
+	// 7
+	platform_short4 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ 990.0f, 20.0f });
+	platform_middle6 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 990.0f, 20.0f });
+
+	// 8 
+	platform_middle7 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ -1080.0f, 140.0f });
+
+	// 9
+	platform_middle8 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ 640.0f, 260.0f });
+
+	// 10
+	platform_short5 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ -630.0f, 380.0f });
+
 
 
 	//platform_wall1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall_Grass>({ 1050.0f, -280.0f });
