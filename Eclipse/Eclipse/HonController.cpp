@@ -41,6 +41,9 @@ void HonController::TakeDamage(int damage)
 		Die();
 	}
 
+	// effect
+	sr->SetAlpha(alphaData[hp]);
+
 	// reset
 	isCollisionD = false;
 }

@@ -54,6 +54,9 @@ protected:
 	float collisionMovingDelta = 0.0f;
 	float pullMovingDelta = 0.0f;
 
+	// hp alpha data
+	float alphaData[4] = { 0, 0.5f, 0.75f, 1.f };
+
 	// asset
 	shared_ptr<AudioClip> SFX_HonCollision = nullptr;
 	shared_ptr<AudioClip> SFX_HonDestroy = nullptr;
