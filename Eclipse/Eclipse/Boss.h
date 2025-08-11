@@ -61,21 +61,24 @@ public:
 		// audio test
 		bgmSource = AddComponent<AudioSource>();
 		sfxSource = AddComponent<AudioSource>();
+		bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
+		sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
 
 		bgmClip = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/BGM_Stage1.wav");
 		sfxClip = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
 	
 		AudioSystem::Get().SetBGMVolume(0.5);
+		AudioSystem::Get().SetSFXVolume(0.5);
 
-		bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
 		bgmSource->SetVolume(1);
 		bgmSource->SetClip(bgmClip);
 		bgmSource->SetLoop(true);
-		//bgmSource->Play();
+		bgmSource->Play();
 
+		sfxSource->SetVolume(1);
 		sfxSource->SetClip(sfxClip);
 		sfxSource->SetLoop(true);
-		//sfxSource->Play();
+		sfxSource->Play();
 	}
 
 	void Update() override

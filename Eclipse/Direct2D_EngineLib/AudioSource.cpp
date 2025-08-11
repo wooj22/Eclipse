@@ -26,6 +26,7 @@ void AudioSource::SetClip(shared_ptr<AudioClip> newClip)
 
 void AudioSource::SetVolume(float volume)
 {
+    this->volume = volume;
     if (channel)
         channel->setVolume(volume);
 }
@@ -93,9 +94,8 @@ void AudioSource::Play()
     {
         system->playSound(clip->GetSound(), nullptr, false, &channel);
         
-        // group
-        if (channel && outputChannel)
-            channel->setChannelGroup(outputChannel);
+        if (channel) channel->setVolume(volume);
+        if (outputChannel) channel->setChannelGroup(outputChannel);
     }
 }
 
@@ -123,10 +123,9 @@ void AudioSource::PlayOneShot()
     if (system)
     {
         system->playSound(clip->GetSound(), nullptr, false, &channel);
-   
-        // group
-        if (channel && outputChannel)
-            channel->setChannelGroup(outputChannel);
+
+        if (channel) channel->setVolume(volume);
+        if (outputChannel) channel->setChannelGroup(outputChannel);
     }
 }
 
