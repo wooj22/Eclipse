@@ -34,13 +34,13 @@ protected:
 	// hon stat
 	int hp = 3;
 	float size = 1;
-	float descentSpeed = 85;						// 하강 speed
+	float descentSpeed = 90;						// 하강 speed
 	float collisionSpeed = 1000;					// 충돌 밀림 speed
 	const float collisionSpeedDefalut = 1000;		// 충돌 밀림 기본 speed
 
 	// data
 	float collisionMovingTime = 0.5f;		// 충돌 밀림 지속시간
-	float pullMovingTime = 0.15f;			// Hon C 끌어당김 지속시간
+	float pullMovingTime = 0.2f;			// Hon C 끌어당김 지속시간
 
 	// controll
 	Vector2 moveDirection = Vector2::zero;		// colliison move dir
