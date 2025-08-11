@@ -41,8 +41,6 @@ void Jump_State::Enter(MovementFSM* fsm)
 
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Jump);
-    // fsm->GetPlayerFSM()->GetAudioSource()->SetLoop(false);
-    // fsm->GetPlayerFSM()->GetAudioSource()->Play();
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 }
 
@@ -62,6 +60,8 @@ void Jump_State::Update(MovementFSM* fsm)
         fsm->GetPlayerFSM()->canDoubleJump = false;
 
         fsm->GetPlayerFSM()->OnJump(JumpPhase::DoubleJump);
+
+        fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
     }
 
     // [ Hanging ]
@@ -114,6 +114,10 @@ void Jump_State::Update(MovementFSM* fsm)
     // [ Idle ] : 일정 시간 후에만 감지
     if (fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->timer > coyoteTime)
     {
+        // 오디오 
+        fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Land);
+        fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
     }

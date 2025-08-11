@@ -94,10 +94,14 @@ private:
 
 public:
 	// [ Audio ]
-	shared_ptr<AudioClip> SFX_Player_Move = nullptr;
 	shared_ptr<AudioClip> SFX_Player_Jump = nullptr;
 	shared_ptr<AudioClip> SFX_Player_Land = nullptr;
 	shared_ptr<AudioClip> SFX_Player_Attack = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Dash = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move1 = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move2 = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move3 = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Move4 = nullptr;
 
 
 public:

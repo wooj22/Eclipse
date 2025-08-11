@@ -36,10 +36,14 @@ void PlayerFSM::Awake()
 	playerAnimatorController = dynamic_cast<PlayerAnimatorController*>(animatorController);
 
 	// [ AudioClip ] 
-	SFX_Player_Move = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
-	SFX_Player_Jump = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
-	SFX_Player_Land = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
-	SFX_Player_Attack = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+	SFX_Player_Move1 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep1.wav");
+	SFX_Player_Move2 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep2.wav");
+	SFX_Player_Move3 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep3.wav");
+	SFX_Player_Move4 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep4.wav");
+	SFX_Player_Jump = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Jump.wav");
+	SFX_Player_Land = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Rending.wav");
+	SFX_Player_Attack = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/SFX_Score.wav");
+	SFX_Player_Dash = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Dash.wav");
 
 	// [ FSM √ ±‚»≠ ]
 	movementFSM = std::make_unique<MovementFSM>();

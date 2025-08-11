@@ -41,6 +41,9 @@ void Fall_State::Update(MovementFSM* fsm)
     // [ Idle ]
     if (fsm->GetPlayerFSM()->GetIsGround())
     {
+        fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Land);
+        fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
     }
@@ -152,4 +155,6 @@ void Fall_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->defaultGravity;
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", false);
+
+    fsm->GetPlayerFSM()->GetAudioSource()->Stop();
 }

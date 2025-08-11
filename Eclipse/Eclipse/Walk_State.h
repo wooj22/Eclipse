@@ -10,4 +10,6 @@ public:
     void Update(MovementFSM* fsm) override;
     void FixedUpdate(MovementFSM* fsm) override;
     void Exit(MovementFSM* fsm) override;
+
+    void PlayRandomFootstep(MovementFSM* fsm);
 };
