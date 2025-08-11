@@ -195,5 +195,5 @@ void HonBController::TakeDamageByPlayer()
 	// collision acttion
 	CollisionStart();
 	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-	TakeDamage(1);
+	TakeDamage(2);
 }

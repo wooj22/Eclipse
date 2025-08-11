@@ -53,16 +53,17 @@ void HonController::Die()
 	// hon score
 	if (honType == HonType::A)
 	{
-		if (is2A) GameManager::Get().ChangeHonCount(3);
-		else GameManager::Get().ChangeHonCount(1);
+		if (is2A) GameManager::Get().ChangeHonCount(30);
+		else GameManager::Get().ChangeHonCount(10);
 	}
 	else if (honType == HonType::B)
 	{
-		GameManager::Get().ChangeHonCount(1);
+		GameManager::Get().ChangeHonCount(15);
+		// TODO :: b flag
 	}
 	else if (honType == HonType::C)
 	{
-		GameManager::Get().ChangeHonCount(1);
+		GameManager::Get().ChangeHonCount(5);
 	}
 	else if (honType == HonType::D)
 	{
