@@ -23,6 +23,9 @@ private:
 	float scrollY = 0.0f;
 	float scrollSpeed = 100.0f;  // 기본 스크롤 속도
 
+	float endTimer = 0.0f;  // 크레딧이 끝났는지 확인하기 위한 타이머
+	bool isEnded = false;  // 크레딧이 끝났는지 여부
+
 public:
 	// Scene 생명주기 함수들
 	virtual void Awake() override;

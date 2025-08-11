@@ -109,6 +109,27 @@ void EndScene::Update()
 		credits[i]->rectTransform->SetPosition(currentPos.x, currentPos.y + currentSpeed * Time::GetDeltaTime());
 	}
 
+	//한윤모가 화면 위로 올라간 후 타이머 시작 (마지막 크레딧이 화면 위로 올라갔는지 확인)
+	if (!isEnded && credits.size() > 0)
+	{
+		auto lastCreditPos = credits[credits.size() - 1]->rectTransform->GetPosition();
+		if(lastCreditPos.y > 600.0f)  // 화면 위로 올라갔는지 확인
+		{
+			isEnded = true;  // 크레딧이 끝났음을 표시
+			
+		}
+	}
+
+//타이머 실행 및 씬 전환
+	if (isEnded)
+	{
+		endTimer+= Time::GetDeltaTime();
+		if (endTimer >= 0.5f)  // 5초 후에 씬 전환
+		{
+			SceneManager::Get().ChangeScene(EclipseApp::MENU);  // 메뉴 씬으로 전환
+		}
+	}
+
 	// scene change
 	if (Input::GetKeyDown('1'))
 	{
