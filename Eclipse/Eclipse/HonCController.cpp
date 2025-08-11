@@ -10,6 +10,7 @@
 void HonCController::Awake()
 {
 	tr = gameObject->transform;
+	sr = gameObject->GetComponent<SpriteRenderer>();
 	collider = gameObject->GetComponent<CircleCollider>();
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
@@ -140,7 +141,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			CollisionStart();
 
 			// sound
-			audioSource->SetClip(SFX_Collision);
+			audioSource->SetClip(SFX_HonCollision);
 			audioSource->PlayOneShot();
 
 			break;
@@ -158,7 +159,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			honCB_dir = other->gameObject->transform->GetWorldPosition() - tr->GetWorldPosition();
 
 			// sound
-			audioSource->SetClip(SFX_Collision);
+			audioSource->SetClip(SFX_HonCollision);
 			audioSource->PlayOneShot();
 
 			TakeDamage(1);
@@ -191,7 +192,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			}
 
 			// sound
-			audioSource->SetClip(SFX_Collision);
+			audioSource->SetClip(SFX_HonCollision);
 			audioSource->PlayOneShot();
 
 			if (!other->gameObject->IsDestroyed()) otherController->TakeDamage(3);

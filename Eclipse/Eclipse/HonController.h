@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Vector2.h"
 #include "../Direct2D_EngineLib/Transform.h"
+#include "../Direct2D_EngineLib/SpriteRenderer.h
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/AudioClip.h"
 #include "../Direct2D_EngineLib/AudioSource.h"
@@ -51,10 +52,10 @@ protected:
 	float pullMovingDelta = 0.0f;
 
 	// asset
-	shared_ptr<AudioClip> SFX_Collision = nullptr;
-	shared_ptr<AudioClip> SFX_Destruction = nullptr;
-	shared_ptr<AudioClip> SFX_Division = nullptr;
-	shared_ptr<AudioClip> SFX_Union = nullptr;
+	shared_ptr<AudioClip> SFX_HonCollision = nullptr;
+	shared_ptr<AudioClip> SFX_HonDestroy = nullptr;
+	shared_ptr<AudioClip> SFX_HonSplit = nullptr;
+	shared_ptr<AudioClip> SFX_HonMerge = nullptr;
 
 	// player 
 	Transform* playerTr = nullptr;
@@ -62,16 +63,17 @@ protected:
 
 	// ref component
 	Transform* tr = nullptr;
+	SpriteRenderer* sr = nullptr;
 	CircleCollider* collider = nullptr;
 	AudioSource* audioSource = nullptr;
 
 public:
 	HonController()
 	{
-		SFX_Collision = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
-		SFX_Destruction = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
-		SFX_Division = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
-		SFX_Union = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
+		SFX_HonCollision = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Crash.wav");
+		SFX_HonDestroy = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Destroy.wav");
+		SFX_HonSplit = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Split.wav");
+		SFX_HonMerge = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Merge.wav");
 	}
 
 	// direction
@@ -101,41 +103,50 @@ public:
 		hp -= damage;
 		if (hp <= 0) 
 		{
-			// wave1 quest
-			GameManager::Get().ChangeQuestCount(1);
-			
-			// hon score
-			if (honType == HonType::A)
-			{
-				if(isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-				else if(is2A) GameManager::Get().ChangeHonCount(3);
-				else GameManager::Get().ChangeHonCount(1);
-			}
-			else if (honType == HonType::B)
-			{
-				if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-				else GameManager::Get().ChangeHonCount(1);
-			}
-			else if (honType == HonType::C)
-			{
-				if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
-				else GameManager::Get().ChangeHonCount(1);
-			}
-			else if (honType == HonType::D) 
-			{
-				GameManager::Get().ChangeHonCount(-1);
-			}
-
-			// sound
-			audioSource->SetClip(SFX_Destruction);
-			audioSource->PlayOneShot();
-
-			// destroy
-			gameObject->Destroy();
+			Die();
 		}
 
 		// reset
 		isCollisionD = false;
+	}
+
+	void Die()
+	{
+		// wave1 quest
+		GameManager::Get().ChangeQuestCount(1);
+
+		// hon score
+		if (honType == HonType::A)
+		{
+			if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
+			else if (is2A) GameManager::Get().ChangeHonCount(3);
+			else GameManager::Get().ChangeHonCount(1);
+		}
+		else if (honType == HonType::B)
+		{
+			if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
+			else GameManager::Get().ChangeHonCount(1);
+		}
+		else if (honType == HonType::C)
+		{
+			if (isCollisionD)  GameManager::Get().ChangeHonCount(-1);
+			else GameManager::Get().ChangeHonCount(1);
+		}
+		else if (honType == HonType::D)
+		{
+			GameManager::Get().ChangeHonCount(-1);
+		}
+
+		sr->SetEnabled(false);
+		collider->SetEnabled(false);
+
+		// sound
+		audioSource->SetClip(SFX_HonDestroy);
+		audioSource->PlayOneShot();
+
+		// sound dealy
+		// destroy
+		gameObject->Destroy();
 	}
 
 	// player attack

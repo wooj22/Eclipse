@@ -8,6 +8,7 @@
 void HonAController::Awake()
 {
 	tr = gameObject->transform;
+	sr = gameObject->GetComponent<SpriteRenderer>();
 	collider = gameObject->GetComponent<CircleCollider>();
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
@@ -137,7 +138,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			}
 
 			// sound
-			audioSource->SetClip(SFX_Union);
+			audioSource->SetClip(SFX_HonMerge);
 			audioSource->PlayOneShot();
 
 			break;
@@ -163,7 +164,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			otherController->CollisionStart();
 
 			// sound
-			audioSource->SetClip(SFX_Collision);
+			audioSource->SetClip(SFX_HonCollision);
 			audioSource->PlayOneShot();
 
 			break;

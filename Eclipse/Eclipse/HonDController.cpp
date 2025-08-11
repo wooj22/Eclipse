@@ -8,6 +8,7 @@
 void HonDController::Awake()
 {
 	tr = gameObject->transform;
+	sr = gameObject->GetComponent<SpriteRenderer>();
 	collider = gameObject->GetComponent<CircleCollider>();
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();

@@ -7,6 +7,7 @@
 void HonBController::Awake()
 {
 	tr = gameObject->transform;
+	sr = gameObject->GetComponent<SpriteRenderer>();
 	collider = gameObject->GetComponent<CircleCollider>();
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
@@ -135,10 +136,14 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				}
 			}
 
+			sr->SetEnabled(false);
+			collider->SetEnabled(false);
+
 			// sound
-			audioSource->SetClip(SFX_Division);
+			audioSource->SetClip(SFX_HonSplit);
 			audioSource->PlayOneShot();
 
+			// sound dealy
 			// old HonB
 			otherGameObject->Destroy();
 			gameObject->Destroy();
