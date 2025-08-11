@@ -18,6 +18,14 @@ void HonDController::Awake()
 
 void HonDController::Update()
 {
+	// sound delay destroy
+	if (destroyPending)
+	{
+		if (!audioSource->IsPlaying()) gameObject->Destroy();
+		return;
+	}
+
+	// moving
 	if (isPullMoving)
 	{
 		// pulling move
@@ -86,12 +94,13 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
-		if (gameObject->IsDestroyed()) return;
+		if (gameObject->IsDestroyed() || destroyPending) return;
 
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
+		if (otherController->destroyPending) return;
 		string honType = otherGameObject->name;
 
 		// collision acttion

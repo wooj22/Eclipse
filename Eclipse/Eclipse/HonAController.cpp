@@ -21,6 +21,14 @@ void HonAController::Start()
 
 void HonAController::Update()
 {
+	// sound delay destroy
+	if (destroyPending)
+	{
+		if (!audioSource->IsPlaying()) gameObject->Destroy();
+		return;
+	}
+
+	// moving
 	if (isAbsorption) return;
 
 	if (isPullMoving)
@@ -95,12 +103,14 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
-		if (gameObject->IsDestroyed()) return;
+		if (gameObject->IsDestroyed() || destroyPending) return;
 
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
+
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
+		if (otherController->destroyPending) return;
 		HonType honType = otherController->honType;
 
 		// collision acttion
@@ -111,7 +121,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hp cheak
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+			if (destroyPending || otherController->destroyPending) return;
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
@@ -152,7 +162,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hp cheak
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+			if (destroyPending || otherController->destroyPending) return;
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);

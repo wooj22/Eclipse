@@ -27,6 +27,9 @@ public:
 	float is2A = false;
 	float isCollisionD = false;
 
+public:
+	bool destroyPending = false;		// sound delay
+
 protected:
 	// hon stat
 	int hp = 3;
@@ -63,9 +66,9 @@ protected:
 
 	// ref component
 	Transform* tr = nullptr;
-	SpriteRenderer* sr = nullptr;
-	CircleCollider* collider = nullptr;
-	AudioSource* audioSource = nullptr;
+public:	SpriteRenderer* sr = nullptr;
+public:	CircleCollider* collider = nullptr;
+protected: AudioSource* audioSource = nullptr;
 
 public:
 	HonController()
@@ -100,6 +103,8 @@ public:
 	int GetHp() { return hp; }
 	void TakeDamage(int damage)
 	{
+		if (destroyPending) return;
+
 		hp -= damage;
 		if (hp <= 0) 
 		{
@@ -144,9 +149,8 @@ public:
 		audioSource->SetClip(SFX_HonDestroy);
 		audioSource->PlayOneShot();
 
-		// sound dealy
 		// destroy
-		gameObject->Destroy();
+		destroyPending = true;
 	}
 
 	// player attack
