@@ -21,7 +21,13 @@ void Hanging_State::Enter(MovementFSM * fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0.0f;
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;
 
-    fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
+
+    // 조건: 보고 있는 방향이 벽 반대일 때만 Flip
+    if ((fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetLastFlipX()) || 
+        (fsm->GetPlayerFSM()->GetIsWallRight() && !fsm->GetPlayerFSM()->GetLastFlipX()))
+    {
+        fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
+    }
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Hanging", true);
 }
