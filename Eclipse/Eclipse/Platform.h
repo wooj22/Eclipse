@@ -30,6 +30,7 @@ public:
     Platform_Short* platform_short3;
     Platform_Short* platform_short4;
     Platform_Short* platform_short5;
+    Platform_Short* platform_short6;
 
     Platform_Middle* platform_middle1;
     Platform_Middle_Grass* platform_middle2;
@@ -37,20 +38,21 @@ public:
     Platform_Middle_Grass* platform_middle4;
     Platform_Middle* platform_middle5;
     Platform_Middle* platform_middle6;
+    Platform_Middle* platform_middle7;
+    Platform_Middle* platform_middle8;
 
     Platform_Long_Grass* platform_long1;
     Platform_Long_Grass* platform_long2;
-
+    Platform_Long_Grass* platform_long3;
 
     BoxObject* box_object1;
     BoxObject* box_object2;
     BoxObject* box_object3;
     BoxObject* box_object4;
+    BoxObject* box_object5;
 
     Platform_Wall* platform_wall2;
     Platform_Wall_Grass* platform_wall1;
-    Platform_Wall_Top* platform_wall_top1;
-    Platform_Wall_Top* platform_wall_top2;
 
     Cemetery* cemetery1;
     Cemetery* cemetery2;
@@ -90,7 +92,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Long.png"), "Platform_Long");
@@ -123,7 +125,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Long_Grass.png"), "Platform_Long_Grass");
@@ -157,7 +159,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Middle.png"), "Platform_Middle");
@@ -190,7 +192,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Middle_Grass.png"), "Platform_Middle_Grass");
@@ -223,7 +225,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Short.png"), "Platform_Short");
@@ -256,7 +258,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Short_Grass.png"), "Platform_Short_Grass");
@@ -289,7 +291,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Wall.png"), "Platform_Wall");
@@ -321,7 +323,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Wall_Grass.png"), "Platform_Wall_Grass");
@@ -379,7 +381,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.4);
+        transform->SetScale(0.35, 0.35);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Box.png"), "Box");
@@ -414,7 +416,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.5, 0.5);
+        transform->SetScale(0.35, 0.35);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Cemetery.png"), "Cemetery");

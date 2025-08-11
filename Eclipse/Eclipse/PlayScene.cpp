@@ -76,9 +76,9 @@ void PlayScene::Update()
 	// game object -> Update()
 	__super::Update();
 
-	if (Input::GetKeyDown('P')) {
-		mapBackGround->Destroy();
-	}
+	//if (Input::GetKeyDown('P')) {
+	//	mapBackGround->Destroy();
+	//}
 }
 
 void PlayScene::Exit()

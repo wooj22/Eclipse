@@ -50,11 +50,27 @@ void Attack_State::Enter(MovementFSM* fsm)
     float angleDeg = angleRad * (180.0f / 3.14159265f);
 
     // playerAttack_Parent 회전 : ( 원본 이미지가 위쪽 방향 기준 -> 시계방향 -90도 회전 적용 )
-    fsm->GetPlayerFSM()->GetPlayerAttackParent()->GetComponent<Transform>()->SetRotation(angleDeg - 90.0f);
+    fsm->GetPlayerFSM()->GetPlayerAttackParent()->GetComponent<Transform>()->SetRotation(angleDeg + 180.0f);
    
     // 공격 범위 활성화
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(true); 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(true); 
+
+
+    // 공격 이펙트 애니메이션 
+    auto anim = fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Animator>();
+    if (anim)
+    {
+        auto attackAnimCtrl = dynamic_cast<AttackAnimatorController*>(anim->controller);
+        if (attackAnimCtrl)
+        {
+            attackAnimCtrl->PlayAttack();
+        }
+    }
+
+
+    // 이펙트 & 범위 활성화
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->Activate();
 
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Attack);
@@ -107,8 +123,10 @@ void Attack_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
     // fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false); 
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false); 
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->Deactivate();
+
+    //fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false); 
+    //fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false); 
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", false);
 

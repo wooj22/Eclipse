@@ -9,7 +9,7 @@ class MovementFSM;
 class Attack_State : public MovementStateBase
 {
     float baseMaxDistance = 0.0f;    // 최대 이동 거리 (playerFSM에서 가져옴)
-    float desiredTime = 0.0f;    // 도달 시간
+    float desiredTime = 0.0f;        // 도달 시간
 
     float timer = 0.0f;
     float moveSpeed = 0.0f;
