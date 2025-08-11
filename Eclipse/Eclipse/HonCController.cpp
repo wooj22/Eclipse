@@ -99,6 +99,13 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		gameObject->Destroy();
 	}
 
+	// [mapborder collision]
+	if (other->gameObject->name == "MapBorder")
+	{
+		CollisionStart();
+		moveDirection = contact.normal;
+	}
+
 	// [boss collision]
 	if (other->gameObject->tag == "Boss")
 	{
