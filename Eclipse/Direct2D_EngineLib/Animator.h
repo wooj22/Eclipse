@@ -11,12 +11,14 @@
 
 class AnimatorController;
 class SpriteRenderer;
+class ImageRenderer;
 
 class Animator : public Component
 {
 public:
     AnimatorController* controller = nullptr;
     SpriteRenderer* spriteRenderer = nullptr;
+    ImageRenderer* imageRenderer = nullptr;
 
 public:
     // component cycle

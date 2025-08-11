@@ -1,6 +1,7 @@
 #include "Animator.h"
 #include "AnimatorController.h"
 #include "SpriteRenderer.h"
+#include "ImageRenderer.h"
 #include "GameObject.h"
 #include "Time.h"
 
@@ -8,6 +9,7 @@ void Animator::OnEnable_Inner()
 {
     AnimatorSystem::Get().Regist(this);
     spriteRenderer = gameObject->GetComponent<SpriteRenderer>();
+    imageRenderer = gameObject->GetComponent<ImageRenderer>();
 }
 
 void Animator::OnDisable_Inner()
@@ -23,7 +25,8 @@ void Animator::Update()
     controller->Update(Time::GetDeltaTime());
 
     // sprite update
-    spriteRenderer->sprite = controller->GetCurrentSprite();
+    if(spriteRenderer) spriteRenderer->sprite = controller->GetCurrentSprite();
+    else if(imageRenderer) imageRenderer->sprite = controller->GetCurrentSprite();
 }
 
 void Animator::OnDestroy_Inner()
