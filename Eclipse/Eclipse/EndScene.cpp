@@ -14,13 +14,13 @@ void EndScene::Awake()
 
 	// create credits - 기획 (모든 텍스트 같은 크기)
 	auto planningTitle = CreateObject<UI_Text>();
-	credits.push_back(planningTitle);
 	planningTitle->rectTransform->SetPosition(0, startY);
 	planningTitle->rectTransform->SetSize(1920, 80);
 	planningTitle->screenTextRenderer->SetFontSize(60);  // 이름과 같은 크기
 	planningTitle->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	planningTitle->screenTextRenderer->SetText(L"기획");
 	planningTitle->screenTextRenderer->SetFontName(L"덕온공주체");
+	credits.push_back(planningTitle);
 
 	auto planningTeam = CreateObject<UI_Text>();
 	planningTeam->rectTransform->SetPosition(0, startY - 100);
