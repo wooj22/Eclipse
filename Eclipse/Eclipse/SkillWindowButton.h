@@ -21,6 +21,7 @@ private:
 	float glowspeed = 3.0f;
 
 public:
+	UI_Image* skillIcon_Image;				// 스킬 아이콘 배경
 	UI_Button* skillIcon_Button;			// 스킬 아이콘 버튼
 	UI_Text* skillLevel_Text;				// 스킬 레벨 텍스트
 	UI_Text* skillName_Text;				// 스킬 이름 텍스트

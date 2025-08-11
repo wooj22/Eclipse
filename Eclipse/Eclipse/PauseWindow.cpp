@@ -1,6 +1,7 @@
 #include "PauseWindow.h"
 #include "EclipseApp.h"
 #include "../Direct2D_EngineLib/GameApp.h"
+#include "PlayUI.h"
 
 void PauseWindow::Awake()
 {
@@ -82,13 +83,14 @@ void PauseWindow::SceneStart()
 	}
 
 	newGame_Button->button->onClickListeners.AddListener(
-		this, [this]() { SceneManager::Get().ChangeScene(EclipseApp::MENU); });
+		this, [this]() { 
+			SceneManager::Get().ChangeScene(EclipseApp::MENU);
+			GameManager::Get().g_playUI->ButtonClickSound(); });
 
 	quitGame_Button->button->onClickListeners.AddListener(
-		this, []() { GameApp::Quit(); });
-	//추후 게임 종료 추가
-	/*quitGame_Button->button->onClickListeners.AddListener(
-		this, [this]() { SceneManager::Get().ChangeScene(0); });*/
+		this, []() {
+			GameManager::Get().g_playUI->ButtonClickSound(); 
+			GameApp::Quit(); });
 
 	SetActive(false);
 
@@ -104,6 +106,7 @@ void PauseWindow::OnPointEnterButton(UI_Button* onButton)
 	onButton->imageRenderer->SetAlpha(1);
 	underscore_Image->rectTransform->SetParent(onButton->rectTransform);
 	underscore_Image->SetActive(true);
+	GameManager::Get().g_playUI->ButtonEnterSound();
 }
 
 void PauseWindow::OnPointExitButton(UI_Button* currButton)

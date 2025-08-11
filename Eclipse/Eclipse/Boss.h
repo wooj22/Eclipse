@@ -56,6 +56,7 @@ public:
 		// color matrix test
 		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
 		spriteRenderer->SetGlowAmmount(150);
+		//spriteRenderer->SetBrightness(2);
 
 		// audio test
 		bgmSource = AddComponent<AudioSource>();

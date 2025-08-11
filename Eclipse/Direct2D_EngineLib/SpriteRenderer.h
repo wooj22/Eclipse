@@ -39,7 +39,7 @@ private:
 	ComPtr<ID2D1Effect> cropEffect = nullptr;
 	ComPtr<ID2D1Effect> blurEffect = nullptr;
 
-	// ColorMatrix
+	// ColorMatrix (RGBA)
 	ColorRGBA colorMultiplier = { 1,1,1,1 };	// R, G, B, A
 	D2D1_MATRIX_5X4_F colorMatrix = {			// color matrix
 	colorMultiplier.a, 0, 0, 0,
@@ -48,7 +48,7 @@ private:
 	0, 0, 0, colorMultiplier.a
 	};
 
-	// Saturation
+	// Saturation (채도)
 	float saturation = 1.0f;
 
 	// 흑백 변환 계수
@@ -56,7 +56,10 @@ private:
 	float gw = 0.6094f;
 	float bw = 0.0820f;
 
-	// Blur
+	// Brightness (명도)
+	float brightnessScale = 1.0f;
+
+	// Blur (글로우)
 	float blurAmmount = 15.0f;
 
 public:
@@ -83,6 +86,10 @@ public:
 	// 0.6 ~ 1.0
 	void SetSaturation(float s);
 	float GetSaturation() { return saturation; }
+
+	// Brightness
+	void SetBrightness(float scale);
+	float GetBrightness() { return brightnessScale; }
 
 public:
 	// Glow (Blur)

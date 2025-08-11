@@ -20,6 +20,7 @@ void GameManager::ReSetData()
 	waveCount = 0;
 	questCount = 0;
 	questState = ChatCondition::None;
+	canUseMouse = true;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;		
@@ -165,6 +166,7 @@ void GameManager::CanAbsorb()
 {
 	canUseAbsorb = true;
 	g_playUI->ActivateAbsorb();
+	g_playUI->SkillActiveSound();
 }
 
 void GameManager::UseAbsorb()
@@ -242,6 +244,7 @@ float GameManager::GetSkillBonus(SkillType type)
 void GameManager::OnNPCInteraction()
 {
 	g_playUI->ChatSetActive(true);
+	canUseMouse = false;
 	if(questState == ChatCondition::Success)
 		GameManager::Get().ChangeHonCount(g_playUI->quest->QuestReward());
 	if (g_playUI->skillWindow_Image->IsActive())

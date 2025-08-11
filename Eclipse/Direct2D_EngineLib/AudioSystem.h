@@ -20,6 +20,7 @@ private:
 	FMOD::ChannelGroup* masterGroup = nullptr;
 	FMOD::ChannelGroup* bgmGroup = nullptr;
 	FMOD::ChannelGroup* sfxGroup = nullptr;
+	FMOD::ChannelGroup* ambGroup = nullptr;
 
 private:
 	vector<AudioSource*> sources;
@@ -44,5 +45,6 @@ public:
 	void SetMasterVolume(float volume);
 	void SetBGMVolume(float volume);
 	void SetSFXVolume(float volume);
+	void SetAMBVolume(float volume);
 };
 

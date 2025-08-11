@@ -3,12 +3,22 @@
 #include "../Direct2D_EngineLib/UI_Image.h"
 #include"../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/GameObject.h"
+#include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "Options.h"
+
+// »ç¿îµå
+#include "../Direct2D_EngineLib/AudioSystem.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 
 class TitleUI : public GameObject
 {
 public:
-	UI_Image* backgroundImage;
+	GameObject* backgroundImage;
+	GameObject* titleLogo_Image;
+	GameObject* titleSpell_Image;
+
 	UI_Button* play_Button;
 	UI_Button* options_Button;
 	UI_Button* credit_Button;
@@ -21,6 +31,14 @@ public:
 
 	// hover event check
 	UI_Button* prevHoverButton = nullptr;
+
+	// audio
+	AudioSource* bgmSource = nullptr;
+	AudioSource* sfxSource = nullptr;
+	shared_ptr<AudioClip> bgmClip = nullptr;
+	shared_ptr<AudioClip> sfxClip_Button1 = nullptr;
+	shared_ptr<AudioClip> sfxClip_Button2 = nullptr;
+	shared_ptr<AudioClip> sfxClip_ChangeScene = nullptr;
 
 public:
 	// game object cycle
@@ -42,6 +60,7 @@ public:
 	void OnPointExitButton(UI_Button* prevButton);
 	void OnClickOptionUI(UI_Button* button);
 	void OpenOptionUI();
+	void ChangePlayScene();
 };
 
 

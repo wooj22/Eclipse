@@ -5,6 +5,9 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/Animator.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 #include "HonBAnimatorController.h"
 #include "HonBController.h"
 
@@ -19,6 +22,7 @@ public:
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
 	Animator* animator;
+	AudioSource* audioSource;
 	HonBController* controller;
 
 	// animator controller asset
@@ -31,6 +35,7 @@ public:
 		rigidbody = AddComponent<Rigidbody>();
 		collider = AddComponent<CircleCollider>();
 		animator = AddComponent<Animator>();
+		audioSource = AddComponent<AudioSource>();
 		controller = AddComponent<HonBController>();
 		
 		// animator
@@ -47,6 +52,10 @@ public:
 		collider->isTrigger = true;
 		collider->offset = { 0, -15 };
 		collider->radius = 40;
+
+		// audio chnnel set
+		audioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+		audioSource->SetLoop(false);
 	}
 
 	~HonB()

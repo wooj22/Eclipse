@@ -39,9 +39,11 @@ void AudioSystem::Init()
 	system->createChannelGroup("Master", &masterGroup);
 	system->createChannelGroup("BGM", &bgmGroup);
 	system->createChannelGroup("SFX", &sfxGroup);
+	system->createChannelGroup("AMB", &ambGroup);
 
 	masterGroup->addGroup(bgmGroup);
 	masterGroup->addGroup(sfxGroup);
+	masterGroup->addGroup(ambGroup);
 }
 
 void AudioSystem::Update()
@@ -77,4 +79,10 @@ void AudioSystem::SetSFXVolume(float volume)
 {
 	if (sfxGroup)
 		sfxGroup->setVolume(volume);
+}
+
+void AudioSystem::SetAMBVolume(float volume)
+{
+	if (ambGroup)
+		ambGroup->setVolume(volume);
 }

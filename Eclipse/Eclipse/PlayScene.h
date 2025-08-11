@@ -9,6 +9,7 @@
 #include "Platform.h"
 #include "playerAttackArea.h"
 #include "WaveSystem.h"
+#include "AmbientSoundManager.h"
 
 class PlayScene : public Scene
 {
@@ -34,6 +35,9 @@ private:
 	// WaveSystem
 	GameObject* waveSystemObj;
 	WaveSystem* waveSystem;
+	
+	// Ambient Sound
+	AmbientSoundManager* ambientSoundManager;
 
 public:
 	PlayScene() = default;

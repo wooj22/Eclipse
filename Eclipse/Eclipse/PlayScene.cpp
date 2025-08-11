@@ -54,6 +54,8 @@ void PlayScene::Awake()
 	waveSystemObj->SetActive(true);  // GameObject 활성화
 	waveSystem = waveSystemObj->AddComponent<WaveSystem>();
 	
+	// ambient sound
+	ambientSoundManager = CreateObject<AmbientSoundManager>();
 
 }
 
@@ -62,6 +64,11 @@ void PlayScene::Start()
 	// game object -> SceneStart()
 	__super::Start();
 
+	// start ambient wind sound
+	if (ambientSoundManager)
+	{
+		ambientSoundManager->PlayWindSound();
+	}
 }
 
 void PlayScene::Update()
