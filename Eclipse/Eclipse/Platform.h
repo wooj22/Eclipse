@@ -36,7 +36,7 @@ public:
     Platform_Middle_Grass* platform_middle2;
     Platform_Middle* platform_middle3;
     Platform_Middle_Grass* platform_middle4;
-    Platform_Middle* platform_middle5;
+    Platform_Middle_Grass* platform_middle5;
     Platform_Middle* platform_middle6;
     Platform_Middle* platform_middle7;
     Platform_Middle* platform_middle8;
@@ -57,6 +57,7 @@ public:
     Cemetery* cemetery1;
     Cemetery* cemetery2;
     Cemetery* cemetery3;
+    Cemetery* cemetery4;
 
     // component 
     BoxCollider* ground_col;
@@ -416,7 +417,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.35, 0.35);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Cemetery.png"), "Cemetery");

@@ -67,8 +67,6 @@ public:
 
 	void Update(float dt) override
 	{
-		// if (controller->GetBool("Player_Attack_Effect") == true)  controller->PlayAnimation("Player_Attack_Effect");
-
 		// 마지막 프레임까지 재생이 끝나면 종료
 		//if (!clip->loop && clip->GetFrameIndexAtTime(controller->currentTime) == clip->frames.size() - 1)
 		//{

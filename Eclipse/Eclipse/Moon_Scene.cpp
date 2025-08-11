@@ -36,6 +36,11 @@ void Moon_Scene::Awake()
 
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
+	// [ player SkillEffect ]
+	skillEffect = CreateObject<PlayerSkillEffect>();
+	skillEffect->GetComponent<Transform>()->SetParent(player->transform);
+	player->playerFSM->SetPlayerSkillEffect(skillEffect);
+
 	// [ Platform ]
 	platform_map = CreateObject<Platform>();
 	

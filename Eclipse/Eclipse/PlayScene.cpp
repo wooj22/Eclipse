@@ -31,8 +31,12 @@ void PlayScene::Awake()
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
 	playerAttackArea->GetComponent<SpriteRenderer>()->SetEnabled(false);
 	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false);
-
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+
+	// [ player SkillEffect ]
+	skillEffect = CreateObject<PlayerSkillEffect>();
+	skillEffect->GetComponent<Transform>()->SetParent(player->transform);
+	player->playerFSM->SetPlayerSkillEffect(skillEffect);
 
 	// [ Platform ]
 	platform_map = CreateObject<Platform>();

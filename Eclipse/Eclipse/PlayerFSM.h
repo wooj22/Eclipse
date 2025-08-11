@@ -17,6 +17,7 @@
 #include "GameManager.h"
 
 
+
 enum class JumpPhase
 {
 	// None,       // 공중에 안뜬 상태
@@ -33,6 +34,8 @@ class WorldTextRenderer;
 class Rigidbody;
 class PlayerAttackArea;
 class PlayerAnimatorController;
+class PlayerSkillEffect;
+
 
 class PlayerFSM : public Script
 {
@@ -99,6 +102,8 @@ private:
 	GameObject* targetHon = nullptr;
 
 	PlayerAnimatorController* playerAnimatorController = nullptr;
+	// SkillAnimatorController* skillAnimatorController = nullptr;
+	PlayerSkillEffect* skillEffect = nullptr;
 
 public:
 	// [ Audio ]
@@ -199,7 +204,8 @@ public:
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }
 	void SetPlayerAttackParent(GameObject* obj) { playerAttackParent = obj; }
 	GameObject* GetPlayerAttackParent() const { return playerAttackParent; }
-	
+	void SetPlayerSkillEffect(PlayerSkillEffect* effect) { skillEffect = effect; }
+	PlayerSkillEffect* GetPlayerSkillEffect() const { return skillEffect; }
 
 public:
 	// script component cycle

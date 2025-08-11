@@ -10,6 +10,7 @@
 #include "playerAttackArea.h"
 #include "WaveSystem.h"
 #include "AmbientSoundManager.h"
+#include "PlayerSkillEffcet.h"
 
 class PlayScene : public Scene
 {
@@ -28,6 +29,7 @@ private:
 	GameObject* playerAttack_Parent;	// Parent - Child
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
 	Shadow* shadow;
+	PlayerSkillEffect* skillEffect;		// Parent - Child
 
 	// Platform 
 	Platform* platform_map;

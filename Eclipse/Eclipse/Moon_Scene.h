@@ -19,6 +19,7 @@
 #include "MapBackGround.h"
 
 #include "Platform.h"
+#include "PlayerSkillEffcet.h"
 
 class Moon_Scene : public Scene
 {
@@ -30,7 +31,8 @@ private:
 	Player* player;						// Parent
 	GameObject* playerAttack_Parent;	// Parent - Child
 	PlayerAttackArea* playerAttackArea; // Parent - Child - Child 
-	Shadow* shadow;
+	PlayerSkillEffect* skillEffect;			// Parent - Child
+	// Shadow* shadow;
 
 	// object 
 	GameObject* cam;

@@ -18,6 +18,9 @@
 #include "PlayUI.h"
 #include "Chat.h"
 #include "HonController.h"
+#include "SkillAnimatorController.h"
+#include "PlayerSkillEffcet.h"
+
 
 
 // 컴포넌트 활성화 시점
@@ -268,8 +271,6 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 		targetHon->GetComponent<HonController>()->Absorption(); // 흡수 시작할 때 호출 
 
 		isAbsorbSkillActive = true; // 혼 끌어당기기 시작 
-		// hasAbsorbedSoul = true;
-		// isReleaseSkillAvailable = true;
 
 		absorbCooldownTimer = GetSkillCooldown();
 
@@ -304,9 +305,12 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist <= releaseEffectRange)
 		{
+			// 1초 뒤에 혼 제거
+			// InvokeSystem::Invoke(1.0f, obj, &GameObject::Destroy);
 			obj->Destroy(); // 혼 제거
+
 			removedCount++;
-			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeHonCount(10);
 			GameManager::Get().ChangeQuestCount(1);
 		}
 	}
@@ -315,8 +319,16 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 	hasAbsorbedSoul = false;
 	isReleaseSkillAvailable = false;
 
-	// 이펙트 발동 
-	// HonReleaseEffect(); // 범위 이펙트, 데미지 
+	// 스킬 이펙트 재생
+	auto anim = GetPlayerSkillEffect()->GetComponent<Animator>();
+	if (anim)
+	{
+		auto skillAnimCtrl = dynamic_cast<SkillAnimatorController*>(anim->controller);
+		if (skillAnimCtrl)
+		{
+			skillAnimCtrl->PlaySkill();
+		}
+	}
 
 	// 애니메이션 상태 변환
 	playerAnimatorController->SetSkillAvailable(false);
@@ -325,7 +337,6 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 	OutputDebugStringA(debugStr.c_str());
 
 	GameManager::Get().UseRelease();
-
 }
 
 GameObject* PlayerFSM::FindNearestSoulInRange(float range)

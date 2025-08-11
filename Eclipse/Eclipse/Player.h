@@ -14,8 +14,10 @@
 
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
+
 #include "AfterImage.h"
 #include "Shadow.h"
+
 
 
 class Player : public GameObject
@@ -69,9 +71,8 @@ public:
 		// 그림자 생성
 		player_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<Shadow>();
 
-		// [ Audio Chnnel ]
+		// [ Audio ]
 		audioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
-
 
 	}
 	~Player() override
@@ -81,7 +82,7 @@ public:
 
 	void Awake() override 
 	{
-		// animator controller
+		// [ 캐릭터 애니메이션 초기화 ]
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
@@ -95,15 +96,11 @@ public:
 		rigidbody->gravityScale = playerFSM->defaultGravity;
 		rigidbody->mass = 1.4f; // 3.0f; 
 
-		// [ Shadow ]
-		/*player_Shadow = GameObject::FindWithTag("Shadow");
-		std::string debugStr = "[Player] player_Shadow = " + player_Shadow->name + "\n";
-		OutputDebugStringA(debugStr.c_str());*/
-
 
 		shadow_transform = player_Shadow->GetComponent<Transform>();
 		shadow_spriteRenderer = player_Shadow->GetComponent<SpriteRenderer>();
 	}
+
 
 	void Update() override
 	{

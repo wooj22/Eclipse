@@ -37,7 +37,7 @@ Platform::Platform()
 
 	// 0
 	box_object1 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -370.0f, -845.0f });
-	cemetery1 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ 600.0f, -845.0f });
+	cemetery1 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ 600.0f, -840.0f });
 	box_object2 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 900.0f, -845.0f });
 
 	// 1
@@ -48,18 +48,28 @@ Platform::Platform()
 	// 2
 	platform_short1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short_Grass>({ 220.0f, -640.0f });
 	platform_long2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Long_Grass>({ 1010.0f, -580.0f });
+	cemetery3 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ 1010.0f, -500.0f });
 
 	// 3
 	platform_middle2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ -1080.0f, -460.0f });
-	platform_middle3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ 640.0f, -460.0f });
-	box_object3 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 670.0f, -440.0f });
+	platform_middle3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ -365.0f, -460.0f });
+	box_object3 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -445.0f, -385.0f });
 
-	//platform_short1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short_Grass>({ -150.0f, -550.0f });
-	//platform_middle2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 850.0f, -550.0f });
+	// 4
+	platform_short2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ -950.0f, -340.0f });
+	cemetery4 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ -960.0f, -300.0f });
+	platform_middle4 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 675.0f, -340.0f });
+	box_object4 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 575.0f, -270.0f });
+
+	// 5
+	platform_middle5 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 50.0f, -220.0f });
+
+	// 6
+	platform_long3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Long_Grass>({ -630.0f, -100.0f });
+	platform_short3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ 990.0f, -100.0f });
+
+
 	//platform_wall1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall_Grass>({ 1050.0f, -280.0f });
-
-
-	//// 4
 	//platform_middle3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ -600.0f, -320.0f });
 	//cemetery2 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ -750.0f, -220.0f });
 	//platform_middle4 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 250.0f, -320.0f });
