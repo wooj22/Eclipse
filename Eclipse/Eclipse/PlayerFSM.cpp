@@ -127,7 +127,7 @@ void PlayerFSM::InputSetting()
 	isShift = Input::GetKey(VK_SHIFT);
 	isSpace = Input::GetKeyDown(VK_SPACE);
 
-	if (!isUIOn)
+	if (GameManager::Get().canUseMouse) // 마우스 사용 가능 할 때 
 	{
 		// LMB
 		isLButton = Input::GetKey(VK_LBUTTON);
