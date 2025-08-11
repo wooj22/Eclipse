@@ -42,7 +42,7 @@ void PlayerFSM::Awake()
 	SFX_Player_Move4 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep4.wav");
 	SFX_Player_Jump = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Jump.wav");
 	SFX_Player_Land = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Rending.wav");
-	SFX_Player_Attack = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/SFX_Score.wav");
+	SFX_Player_Attack = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Attack.wav");
 	SFX_Player_Dash = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Dash.wav");
 
 	// [ FSM √ ±‚»≠ ]

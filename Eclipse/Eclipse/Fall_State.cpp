@@ -149,7 +149,9 @@ void Fall_State::FixedUpdate(MovementFSM* fsm)
     else
     {
         // 입력이 없으면 감속
-        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = Lerp(curVelX, 0.0f, Time::GetDeltaTime() * airFriction);
+        float decelRate = airFriction + (abs(fsm->GetPlayerFSM()->GetRigidbody()->velocity.y) * 0.05f);
+        fsm->GetPlayerFSM()->GetRigidbody()->velocity.x =
+            Lerp(curVelX, 0.0f, Time::GetDeltaTime() * decelRate);
     }
 }
 
