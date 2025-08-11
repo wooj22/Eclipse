@@ -114,7 +114,6 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		string honType = otherGameObject->name;
 
 		// collision acttion
-		otherController->isCollisionD = true;
 		otherController->TakeDamage(1);
 		TakeDamage(1);
 	}
@@ -124,5 +123,5 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 // Player Attack
 void HonDController::TakeDamageByPlayer()
 {
-	TakeDamage(1);
+	TakeDamage(2);
 }

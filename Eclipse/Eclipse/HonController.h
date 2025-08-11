@@ -25,14 +25,13 @@ class HonController : public Script
 public:
 	HonType honType = HonType::NONE;
 	float is2A = false;
-	float isCollisionD = false;
 
 public:
 	bool destroyPending = false;		// sound delay
 
 protected:
 	// hon stat
-	int hp = 3;
+	int hp = 5;
 	float size = 1;
 	float descentSpeed = 90;						// 하강 speed
 	float collisionSpeed = 1000;					// 충돌 밀림 speed
@@ -53,6 +52,9 @@ protected:
 	// delta
 	float collisionMovingDelta = 0.0f;
 	float pullMovingDelta = 0.0f;
+
+	// hp alpha data
+	float alphaData[4] = { 0, 0.5f, 0.75f, 1.f };
 
 	// asset
 	shared_ptr<AudioClip> SFX_HonCollision = nullptr;

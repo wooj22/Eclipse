@@ -130,7 +130,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::A:		// ¿¬¼â ¹ÝÀÀ C-A
 		{
 			// score
-			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeHonCount(10);
 
 			// hp cheak
 			TakeDamage(1);
@@ -167,7 +167,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		case HonType::B:		// ¿¬¼â ¹ÝÀÀ C-B
 		{
 			// score
-			GameManager::Get().ChangeHonCount(1);
+			GameManager::Get().ChangeHonCount(10);
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
@@ -241,5 +241,5 @@ void HonCController::TakeDamageByPlayer()
 	// collision acttion
 	CollisionStart();
 	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
-	TakeDamage(1);
+	TakeDamage(2);
 }
