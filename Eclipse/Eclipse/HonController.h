@@ -142,6 +142,7 @@ public:
 			GameManager::Get().ChangeHonCount(-1);
 		}
 
+		// component off
 		sr->SetEnabled(false);
 		collider->SetEnabled(false);
 

@@ -12,6 +12,9 @@ void HonAController::Awake()
 	collider = gameObject->GetComponent<CircleCollider>();
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
+
+	sr->renderMode = RenderMode::Lit_Glow;
+	sr->SetGlowAmmount(10);
 }
 
 void HonAController::Start()
