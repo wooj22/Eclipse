@@ -86,6 +86,9 @@ public:
 	PlayUI* g_playUI;
 	int honCount;
 
+	// 마우스
+	bool canUseMouse;
+
 	//웨이브
 	int waveCount;				// UI 에서 넘겨 줄 웨이브 카운트
 	bool isWave;				// UI 에서 넘겨 줄 웨이브 시작 여부
