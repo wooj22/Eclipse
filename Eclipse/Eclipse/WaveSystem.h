@@ -11,6 +11,7 @@ class HonC;
 class HonD;
 class Boss;
 class GameManager;
+class AudioSource;
 
 enum class WaveState
 {
@@ -78,6 +79,9 @@ private:
     
     // GameManager reference
     GameManager* m_gameManager;
+
+    // Audio
+    AudioSource* m_waveEndAudioSource;
 
     // Wave StartCheck
 	bool m_waveStartCheck = true;

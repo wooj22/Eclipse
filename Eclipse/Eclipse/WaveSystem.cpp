@@ -12,6 +12,10 @@
 #include "../Direct2D_EngineLib/Scene.h"
 #include "../Direct2D_EngineLib/SceneManager.h"
 #include "../Direct2D_EngineLib/Singleton.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/AudioSystem.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 #include <algorithm>
 #include <chrono>
 #include "PlayUI.h"
@@ -28,6 +32,7 @@ WaveSystem::WaveSystem()
     m_destroyedCount = 0;
     m_activeBoss = nullptr;
     m_gameManager = nullptr;
+    m_waveEndAudioSource = nullptr;
 
     // Initialize random generator
     auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -47,6 +52,30 @@ void WaveSystem::Awake()
 
 void WaveSystem::Start()
 {
+    // Initialize audio source for wave end sound
+    m_waveEndAudioSource = gameObject->AddComponent<AudioSource>();
+    OutputDebugStringA("[WaveSystem] AudioSource component added.\n");
+
+	// Set to SFX group for volume control
+	m_waveEndAudioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+	OutputDebugStringA("[WaveSystem] Audio source set to SFX group.\n");
+
+    // Load wave end sound clip
+    auto waveEndClip = ResourceManager::Get().CreateAudioClip("../Resource/Aron/BGM/s_WaveEnd.wav");
+    if (waveEndClip)
+    {
+        m_waveEndAudioSource->SetClip(waveEndClip);
+        OutputDebugStringA("[WaveSystem] Wave end audio clip loaded successfully.\n");
+    }
+    else
+    {
+        OutputDebugStringA("[WaveSystem] ERROR: Failed to load wave end audio clip!\n");
+    }
+    
+    
+    // Set volume
+    m_waveEndAudioSource->SetVolume(1.0f);
+    OutputDebugStringA("[WaveSystem] Wave end audio source initialized.\n");
 }
 
 void WaveSystem::Update()
@@ -133,6 +162,22 @@ void WaveSystem::Update()
         }
 
         OutputDebugStringA("Wave cleanup completed.\n");
+        
+        // Stop all BGM before playing wave end sound
+        AudioSystem::Get().GetBGMGroup()->stop();
+        OutputDebugStringA("[WaveSystem] All BGM stopped.\n");
+        
+        // Play wave end sound
+        if (m_waveEndAudioSource)
+        {
+            OutputDebugStringA("[WaveSystem] Attempting to play wave end sound...\n");
+            m_waveEndAudioSource->PlayOneShot();
+            OutputDebugStringA("[WaveSystem] Wave end sound PlayOneShot() called.\n");
+        }
+        else
+        {
+            OutputDebugStringA("[WaveSystem] ERROR: Wave end audio source is null!\n");
+        }
 
         // Notify GameManager that wave is complete
         if (m_gameManager)
@@ -179,28 +224,28 @@ void WaveSystem::StartWave(int waveNumber)
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
         //m_waveDuration = 70.0f;        
-        m_waveDuration = 70.0f;
+        m_waveDuration = 2.0f;
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;
 
     case 2:
         m_currentWaveState = WaveState::WAVE_2;
-        m_waveDuration = 70.0f;
+        m_waveDuration = 2.0f;
         SetupWave2Pattern();
         OutputDebugStringA("Wave 2 Started - Chain Reaction (HonA, HonB, HonC)\n");
         break;
 
     case 3:
         m_currentWaveState = WaveState::WAVE_3;
-        m_waveDuration = 70.0f;
+        m_waveDuration = 2.0f;
         SetupWave3Pattern();
         OutputDebugStringA("Wave 3 Started - Increased Difficulty (All Hons)\n");
         break;
 
     case 4:
         m_currentWaveState = WaveState::WAVE_BOSS;
-        m_waveDuration = 80.0f;
+        m_waveDuration = 3.0f;
         SetupBossPattern();
         OutputDebugStringA("Boss Wave Started!\n");
         break;
