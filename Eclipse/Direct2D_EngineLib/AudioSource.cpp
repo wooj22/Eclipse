@@ -45,6 +45,29 @@ bool AudioSource::GetLoop()
     return isLoop;
 }
 
+float AudioSource::GetCurrentClipLenght()
+{
+    return clip->GetLenght();
+}
+
+float AudioSource::GetCurrentPlayTime()
+{
+    unsigned int posMS = 0;
+    FMOD_RESULT result = channel->getPosition(&posMS, FMOD_TIMEUNIT_MS);
+    if (result != FMOD_OK) return 0.0f;
+
+    return posMS / 1000.0f;
+}
+
+float AudioSource::GetPlaybackProgress()
+{
+    float current = GetCurrentPlayTime();
+    float total = GetCurrentClipLenght();
+
+    if (total <= 0.0f) return 0.0f;
+    return current / total; 
+}
+
 void AudioSource::Play()
 {
     if (!clip || !clip->IsValid()) return;

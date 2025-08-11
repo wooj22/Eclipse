@@ -4,7 +4,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Vector2.h"
 #include "../Direct2D_EngineLib/Transform.h"
-#include "../Direct2D_EngineLib/SpriteRenderer.h
+#include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/AudioClip.h"
 #include "../Direct2D_EngineLib/AudioSource.h"
