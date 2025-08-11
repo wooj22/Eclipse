@@ -1,6 +1,7 @@
 #include "TitleUI.h"
 #include "../Direct2D_EngineLib/GameApp.h"
 #include "EclipseApp.h"
+#include <DirectXMath.h>
 
 void TitleUI::Awake()
 {
@@ -13,13 +14,9 @@ void TitleUI::Awake()
 	sfxClip_Button1 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_1.wav");
 	sfxClip_Button2 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_2.wav");
 
-	// audio system BGM 채널그룹 볼륨 설정
-	AudioSystem::Get().SetBGMVolume(0);
-	AudioSystem::Get().SetSFXVolume(1);
-
 	// audioSource 채널 그룹 지정 및 사운드 재생
 	bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
-	bgmSource->SetVolume(1);
+	bgmSource->SetVolume(0);
 	bgmSource->SetClip(bgmClip);
 	bgmSource->SetLoop(true);
 	bgmSource->Play();
@@ -41,10 +38,14 @@ void TitleUI::SceneStart()
 	titleSpell_Image->AddComponent<SpriteRenderer>();
 	auto title = ResourceManager::Get().CreateTexture2D("../Resource/mo/TitleBackGround.png");
 	backgroundImage->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(title, "TitleBackGround");
+
 	auto logo = ResourceManager::Get().CreateTexture2D("../Resource/mo/Title_Logo.png");
 	titleLogo_Image->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(logo, "Title_Logo");
+	titleLogo_Image->GetComponent<SpriteRenderer>()->renderMode = RenderMode::Lit_Glow;;
+
 	auto spell = ResourceManager::Get().CreateTexture2D("../Resource/mo/Title_Spell.png");
 	titleSpell_Image->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(spell, "Title_Spell");
+	//titleSpell_Image->GetComponent<SpriteRenderer>()->renderMode = RenderMode::Lit_Glow;
 
 	options_Button->rectTransform->SetParent(play_Button->rectTransform);
 	credit_Button->rectTransform->SetParent(play_Button->rectTransform);
@@ -140,6 +141,15 @@ void TitleUI::SceneStart()
 void TitleUI::Update()
 {
 	titleSpell_Image->transform->Rotate(0.05);
+
+	glowtimer += Time::GetDeltaTime();  // 매 프레임 시간 누적
+
+	//float glow = ((sinf(glowtimer * glowspeed - DirectX::XM_PIDIV2) + 1.0f) / 2.0f) * 1000.0f;
+	float s = sinf(glowtimer * glowspeed) * 0.5f + 0.5f;
+	s = pow(s, 6.0f);
+	float glow = s * 150.0f;
+	titleLogo_Image->GetComponent<SpriteRenderer>()->SetGlowAmmount(glow);
+
 }
 
 void TitleUI::Destroyed()

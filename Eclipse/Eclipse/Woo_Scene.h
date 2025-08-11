@@ -31,6 +31,7 @@ class Woo_Scene : public Scene
 private:
 	GameObject* cam;
 	UI_Text* title_text;
+	BoxCollider* c;
 
 	// Boss
 	Boss* boss;

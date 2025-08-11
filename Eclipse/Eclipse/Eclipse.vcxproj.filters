@@ -156,9 +156,6 @@
     <ClCompile Include="PlayScene.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="EndScene.cpp">
-      <Filter>01. Scene</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerFSM.cpp">
       <Filter>03. Script\Moon\[ Player FSM ]</Filter>
     </ClCompile>
@@ -296,6 +293,30 @@
     </ClCompile>
     <ClCompile Include="HonController.cpp">
       <Filter>03. Script\Woo\Hon\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="AmbientSoundManager.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BossHP.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBackGround.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ParallaxLayer.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseWindow.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolTip.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EndScene.cpp">
+      <Filter>01. Scene\dev</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -512,5 +533,43 @@
     <ClInclude Include="HonController.h">
       <Filter>03. Script\Woo\Hon\Base</Filter>
     </ClInclude>
+    <ClInclude Include="AmbientSoundManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BossHP.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Cemetery.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBackGround.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ParallaxLayer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseWindow.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Shadow.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolTip.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.dll">
+      <Filter>헤더 파일</Filter>
+    </None>
+    <None Include="fmodL.dll">
+      <Filter>헤더 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

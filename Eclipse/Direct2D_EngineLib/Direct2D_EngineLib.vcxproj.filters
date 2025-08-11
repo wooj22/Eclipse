@@ -169,6 +169,12 @@
     <Filter Include="헤더 파일\02. GameObject\UI">
       <UniqueIdentifier>{5e7ec924-3b81-495d-a729-edb94dd4b475}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\98. Utils\Font">
+      <UniqueIdentifier>{c203d507-e3f2-43cb-b572-dbecc0c0e4b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\98. Utils\Font">
+      <UniqueIdentifier>{49a90c81-5a1a-4172-b232-4a828b50a945}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -336,6 +342,24 @@
     <ClInclude Include="UI_Slider.h">
       <Filter>헤더 파일\02. GameObject\UI</Filter>
     </ClInclude>
+    <ClInclude Include="InvokeSystem.h">
+      <Filter>헤더 파일\05. StaticSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FontCollectionLoader.h">
+      <Filter>헤더 파일\98. Utils\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="FontFileEnumerator.h">
+      <Filter>헤더 파일\98. Utils\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="FontFileLoader.h">
+      <Filter>헤더 파일\98. Utils\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="FontFileStream.h">
+      <Filter>헤더 파일\98. Utils\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="FontLoaderUtil.h">
+      <Filter>헤더 파일\98. Utils\Font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -497,6 +521,24 @@
     </ClCompile>
     <ClCompile Include="I_UI.cpp">
       <Filter>소스 파일\03. Component\Base\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="InvokeSystem.cpp">
+      <Filter>소스 파일\05. StaticSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FontCollectionLoader.cpp">
+      <Filter>소스 파일\98. Utils\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="FontFileEnumerator.cpp">
+      <Filter>소스 파일\98. Utils\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="FontFileLoader.cpp">
+      <Filter>소스 파일\98. Utils\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="FontFileStream.cpp">
+      <Filter>소스 파일\98. Utils\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="FontLoaderUtil.cpp">
+      <Filter>소스 파일\98. Utils\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

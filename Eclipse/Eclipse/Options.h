@@ -14,6 +14,8 @@ public:
 	UI_Button* close_Button;
 	UI_Button* sound_Button;
 	UI_Button* key_Button;
+	UI_Image* optionWindowBackGround_Image;			// 옵션 창 검은 화면 이미지
+	UI_Image* optionWindowBackGroundGradient_Image;	// 옵션 창 그라데이션 이미지
 public:
 	Options();
 	~Options() = default;

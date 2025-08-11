@@ -41,6 +41,7 @@ public:
 	FMOD::ChannelGroup* GetMasterGroup() const { return masterGroup; }
 	FMOD::ChannelGroup* GetBGMGroup() const { return bgmGroup; }
 	FMOD::ChannelGroup* GetSFXGroup() const { return sfxGroup; }
+	FMOD::ChannelGroup* GetAMBGroup() const { return ambGroup; }
 
 	void SetMasterVolume(float volume);
 	void SetBGMVolume(float volume);

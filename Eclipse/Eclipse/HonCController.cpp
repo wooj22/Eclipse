@@ -10,10 +10,13 @@
 void HonCController::Awake()
 {
 	tr = gameObject->transform;
+	sr = gameObject->GetComponent<SpriteRenderer>();
 	collider = gameObject->GetComponent<CircleCollider>();
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
 
+	sr->renderMode = RenderMode::Lit_ColorTint;
+	sr->SetGlowAmmount(10);
 }
 
 void HonCController::Start()
@@ -23,6 +26,14 @@ void HonCController::Start()
 
 void HonCController::Update()
 {
+	// sound delay destroy
+	if (destroyPending)
+	{
+		if (!audioSource->IsPlaying()) gameObject->Destroy();
+		return;
+	}
+
+	// moving
 	if (isAbsorption) return;
 
 	if (isPullMoving)
@@ -87,6 +98,13 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		gameObject->Destroy();
 	}
 
+	// [mapborder collision]
+	if (other->gameObject->name == "MapBorder")
+	{
+		CollisionStart();
+		moveDirection = contact.normal;
+	}
+
 	// [boss collision]
 	if (other->gameObject->tag == "Boss")
 	{
@@ -97,12 +115,13 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [hon collision]
 	if (other->gameObject->tag == "Hon")
 	{
-		if (gameObject->IsDestroyed()) return;
+		if (gameObject->IsDestroyed() || destroyPending) return;
 
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
+		if (otherController->destroyPending) return;
 		HonType honType = otherController->honType;
 
 		// collision acttion
@@ -116,7 +135,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hp cheak
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+			if (destroyPending || otherController->destroyPending) return;
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
@@ -140,7 +159,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			CollisionStart();
 
 			// sound
-			audioSource->SetClip(SFX_Collision);
+			audioSource->SetClip(SFX_HonCollision);
 			audioSource->PlayOneShot();
 
 			break;
@@ -158,7 +177,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			honCB_dir = other->gameObject->transform->GetWorldPosition() - tr->GetWorldPosition();
 
 			// sound
-			audioSource->SetClip(SFX_Collision);
+			audioSource->SetClip(SFX_HonCollision);
 			audioSource->PlayOneShot();
 
 			TakeDamage(1);
@@ -170,7 +189,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// hp check
 			TakeDamage(1);
 			otherController->TakeDamage(1);
-			if (gameObject->IsDestroyed() || otherGameObject->IsDestroyed()) return;
+			if (destroyPending || otherController->destroyPending) return;
 
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
@@ -191,7 +210,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			}
 
 			// sound
-			audioSource->SetClip(SFX_Collision);
+			audioSource->SetClip(SFX_HonCollision);
 			audioSource->PlayOneShot();
 
 			if (!other->gameObject->IsDestroyed()) otherController->TakeDamage(3);

@@ -26,6 +26,7 @@ void AudioSource::SetClip(shared_ptr<AudioClip> newClip)
 
 void AudioSource::SetVolume(float volume)
 {
+    this->volume = volume;
     if (channel)
         channel->setVolume(volume);
 }
@@ -43,6 +44,29 @@ void AudioSource::SetLoop(bool loop)
 bool AudioSource::GetLoop()
 {
     return isLoop;
+}
+
+float AudioSource::GetCurrentClipLenght()
+{
+    return clip->GetLenght();
+}
+
+float AudioSource::GetCurrentPlayTime()
+{
+    unsigned int posMS = 0;
+    FMOD_RESULT result = channel->getPosition(&posMS, FMOD_TIMEUNIT_MS);
+    if (result != FMOD_OK) return 0.0f;
+
+    return posMS / 1000.0f;
+}
+
+float AudioSource::GetPlaybackProgress()
+{
+    float current = GetCurrentPlayTime();
+    float total = GetCurrentClipLenght();
+
+    if (total <= 0.0f) return 0.0f;
+    return current / total; 
 }
 
 void AudioSource::Play()
@@ -70,9 +94,8 @@ void AudioSource::Play()
     {
         system->playSound(clip->GetSound(), nullptr, false, &channel);
         
-        // group
-        if (channel && outputChannel)
-            channel->setChannelGroup(outputChannel);
+        if (channel) channel->setVolume(volume);
+        if (outputChannel) channel->setChannelGroup(outputChannel);
     }
 }
 
@@ -100,10 +123,9 @@ void AudioSource::PlayOneShot()
     if (system)
     {
         system->playSound(clip->GetSound(), nullptr, false, &channel);
-   
-        // group
-        if (channel && outputChannel)
-            channel->setChannelGroup(outputChannel);
+
+        if (channel) channel->setVolume(volume);
+        if (outputChannel) channel->setChannelGroup(outputChannel);
     }
 }
 

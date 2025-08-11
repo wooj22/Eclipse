@@ -112,6 +112,7 @@ void GameApp::Update()
 {
 	Input::Update();
 	Time::Update();
+	InvokeSystem::Update();
 	
 	sceneManager.Update();
 	scriptSystem.Update();

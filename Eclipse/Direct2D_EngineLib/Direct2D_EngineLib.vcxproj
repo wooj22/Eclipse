@@ -153,6 +153,12 @@
     <ClInclude Include="AudioSystem.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="FontCollectionLoader.h" />
+    <ClInclude Include="FontFileEnumerator.h" />
+    <ClInclude Include="FontFileLoader.h" />
+    <ClInclude Include="FontFileStream.h" />
+    <ClInclude Include="FontLoaderUtil.h" />
+    <ClInclude Include="InvokeSystem.h" />
     <ClInclude Include="UISystem.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraSystem.h" />
@@ -210,6 +216,12 @@
     <ClCompile Include="AudioSystem.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="FontCollectionLoader.cpp" />
+    <ClCompile Include="FontFileEnumerator.cpp" />
+    <ClCompile Include="FontFileLoader.cpp" />
+    <ClCompile Include="FontFileStream.cpp" />
+    <ClCompile Include="FontLoaderUtil.cpp" />
+    <ClCompile Include="InvokeSystem.cpp" />
     <ClCompile Include="UISystem.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraSystem.cpp" />

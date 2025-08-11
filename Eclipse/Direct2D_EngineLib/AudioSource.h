@@ -42,6 +42,9 @@ public:
     float GetVolume();
     void SetLoop(bool loop);
     bool GetLoop();
+    float GetCurrentClipLenght();
+    float GetCurrentPlayTime();     // sound play ม๘วเทü 0.0 ~ 1.0
+    float GetPlaybackProgress();
     void Play();
     void PlayOneShot();
     void Stop();
