@@ -336,6 +336,9 @@
     <ClInclude Include="UI_Slider.h">
       <Filter>헤더 파일\02. GameObject\UI</Filter>
     </ClInclude>
+    <ClInclude Include="InvokeSystem.h">
+      <Filter>헤더 파일\05. StaticSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -497,6 +500,9 @@
     </ClCompile>
     <ClCompile Include="I_UI.cpp">
       <Filter>소스 파일\03. Component\Base\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="InvokeSystem.cpp">
+      <Filter>소스 파일\05. StaticSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -124,6 +124,7 @@ class AudoiSource;
 /*--------------------------------------------------------------*/
 class Input;
 class Time;
+class InvokeSystem;
 
 
 

@@ -16,6 +16,7 @@
 #include "CameraSystem.h"
 #include "Time.h"
 #include "Input.h"
+#include "InvokeSystem.h"
 #include "ObjectTable.h"
 
 using namespace std;
@@ -66,7 +67,7 @@ public:
 
 	/* Game Life Cycle */
 	virtual void Init();
-	void Update();			// input, time, uiystem, transformSystem, scene(gameObject), scriptsystem.Update(), animatorSystem, renderSystem.update, cameraSystem, audioSystem
+	void Update();			// input, time, invoke, uiystem, transformSystem, scene(gameObject), scriptsystem.Update(), animatorSystem, renderSystem.update, cameraSystem, audioSystem
 	void FixedUpdate();		// scriptsystem.FixedUpdate(), 물리 관련
 	void Render();			// renderSystem.render
 	void Loop();
