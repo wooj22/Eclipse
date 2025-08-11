@@ -6,7 +6,8 @@
 void PauseWindow::Awake()
 {
 	rectTransform = AddComponent<RectTransform>();
-	background_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	optionWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	optionWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	window_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	close_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	newGame_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
@@ -14,29 +15,33 @@ void PauseWindow::Awake()
 	quitGame_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	underscore_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 
-	background_Image->rectTransform->SetParent(rectTransform);
-	window_Image->rectTransform->SetParent(background_Image->rectTransform);
-	close_Button->rectTransform->SetParent(background_Image->rectTransform);
+	optionWindowBackGround_Image->rectTransform->SetParent(rectTransform);
+	optionWindowBackGroundGradient_Image->rectTransform->SetParent(rectTransform);
+	window_Image->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
+	close_Button->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
 
-	continuGame_Button->rectTransform->SetParent(background_Image->rectTransform);
+	continuGame_Button->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
 	newGame_Button->rectTransform->SetParent(continuGame_Button->rectTransform);
 	quitGame_Button->rectTransform->SetParent(continuGame_Button->rectTransform);
-	background_Image->imageRenderer->layer = 21;
 }
 
 void PauseWindow::SceneStart()
 {
 	eventButtons = { continuGame_Button,newGame_Button , quitGame_Button };
-	background_Image->rectTransform->SetSize(1248, 702);
-	auto backImagenTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionsBackGround.png");
-	background_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(backImagenTexture, "OptionsBackGround");
+	window_Image->rectTransform->SetSize(850, 600);
+	optionWindowBackGround_Image->rectTransform->SetSize(1920, 1080);
+	optionWindowBackGroundGradient_Image->rectTransform->SetSize(1920, 1080);
 
+	auto windowImagenTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionsBackGround.png");
+	window_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(windowImagenTexture, "OptionsBackGround");
+	auto optionWindowBackGroundImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/WindowBackGround.png");
+	optionWindowBackGround_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(optionWindowBackGroundImageTexture, "WindowBackGround");
+	auto optionWindowBackGroundGradientImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/WindowBackGroundGradient.png");
+	optionWindowBackGroundGradient_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(optionWindowBackGroundGradientImageTexture, "WindowBackGroundGradient");
 
-	window_Image->rectTransform->SetSize(811, 456);
-	window_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(backImagenTexture, "OptionsBackGround");
 
 	close_Button->rectTransform->SetPosition(500, 280);
-	close_Button->rectTransform->SetSize(150, 100);
+	close_Button->rectTransform->SetSize(83, 79);
 	auto closeButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
 	close_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(closeButtonTexture, "BackButton");
 

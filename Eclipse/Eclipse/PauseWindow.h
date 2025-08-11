@@ -8,7 +8,8 @@
 class PauseWindow : public GameObject
 {
 public:
-	UI_Image* background_Image;
+	UI_Image* optionWindowBackGround_Image;
+	UI_Image* optionWindowBackGroundGradient_Image;
 	UI_Image* window_Image;
 	UI_Button* close_Button;
 	UI_Button* newGame_Button;

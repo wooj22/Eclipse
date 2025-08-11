@@ -12,13 +12,8 @@ void GameManager::Init()
 {
 	g_playUI = nullptr; 
 	ReSetData();
-
-	// audio system BGM 채널그룹 볼륨 설정
-	AudioSystem::Get().SetMasterVolume(0.5);
-	AudioSystem::Get().SetBGMVolume(0.5);
-	AudioSystem::Get().SetSFXVolume(0.5);
-	AudioSystem::Get().SetSFXVolume(0.5);
 }
+
 void GameManager::UnInit()
 {
 	g_playUI = nullptr;

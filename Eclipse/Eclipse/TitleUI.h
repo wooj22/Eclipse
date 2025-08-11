@@ -4,7 +4,10 @@
 #include"../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/GameObject.h"
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
+#include "../Direct2D_EngineLib/Animator.h"
 #include "Options.h"
+#include "Credit.h"
+#include "LineClip.h"
 
 // »ç¿îµå
 #include "../Direct2D_EngineLib/AudioSystem.h"
@@ -31,6 +34,7 @@ public:
 	std::vector<UI_Button*> optionButtons;
 
 	Options* optionUI;
+	Credit* creditUI;
 
 	// hover event check
 	UI_Button* prevHoverButton = nullptr;
@@ -42,6 +46,8 @@ public:
 	shared_ptr<AudioClip> sfxClip_Button1 = nullptr;
 	shared_ptr<AudioClip> sfxClip_Button2 = nullptr;
 	shared_ptr<AudioClip> sfxClip_ChangeScene = nullptr;
+
+	LineController* linecontroller;
 
 public:
 	// game object cycle
@@ -63,6 +69,7 @@ public:
 	void OnPointExitButton(UI_Button* prevButton);
 	void OnClickOptionUI(UI_Button* button);
 	void OpenOptionUI();
+	void OpenCreditUI();
 	void ChangePlayScene();
 };
 

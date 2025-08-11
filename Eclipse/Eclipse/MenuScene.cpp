@@ -21,6 +21,7 @@ void MenuScene::Awake()
 	titleUI->underscore_Image = CreateObject<UI_Image>();
 
 	titleUI->optionUI = CreateObject<Options>();
+	titleUI->creditUI = CreateObject<Credit>();
 }
 
 void MenuScene::Start()
