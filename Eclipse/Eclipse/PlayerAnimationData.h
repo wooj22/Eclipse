@@ -27,10 +27,10 @@ public:
         {
             // Idle_00.png, Idle_01.png, ...
             char filename[256];
-            sprintf_s(filename, "%sIdle_%02d.png", basePath.c_str(), i);
+            sprintf_s(filename, "%sN_Idle (%d).png", basePath.c_str(), i);
 
             auto texture = ResourceManager::Get().CreateTexture2D(filename);
-            auto sprite = ResourceManager::Get().CreateSprite(texture, "Idle_" + std::to_string(i));
+            auto sprite = ResourceManager::Get().CreateSprite(texture, "N_Idle_" + std::to_string(i));
 
             AnimationFrame frame;
             frame.sprite = sprite;
@@ -228,7 +228,7 @@ public:
         for (int i = 0; i < frameCount; ++i)
         {
             char filename[256];
-            sprintf_s(filename, "%sY_Idle_%02d.png", basePath.c_str(), i);
+            sprintf_s(filename, "%sY_Idle (%d).png", basePath.c_str(), i);
 
             auto texture = ResourceManager::Get().CreateTexture2D(filename);
             auto sprite = ResourceManager::Get().CreateSprite(texture, "Y_Idle_" + std::to_string(i));

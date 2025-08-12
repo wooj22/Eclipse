@@ -102,7 +102,6 @@ private:
 	GameObject* targetHon = nullptr;
 
 	PlayerAnimatorController* playerAnimatorController = nullptr;
-	// SkillAnimatorController* skillAnimatorController = nullptr;
 	PlayerSkillEffect* skillEffect = nullptr;
 
 public:
@@ -201,6 +200,7 @@ public:
     Transform* GetTransform() const { return transform; }
 	SpriteRenderer* GetSpriteRenderer() const { return spriteRenderer; }
 	AudioSource* GetAudioSource() const { return audioSource; }
+	PlayerAnimatorController* GetPlayerAnimatorController() const { return playerAnimatorController; }
 
 	void SetPlayerAttackArea(PlayerAttackArea* obj) { playerAttackArea = obj; }
 	PlayerAttackArea* GetPlayerAttackArea() const { return playerAttackArea; }

@@ -37,7 +37,7 @@ void PlayerJumpState::Update(float dt)
     else if (controller->GetBool("Dash"))    pac->PlaySkillSensitiveAnimation("Player_Dash");
     else if (controller->GetBool("Hanging")) pac->PlaySkillSensitiveAnimation("Player_Hanging");
     else if (controller->GetBool("Attack"))  pac->PlaySkillSensitiveAnimation("Player_Attack");
-    else if(controller->GetBool("Jump"))   pac->PlaySkillSensitiveAnimation("Player_Jump");
+    else  pac->PlaySkillSensitiveAnimation("Player_Jump");
 }
 
 void PlayerHangingState::Update(float dt)

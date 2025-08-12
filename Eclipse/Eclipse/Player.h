@@ -97,7 +97,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(0, -780);
+		transform->SetPosition(-20, -790);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -105,7 +105,7 @@ public:
 
 		rigidbody->useGravity = true;
 		rigidbody->gravityScale = playerFSM->defaultGravity;
-		rigidbody->mass = 1.4f; // 3.0f; 
+		rigidbody->mass = 1.4f; 
 
 		// [ 그림자 ]
 		shadow_transform = player_Shadow->GetComponent<Transform>();
@@ -136,10 +136,6 @@ public:
 		if (!shadow_transform || !shadow_spriteRenderer)
 		{ OutputDebugStringA("[Player] player_Shadow의 Component가 없습니다. \n"); return; }
 
-		//D2D1_POINT_2F start = { 0, 0 };
-		//D2D1_POINT_2F end = { 0, -240 };
-		//RenderSystem::Get().DebugDrawLine(start, end, transform->GetScreenMatrix(), 2.0f);
-
 		// ray 
 		ray.direction = Vector2::down;
 		ray.origin = transform->GetWorldPosition() - Vector2(0, 120);
@@ -153,9 +149,6 @@ public:
 			player_Shadow->GetComponent<SpriteRenderer>()->SetEnabled(false);
 			return;
 		}
-
-		//std::string debugStr = "[PlayerFSM] hit.collider = " + hit.collider->gameObject->name + " / hit의 ray 좌표 = " + std::to_string(hit.point.y) + "\n";
-		//OutputDebugStringA(debugStr.c_str());
 
 		float distance = transform->GetWorldPosition().y - hit.point.y;
 		float maxDistance = 300.0f;
