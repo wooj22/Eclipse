@@ -5,6 +5,7 @@
 #include "../Direct2D_EngineLib/UI_Text.h"
 #include "../Direct2D_EngineLib/UI_Image.h"
 #include "../Direct2D_EngineLib/UI_Button.h"
+
 #include "Player_Woo.h"
 #include "Map_Woo.h"
 #include "Boss.h"
@@ -13,6 +14,7 @@
 #include "HonC.h"
 #include "HonD.h"
 
+#include "InGameCamera.h"
 #include "MapBackGround.h"
 
 #include "Player.h"
@@ -29,7 +31,8 @@
 class Woo_Scene : public Scene
 {
 private:
-	GameObject* cam;
+	//GameObject* cam;
+	InGameCamera* cam;
 	UI_Text* title_text;
 	BoxCollider* c;
 

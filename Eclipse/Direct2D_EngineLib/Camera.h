@@ -7,7 +7,7 @@
 
 /* [Camera Conponent]
 * 
-* TODO :: zoom 등 기능 함수 추가
+* 
 */
 
 class Transform;
@@ -16,6 +16,7 @@ class Camera : public Component
 private:
 	Transform* transform = nullptr;
 	Vector2 viewSize = { 1920.0f, 1080.0f };
+	float zoom = 1.f;
 
 	// matrix
 	D2D1::Matrix3x2F worldMatrix = D2D1::Matrix3x2F::Identity();
@@ -65,6 +66,12 @@ public:
 	// get / set
 	void SetViewSize(float width, float height) { viewSize.x = width; viewSize.y = height; }
 	Vector2 GetViewSize() const { return viewSize; }
+
+	// zoom
+	void SetZoom(float z) { zoom = max(z, 0.01f); }
+	float GetZoom() const { return zoom; }
+	void ZoomIn(float amount) { zoom += amount; if (zoom < 0.01f) zoom = 0.01f; }
+	void ZoomOut(float amount) { zoom -= amount; if (zoom < 0.01f) zoom = 0.01f; }
 
 public:
 	// target trace
