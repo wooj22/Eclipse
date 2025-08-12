@@ -118,7 +118,6 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		// other
 		GameObject* otherGameObject = other->gameObject;
 		if (otherGameObject->IsDestroyed()) return;
-
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
 		if (otherController->destroyPending) return;
 		HonType honType = otherController->honType;
@@ -137,31 +136,41 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			GameManager::Get().ChangeQuestCount(2);
 
 			// collision move start
-			// Size를 기준으로 합체 주체 결정
-			if (size >= otherController->GetSize())
+			// 2A2A 파괴
+			if (is2A && otherController->is2A)
+			{
+				otherController->TakeDamage(5);
+				TakeDamage(5);
+			}
+			// 회복
+			else if (is2A || otherController->is2A)
+			{
+				if (is2A)
+				{
+					if (!otherGameObject->IsDestroyed()) otherController->TakeDamage(5);
+					SetHp(3);
+				}
+				else
+				{
+					otherController->SetHp(3);
+					TakeDamage(5);
+				}
+			}
+			// 합체
+			else
 			{
 				if (!otherGameObject->IsDestroyed()) otherGameObject->Destroy();
 				SetSize(size * 1.4);
 				CollisionEnd();
 				SetDescentSpeed(descentSpeed * 0.6);
-				SetHp(1);
+				SetHp(3);
 				sr->SetAlpha(alphaData[hp]);
 				is2A = true;
+				 
+				// sound
+				audioSource->SetClip(SFX_HonMerge);
+				audioSource->PlayOneShot();
 			}
-			else
-			{
-				otherController->SetSize(otherController->GetSize() * 1.5);
-				otherController->CollisionEnd();
-				otherController->SetDescentSpeed(otherController->GetSDescentpeed() * 0.6);
-				otherController->SetHp(1);
-				otherController->sr->SetAlpha(alphaData[1]);
-				otherController->is2A = true;
-				if (!this->gameObject->IsDestroyed()) this->gameObject->Destroy();
-			}
-
-			// sound
-			audioSource->SetClip(SFX_HonMerge);
-			audioSource->PlayOneShot();
 
 			break;
 		}

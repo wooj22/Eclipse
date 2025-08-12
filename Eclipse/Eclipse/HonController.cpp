@@ -29,7 +29,11 @@ void HonController::SetDescentSpeed(float s) { descentSpeed = s; }
 float HonController::GetSDescentpeed() { return descentSpeed; }
 
 // hp
-void HonController::SetHp(int h) { hp = h; }
+void HonController::SetHp(int h) 
+{
+	hp = h; 
+	if(sr) sr->SetAlpha(alphaData[hp]);
+}
 int HonController::GetHp() { return hp; }
 void HonController::TakeDamage(int damage)
 {
@@ -38,6 +42,7 @@ void HonController::TakeDamage(int damage)
 	hp -= damage;
 	if (hp <= 0)
 	{
+		hp = 0;
 		Die();
 	}
 
@@ -53,17 +58,20 @@ void HonController::Die()
 	// hon score
 	if (honType == HonType::A)
 	{
-		if (is2A) GameManager::Get().ChangeHonCount(30);
+		if (isCollisionD) {}
+		else if (is2A) GameManager::Get().ChangeHonCount(30);
 		else GameManager::Get().ChangeHonCount(10);
 	}
 	else if (honType == HonType::B)
 	{
-		GameManager::Get().ChangeHonCount(15);
-		// TODO :: b flag
+		if (isCollisionD) {}
+		else if(isb) GameManager::Get().ChangeHonCount(10);
+		else GameManager::Get().ChangeHonCount(15);
 	}
 	else if (honType == HonType::C)
 	{
-		GameManager::Get().ChangeHonCount(5);
+		if (isCollisionD) {}
+		else GameManager::Get().ChangeHonCount(5);
 	}
 	else if (honType == HonType::D)
 	{

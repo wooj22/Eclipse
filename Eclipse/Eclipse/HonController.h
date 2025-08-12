@@ -24,7 +24,9 @@ class HonController : public Script
 {
 public:
 	HonType honType = HonType::NONE;
+	bool isCollisionD = false;
 	float is2A = false;
+	float isb = false;
 
 public:
 	bool destroyPending = false;		// sound delay
@@ -54,7 +56,7 @@ protected:
 	float pullMovingDelta = 0.0f;
 
 	// hp alpha data
-	float alphaData[4] = { 0, 0.5f, 0.75f, 1.f };
+	float alphaData[6] = { 0, 0.3f, 0.5f, 0.7f, 0.85f,  1.f };
 
 	// asset
 	shared_ptr<AudioClip> SFX_HonCollision = nullptr;
