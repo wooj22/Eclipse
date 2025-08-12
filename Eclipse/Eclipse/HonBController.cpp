@@ -134,41 +134,112 @@ void HonBController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
 
-			// position
-			std::vector<Vector2> offsets = {
-				Vector2(-100, 100),
-				Vector2(-100, -100),
-				Vector2(100, -100),
-				Vector2(100, 100)
-			};
-
-			// new HonB
-			for (const Vector2& offset : offsets)
+			// collision move start
+			// bb 파괴
+			if(isb && otherController->isb)
 			{
-				GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + offset);
-				HonBController* controller = newHonB->GetComponent<HonBController>();
-				if (controller)
+				otherController->TakeDamage(2);
+				TakeDamage(2);
+			}
+			// Bb 2 분열
+			else if (isb || otherController->isb)
+			{
+				// position
+				std::vector<Vector2> offsets = {
+					Vector2(-60, 60),
+					Vector2(60, -60),
+				};
+
+				if (isb)
 				{
-					controller->SetSize(size * 0.7f);
-					controller->SetDescentSpeed(descentSpeed * 1.2f);
-					controller->SetHp(1);
-					controller->sr->SetAlpha(alphaData[1]);
+					// new HonB
+					for (const Vector2& offset : offsets)
+					{
+						GameObject* newHonB = Instantiate<HonB>(other->gameObject->transform->GetWorldPosition() + offset);
+						HonBController* controller = newHonB->GetComponent<HonBController>();
+						if (controller)
+						{
+							controller->SetSize(size * 0.7f);
+							controller->SetDescentSpeed(descentSpeed * 1.2f);
+							controller->SetHp(2);
+							controller->isb = true;
+						}
+					}
+
+					// sound
+					audioSource->SetClip(SFX_HonSplit);
+					audioSource->PlayOneShot();
+
+					// 상대니까 그냥 파괴
+					other->gameObject->Destroy();
+				}
+				else
+				{
+					// new HonB
+					for (const Vector2& offset : offsets)
+					{
+						GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + offset);
+						HonBController* controller = newHonB->GetComponent<HonBController>();
+						if (controller)
+						{
+							controller->SetSize(size * 0.7f);
+							controller->SetDescentSpeed(descentSpeed * 1.2f);
+							controller->SetHp(2);
+							controller->isb = true;
+						}
+					}
+
+					sr->SetEnabled(false);
+					collider->SetEnabled(false);
+
+					// sound
+					audioSource->SetClip(SFX_HonSplit);
+					audioSource->PlayOneShot();
+
+					// sound dealy
+					// old HonB
+					destroyPending = true;
 				}
 			}
+			// BB 4 분열
+			else
+			{
+				// position
+				std::vector<Vector2> offsets = {
+					Vector2(-100, 100),
+					Vector2(-100, -100),
+					Vector2(100, -100),
+					Vector2(100, 100)
+				};
 
-			sr->SetEnabled(false);
-			collider->SetEnabled(false);
-			otherController->sr->SetEnabled(false);
-			otherController->collider->SetEnabled(false);
+				// new HonB
+				for (const Vector2& offset : offsets)
+				{
+					GameObject* newHonB = Instantiate<HonB>(tr->GetWorldPosition() + offset);
+					HonBController* controller = newHonB->GetComponent<HonBController>();
+					if (controller)
+					{
+						controller->SetSize(size * 0.7f);
+						controller->SetDescentSpeed(descentSpeed * 1.2f);
+						controller->SetHp(2);
+						controller->isb = true;
+					}
+				}
 
-			// sound
-			audioSource->SetClip(SFX_HonSplit);
-			audioSource->PlayOneShot();
+				sr->SetEnabled(false);
+				collider->SetEnabled(false);
+				otherController->sr->SetEnabled(false);
+				otherController->collider->SetEnabled(false);
 
-			// sound dealy
-			// old HonB
-			otherController->destroyPending = true;
-			destroyPending = true;
+				// sound
+				audioSource->SetClip(SFX_HonSplit);
+				audioSource->PlayOneShot();
+
+				// sound dealy
+				// old HonB
+				otherController->destroyPending = true;
+				destroyPending = true;
+			}
 		}
 		case HonType::C:		// 연쇄 반응 B-C (C쪽에서 처리해서 자기 보정만 담당)
 		{
