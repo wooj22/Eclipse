@@ -132,6 +132,9 @@ public:
 	bool ChatActiveCheck() { return chat_Image->IsActive(); }
 	void ClickChatButton();
 
+	void BossIntroEnd();
+	void WaveStartData();
+
 	void AllSkillCheat();
 	void ResetAllSkillCheat();
 	void PlayerInteraction();
