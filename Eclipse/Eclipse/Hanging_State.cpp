@@ -23,8 +23,8 @@ void Hanging_State::Enter(MovementFSM * fsm)
 
 
     // 조건: 보고 있는 방향이 벽 반대일 때만 Flip
-    if ((fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetLastFlipX()) || 
-        (fsm->GetPlayerFSM()->GetIsWallRight() && !fsm->GetPlayerFSM()->GetLastFlipX()))
+    if ((fsm->GetPlayerFSM()->GetIsWallRight() && fsm->GetPlayerFSM()->GetLastFlipX()) ||
+        (fsm->GetPlayerFSM()->GetIsWallLeft() && !fsm->GetPlayerFSM()->GetLastFlipX()))
     {
         fsm->GetPlayerFSM()->SetLastFlipX(!fsm->GetPlayerFSM()->GetLastFlipX());
     }

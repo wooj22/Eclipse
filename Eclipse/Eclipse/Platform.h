@@ -51,13 +51,15 @@ public:
     BoxObject* box_object4;
     BoxObject* box_object5;
 
-    Platform_Wall* platform_wall2;
     Platform_Wall_Grass* platform_wall1;
+    Platform_Wall* platform_wall2;
+    Platform_Wall* platform_wall3;
 
     Cemetery* cemetery1;
     Cemetery* cemetery2;
     Cemetery* cemetery3;
     Cemetery* cemetery4;
+    Cemetery* cemetery5;
 
     // component 
     BoxCollider* ground_col;
@@ -388,7 +390,8 @@ public:
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Box.png"), "Box");
         spriteRenderer->layer = 1;
 
-        collider->size = { 300.0f, 300.0f };
+		collider->offset = { 0.0f, 100.0f };
+        collider->size = { 300.0f, 100.0f };
         collider->isFlatform = true;
     }
 
