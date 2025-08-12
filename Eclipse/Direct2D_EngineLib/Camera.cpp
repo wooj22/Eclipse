@@ -127,7 +127,7 @@ bool Camera::IsInView(const Vector2& worldPos, const Vector2& boundSize) const
 // Target Trace
 void Camera::TargetTrace()
 {
-    if (target)
+    if (target && useTargetTrace)
     {
         // dist
         Vector2 dist = target->GetWorldPosition() - transform->GetWorldPosition();

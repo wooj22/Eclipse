@@ -25,6 +25,7 @@ private:
 private:
 	// target 
 	Transform* target = nullptr;
+	bool useTargetTrace = false;
 	float targetTraceXSpeed = 100.0f;
 	float targetTraceYSpeed = 100.0f;
 	float targetTraceLimitX = 10.0f;
@@ -76,7 +77,8 @@ public:
 
 public:
 	// target trace
-	void SetTarget(Transform* target) { this->target = target; }
+	void UseTargetTrace(bool b){ useTargetTrace = b; }
+	void SetTarget(Transform* target) { this->target = target; useTargetTrace = true; }
 	void SetTargetTraceXSpeed(float speed) { targetTraceXSpeed = speed; }
 	void SetTargetTraceYSpeed(float speed) { targetTraceYSpeed = speed; }
 	void SetTargetTraceLimitX(float limit) { targetTraceLimitX = limit; }
