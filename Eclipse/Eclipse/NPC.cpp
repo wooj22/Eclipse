@@ -26,7 +26,7 @@ NPC::NPC() : GameObject("NPC") {
 
 void NPC::Awake()
 {
-	transform->SetScale(1.5, 1.5);
+	transform->SetScale(0.35, 0.35);
 	transform->Translate(0, 25);
 	spriteRenderer->renderMode = RenderMode::Lit_Glow;
 	rigidbody->isKinematic = true;
