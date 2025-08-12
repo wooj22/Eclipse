@@ -307,7 +307,7 @@ void PlayUI::SceneStart()
 
 	stop_Button->button->onPointExitListeners.AddListener(
 		this, [this]() {
-			if(pauseWindow->IsActive())
+			if(!pauseWindow->IsActive())
 				GameManager::Get().canUseMouse = true;
 		});
 
