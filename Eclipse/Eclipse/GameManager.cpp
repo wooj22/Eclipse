@@ -52,43 +52,47 @@ void GameManager::SkillReset()
 	skillText.clear();
 
 	//스킬 트리 초기화
-	skillTree[SkillType::KnockbackDistanceUp] = { false, 0, 3, SkillType::COUNT, 0, {15,20,30} };
-	skillTree[SkillType::DoubleJump] = { false, 0, 1, SkillType::KnockbackDistanceUp, 3, {25} };
-	skillTree[SkillType::WallJump] = { false, 0, 1, SkillType::DoubleJump, 1, { 30 } };
+	skillTree[SkillType::MoveSpeedUp] = { false, 0, 3, SkillType::COUNT, 0,{30,50,80} };
+	skillTree[SkillType::AttackRangeUp] = { false, 0, 3, SkillType::MoveSpeedUp, 3,{30,50,80} };
+	skillTree[SkillType::KnockbackDistanceUp] = { false, 0, 3, SkillType::AttackRangeUp, 3, {30,50,80} };
 
-	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::COUNT, 0,{15,30} };
-	skillTree[SkillType::JumpAttackExtra] = { false, 0, 1, SkillType::SkillCooldownDown, 1,{25} };
-	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::JumpAttackExtra, 1,{ 30 } };
+	skillTree[SkillType::DoubleJump] = { false, 0, 1, SkillType::COUNT, 0, {100} };
+	skillTree[SkillType::WallJump] = { false, 0, 1, SkillType::DoubleJump, 1, { 100 } };
+	skillTree[SkillType::JumpAttackExtra] = { false, 0, 1, SkillType::WallJump, 1,{100} };
 
-	skillTree[SkillType::MoveSpeedUp] = { false, 0, 3, SkillType::COUNT, 0,{15,20,30} };
-	skillTree[SkillType::AttackRangeUp] = { false, 0, 3, SkillType::MoveSpeedUp, 3,{15,20,30} };
-	skillTree[SkillType::Dash] = { false, 0, 1, SkillType::AttackRangeUp, 3,{ 30 } };
+	skillTree[SkillType::Dash] = { false, 0, 2, SkillType::COUNT, 0,{ 50,100 } };
+	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::SkillCooldownDown, 2,{50,100} };
+	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::FastFall, 2,{ 100 } };
+
 
 	//스킬값 초기화
-	skillValue[SkillType::KnockbackDistanceUp] = { 1.05f,1.1f,1.15f };
-	skillValue[SkillType::DoubleJump] = { 1 };
-	skillValue[SkillType::WallJump] = { 1 };
-
-	skillValue[SkillType::SkillCooldownDown] = { 2,5 };
-	skillValue[SkillType::JumpAttackExtra] = { 1 };
-	skillValue[SkillType::FastFall] = { 1 };
-
 	skillValue[SkillType::MoveSpeedUp] = { 1.05f,1.1f,1.15f };
 	skillValue[SkillType::AttackRangeUp] = { 1.05f,1.1f,1.15f };
-	skillValue[SkillType::Dash] = { 1 };
+	skillValue[SkillType::KnockbackDistanceUp] = { 1.05f,1.1f,1.15f };
+
+	skillValue[SkillType::DoubleJump] = { 1 };
+	skillValue[SkillType::WallJump] = { 1 };
+	skillValue[SkillType::JumpAttackExtra] = { 1 };
+
+	skillValue[SkillType::Dash] = { 0.5,1 };
+	skillValue[SkillType::SkillCooldownDown] = { 2,5 };
+	skillValue[SkillType::FastFall] = { 1 };
+
 
 	//스킬 텍스트 초기화
-	skillText[SkillType::KnockbackDistanceUp] = { L"충돌 비거리 증가",L"밀려나는 영혼의 이동거리가\n        /        /       %\n만큼 증가한다." };
-	skillText[SkillType::DoubleJump] = { L"더블 점프", L"공중에서 1회 \n추가 점프가 가능해진다." };
-	skillText[SkillType::WallJump] = { L"벽 점프",L"벽을 타고 반대방향으로\n1회 점프가 가능해 진다." };
+	skillText[SkillType::MoveSpeedUp] = { L"이동속도 증가" ,L"이동 속도가\n       /        /       %\n만큼 증가한다." };
+	skillText[SkillType::AttackRangeUp] = { L"사거리 증가",L"공격 이동거리가\n       /        /       %\n만큼 증가한다." };
+	skillText[SkillType::KnockbackDistanceUp] = { L"비거리 증가",L"영혼이 밀리는 거리가\n       /        /       %\n만큼 증가한다." };
+	
+	skillText[SkillType::DoubleJump] = { L"공중 점프", L"공중에서 한 번 더\n점프할 수 있다." };
+	skillText[SkillType::WallJump] = { L"벽 점프",L"벽을 차고 한 번 더\n점프할 수 있다." };
+	skillText[SkillType::JumpAttackExtra] = { L"추가 공격" ,L"공중, 벽 점프 후\n1회 추가 공격이 가능해진다." };
 
-	skillText[SkillType::SkillCooldownDown] = { L"스킬 쿨타임 감소",L"Q와 E 스킬의 쿨타임이\n        /        초 감소한다." };
-	skillText[SkillType::JumpAttackExtra] = { L"점프 후 추가공격" ,L"기본 1회 이외에\n더블점프, 벽점프 이후\n1회 추가 공격이 가능해진다." };
-	skillText[SkillType::FastFall] = { L"빠른 낙하" ,L"아래 방향키를 눌러\n빠르게 플랫폼 위로\n내려올 수 있다." };
+	skillText[SkillType::Dash] = { L"돌진 쿨타임감소",L"돌진의 재사용 대기시간이\n       /        초로 감소한다." };
+	skillText[SkillType::SkillCooldownDown] = { L"흡수 쿨타임 감소",L"흡수의 재사용 대기시간이\n       /        초로 감소한다." };
+	skillText[SkillType::FastFall] = { L"빠른 하강" ,L"S키를 눌러\n빠르게 하강할 수 있다." };
 
-	skillText[SkillType::MoveSpeedUp] = { L"이동속도 증가" ,L"이동 속도가\n        /        /       %\n만큼 증가한다." };
-	skillText[SkillType::AttackRangeUp] = { L"공격 이동거리 증가",L"공격 이동거리가\n        /        /       %\n만큼 증가한다." };
-	skillText[SkillType::Dash] = { L"대시",L"Shift를 눌러\n대시를 사용할 수 있다." };
+	
 
 	if (g_playUI != nullptr)
 	{
