@@ -8,6 +8,7 @@
 #include "Options.h"
 #include "Credit.h"
 #include "LineClip.h"
+#include "SoundManager.h"
 
 // »ç¿îµå
 #include "../Direct2D_EngineLib/AudioSystem.h"
@@ -20,6 +21,7 @@ class TitleUI : public GameObject
 private:
 	float glowtimer = 0;
 	float glowspeed = 1.8f;
+	SoundManager* soundManager;
 public:
 	GameObject* backgroundImage;
 	GameObject* titleLogo_Image;

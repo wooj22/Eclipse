@@ -47,13 +47,14 @@ void BossController::Update()
 		Move();
 		AttackHandler();
 		if (isHit) HitEffect();
-
-		// debug
-		if (Input::GetKeyDown('0')) TakeDamage(5);
 	}
 	else
 	{
 		OpacityDirecting();
+		if (sr->GetAlpha() <= 0) {
+			bossFace->gameObject->Destroy();
+			this->gameObject->Destroy();
+		}
 	}
 }
 
@@ -282,7 +283,7 @@ void BossController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	if (other->gameObject->tag == "EndLine")
 	{
 		isGoal = true;
-		// TODO :: GameManager 게임 오버 전달
+		isDie = true;
 	}
 }
 

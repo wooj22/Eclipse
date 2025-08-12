@@ -47,7 +47,10 @@ void Quest::RefreshQuestCountText(int num)
 	if (num == -1)
 		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetText(L"");
 	else
+	{
 		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetText(L"[   "+ to_wstring(num) + L"    /    " + to_wstring(questMaxCount[GameManager::Get().waveCount]) + L"   ]");
+		GameManager::Get().g_playUI->quest_Text->rectTransform->SetPosition(0, 0);
+	}
 }
 
 void Quest::QuestSuccess()

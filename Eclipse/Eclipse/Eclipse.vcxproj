@@ -198,6 +198,7 @@
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="ParallaxLayer.cpp" />
     <ClCompile Include="PauseWindow.cpp" />
+    <ClCompile Include="PerformanceChecker.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayerAnimationData.cpp" />
     <ClCompile Include="PlayerAreaController.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="ParallaxLayer.h" />
     <ClInclude Include="PauseWindow.h" />
+    <ClInclude Include="PerformanceChecker.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAnimationData.h" />
@@ -317,6 +319,7 @@
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="SkillAnimatorController.h" />
     <ClInclude Include="SkillWindowButton.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StateBase.h" />
     <ClInclude Include="TitleUI.h" />
     <ClInclude Include="ToolTip.h" />

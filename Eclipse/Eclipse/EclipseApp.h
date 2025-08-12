@@ -1,13 +1,11 @@
 #pragma once
 #include "../Direct2D_EngineLib/GameApp.h"
 #include "GameManager.h"
-#include "SoundManager.h"
 
 class EclipseApp : public GameApp
 {
 private:
 	GameManager gameManager;
-	SoundManager soundManager;
 
 public:
 	enum SceneName { MOON, YUNMO, ARON, WOO, MENU, PLAY, END };	// scene enum

@@ -14,6 +14,7 @@
 #include "CameraController.h"
 #include "Typer.h"
 #include "FadeManager.h"
+#include "SoundManager.h"
 #include "../Direct2D_EngineLib/AudioSource.h"
 #include <vector>
 
@@ -45,13 +46,15 @@ private:
 	shared_ptr<AudioClip> bgmClip_Main = nullptr;
 	shared_ptr<AudioClip> bgmClip_Wave = nullptr;
 	shared_ptr<AudioClip> bgmClip_Boss = nullptr;
-	//shared_ptr<AudioClip> bgmClip_Clear = nullptr;
+	shared_ptr<AudioClip> bgmClip_Clear = nullptr;
 	shared_ptr<AudioClip> sfxClip_Button1 = nullptr;
 	shared_ptr<AudioClip> sfxClip_Button2 = nullptr;
 	shared_ptr<AudioClip> sfxClip_SkillUI = nullptr;
 	shared_ptr<AudioClip> sfxClip_SkillActive = nullptr;
 	shared_ptr<AudioClip> sfxClip_GameOver = nullptr;
 	shared_ptr<AudioClip> sfxClip_ChangeScene = nullptr;
+
+	SoundManager* soundManager;
 
 public:
 	UI_Image* timer_Image;			// 웨이브 타이머 이미지
@@ -170,4 +173,7 @@ public:
 
 	void FailEvent();
 	void SuccessEvent();
+	void BossReTry();
+
+	void ClearSound();
 };
