@@ -31,7 +31,7 @@ void PlayUI::Awake()
 	skill2Icon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2Key_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
-	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	waveInfo_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -102,11 +102,8 @@ void PlayUI::SceneStart()
 	timer_Text->screenTextRenderer->SetFontSize(70);
 	timer_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 
-	//waveInfo_Text->rectTransform->SetPosition(0, 400);
-	waveInfo_Text->rectTransform->SetSize(1920, 40);
-	waveInfo_Text->screenTextRenderer->SetFontSize(200);
-	waveInfo_Text->SetActive(false);
-	waveInfo_Text->screenTextRenderer->SetFontName(L"덕온공주체");
+	waveInfo_Image->rectTransform->SetSize(631, 346);
+	waveInfo_Image->SetActive(false);
 
 	// 일시 정지 버튼
 	stop_Button->rectTransform->SetPosition(920, 500);
@@ -195,8 +192,8 @@ void PlayUI::SceneStart()
 
 	skill1_Image->rectTransform->SetPosition(0, -132);
 	skill1_Image->rectTransform->SetSize(100, 100);
-	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ.png");
-	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ");
+	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ_Deactivate.png");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
+	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ_Deactivate");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
 	auto skillIconTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillIcon.png");
 	skill1Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 
@@ -218,8 +215,8 @@ void PlayUI::SceneStart()
 
 	skill2_Image->rectTransform->SetPosition(120, -132);
 	skill2_Image->rectTransform->SetSize(100, 100);
-	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE.png");
-	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE");
+	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE_Deactivate.png");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
+	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE_Deactivate");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
 	skill2Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 
 	skill2Key_Image->rectTransform->SetPosition(0, 50);
@@ -363,7 +360,7 @@ void PlayUI::Update()
 		skill1CollTimeFilter_Image->imageRenderer->fillAmount = cooltime;
 	}
 
-	if (waveInfo_Text->IsActive())
+	if (waveInfo_Image->IsActive())
 	{
 		if (waveInfoTimer < waveIntoTime)
 		{
@@ -386,13 +383,13 @@ void PlayUI::Update()
 
 			// clamp 알파값 (0 ~ 1)
 			alpha = std::max(0.0f, std::min(1.0f, alpha));
-			waveInfo_Text->screenTextRenderer->SetAlpha(alpha);
+			waveInfo_Image->imageRenderer->SetAlpha(alpha);
 		}
 		else
 		{
 			waveInfoTimer = 0;
-			waveInfo_Text->screenTextRenderer->SetAlpha(0);
-			waveInfo_Text->SetActive(false);
+			waveInfo_Image->imageRenderer->SetAlpha(0);
+			waveInfo_Image->SetActive(false);
 		}
 	}
 
@@ -539,22 +536,25 @@ void PlayUI::WaveStartData()
 
 void PlayUI::StartWaveInfo(int waveNumber)
 {
-	std::wstring waveText;
+	std::string stageImagePath;
 	if (waveNumber < 4)
 	{
-		waveText = L"공세 " + std::to_wstring(waveNumber) + L"막";
+		stageImagePath = "../Resource/mo/Stage0" + std::to_string(waveNumber) + ".png";
 		bgmSource->SetClip(bgmClip_Wave);
 	}
 	else
 	{
-		waveText = L"공세 종막";
+		stageImagePath = "../Resource/mo/Stage04.png"; // Boss Stage
 		bgmSource->SetClip(bgmClip_Boss);
 	}
-	waveInfo_Text->screenTextRenderer->SetText(waveText);
-	
+
+	// Texture/Sprite 생성 후 적용
+	auto texture = ResourceManager::Get().CreateTexture2D(stageImagePath);
+	waveInfo_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(texture, "Stage" + std::to_string(waveNumber));
+
 	waveInfoTimer = 0;
-	waveInfo_Text->SetActive(true);
-	waveInfo_Text->screenTextRenderer->SetAlpha(0);
+	waveInfo_Image->SetActive(true);
+	waveInfo_Image->imageRenderer->SetAlpha(0);
 
 	tooltipInfoTimer = 0;
 

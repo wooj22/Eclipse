@@ -84,7 +84,7 @@ public:
 	UI_Image* skill2Icon_Image;		// 스킬2 이미지
 	UI_Image* skill2Key_Image;		// 스킬1 텍스트
 
-	UI_Text* waveInfo_Text;			// 웨이브 정보 텍스트
+	UI_Image* waveInfo_Image;		// 웨이브 정보 이미지
 
 	tooltip* tooltip1;
 	tooltip* tooltip2;
