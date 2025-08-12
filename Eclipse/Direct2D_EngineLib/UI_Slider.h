@@ -120,4 +120,10 @@ public:
 	{
 		child_handle_Image->sprite = new_sprite;
 	}
+
+	// SetGauge Alpha
+	void SetGuageImageAlpha()
+	{
+		child_guage_Image->SetAlpha(0);
+	}
 };
