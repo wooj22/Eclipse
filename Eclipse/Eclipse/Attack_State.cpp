@@ -24,14 +24,10 @@ void Attack_State::Enter(MovementFSM* fsm)
     baseMaxDistance = fsm->GetPlayerFSM()->maxAttackDistance * skillBonus;
     desiredTime = fsm->GetPlayerFSM()->attackDesiredTime;
 
-    //std::string dbg = "[Attack_State] Attack MaxDist: " + std::to_string(baseMaxDistance) + "\n";
-    //OutputDebugStringA(dbg.c_str());
-
     // 애니메이션 재생 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", true);
 
     startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 현재 위치 
-
     Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
@@ -41,44 +37,32 @@ void Attack_State::Enter(MovementFSM* fsm)
 
     if (!fsm->GetPlayerFSM()->GetIsGround()) // 땅에 없을 때만 이동 계산
     {
-		//Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치
-
-  //      // 이동 거리 제한 (마우스보다 멀리 못 감)
-  //      float actualDistance = (toMouse.Magnitude() < baseMaxDistance) ? toMouse.Magnitude() : baseMaxDistance;
-  //      direction = toMouse.Normalized();
         targetPos = startPos + direction * actualDistance;
 
         // 속도 계산 : 거리 / 시간
         moveSpeed = actualDistance / desiredTime;
+
+        std::string dbg = "[Attack_State] Attack desiredTime (Air) : " + std::to_string(desiredTime) + ")\n";
+        OutputDebugStringA(dbg.c_str());
     }
     else
     {
         // 땅에 있을 때는 제자리에서 공격
-        // direction = Vector2::zero;
+        targetPos = startPos;
         targetPos = toMouse.Normalized();
         moveSpeed = 0.0f;
+
+        std::string dbg = "[Attack_State] Attack desiredTime (Ground) : " + std::to_string(desiredTime) + ")\n";
+        OutputDebugStringA(dbg.c_str());
     }
-
-
- //   // [ 공격 이동 ] 
- //   startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
- //   Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
-
- //   // 이동 거리 제한 (마우스보다 멀리 못 감)
- //   float actualDistance = (((toMouse.Magnitude()) < (baseMaxDistance)) ? (toMouse.Magnitude()) : (baseMaxDistance)); // sts::min 
-	//direction = toMouse.Normalized(); // 방향 벡터 
- //   targetPos = startPos + direction * actualDistance;
-
- //   // 속도 계산: 거리 / 시간
- //   moveSpeed = actualDistance / desiredTime;
 
 
     // 방향 벡터 저장 
     fsm->GetPlayerFSM()->attackDirection = direction;
 
-    //Vector2 dir = fsm->GetPlayerFSM()->attackDirection;
-    //std::string dbg = "[Attack_State] AttackDirection: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ")\n";
-    //OutputDebugStringA(dbg.c_str());
+    // 좌우 반전 처리
+    if (direction.x < 0) fsm->GetPlayerFSM()->SetLastFlipX(false);
+    else if (direction.x > 0) fsm->GetPlayerFSM()->SetLastFlipX(true);
 
 
     // [ 이펙트, 충돌 ]
@@ -107,6 +91,8 @@ void Attack_State::Enter(MovementFSM* fsm)
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Attack);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = direction * moveSpeed;
 }
 
 void Attack_State::Update(MovementFSM* fsm)
@@ -124,14 +110,11 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
         else { fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>()); return; }
     }
 
-    if (direction == Vector2::zero) return;
-
-    // 이동 유지
-    fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(direction * moveSpeed);
+    // if (direction == Vector2::zero) return;
 
     Vector2 currentPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
-    float traveled = (currentPos - startPos).Magnitude();
-    float totalDistance = (targetPos - startPos).Magnitude();
+    float traveled = (currentPos - startPos).Magnitude(); 
+    float totalDistance = (targetPos - startPos).Magnitude(); 
 
     // 도착 여부 판정
     if (traveled >= totalDistance)

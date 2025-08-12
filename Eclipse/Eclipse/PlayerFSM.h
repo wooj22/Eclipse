@@ -141,7 +141,7 @@ public:
 
 	// attack 
 	float maxAttackDistance = 150.0f;       // 공격 시, 최대 이동 거리 
-	float attackDesiredTime = 0.7f;         // 도달 시간 0.3f -> 0.7f
+	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f -> 0.7f
 	Vector2 attackDirection;                // 공격 방향 벡터
 
 	// boss
