@@ -265,6 +265,8 @@ void GameManager::OnNPCInteraction()
 	g_playUI->hon_Image->SetActive(false);
 	g_playUI->stop_Button->SetActive(false);
 	g_playUI->quest_Image->SetActive(false);
+
+	GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomInToPlayer();
 }
 
 void GameManager::ChangeBossHp(float hp)

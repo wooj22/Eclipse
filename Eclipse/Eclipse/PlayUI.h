@@ -11,6 +11,7 @@
 #include "BossHp.h"
 #include "tooltip.h"
 #include "MoonShadowController.h"
+#include "CameraController.h"
 #include <vector>
 
 // »ç¿îµå

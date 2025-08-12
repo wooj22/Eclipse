@@ -461,6 +461,7 @@ void PlayUI::ClickChatButton() {
 	hon_Image->SetActive(true);
 	stop_Button->SetActive(true);
 	quest_Image->SetActive(true);
+	GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
 }
 
 void PlayUI::StartWaveInfo(int waveNumber)

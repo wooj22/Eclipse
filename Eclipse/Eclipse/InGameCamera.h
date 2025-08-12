@@ -14,7 +14,7 @@ private:
 	CameraController* controller;
 
 public:
-	InGameCamera()
+	InGameCamera() : GameObject("InGameCamera","InGameCamera")
 	{
 		transform = AddComponent<Transform>();
 		camera = AddComponent<Camera>(1920, 1080);
