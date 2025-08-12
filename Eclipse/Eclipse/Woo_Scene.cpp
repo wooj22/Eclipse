@@ -48,11 +48,13 @@ void Woo_Scene::Awake()
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/Boss_Bullet.png");
 	auto newSprite = ResourceManager::Get().CreateSprite(texture, "handle");
 	ui_slider->SetHandleImage(newSprite);
+	ui_slider->GetComponent<Slider>()->SetValue(0);
 
 	ui_slider2 = CreateObject<UI_Slider>();
 	ui_slider2->SetSliderSize(1000, 30);
 	ui_slider2->SetHandleSize(40);
 	ui_slider2->rectTransform->SetPosition(300, 300);
+	ui_slider2->GetComponent<Slider>()->SetValue(1);
 
 	// map border test
 	GameObject* mapBorder = CreateObject<GameObject>({-500,0});
@@ -106,7 +108,7 @@ void Woo_Scene::Start()
 {
 	// game object -> SceneStart()
 	__super::Start();
-
+	
 }
 
 void Woo_Scene::Update()

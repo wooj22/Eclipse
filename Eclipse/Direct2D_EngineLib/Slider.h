@@ -41,6 +41,7 @@ public:
 public:
     // funcs
     float GetValue() { return value; }
+    void SetValue(float v);
 public:
     /* Event */
     MultiDelegate<> onValueChangedListeners;       // On Value Changed

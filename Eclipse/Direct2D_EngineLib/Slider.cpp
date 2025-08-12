@@ -70,6 +70,29 @@ void Slider::Update()
     }
 }
 
+void Slider::SetValue(float v)
+{
+    value = clamp(v, 0.0f, 1.0f); // 0~1 범위 제한
+
+    // handle
+    if (slideArea && handle)
+    {
+        Vector2 slideAreaSize = { slideArea->GetSize().width, slideArea->GetSize().height };
+        float clampedX = value * slideAreaSize.x;
+        Vector2 handlePos = handle->GetPosition();
+        handlePos.x = clampedX - slideAreaSize.x / 2.0f;
+        handle->SetPosition(handlePos);
+    }
+
+    // gauge
+    if (gauge)
+        gauge->fillAmount = value;
+
+    // event
+    OnValueChanged();
+}
+
+
 // Event
 void Slider::OnValueChanged()
 {
