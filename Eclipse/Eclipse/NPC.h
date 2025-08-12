@@ -4,6 +4,8 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/BoxCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
+#include "../Direct2D_EngineLib/Animator.h"
+#include "NpcAnimatorController.h"
 
 #include "NPCInteraction.h"
 #include "PlayUI.h"
@@ -14,8 +16,11 @@ public:
 	SpriteRenderer* spriteRenderer;
 	Rigidbody* rigidbody;
 	BoxCollider* collider;
+	Animator* animator;
 	NPCInteraction* script;
 	GameObject* interactImage;
+
+	NpcAnimatorController* animatorController;
 
 public:
 	// game object cycle
