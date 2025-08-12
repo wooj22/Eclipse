@@ -10,6 +10,7 @@
 void PlayUI::Awake()
 {  
 	//해당 씬에 게임 오브젝트 생성
+	timer_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	timer_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	stop_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	pauseWindow = SceneManager::Get().GetCurrentScene()->CreateObject<PauseWindow>();
@@ -18,6 +19,7 @@ void PlayUI::Awake()
 	quest_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	questCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	chat_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	chatNext_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	chat_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	chat_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	hon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -35,7 +37,6 @@ void PlayUI::Awake()
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowSplitter_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowName_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
-	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
@@ -48,6 +49,7 @@ void PlayUI::Awake()
 	skillHonBig_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
 	npc = SceneManager::Get().GetCurrentScene()->CreateObject<NPC>({ 0,-800 });
 	tooltip1 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
@@ -88,9 +90,16 @@ void PlayUI::SceneStart()
 	pauseCheckButtos = { stop_Button, pauseWindow->close_Button, pauseWindow->continuGame_Button };
 
 	// 웨이브 타이머 UI
-	timer_Text->rectTransform->SetPosition(0, 400);
+	timer_Image->rectTransform->SetPosition(0, 380);
+	timer_Image->rectTransform->SetSize(190, 190);
+	auto timerTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Timer.png");
+	timer_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(timerTexture, "Timer");
+	timer_Image->SetActive(false);
+
+	timer_Text->rectTransform->SetParent(timer_Image->rectTransform);
+	timer_Text->rectTransform->SetPosition(0, 20);
 	timer_Text->rectTransform->SetSize(500, 40);
-	timer_Text->screenTextRenderer->SetFontSize(140);
+	timer_Text->screenTextRenderer->SetFontSize(70);
 	timer_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	//waveInfo_Text->rectTransform->SetPosition(0, 400);
@@ -130,6 +139,7 @@ void PlayUI::SceneStart()
 
 
 	// 대화창 UI
+	chatNext_Image->rectTransform->SetParent(chat_Image->rectTransform);
 	chat_Text->rectTransform->SetParent(chat_Image->rectTransform);
 	chat_Button->rectTransform->SetParent(chat_Image->rectTransform);
 	chat_Button->button->onClickListeners.AddListener(
@@ -141,13 +151,19 @@ void PlayUI::SceneStart()
 	auto chatImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Chat.png");
 	chat_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatImageTexture, "Chat");
 	
+	chatNext_Image->rectTransform->SetPosition(350, -40);
+	chatNext_Image->rectTransform->SetSize(25, 22);
+	auto nextImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Next.png");
+	chatNext_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(nextImageTexture, "Next");
+
+
 	chat_Text->rectTransform->SetSize(400, 50);
 	chat_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	chat_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
 
 	chat = chat_Text->AddComponent<Chat>();
-	chat_Button->rectTransform->SetPosition(300, -40);
-	chat_Button->rectTransform->SetSize(100, 50);
+	chat_Button->rectTransform->SetPosition(240, -40);
+	chat_Button->rectTransform->SetSize(184, 49);
 	auto chatButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton.png");
 	chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonTexture, "ChatButton");
 
@@ -300,6 +316,19 @@ void PlayUI::SceneStart()
 	}
 	tooltipName = { L"index",L"Ignis",L"Dark",L"Luna",L"Nox"};
 
+	chat_Button->button->onPointEnterListeners.AddListener(
+		this, [this]() {
+			chat_Button->imageRenderer->SetAlpha(1);
+			auto chatButtonPressedTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton_pressed.png");
+			chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonPressedTexture, "ChatButtonPress");
+		});
+
+	chat_Button->button->onPointExitListeners.AddListener(
+		this, [this]() {
+				auto chatButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton.png");
+				chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonTexture, "ChatButton");
+		});
+
 	stop_Button->button->onPointEnterListeners.AddListener(
 		this, []() {
 			GameManager::Get().canUseMouse = false;
@@ -403,6 +432,19 @@ void PlayUI::Update()
 		}
 	}
 
+	if (chat_Image->IsActive() && !chat_Button->IsActive())
+	{
+		// 원래 위치
+		Vector2 curPos = chatNext_Image->rectTransform->GetPosition();
+
+		float offsetY = sinf(Time::GetTotalTime() * 3.0f) * 0.5f;
+
+		chatNext_Image->rectTransform->SetPosition(
+			curPos.x,
+			curPos.y + offsetY
+		);
+	}
+
 	// TODOMO : 아래 입력 삭제 
 
 	if (Input::GetKeyDown(VK_ESCAPE))
@@ -488,7 +530,8 @@ void PlayUI::WaveStartData()
 	if (skillWindowBackGround_Image->IsActive()) skillWindowBackGround_Image->SetActive(false);
 	hon_Image->SetActive(true);
 	stop_Button->SetActive(true);
-	quest_Image->SetActive(true);
+	quest_Image->SetActive(true); 
+	timer_Image->SetActive(true);
 	GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
 }
 
