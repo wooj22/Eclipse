@@ -61,7 +61,7 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Hanging ]
-    if (!fsm->GetPlayerFSM()->GetIsGround() && GameManager::Get().CheckUnlock(SkillType::WallJump) 
+    if (!fsm->GetPlayerFSM()->GetIsGround() /*&& GameManager::Get().CheckUnlock(SkillType::WallJump)*/ 
         && fsm->GetPlayerFSM()->canHanging)
     {
         if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
