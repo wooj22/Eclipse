@@ -35,6 +35,10 @@ void Woo_Scene::Awake()
 	// [BackGround Map]
 	mapBackGround = CreateObject<MapBackGround>();
 
+	// [Moon Shadow]
+	moonShadow = CreateObject<MoonShadow>();
+	moonShadow->transform->Translate(1000, 0);
+
 	// [Fade Manager]
 	fadeObject = CreateObject<FadeObject>();
 
