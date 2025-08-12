@@ -16,6 +16,7 @@
 
 #include "InGameCamera.h"
 #include "MapBackGround.h"
+#include "FadeObject.h"
 
 #include "Player.h"
 #include "playerAttackArea.h"
@@ -52,6 +53,9 @@ private:
 
 	// background
 	MapBackGround* mapBackGround;
+
+	// fademanager
+	FadeObject* fadeObject;
 
 	// ground endline
 	Map_Woo* ground;

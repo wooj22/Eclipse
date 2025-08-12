@@ -58,7 +58,7 @@ void CameraController::LateUpdate()
 
 void CameraController::ZoomInToPlayer()
 {
-	targetZoom = 1.6;
+	targetZoom = 2;
 	isZooming = true;
 }
 

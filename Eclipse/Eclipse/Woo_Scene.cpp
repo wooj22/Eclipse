@@ -35,6 +35,9 @@ void Woo_Scene::Awake()
 	// [BackGround Map]
 	mapBackGround = CreateObject<MapBackGround>();
 
+	// [Fade Manager]
+	fadeObject = CreateObject<FadeObject>();
+
 	// [Ground Sample]
 	ground = CreateObject<Map_Woo>({ 0, -800 });
 
