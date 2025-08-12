@@ -10,7 +10,7 @@
 #include "../Direct2D_EngineLib/Vector2.h"
 
 #include "Fall_State.h"
-#include "../Direct2D_EngineLib/Input.h"
+#include "AfterImage.h"
 
 void Attack_State::Enter(MovementFSM* fsm)
 {
@@ -24,61 +24,43 @@ void Attack_State::Enter(MovementFSM* fsm)
     baseMaxDistance = fsm->GetPlayerFSM()->maxAttackDistance * skillBonus;
     desiredTime = fsm->GetPlayerFSM()->attackDesiredTime;
 
-    //std::string dbg = "[Attack_State] Attack MaxDist: " + std::to_string(baseMaxDistance) + "\n";
-    //OutputDebugStringA(dbg.c_str());
-
     // 애니메이션 재생 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", true);
 
-    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 현재 위치 
-
-    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치
+    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();   // 현재 위치 
+    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
     float actualDistance = (toMouse.Magnitude() < baseMaxDistance) ? toMouse.Magnitude() : baseMaxDistance;
     direction = toMouse.Normalized();
 
 
-    if (!fsm->GetPlayerFSM()->GetIsGround()) // 땅에 없을 때만 이동 계산
+    // [ 공중 이동 조건 ]
+    airAttack = !fsm->GetPlayerFSM()->GetIsGround() || (fsm->GetPlayerFSM()->isBulletAttack && fsm->GetPlayerFSM()->MouseWorldPos.y > startPos.y);
+
+    if (airAttack)
     {
-		//Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치
-
-  //      // 이동 거리 제한 (마우스보다 멀리 못 감)
-  //      float actualDistance = (toMouse.Magnitude() < baseMaxDistance) ? toMouse.Magnitude() : baseMaxDistance;
-  //      direction = toMouse.Normalized();
         targetPos = startPos + direction * actualDistance;
-
-        // 속도 계산 : 거리 / 시간
-        moveSpeed = actualDistance / desiredTime;
+        moveSpeed = actualDistance / desiredTime; // 속도 계산 : 거리 / 시간
+        fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, 5.0f));
+        OutputDebugStringA("[Attack_State] 공중 공격 진입 \n");
     }
     else
     {
-        // 땅에 있을 때는 제자리에서 공격
-        // direction = Vector2::zero;
+        // 땅에서 제자리 공격
+        targetPos = startPos;
         targetPos = toMouse.Normalized();
         moveSpeed = 0.0f;
+        OutputDebugStringA("[Attack_State] 제자리 공격 진입 \n");
     }
-
-
- //   // [ 공격 이동 ] 
- //   startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
- //   Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
-
- //   // 이동 거리 제한 (마우스보다 멀리 못 감)
- //   float actualDistance = (((toMouse.Magnitude()) < (baseMaxDistance)) ? (toMouse.Magnitude()) : (baseMaxDistance)); // sts::min 
-	//direction = toMouse.Normalized(); // 방향 벡터 
- //   targetPos = startPos + direction * actualDistance;
-
- //   // 속도 계산: 거리 / 시간
- //   moveSpeed = actualDistance / desiredTime;
 
 
     // 방향 벡터 저장 
     fsm->GetPlayerFSM()->attackDirection = direction;
 
-    //Vector2 dir = fsm->GetPlayerFSM()->attackDirection;
-    //std::string dbg = "[Attack_State] AttackDirection: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ")\n";
-    //OutputDebugStringA(dbg.c_str());
+    // 좌우 반전 처리
+    if (direction.x < 0) fsm->GetPlayerFSM()->SetLastFlipX(false);
+    else if (direction.x > 0) fsm->GetPlayerFSM()->SetLastFlipX(true);
 
 
     // [ 이펙트, 충돌 ]
@@ -114,9 +96,26 @@ void Attack_State::Update(MovementFSM* fsm)
     timer += Time::GetDeltaTime();
 }
 
-void Attack_State::FixedUpdate(MovementFSM* fsm)
+void Attack_State::FixedUpdate(MovementFSM* fsm) 
 {
     if (!fsm->GetPlayerFSM()->GetRigidbody() || !fsm->GetPlayerFSM()->GetTransform()) return;
+
+    // 잔상 
+    if (airAttack)
+    {
+        afterimageTimer += Time::GetDeltaTime();
+        if (afterimageTimer >= afterimageInterval)
+        {
+            afterimageTimer = 0.0f;
+
+            CreateAfterImage(fsm);
+        }
+    }
+
+    if (!isAttackStart)
+    {
+       fsm->GetPlayerFSM()->GetRigidbody()->velocity = direction * moveSpeed; // 이동
+    }
 
     if (timer >= desiredTime)
     {
@@ -124,14 +123,11 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
         else { fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>()); return; }
     }
 
-    if (direction == Vector2::zero) return;
-
-    // 이동 유지
-    fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(direction * moveSpeed);
+    // if (direction == Vector2::zero) return;
 
     Vector2 currentPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
-    float traveled = (currentPos - startPos).Magnitude();
-    float totalDistance = (targetPos - startPos).Magnitude();
+    float traveled = (currentPos - startPos).Magnitude(); 
+    float totalDistance = (targetPos - startPos).Magnitude(); 
 
     // 도착 여부 판정
     if (traveled >= totalDistance)
@@ -151,14 +147,55 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
 void Attack_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->OnAirAttack();
+    fsm->GetPlayerFSM()->isBulletAttack = false;
 
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
-    // fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->Deactivate();
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", false);
 
     fsm->GetPlayerFSM()->GetAudioSource()->Stop();
+}
+
+
+void Attack_State::CreateAfterImage(MovementFSM* fsm)
+{
+    PlayerFSM* player = fsm->GetPlayerFSM();
+    if (!player) return;
+
+    // 현재 스프라이트 가져오기
+    SpriteRenderer* playerRenderer = player->GetSpriteRenderer();
+    if (!playerRenderer) return;
+
+    shared_ptr<Sprite> currentSprite = playerRenderer->sprite;
+    if (!currentSprite || !currentSprite->texture || !currentSprite->texture->texture2D)
+    {
+        OutputDebugStringA("AfterImage sprite에 texture가 없음!\n");
+        return;
+    }
+
+    // 위치 및 방향
+    Vector2 position = player->GetTransform()->GetPosition();
+    bool flipX = playerRenderer->flipX;
+
+    // 잔상 오브젝트 생성 
+    GameObject* afterImage = player->Instantiate<GameObject>();
+    afterImage->AddComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
+    afterImage->GetComponent<Transform>()->SetPosition(position);
+
+    // 렌더러 추가
+    auto renderer = afterImage->AddComponent<SpriteRenderer>();
+    renderer->sprite = currentSprite;
+    renderer->flipX = flipX;
+    renderer->flipY = playerRenderer->flipY;
+    renderer->SetAlpha(0.1f);
+    renderer->SetColor(1.0f, 1.0f, 0.8f);
+    renderer->renderMode = RenderMode::Lit_ColorTint;
+    renderer->layer = 1;
+
+    // 잔상 스크립트
+    auto afterImageScript = afterImage->AddComponent<AfterImage>();
+    afterImageScript->SetInitialAlpha(0.4f);
 }

@@ -49,6 +49,10 @@ public:
 	Transform* shadow_transform = nullptr;
 	SpriteRenderer* shadow_spriteRenderer = nullptr;
 
+	// [ BlackOut ] 
+	GameObject* blackOut = nullptr;
+	Transform* blackOut_transform = nullptr;
+	SpriteRenderer* blackOut_spriteRenderer = nullptr;
 
 public:
 	float GetPlayerGravityScale() const { return playerGravityScale; }
@@ -63,13 +67,20 @@ public:
 		animator = AddComponent<Animator>();
 		audioSource = AddComponent<AudioSource>();
 
-		spriteRenderer->layer = 4;
+		spriteRenderer->layer = 25;
 		rigidbody->collisionDetection = CollisionDetection::Continuous;
 
 		playerFSM = AddComponent<PlayerFSM>();
 
-		// 그림자 생성
+		// [ Shadow ] 
 		player_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<Shadow>();
+
+		// [ BlackOut ]
+		blackOut = SceneManager::Get().GetCurrentScene()->CreateObject<GameObject>();
+		blackOut->name = "BlackOut";
+		blackOut->tag = "BlackOut";
+		blackOut_transform = blackOut->AddComponent<Transform>();
+		blackOut_spriteRenderer = blackOut->AddComponent<SpriteRenderer>();
 
 		// [ Audio ]
 		audioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
@@ -86,7 +97,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(-300, -500);
+		transform->SetPosition(0, -780);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -96,9 +107,16 @@ public:
 		rigidbody->gravityScale = playerFSM->defaultGravity;
 		rigidbody->mass = 1.4f; // 3.0f; 
 
-
+		// [ 그림자 ]
 		shadow_transform = player_Shadow->GetComponent<Transform>();
 		shadow_spriteRenderer = player_Shadow->GetComponent<SpriteRenderer>();
+
+		// [ BlackOut ]
+		blackOut_spriteRenderer->sprite
+			= ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/BlackOut.png"), "BlackOut");
+		blackOut_spriteRenderer->layer = 20;
+		blackOut_spriteRenderer->SetAlpha(0.5f);
+		blackOut_spriteRenderer->SetEnabled(false);
 	}
 
 
@@ -107,7 +125,10 @@ public:
 		UpdateShadow();
 
 		// AABB 영역 
-		collider->DebugColliderDraw();
+		// collider->DebugColliderDraw();
+
+		//std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
+		//OutputDebugStringA(debugStr.c_str());
 	}
 
 	void UpdateShadow()
@@ -115,9 +136,9 @@ public:
 		if (!shadow_transform || !shadow_spriteRenderer)
 		{ OutputDebugStringA("[Player] player_Shadow의 Component가 없습니다. \n"); return; }
 
-		D2D1_POINT_2F start = { 0, 0 };
-		D2D1_POINT_2F end = { 0, -240 };
-		RenderSystem::Get().DebugDrawLine(start, end, transform->GetScreenMatrix(), 2.0f);
+		//D2D1_POINT_2F start = { 0, 0 };
+		//D2D1_POINT_2F end = { 0, -240 };
+		//RenderSystem::Get().DebugDrawLine(start, end, transform->GetScreenMatrix(), 2.0f);
 
 		// ray 
 		ray.direction = Vector2::down;

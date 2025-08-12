@@ -34,7 +34,6 @@ void Dash_State::Enter(MovementFSM* fsm)
     if (inputX == 0)
     {
         bool flipX = fsm->GetPlayerFSM()->GetLastFlipX();
-        // inputX = flipX ? -1 : 1;  // true: 왼쪽 → -1, false: 오른쪽 → +1
         inputX = flipX ? 1 : -1;  
     }
 
@@ -51,6 +50,8 @@ void Dash_State::Enter(MovementFSM* fsm)
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Dash);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
+    fsm->GetPlayerFSM()->ResetDashCooldown();
 }
 
 void Dash_State::Update(MovementFSM* fsm)
