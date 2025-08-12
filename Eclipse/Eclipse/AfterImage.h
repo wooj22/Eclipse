@@ -24,8 +24,6 @@ public:
     {
         if (!renderer) return;
 
-        // OutputDebugStringA("AfterImage Update 되는중.. \n");
-
         timer += Time::GetDeltaTime();
         float t = timer / lifeTime;
         float currentAlpha = initialAlpha * (1.0f - t); // 점점 사라짐

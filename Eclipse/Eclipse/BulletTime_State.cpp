@@ -4,12 +4,14 @@
 #include "MovementFSM.h"
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
+#include "AfterImage.h"
 
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "../Direct2D_EngineLib/RenderSystem.h"
 #include "../Direct2D_EngineLib/Vector2.h"
 #include "../Direct2D_EngineLib/Camera.h"
+
 
 
 void BulletTime_State::Enter(MovementFSM* fsm)
@@ -113,6 +115,15 @@ void BulletTime_State::Update(MovementFSM* fsm)
     
     // 디버그 선 그리기
     RenderSystem::Get().DebugDrawLine(start, end, screenMatrix, 2.0f);
+
+    // 잔상 
+    afterimageTimer += unscaledDelta;
+    if (afterimageTimer >= afterimageInterval)
+    {
+        afterimageTimer = 0.0f;
+
+        CreateAfterImage(fsm);
+    }
 }
 
 void BulletTime_State::FixedUpdate(MovementFSM* fsm)
@@ -127,4 +138,44 @@ void BulletTime_State::Exit(MovementFSM* fsm)
     // 복구 
     Time::SetTimeScale(1.0f);
     fsm->GetPlayerFSM()->SetisBulletFliping(false);
+}
+
+void BulletTime_State::CreateAfterImage(MovementFSM* fsm)
+{
+    PlayerFSM* player = fsm->GetPlayerFSM();
+    if (!player) return;
+
+    // 현재 스프라이트 가져오기
+    SpriteRenderer* playerRenderer = player->GetSpriteRenderer();
+    if (!playerRenderer) return;
+
+    shared_ptr<Sprite> currentSprite = playerRenderer->sprite;
+    if (!currentSprite || !currentSprite->texture || !currentSprite->texture->texture2D)
+    {
+        OutputDebugStringA("AfterImage sprite에 texture가 없음!\n");
+        return;
+    }
+
+    // 위치 및 방향
+    Vector2 position = player->GetTransform()->GetPosition();
+    bool flipX = playerRenderer->flipX;
+
+    // 잔상 오브젝트 생성 
+    GameObject* afterImage = player->Instantiate<GameObject>();
+    afterImage->AddComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
+    afterImage->GetComponent<Transform>()->SetPosition(position);
+
+    // 렌더러 추가
+    auto renderer = afterImage->AddComponent<SpriteRenderer>();
+    renderer->sprite = currentSprite;
+    renderer->flipX = flipX;
+    renderer->flipY = playerRenderer->flipY;
+    renderer->SetAlpha(0.1f);
+    renderer->SetColor(1.0f, 1.0f, 0.8f);
+    renderer->renderMode = RenderMode::Lit_ColorTint;
+    renderer->layer = 1;
+
+    // 잔상 스크립트
+    auto afterImageScript = afterImage->AddComponent<AfterImage>();
+    afterImageScript->SetInitialAlpha(0.4f);
 }

@@ -16,6 +16,11 @@ class Jump_State : public MovementStateBase
 
     float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
 
+    // 잔상
+    float afterimageTimer = 0.0f;
+    float afterimageInterval = 0.01f;
+    void CreateAfterImage(MovementFSM* fsm);
+
 public:
     void Enter(MovementFSM* fsm) override;
     void Update(MovementFSM* fsm) override;

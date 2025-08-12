@@ -86,7 +86,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(-300, -500);
+		transform->SetPosition(0, -780);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -108,6 +108,9 @@ public:
 
 		// AABB ¿µ¿ª 
 		collider->DebugColliderDraw();
+
+		//std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
+		//OutputDebugStringA(debugStr.c_str());
 	}
 
 	void UpdateShadow()

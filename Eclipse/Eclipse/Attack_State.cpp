@@ -10,15 +10,14 @@
 #include "../Direct2D_EngineLib/Vector2.h"
 
 #include "Fall_State.h"
+#include "AfterImage.h"
 
 void Attack_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Attack_State] Player의 Attack_State 진입 \n");
 
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = false;
-    // fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 50.0f;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
     // 초기화 : 스킬 해금 레벨에 따라 보정
     float skillBonus = fsm->GetPlayerFSM()->GetAttackRangeBonus();
@@ -37,8 +36,7 @@ void Attack_State::Enter(MovementFSM* fsm)
 
 
     // [ 공중 이동 조건 ]
-    bool airAttack = !fsm->GetPlayerFSM()->GetIsGround() ||
-        (fsm->GetPlayerFSM()->isBulletAttack && fsm->GetPlayerFSM()->MouseWorldPos.y > startPos.y);
+    airAttack = !fsm->GetPlayerFSM()->GetIsGround() || (fsm->GetPlayerFSM()->isBulletAttack && fsm->GetPlayerFSM()->MouseWorldPos.y > startPos.y);
 
     if (airAttack)
     {
@@ -91,7 +89,6 @@ void Attack_State::Enter(MovementFSM* fsm)
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Attack);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
-
 }
 
 void Attack_State::Update(MovementFSM* fsm)
@@ -99,9 +96,21 @@ void Attack_State::Update(MovementFSM* fsm)
     timer += Time::GetDeltaTime();
 }
 
-void Attack_State::FixedUpdate(MovementFSM* fsm)
+void Attack_State::FixedUpdate(MovementFSM* fsm) 
 {
     if (!fsm->GetPlayerFSM()->GetRigidbody() || !fsm->GetPlayerFSM()->GetTransform()) return;
+
+    // 잔상 
+    if (airAttack)
+    {
+        afterimageTimer += Time::GetDeltaTime();
+        if (afterimageTimer >= afterimageInterval)
+        {
+            afterimageTimer = 0.0f;
+
+            CreateAfterImage(fsm);
+        }
+    }
 
     if (!isAttackStart)
     {
@@ -148,4 +157,45 @@ void Attack_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", false);
 
     fsm->GetPlayerFSM()->GetAudioSource()->Stop();
+}
+
+
+void Attack_State::CreateAfterImage(MovementFSM* fsm)
+{
+    PlayerFSM* player = fsm->GetPlayerFSM();
+    if (!player) return;
+
+    // 현재 스프라이트 가져오기
+    SpriteRenderer* playerRenderer = player->GetSpriteRenderer();
+    if (!playerRenderer) return;
+
+    shared_ptr<Sprite> currentSprite = playerRenderer->sprite;
+    if (!currentSprite || !currentSprite->texture || !currentSprite->texture->texture2D)
+    {
+        OutputDebugStringA("AfterImage sprite에 texture가 없음!\n");
+        return;
+    }
+
+    // 위치 및 방향
+    Vector2 position = player->GetTransform()->GetPosition();
+    bool flipX = playerRenderer->flipX;
+
+    // 잔상 오브젝트 생성 
+    GameObject* afterImage = player->Instantiate<GameObject>();
+    afterImage->AddComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
+    afterImage->GetComponent<Transform>()->SetPosition(position);
+
+    // 렌더러 추가
+    auto renderer = afterImage->AddComponent<SpriteRenderer>();
+    renderer->sprite = currentSprite;
+    renderer->flipX = flipX;
+    renderer->flipY = playerRenderer->flipY;
+    renderer->SetAlpha(0.1f);
+    renderer->SetColor(1.0f, 1.0f, 0.8f);
+    renderer->renderMode = RenderMode::Lit_ColorTint;
+    renderer->layer = 1;
+
+    // 잔상 스크립트
+    auto afterImageScript = afterImage->AddComponent<AfterImage>();
+    afterImageScript->SetInitialAlpha(0.4f);
 }

@@ -5,6 +5,11 @@ class MovementFSM;
 
 class BulletTime_State : public MovementStateBase
 {
+    // ¿‹ªÛ
+    float afterimageTimer = 0.0f;
+    float afterimageInterval = 0.04f;
+    void CreateAfterImage(MovementFSM* fsm);
+
 public:
     void Enter(MovementFSM* fsm) override;
     void Update(MovementFSM* fsm) override;
