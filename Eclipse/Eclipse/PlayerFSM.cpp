@@ -121,6 +121,10 @@ void PlayerFSM::OnDestroy()
 
 void PlayerFSM::InputSetting()
 {
+	isF = Input::GetKeyDown('F');
+
+	if (!GameManager::Get().canUseMouse) return;
+
 	inputX = Input::GetAxisHorizontal();
 	inputY = Input::GetAxisVertical();
 
@@ -154,8 +158,6 @@ void PlayerFSM::InputSetting()
 		isRButtonDown = false;
 		isRButtonUp = false;
 	}
-
-	isF = Input::GetKeyDown('F');
 }
 
 void PlayerFSM::FlipXSetting()
