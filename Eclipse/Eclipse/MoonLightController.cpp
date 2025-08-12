@@ -24,5 +24,7 @@ void MoonLightController::Update()
         }
     }
 
+    // TODO ::  1 찍으면 다시 0.5까지 어두워지고 스스로 destroy
+
     tr->SetScale(scale.x, scale.y);
 }

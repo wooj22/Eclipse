@@ -442,6 +442,9 @@ void PlayUI::ClickChatButton() {
 	{
 	case 3:
 		GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->DirectingBossWave();
+		GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
+		chat_Button->SetActive(false);
+		chat_Image->SetActive(false);
 		return;
 	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경

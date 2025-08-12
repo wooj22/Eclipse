@@ -64,6 +64,7 @@ BackGround01_Moon::BackGround01_Moon()
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "BackGround01_Moon");
 	spriteRenderer->sprite = new_sprite;
 	spriteRenderer->layer = -9;
+	spriteRenderer->renderMode = RenderMode::Lit_Glow;
 
 	parallax->parallaxFactor = 0.8;
 }
