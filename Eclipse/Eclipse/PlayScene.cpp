@@ -9,6 +9,8 @@ void PlayScene::Awake()
 
 	// create object
 	mapBackGround = CreateObject<MapBackGround>();
+	moonShadow = CreateObject<MoonShadow>();
+	moonShadow->transform->Translate(1000, 0);
 
 	// UI
 	playUI = CreateObject<PlayUI>();

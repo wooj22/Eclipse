@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/UI_Text.h"
 #include "InGameCamera.h"
 #include "MapBackGround.h"
+#include "MoonShadow.h"
 #include "Player.h"
 #include "PlayUI.h"
 #include "Platform.h"
@@ -20,6 +21,9 @@ private:
 
 	// background
 	MapBackGround* mapBackGround;
+
+	// moon shadow
+	MoonShadow* moonShadow;
 
 	// UI
 	PlayUI* playUI;
