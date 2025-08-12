@@ -272,431 +272,158 @@ void WaveSystem::OnHonDestroyed(GameObject* hon)
 void WaveSystem::SetupWave1Pattern()
 {
 	m_currentSpawnPattern.clear();
+
+	// Wave 1: 2-3초마다 1-2마리 랜덤 스폰
 	float currentTime = 0.0f;
+	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
+	std::uniform_int_distribution<int> countDist(1, 2);
 
-	// Pattern 1: HonA, HonB 중앙 충돌 유도 (0-15s)
-	// 좌우에서 중앙으로 모여드는 패턴
-	for (int i = 0; i < 5; ++i)
+	while (currentTime < 70.0f)
 	{
-		for (int j = 0; j < 2; ++j)
+		float spawnInterval = intervalDist(m_randomGen);  // 2-3초 랜덤
+		int spawnCount = countDist(m_randomGen);  // 1-2마리 랜덤
+
+		currentTime += spawnInterval;
+		if (currentTime >= 70.0f) break;
+
+		for (int j = 0; j < spawnCount; j++)
 		{
 			SpawnData data;
-			data.delayTime = currentTime + j * 0.3f;
-			data.x = (j == 0 ? -1000.0f : 1000.0f) + (j == 0 ? i * 200.0f : -i * 200.0f);
+			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;
-			data.honType = j;
+			data.honType = (m_randomGen() % 2 == 0) ? 0 : 1;  // A, B 랜덤
+			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+
 			m_currentSpawnPattern.push_back(data);
 		}
-		currentTime += 3.0f;
-	}
-
-	// Pattern 2: 밀집 대형 (15-35s)
-	// 좁은 영역에 여러 Hon을 배치하여 충돌 확률 증가
-	for (int i = 0; i < 4; ++i)
-	{
-		float startX = GetRandomSpawnX() * 0.5f;
-		for (int j = 0; j < 5; ++j)
-		{
-			SpawnData data;
-			data.delayTime = currentTime + j * 0.2f;
-			data.x = startX + (j - 2.0f) * 100.0f;
-			data.x = (std::max)(-1200.0f, (std::min)(1200.0f, data.x));
-			data.y = SPAWN_Y;
-			data.honType = j % 2;
-			m_currentSpawnPattern.push_back(data);
-		}
-		currentTime += 4.0f;
-	}
-
-	// Pattern 3: 교차 낙하 (35-55s)
-	// Hon들이 교차하며 떨어져 충돌을 유도
-	currentTime = 35.0f;
-	for (int i = 0; i < 10; ++i)
-	{
-		SpawnData left, right;
-		left.delayTime = currentTime;
-		left.x = -800.0f + i * 150.0f;
-		left.y = SPAWN_Y;
-		left.honType = 0;
-		m_currentSpawnPattern.push_back(left);
-
-		right.delayTime = currentTime;
-		right.x = 800.0f - i * 150.0f;
-		right.y = SPAWN_Y;
-		right.honType = 1;
-		m_currentSpawnPattern.push_back(right);
-
-		currentTime += 1.5f;
-	}
-
-	// Pattern 4: 최종 압박 (55-70s)
-	// 여러 Hon이 동시다발적으로 떨어짐
-	currentTime = 55.0f;
-	for (int i = 0; i < 3; ++i)
-	{
-		for (int j = 0; j < 4; ++j)
-		{
-			SpawnData data;
-			data.delayTime = currentTime + j * 0.2f;
-			data.x = GetRandomSpawnX();
-			data.y = SPAWN_Y;
-			data.honType = j % 2;
-			m_currentSpawnPattern.push_back(data);
-		}
-		currentTime += 3.0f;
 	}
 }
 void WaveSystem::SetupWave2Pattern()
 {
 	m_currentSpawnPattern.clear();
+
+	// Wave 2: 2-3초마다 1-2마리 랜덤 스폰 (A, B, C)
 	float currentTime = 0.0f;
+	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
+	std::uniform_int_distribution<int> countDist(1, 2);
 
-	// Pattern 1: HonC를 중심으로 한 분산 패턴 (0-15s)
-	// 넓은 간격으로 HonA, HonB를 배치하고, 그 중앙에 HonC를 떨어뜨립니다.
-	for (int i = 0; i < 3; ++i)
+	while (currentTime < 70.0f)
 	{
-		float honCX = -800.0f + i * 800.0f;
-		SpawnData honc;
-		honc.delayTime = currentTime;
-		honc.x = honCX;
-		honc.y = SPAWN_Y;
-		honc.honType = 2; // HonC
-		m_currentSpawnPattern.push_back(honc);
+		float spawnInterval = intervalDist(m_randomGen);  // 2-3초 랜덤
+		int spawnCount = countDist(m_randomGen);  // 1-2마리 랜덤
 
-		for (int j = 0; j < 4; ++j)
+		currentTime += spawnInterval;
+		if (currentTime >= 70.0f) break;
+
+		for (int j = 0; j < spawnCount; j++)
 		{
 			SpawnData data;
-			data.delayTime = currentTime + 0.5f;
-			data.x = honCX + (j % 2 == 0 ? 300.0f : -300.0f);
-			data.y = SPAWN_Y + (j / 2) * 200.0f;
-			data.honType = j % 2;
-			m_currentSpawnPattern.push_back(data);
-		}
-		currentTime += 5.0f;
-	}
-
-	// Pattern 2: HonC와 주변 HonA, HonB (15-30s)
-	// HonC가 떨어지고, 그 주변에 HonA와 HonB가 흩어져서 떨어집니다.
-	currentTime = 15.0f;
-	for (int i = 0; i < 4; ++i)
-	{
-		float honCX = GetRandomSpawnX() * 0.7f;
-		SpawnData honc;
-		honc.delayTime = currentTime;
-		honc.x = honCX;
-		honc.y = SPAWN_Y;
-		honc.honType = 2; // HonC
-		m_currentSpawnPattern.push_back(honc);
-
-		for (int j = 0; j < 4; ++j)
-		{
-			SpawnData data;
-			data.delayTime = currentTime + 0.5f + j * 0.2f;
-			data.x = (std::max)(-1200.0f, (std::min)(1200.0f, honCX + (j - 2.0f) * 200.0f));
+			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;
-			data.honType = j % 2;
+			data.honType = m_randomGen() % 3;  // A, B, C 랜덤
+			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+
 			m_currentSpawnPattern.push_back(data);
 		}
-		currentTime += 4.0f;
-	}
-
-	// Pattern 3: HonA, HonB 물결과 HonC 징검다리 (30-55s)
-	// HonA와 HonB가 좌우에서 물결처럼 쏟아지며, 그 사이에 HonC를 하나씩 배치하여 연쇄 폭발을 위한 징검다리를 놓습니다.
-	currentTime = 30.0f;
-	for (int i = 0; i < 5; ++i)
-	{
-		SpawnData honc;
-		honc.delayTime = currentTime;
-		honc.x = GetRandomSpawnX() * 0.5f;
-		honc.y = SPAWN_Y;
-		honc.honType = 2; // HonC
-		m_currentSpawnPattern.push_back(honc);
-
-		for (int j = 0; j < 3; ++j)
-		{
-			SpawnData left, right;
-			left.delayTime = currentTime + 0.5f + j * 0.5f;
-			left.x = -1000.0f + j * 100.0f;
-			left.y = SPAWN_Y;
-			left.honType = 0;
-			m_currentSpawnPattern.push_back(left);
-
-			right.delayTime = currentTime + 0.5f + j * 0.5f;
-			right.x = 1000.0f - j * 100.0f;
-			right.y = SPAWN_Y;
-			right.honType = 1;
-			m_currentSpawnPattern.push_back(right);
-		}
-		currentTime += 5.0f;
-	}
-
-	// Pattern 4: 최종 폭탄 투하 (55-70s)
-	// 넓은 간격으로 HonC를 흩뿌려, 플레이어가 직접 여러 HonC를 연결하여 폭발시켜야 합니다.
-	currentTime = 55.0f;
-	for (int i = 0; i < 4; ++i)
-	{
-		for (int j = 0; j < 3; ++j)
-		{
-			SpawnData honc;
-			honc.delayTime = currentTime + j * 0.5f;
-			honc.x = -1000.0f + j * 1000.0f;
-			honc.y = SPAWN_Y;
-			honc.honType = 2; // HonC
-			m_currentSpawnPattern.push_back(honc);
-		}
-		currentTime += 3.0f;
 	}
 }
 
 void WaveSystem::SetupWave3Pattern()
 {
 	m_currentSpawnPattern.clear();
+
+	// Wave 3: 2-3초마다 2-3마리 랜덤 스폰 (모든 타입)
 	float currentTime = 0.0f;
+	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
+	std::uniform_int_distribution<int> countDist(2, 3);
 
-	// Pattern 1: HonD와 방해꾼의 등장 (0-15s)
-	// HonD 한 마리가 떨어지고, HonA와 HonB가 뒤따라 떨어져 HonD를 위협합니다.
-	for (int i = 0; i < 2; ++i)
+	while (currentTime < 70.0f)
 	{
-		float honDX = (i == 0) ? -600.0f : 600.0f;
-		SpawnData honD;
-		honD.delayTime = currentTime;
-		honD.x = honDX;
-		honD.y = SPAWN_Y;
-		honD.honType = 3; // HonD
-		m_currentSpawnPattern.push_back(honD);
+		float spawnInterval = intervalDist(m_randomGen);  // 2-3초 랜덤
+		int spawnCount = countDist(m_randomGen);  // 2-3마리 랜덤
 
-		for (int j = 0; j < 3; ++j)
+		currentTime += spawnInterval;
+		if (currentTime >= 70.0f) break;
+
+		for (int j = 0; j < spawnCount; j++)
 		{
-			SpawnData disruptor;
-			disruptor.delayTime = currentTime + 0.5f + j * 0.5f;
-			disruptor.x = honDX + (j - 1.0f) * 150.0f;
-			disruptor.y = SPAWN_Y;
-			disruptor.honType = j % 2; // HonA, HonB
-			m_currentSpawnPattern.push_back(disruptor);
+			SpawnData data;
+			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
+			data.y = SPAWN_Y;
+
+			// 모든 타입 포함한 랜덤 패턴 (D는 25% 확률)
+			int randomNum = m_randomGen() % 100;
+			if (randomNum < 25) {
+				data.honType = 3;  // HonD (25% 비율)
+			}
+			else {
+				data.honType = (randomNum - 25) % 3;  // HonA, HonB, HonC (75% 비율)
+			}
+
+			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+
+			m_currentSpawnPattern.push_back(data);
 		}
-		currentTime += 5.0f;
-	}
-
-	// Pattern 2: HonD와 HonC의 위협 (15-30s)
-	// HonD가 떨어지는 지점 근처에 HonC를 배치하여, HonC가 폭발하면 HonD도 파괴될 위험을 만듭니다.
-	currentTime = 15.0f;
-	for (int i = 0; i < 2; ++i)
-	{
-		float honDX = (i == 0) ? -400.0f : 400.0f;
-		SpawnData honD;
-		honD.delayTime = currentTime;
-		honD.x = honDX;
-		honD.y = SPAWN_Y;
-		honD.honType = 3;
-		m_currentSpawnPattern.push_back(honD);
-
-		SpawnData honC;
-		honC.delayTime = currentTime + 1.0f;
-		honC.x = honDX + (i == 0 ? 200.0f : -200.0f);
-		honC.y = SPAWN_Y;
-		honC.honType = 2; // HonC
-		m_currentSpawnPattern.push_back(honC);
-		currentTime += 5.0f;
-	}
-
-	// Pattern 3: HonD 삼각 진형과 러시 (30-45s)
-	// HonD 3마리가 삼각 진형으로 떨어지며, 주변에서 HonA와 HonB가 쏟아져 압박합니다.
-	currentTime = 30.0f;
-	SpawnData honD_center, honD_left, honD_right;
-	honD_center.delayTime = currentTime;
-	honD_center.x = 0.0f;
-	honD_center.y = SPAWN_Y;
-	honD_center.honType = 3;
-	m_currentSpawnPattern.push_back(honD_center);
-
-	honD_left.delayTime = currentTime + 0.5f;
-	honD_left.x = -500.0f;
-	honD_left.y = SPAWN_Y;
-	honD_left.honType = 3;
-	m_currentSpawnPattern.push_back(honD_left);
-
-	honD_right.delayTime = currentTime + 0.5f;
-	honD_right.x = 500.0f;
-	honD_right.y = SPAWN_Y;
-	honD_right.honType = 3;
-	m_currentSpawnPattern.push_back(honD_right);
-
-	for (int i = 0; i < 5; ++i)
-	{
-		SpawnData rusher;
-		rusher.delayTime = currentTime + 2.0f + i * 0.3f;
-		rusher.x = GetRandomSpawnX();
-		rusher.y = SPAWN_Y;
-		rusher.honType = i % 2; // HonA, HonB
-		m_currentSpawnPattern.push_back(rusher);
-	}
-	currentTime += 5.0f;
-
-	// Pattern 4: HonD와 HonC의 최종 압박 (45-70s)
-	// HonD가 중앙에 떨어지고, 양 옆에서 HonC와 HonA, HonB가 동시에 쏟아집니다.
-	currentTime = 45.0f;
-	for (int i = 0; i < 3; ++i)
-	{
-		SpawnData honD;
-		honD.delayTime = currentTime;
-		honD.x = -400.0f + i * 400.0f;
-		honD.y = SPAWN_Y;
-		honD.honType = 3;
-		m_currentSpawnPattern.push_back(honD);
-
-		SpawnData honC_left, honC_right;
-		honC_left.delayTime = currentTime + 1.0f;
-		honC_left.x = -800.0f;
-		honC_left.y = SPAWN_Y;
-		honC_left.honType = 2;
-		m_currentSpawnPattern.push_back(honC_left);
-
-		honC_right.delayTime = currentTime + 1.0f;
-		honC_right.x = 800.0f;
-		honC_right.y = SPAWN_Y;
-		honC_right.honType = 2;
-		m_currentSpawnPattern.push_back(honC_right);
-
-		currentTime += 4.0f;
 	}
 }
 
 void WaveSystem::SetupBossPattern()
 {
 	m_currentSpawnPattern.clear();
-	float currentTime = 0.0f;
 
-	// Boss Spawns
+	// Boss wave: 1 boss + continuous hon spawning
 	SpawnBoss();
 
-	// Pattern 1: Boss Guards (5-15s)
-	// HonD form a protective circle around the boss, with HonA and HonB flanking.
-	currentTime = 5.0f;
-	for (int i = 0; i < 6; ++i)
-	{
-		float angle = (i / 6.0f) * 2 * 3.14159f;
-		float radius = 500.0f;
-		SpawnData data;
-		data.delayTime = currentTime + i * 0.3f;
-		data.x = (std::max)(-1200.0f, (std::min)(1200.0f, cos(angle) * radius));
-		data.y = SPAWN_Y;
-		data.honType = 3; // HonD guards
-		m_currentSpawnPattern.push_back(data);
-	}
+	// Boss Pattern: 2-3초마다 2-3마리 랜덤 스폰
+	float currentTime = 5.0f;  // Start after 5 seconds
+	float bossWidth = 400.0f;  // 보스 크기 고려한 안전 거리
+	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
+	std::uniform_int_distribution<int> countDist(2, 3);
 
-	currentTime += 2.0f;
-	for (int i = 0; i < 4; ++i)
+	while (currentTime < 80.0f)
 	{
-		SpawnData flank;
-		flank.delayTime = currentTime + i * 0.5f;
-		flank.x = (i % 2 == 0 ? -1000.0f : 1000.0f);
-		flank.y = SPAWN_Y;
-		flank.honType = (i % 2 == 0) ? 0 : 1; // HonA and HonB
-		m_currentSpawnPattern.push_back(flank);
-	}
-	currentTime += 5.0f;
+		float spawnInterval = intervalDist(m_randomGen);  // 2-3초 랜덤
+		int spawnCount = countDist(m_randomGen);  // 2-3마리 랜덤
 
-	// Pattern 2: HonC Bombardment (15-30s)
-	// Boss spawns waves of HonC, creating a dense field of explosives.
-	currentTime = 15.0f;
-	for (int wave = 0; wave < 3; ++wave)
-	{
-		// HonC are dropped in a line, creating a fuse.
-		for (int i = 0; i < 5; ++i)
+		currentTime += spawnInterval;
+		if (currentTime >= 80.0f) break;
+
+		for (int j = 0; j < spawnCount; j++)
 		{
-			SpawnData honc;
-			honc.delayTime = currentTime + i * 0.2f;
-			honc.x = -800.0f + i * 400.0f;
-			honc.y = SPAWN_Y;
-			honc.honType = 2; // HonC
-			m_currentSpawnPattern.push_back(honc);
-		}
+			SpawnData data;
 
-		currentTime += 2.0f;
-		// A single HonA is dropped to detonate the line.
-		SpawnData trigger;
-		trigger.delayTime = currentTime;
-		trigger.x = -800.0f;
-		trigger.y = SPAWN_Y;
-		trigger.honType = 0; // HonA
-		m_currentSpawnPattern.push_back(trigger);
-
-		currentTime += 4.0f;
-	}
-
-	// Pattern 3: HonD Walls and HonA/B Rush (30-50s)
-	// The boss builds walls of HonD to block shots, while a rapid succession of HonA/B stream down.
-	currentTime = 30.0f;
-	for (int wave = 0; wave < 3; ++wave)
-	{
-		// HonD walls on the sides
-		for (int i = 0; i < 2; ++i)
-		{
-			for (int j = 0; j < 3; ++j)
+			// 보스를 피해 좌우로만 스폰
+			float randomX = GetRandomSpawnX();
+			if (std::abs(randomX) < bossWidth)
 			{
-				SpawnData wall;
-				wall.delayTime = currentTime + j * 0.3f;
-				wall.x = (i == 0 ? -1000.0f : 1000.0f) + (i == 0 ? j * 150.0f : -j * 150.0f);
-				wall.y = SPAWN_Y;
-				wall.honType = 3; // HonD
-				m_currentSpawnPattern.push_back(wall);
+				// 중앙 근처면 좌우 끝으로 이동
+				data.x = (randomX >= 0) ? bossWidth : -bossWidth;
 			}
-		}
-		currentTime += 1.0f;
+			else
+			{
+				data.x = randomX;
+			}
 
-		// HonA/B rush through the center
-		for (int i = 0; i < 5; ++i)
-		{
-			SpawnData rusher;
-			rusher.delayTime = currentTime + i * 0.4f;
-			rusher.x = -200.0f + i * 100.0f;
-			rusher.y = SPAWN_Y;
-			rusher.honType = m_randomGen() % 2;
-			m_currentSpawnPattern.push_back(rusher);
-		}
-		currentTime += 5.0f;
-	}
+			data.y = SPAWN_Y;
 
-	// Pattern 4: Final Barrage (50-75s)
-	// All enemy types are used in a dense, overwhelming final push.
-	currentTime = 50.0f;
-	for (int i = 0; i < 5; ++i)
-	{
-		// HonD cluster
-		for (int j = 0; j < 3; ++j)
-		{
-			SpawnData honD;
-			honD.delayTime = currentTime;
-			honD.x = -600.0f + j * 600.0f;
-			honD.y = SPAWN_Y;
-			honD.honType = 3;
-			m_currentSpawnPattern.push_back(honD);
-		}
-		currentTime += 1.0f;
+			// 0.8:1:1:1 비율로 설정 (총 3.8)
+			// HonD: 0.8/3.8 = 21%, A,B,C: 1/3.8 = 26.3%씩
+			int randomNum = m_randomGen() % 100;
+			if (randomNum < 21)  // 21% 확률로 HonD
+			{
+				data.honType = 3;  // HonD
+			}
+			else
+			{
+				// 나머지 79%를 A, B, C가 균등 분배 (각각 26.3%)
+				int honType = (randomNum - 21) % 3;
+				data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
+			}
 
-		// HonC cluster
-		for (int j = 0; j < 2; ++j)
-		{
-			SpawnData honC;
-			honC.delayTime = currentTime;
-			honC.x = -400.0f + j * 800.0f;
-			honC.y = SPAWN_Y;
-			honC.honType = 2;
-			m_currentSpawnPattern.push_back(honC);
-		}
-		currentTime += 1.0f;
+			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
 
-		// HonA/B filler
-		for (int j = 0; j < 5; ++j)
-		{
-			SpawnData honAB;
-			honAB.delayTime = currentTime + j * 0.2f;
-			honAB.x = GetRandomSpawnX();
-			honAB.y = SPAWN_Y;
-			honAB.honType = m_randomGen() % 2;
-			m_currentSpawnPattern.push_back(honAB);
+			m_currentSpawnPattern.push_back(data);
 		}
-		currentTime += 4.0f;
 	}
 }
 
