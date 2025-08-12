@@ -40,7 +40,7 @@ void PauseWindow::SceneStart()
 	optionWindowBackGroundGradient_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(optionWindowBackGroundGradientImageTexture, "WindowBackGroundGradient");
 
 
-	close_Button->rectTransform->SetPosition(500, 280);
+	close_Button->rectTransform->SetPosition(350, 230);
 	close_Button->rectTransform->SetSize(83, 79);
 	auto closeButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
 	close_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(closeButtonTexture, "BackButton");

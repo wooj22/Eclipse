@@ -33,16 +33,17 @@ void PlayUI::Awake()
 	skillWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
-	skillWindowName_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skillWindowSplitter_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skillWindowName_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::DoubleJump));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::WallJump));
-	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::JumpAttackExtra));
-	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
-	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
-	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
+	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
@@ -169,7 +170,7 @@ void PlayUI::SceneStart()
 	hon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	hon_Text->screenTextRenderer->SetFontSize(40);
 
-	hon_Text->screenTextRenderer->SetText(L"x 0") ;
+	hon_Text->screenTextRenderer->SetText(L"x 000") ;
 
 	// 스킬1
 	skill1CollTime_Text->rectTransform->SetParent(skill1_Image->rectTransform);
@@ -213,14 +214,15 @@ void PlayUI::SceneStart()
 	// 스킬창 UI
 	
 	skillWindow_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
+	skillWindowSplitter_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindowBackGroundGradient_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	}
 	skillHon_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
-	skillHon_Text->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
-	skillWindowName_Text->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
+	skillHon_Text->rectTransform->SetParent(skillHon_Image->rectTransform);
+	skillWindowName_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 
 	skillWindowBackGround_Image->SetActive(false);
 	skillWindowBackGround_Image->rectTransform->SetSize(1920, 1080);
@@ -228,6 +230,10 @@ void PlayUI::SceneStart()
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
 	skillWindow_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowImageTexture, "SkillWindow");
+	skillWindowSplitter_Image->rectTransform->SetPosition(0, 70);
+	skillWindowSplitter_Image->rectTransform->SetSize(700, 400);
+	auto skillWindowSplitterImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindowSplitter.png");
+	skillWindowSplitter_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowSplitterImageTexture, "SkillWindowSplitter");
 	auto skillWindowBackGroundImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/WindowBackGround.png");
 	skillWindowBackGround_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowBackGroundImageTexture, "WindowBackGround");
 	auto skillWindowBackGroundImageGradientTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/WindowBackGroundGradient.png");
@@ -244,28 +250,30 @@ void PlayUI::SceneStart()
 	skillHon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
 
-	skillButtons[0]->rectTransform->SetPosition(-50, -50);
-	skillButtons[1]->rectTransform->SetPosition(-50, 100);
-	skillButtons[2]->rectTransform->SetPosition(-50, 250);
-	skillButtons[3]->rectTransform->SetPosition(-450, -200);
-	skillButtons[4]->rectTransform->SetPosition(-450, -50);
-	skillButtons[5]->rectTransform->SetPosition(-450, 100);
-	skillButtons[6]->rectTransform->SetPosition(300, -200);
-	skillButtons[7]->rectTransform->SetPosition(300, -50);
-	skillButtons[8]->rectTransform->SetPosition(300,100);
+	skillButtons[0]->rectTransform->SetPosition(-400, 160);
+	skillButtons[1]->rectTransform->SetPosition(-400, -20);
+	skillButtons[2]->rectTransform->SetPosition(-400, -200);
+	skillButtons[3]->rectTransform->SetPosition(-50, 160);
+	skillButtons[4]->rectTransform->SetPosition(-50, -20);
+	skillButtons[5]->rectTransform->SetPosition(-50, -200);
+	skillButtons[6]->rectTransform->SetPosition(300, 160);
+	skillButtons[7]->rectTransform->SetPosition(300, -20);
+	skillButtons[8]->rectTransform->SetPosition(300,-200);
 
-	skillHon_Image->rectTransform->SetPosition(-100,-250);
-	skillHon_Text->rectTransform->SetPosition(200,-250);
-	skillHon_Text->rectTransform->SetSize(500,100);
-	skillHon_Text->screenTextRenderer->SetFontSize(50);
+	skillHon_Image->rectTransform->SetPosition(480,-280);
+	skillHon_Image->rectTransform->SetSize(30,30);
+	skillHon_Text->rectTransform->SetPosition(120,0);
+	skillHon_Text->rectTransform->SetSize(200,35);
+	skillHon_Text->screenTextRenderer->SetFontSize(25);
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
-	skillHon_Text->screenTextRenderer->SetText(L"x 0");
+	skillHon_Text->screenTextRenderer->SetText(L"x 000");
 
 
 	// 스킬창 제목
-	skillWindowName_Text->rectTransform->SetPosition(-300, 300);
-	skillWindowName_Text->screenTextRenderer->SetText(L"성장");
-	skillWindowName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
+	skillWindowName_Image->rectTransform->SetPosition(0, 350);
+	skillWindowName_Image->rectTransform->SetSize(273, 74);
+	auto SkillWindowNameGradientTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindowName.png");
+	skillWindowName_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(SkillWindowNameGradientTexture, "SkillWindowName");
 
 	
 	for (UI_Button* btn : pauseCheckButtos)
@@ -391,6 +399,16 @@ void PlayUI::Update()
 		}
 	}
 
+	if (Input::GetKeyDown('R'))
+	{
+		GameManager::Get().SkillReset();
+	}
+
+	if (Input::GetKeyDown(VK_F3))
+	{
+		GameManager::Get().ChangeHonCount(100);
+	}
+
 }
 
 void PlayUI::Destroyed()
@@ -486,8 +504,13 @@ void PlayUI::PlayerInteraction()
 // 혼 개수 추가 호출 함수
 void PlayUI::ChangeHonCountText()
 {
-	hon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
-	skillHon_Text->screenTextRenderer->SetText(L"x " + std::to_wstring(GameManager::Get().honCount));
+	int count = GameManager::Get().honCount;
+
+	std::wstringstream ss;
+	ss << L"x " << std::setw(3) << std::setfill(L'0') << count;
+
+	hon_Text->screenTextRenderer->SetText(ss.str());
+	skillHon_Text->screenTextRenderer->SetText(ss.str());
 }
 
 void PlayUI::ActivateAbsorb()

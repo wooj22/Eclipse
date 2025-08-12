@@ -46,7 +46,7 @@ void Credit::SceneStart()
 	auto creditSplitterImage = ResourceManager::Get().CreateTexture2D("../Resource/mo/CreditSplitterImage.png");
 	splitter_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(creditSplitterImage, "CreditSplitterImage");
 
-	close_Button->rectTransform->SetPosition(310, 230);
+	close_Button->rectTransform->SetPosition(350, 230);
 	close_Button->rectTransform->SetSize(83, 79);
 	auto closeButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
 	close_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(closeButtonTexture, "BackButton");
