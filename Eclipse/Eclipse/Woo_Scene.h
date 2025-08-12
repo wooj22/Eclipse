@@ -55,7 +55,7 @@ private:
 
 	// slider engine test
 	UI_Slider* ui_slider;
-
+	UI_Slider* ui_slider2;
 
 	/* À±¸ğÇÜ ¿ÀºêÁ§Æ® */
 	// UI

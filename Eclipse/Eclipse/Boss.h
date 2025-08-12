@@ -6,11 +6,6 @@
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "BossController.h"
 
-// audio test
-#include "../Direct2D_EngineLib/AudioSystem.h"
-#include "../Direct2D_EngineLib/AudioSource.h"
-#include "../Direct2D_EngineLib/ResourceManager.h"
-
 /* 보스 웨이브에 등장하는 Boss GameObject 선언 클래스 */
 
 class Boss : public GameObject
@@ -22,12 +17,6 @@ public:
 	Rigidbody* rigidbody;
 	CircleCollider* collider;
 	BossController* bossController;
-
-	// audio test
-	AudioSource* bgmSource = nullptr;
-	AudioSource* sfxSource = nullptr;
-	shared_ptr<AudioClip> bgmClip = nullptr;
-	shared_ptr<AudioClip> sfxClip = nullptr;
 
 	Boss()
 	{
@@ -56,34 +45,6 @@ public:
 		// color matrix test
 		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
 		spriteRenderer->SetGlowAmmount(150);
-		//spriteRenderer->SetBrightness(2);
-
-		// audio test
-		bgmSource = AddComponent<AudioSource>();
-		sfxSource = AddComponent<AudioSource>();
-		bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
-		sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
-
-		bgmClip = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/BGM_Stage1.wav");
-		sfxClip = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Sample/SFX_Score.wav");
-	
-		AudioSystem::Get().SetBGMVolume(0.5);
-		AudioSystem::Get().SetSFXVolume(0.5);
-
-		bgmSource->SetVolume(1);
-		bgmSource->SetClip(bgmClip);
-		bgmSource->SetLoop(true);
-		bgmSource->Play();
-
-		sfxSource->SetVolume(1);
-		sfxSource->SetClip(sfxClip);
-		sfxSource->SetLoop(true);
-		sfxSource->Play();
-	}
-
-	void Update() override
-	{
-		collider->DebugColliderDraw();
 	}
 };
 
