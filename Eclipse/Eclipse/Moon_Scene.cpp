@@ -10,10 +10,8 @@
 
 void Moon_Scene::Awake()
 {
-	// [ camera ]
-	cam = CreateObject<GameObject>();
-	cam->AddComponent<Transform>()->SetPosition(-0.0f, -0.0f);
-	auto camCompo = cam->AddComponent<Camera>(1920, 1080);
+	// camera
+	camera = CreateObject<InGameCamera>();
 
 	// [BackGround Map]
 	mapBackGround = CreateObject<MapBackGround>();
@@ -43,18 +41,6 @@ void Moon_Scene::Awake()
 
 	// [ Platform ]
 	platform_map = CreateObject<Platform>();
-	
-	// boundary condition
-	Rect mapRect;
-	mapRect.size = { 2560, 1920 };
-
-	// camera target
-	camCompo->SetTarget(player->transform);
-	camCompo->SetTargetTraceXSpeed(400.0f);
-	camCompo->SetTargetTraceLimitX(30.0f);
-	camCompo->SetTargetTraceLimitY(100.0f);
-	camCompo->SetMapCondition(mapRect);
-
 
 	// [ UI ] 
 	playUI = CreateObject<PlayUI>();

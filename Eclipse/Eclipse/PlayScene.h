@@ -1,8 +1,8 @@
 #pragma once
 #include "../Direct2D_EngineLib/Scene.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
+#include "InGameCamera.h"
 #include "MapBackGround.h"
 #include "Player.h"
 #include "PlayUI.h"
@@ -16,7 +16,7 @@ class PlayScene : public Scene
 {
 private:
 	// camera
-	GameObject* camera;
+	InGameCamera* camera;
 
 	// background
 	MapBackGround* mapBackGround;
