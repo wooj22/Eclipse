@@ -14,6 +14,15 @@ void PauseWindow::Awake()
 	continuGame_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	quitGame_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	underscore_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	soundBase_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	soundMaster_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundBGM_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundSFX_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundAMB_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundMaster_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
+	soundBGM_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
+	soundSFX_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
+	soundAMB_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
 
 	optionWindowBackGround_Image->rectTransform->SetParent(rectTransform);
 	optionWindowBackGroundGradient_Image->rectTransform->SetParent(rectTransform);
@@ -21,8 +30,20 @@ void PauseWindow::Awake()
 	close_Button->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
 
 	continuGame_Button->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
-	newGame_Button->rectTransform->SetParent(continuGame_Button->rectTransform);
-	quitGame_Button->rectTransform->SetParent(continuGame_Button->rectTransform);
+	newGame_Button->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
+	quitGame_Button->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
+
+	soundBase_Image->rectTransform->SetParent(optionWindowBackGround_Image->rectTransform);
+	soundMaster_Text->rectTransform->SetParent(window_Image->rectTransform);
+	soundBGM_Text->rectTransform->SetParent(window_Image->rectTransform);
+	soundSFX_Text->rectTransform->SetParent(window_Image->rectTransform);
+	soundAMB_Text->rectTransform->SetParent(window_Image->rectTransform);
+	soundMaster_slider->rectTransform->SetParent(soundMaster_Text->rectTransform);
+	soundBGM_slider->rectTransform->SetParent(soundBGM_Text->rectTransform);
+	soundSFX_slider->rectTransform->SetParent(soundSFX_Text->rectTransform);
+	soundAMB_slider->rectTransform->SetParent(soundAMB_Text->rectTransform);
+
+	linecontroller = new LineController();
 }
 
 void PauseWindow::SceneStart()
@@ -45,37 +66,95 @@ void PauseWindow::SceneStart()
 	auto closeButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
 	close_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(closeButtonTexture, "BackButton");
 
-	continuGame_Button->rectTransform->SetPosition(0, -150);
-	continuGame_Button->rectTransform->SetSize(200, 100);
+	continuGame_Button->rectTransform->SetPosition(0, -225);
+	continuGame_Button->rectTransform->SetSize(200, 30);
 	continuGame_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 	
-	newGame_Button->rectTransform->SetPosition(-200, 0);
-	newGame_Button->rectTransform->SetSize(200, 100);
+	newGame_Button->rectTransform->SetPosition(-200, -225);
+	newGame_Button->rectTransform->SetSize(200, 30);
 	newGame_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 	
-	quitGame_Button->rectTransform->SetPosition(200, 0);
-	quitGame_Button->rectTransform->SetSize(200, 100);
+	quitGame_Button->rectTransform->SetPosition(200, -225);
+	quitGame_Button->rectTransform->SetSize(200, 30);
 	quitGame_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
 	//TODOMO : 이미지로하면 텍스트는 제거
-	continuGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	continuGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Cyan));
 	continuGame_Button->screenTextRenderer->SetText(L"이어하기");
 	continuGame_Button->screenTextRenderer->SetFontSize(30);
 	continuGame_Button->screenTextRenderer->SetFontName(L"덕온공주체");
-	newGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	newGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Cyan));
 	newGame_Button->screenTextRenderer->SetText(L"처음으로");
 	newGame_Button->screenTextRenderer->SetFontSize(30);
 	newGame_Button->screenTextRenderer->SetFontName(L"덕온공주체");
-	quitGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	quitGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Cyan));
 	quitGame_Button->screenTextRenderer->SetText(L"게임종료");
 	quitGame_Button->screenTextRenderer->SetFontSize(30);
 	quitGame_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 
+	soundBase_Image->rectTransform->SetPosition(0, 100);
+	soundBase_Image->rectTransform->SetSize(700, 55);
+	auto pauseSoundTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/PauseSound.png");
+	soundBase_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(pauseSoundTexture, "PauseSound");
+
+	soundMaster_Text->rectTransform->SetPosition(0, 200);
+	soundMaster_Text->rectTransform->SetSize(550, 50);
+	soundMaster_Text->screenTextRenderer->SetText(L"전체음량");
+
+	soundBGM_Text->rectTransform->SetPosition(0, 75);
+	soundBGM_Text->rectTransform->SetSize(550, 50);
+	soundBGM_Text->screenTextRenderer->SetText(L"배경음");
+
+	soundAMB_Text->rectTransform->SetPosition(0, -25);
+	soundAMB_Text->rectTransform->SetSize(550, 50);
+	soundAMB_Text->screenTextRenderer->SetText(L"환경음");
+
+	soundSFX_Text->rectTransform->SetPosition(0, -125);
+	soundSFX_Text->rectTransform->SetSize(550, 50);
+	soundSFX_Text->screenTextRenderer->SetText(L"효과음");
+
+	auto optionSoundSingle = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionSoundSingle.png");
+	auto soundbar = ResourceManager::Get().CreateSprite(optionSoundSingle, "OptionSoundSingle");
+
+	auto soundHandle = ResourceManager::Get().CreateTexture2D("../Resource/mo/SoundHandle.png");
+	auto handle = ResourceManager::Get().CreateSprite(soundHandle, "SoundHandle");
+
+	soundMaster_slider->SetSliderSize(450, 100);
+	soundBGM_slider->SetSliderSize(450, 100);
+	soundSFX_slider->SetSliderSize(450, 100);
+	soundAMB_slider->SetSliderSize(450, 100);
+
+	soundMaster_slider->SetHandleSize(100);
+	soundBGM_slider->SetHandleSize(100);
+	soundSFX_slider->SetHandleSize(100);
+	soundAMB_slider->SetHandleSize(100);
+
+	soundMaster_slider->SetBackgroundImage(soundbar);
+	soundBGM_slider->SetBackgroundImage(soundbar);
+	soundSFX_slider->SetBackgroundImage(soundbar);
+	soundAMB_slider->SetBackgroundImage(soundbar);
+
+	soundMaster_slider->SetHandleImage(handle);
+	soundBGM_slider->SetHandleImage(handle);
+	soundSFX_slider->SetHandleImage(handle);
+	soundAMB_slider->SetHandleImage(handle);
+
+	soundMaster_slider->rectTransform->SetPosition(0, -50);
+	soundBGM_slider->rectTransform->SetPosition(0, -50);
+	soundSFX_slider->rectTransform->SetPosition(0, -50);
+	soundAMB_slider->rectTransform->SetPosition(0, -50);
+
+	soundMaster_slider->SetGuageImageAlpha();
+	soundBGM_slider->SetGuageImageAlpha();
+	soundSFX_slider->SetGuageImageAlpha();
+	soundAMB_slider->SetGuageImageAlpha();
+
 	// 밑줄 이미지
-	underscore_Image->rectTransform->SetPosition(0, -30); // TODOMO : 버튼 이미지 나오면 위치 수정
-	underscore_Image->rectTransform->SetSize(200, 150);
-	auto underScoreTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Underscore.png");
-	underscore_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(underScoreTexture, "Underscore");
+	underscore_Image->AddComponent<Animator>();
+	underscore_Image->GetComponent<Animator>()->SetController(linecontroller);
+	underscore_Image->rectTransform->SetPosition(0, -20);
+	underscore_Image->rectTransform->SetSize(150, 1500);
+	underscore_Image->imageRenderer->layer = 99;
 	underscore_Image->SetActive(false); // 초기에는 밑줄 이미지 비활성화
 
 	for (UI_Button* btn : eventButtons)
@@ -97,20 +176,37 @@ void PauseWindow::SceneStart()
 			GameManager::Get().g_playUI->ButtonClickSound(); 
 			GameApp::Quit(); });
 
-	SetActive(false);
+	soundMaster_slider->slider->SetValue(AudioSystem::Get().GetMasterVolume());
+	soundBGM_slider->slider->SetValue(AudioSystem::Get().GetBGMVolume());
+	soundSFX_slider->slider->SetValue(AudioSystem::Get().GetSFXVolume());
+	soundAMB_slider->slider->SetValue(AudioSystem::Get().GetAMBVolume());
 
+	soundMaster_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetMasterVolume(soundMaster_slider->GetComponent<Slider>()->GetValue()); });
+	soundBGM_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetBGMVolume(soundBGM_slider->GetComponent<Slider>()->GetValue()); });
+	soundSFX_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetSFXVolume(soundSFX_slider->GetComponent<Slider>()->GetValue()); });
+	soundAMB_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetAMBVolume(soundAMB_slider->GetComponent<Slider>()->GetValue()); });
+
+	SetActive(false);
 }
 
 void PauseWindow::Update()
 {
 }
 
+void PauseWindow::Destroyed()
+{
+	delete linecontroller;
+}
+
 void PauseWindow::OnPointEnterButton(UI_Button* onButton)
 {
 	prevHoverButton = onButton;
 	onButton->imageRenderer->SetAlpha(1);
-	underscore_Image->rectTransform->SetParent(onButton->rectTransform);
 	underscore_Image->SetActive(true);
+	underscore_Image->rectTransform->SetParent(onButton->rectTransform);
+	linecontroller->PlayAnimation("UI_Line");
+	bool tr = underscore_Image->IsActive();
+	bool tr2 = underscore_Image->rectTransform->GetParent()->gameObject->IsActive();
 	GameManager::Get().g_playUI->ButtonEnterSound();
 }
 

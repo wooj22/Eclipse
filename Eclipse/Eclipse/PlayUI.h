@@ -85,12 +85,14 @@ public:
 	tooltip* tooltip1;
 	tooltip* tooltip2;
 
+	UI_Button* skillWindowClose_Button;			// 스킬 창 검은 화면 이미지
 	UI_Image* skillWindowBackGround_Image;			// 스킬 창 검은 화면 이미지
 	UI_Image* skillWindowBackGroundGradient_Image;	// 스킬 창 그라데이션 이미지
 	UI_Image* skillWindow_Image;					// 스킬 창 이미지
 	UI_Image* skillWindowSplitter_Image;			// 스킬 창 이미지
 	UI_Image* skillWindowName_Image;				// 스킬창 이름 이미지
 	std::vector<SkillWindowButton*> skillButtons;	// 스킬 버튼 모음
+	UI_Image* skillHonBig_Image;					// 스킬창 혼 이미지
 	UI_Image* skillHon_Image;						// 스킬창 혼 이미지
 	UI_Text* skillHon_Text;							// 스킬창 혼 개수 텍스트
 
