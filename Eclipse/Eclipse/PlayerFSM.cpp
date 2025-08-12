@@ -125,26 +125,8 @@ void PlayerFSM::InputSetting()
 
 	if (!GameManager::Get().canUseMouse) // 모든 입력값 초기화
 	{
-		inputX = 0.0f;
-		inputY = 0.0f;
-
-		isA = false;
-		isD = false;
-		isS = false;
-		isQ = false;
-		isE = false;
-		isShift = false;
-		isSpace = false;
-
-		isLButton = false;
-		isLButtonDown = false;
-		isLButtonUp = false;
-
-		isRButton = false;
-		isRButtonDown = false;
-		isRButtonUp = false;
-
-		return; 
+		ResetInputs(); 
+		return;
 	}
 
 	// [ 입력 허용 ]
@@ -167,6 +149,28 @@ void PlayerFSM::InputSetting()
 	isRButton = Input::GetKey(VK_RBUTTON);
 	isRButtonDown = Input::GetKeyDown(VK_RBUTTON);
 	isRButtonUp = Input::GetKeyUp(VK_RBUTTON);
+}
+
+void PlayerFSM::ResetInputs() 
+{
+	inputX = 0.0f;
+	inputY = 0.0f;
+
+	isA = false;
+	isD = false;
+	isS = false;
+	isQ = false;
+	isE = false;
+	isShift = false;
+	isSpace = false;
+	// isF = false;
+
+	isLButton = false;
+	isLButtonDown = false;
+	isLButtonUp = false;
+	isRButton = false;
+	isRButtonDown = false;
+	isRButtonUp = false;
 }
 
 void PlayerFSM::FlipXSetting()

@@ -30,10 +30,7 @@ void Walk_State::Enter(MovementFSM* fsm)
 }
 
 void Walk_State::Update(MovementFSM* fsm)
-{/*
-    if (!GameManager::Get().canUseMouse) 
-        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
-    */
+{
     // [ Jump ]
     if (fsm->GetPlayerFSM()->GetIsSpace() && fsm->GetPlayerFSM()->GetIsGround())
     {
