@@ -6,6 +6,7 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Animator.h"
 #include "NpcAnimatorController.h"
+#include "../Direct2D_EngineLib/WorldTextRenderer.h"
 
 #include "NPCInteraction.h"
 #include "PlayUI.h"
@@ -19,6 +20,7 @@ public:
 	Animator* animator;
 	NPCInteraction* script;
 	GameObject* interactImage;
+	GameObject* interactText;
 
 	NpcAnimatorController* animatorController;
 

@@ -33,16 +33,16 @@ void NPC::Awake()
 	spriteRenderer->renderMode = RenderMode::Lit_Glow;
 	rigidbody->isKinematic = true;
 	collider->isTrigger = true;
-	collider->size = {100, 100};
+	collider->size = { 100, 100 };
 
 	auto npcint = ResourceManager::Get().CreateTexture2D("../Resource/mo/F.png");
 	interactImage->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(npcint, "F");
 	interactImage->transform->SetParent(transform);
-	interactImage->transform->SetPosition(0, 100);
-	interactImage->transform->SetScale(0.5, 0.5);
+	interactImage->transform->Translate(-100, 300);
+	interactImage->transform->SetScale(2, 2);
 
 	interactText->transform->SetPosition(150, 0);
-	interactText->GetComponent<WorldTextRenderer>()->SetLayout(200,50);
+	interactText->GetComponent<WorldTextRenderer>()->SetLayout(200, 50);
 	interactText->GetComponent<WorldTextRenderer>()->SetText(L"상호 작용");
 }
 
