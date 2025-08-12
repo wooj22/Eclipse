@@ -1,4 +1,5 @@
 #include "Options.h"
+#include "../Direct2D_EngineLib/AudioSystem.h"
 
 Options::Options() : GameObject("Optionts", "Optionts")
 {
@@ -14,6 +15,14 @@ Options::Options() : GameObject("Optionts", "Optionts")
 	controlKeyBase_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	leftClick_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	rightClick_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	soundMaster_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundBGM_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundSFX_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundAMB_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	soundMaster_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
+	soundBGM_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
+	soundSFX_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
+	soundAMB_slider = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Slider>();
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -49,6 +58,14 @@ Options::Options() : GameObject("Optionts", "Optionts")
 	sound_Button->rectTransform->SetParent(this->rectTransform);
 	key_Button->rectTransform->SetParent(this->rectTransform);
 	soundBase_Image->rectTransform->SetParent(this->rectTransform);
+	soundMaster_Text->rectTransform->SetParent(soundBase_Image->rectTransform);
+	soundBGM_Text->rectTransform->SetParent(soundBase_Image->rectTransform);
+	soundSFX_Text->rectTransform->SetParent(soundBase_Image->rectTransform);
+	soundAMB_Text->rectTransform->SetParent(soundBase_Image->rectTransform);
+	soundMaster_slider->rectTransform->SetParent(soundMaster_Text->rectTransform);
+	soundBGM_slider->rectTransform->SetParent(soundBGM_Text->rectTransform);
+	soundSFX_slider->rectTransform->SetParent(soundSFX_Text->rectTransform);
+	soundAMB_slider->rectTransform->SetParent(soundAMB_Text->rectTransform);
 
 	controlKeyBase_Image->rectTransform->SetParent(this->rectTransform);
 	leftClick_Image->rectTransform->SetParent(controlKeyBase_Image->rectTransform);
@@ -118,22 +135,67 @@ void Options::SceneStart()
 	key_Button->rectTransform->SetSize(200, 100);
 	key_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
-	sound_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	sound_Button->screenTextRenderer->SetText(L"소리");
 	sound_Button->screenTextRenderer->SetFontSize(60);
 	sound_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Cyan));
 	sound_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 
-	key_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	key_Button->screenTextRenderer->SetText(L"조작");
 	key_Button->screenTextRenderer->SetFontSize(60);
 	key_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Cyan));
 	key_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	soundBase_Image->rectTransform->SetPosition(52, 5);
-	soundBase_Image->rectTransform->SetSize(588, 385);
-	auto OptionSoundTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionSound.png");
-	soundBase_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(OptionSoundTexture, "OptionSound");
+	soundBase_Image->rectTransform->SetSize(588, 385); 
+	auto optionSoundTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionSound.png");
+	soundBase_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(optionSoundTexture, "OptionSound");
+
+	soundMaster_Text->rectTransform->SetPosition(0, 200);
+	soundMaster_Text->rectTransform->SetSize(550, 50);
+	soundMaster_Text->screenTextRenderer->SetText(L"전체음량");
+
+	soundBGM_Text->rectTransform->SetPosition(0, 75);
+	soundBGM_Text->rectTransform->SetSize(550, 50);
+	soundBGM_Text->screenTextRenderer->SetText(L"배경음");
+
+	soundAMB_Text->rectTransform->SetPosition(0, -25);
+	soundAMB_Text->rectTransform->SetSize(550, 50);
+	soundAMB_Text->screenTextRenderer->SetText(L"환경음");
+
+	soundSFX_Text->rectTransform->SetPosition(0, -125);
+	soundSFX_Text->rectTransform->SetSize(550, 50);
+	soundSFX_Text->screenTextRenderer->SetText(L"효과음");
+
+	auto optionSoundSingle = ResourceManager::Get().CreateTexture2D("../Resource/mo/OptionSoundSingle.png");
+	auto soundbar = ResourceManager::Get().CreateSprite(optionSoundSingle, "OptionSoundSingle");
+
+	auto soundHandle = ResourceManager::Get().CreateTexture2D("../Resource/mo/SoundHandle.png");
+	auto handle = ResourceManager::Get().CreateSprite(soundHandle, "SoundHandle");
+
+	soundMaster_slider->SetSliderSize(450, 100);
+	soundBGM_slider->SetSliderSize(450, 100);
+	soundSFX_slider->SetSliderSize(450, 100);
+	soundAMB_slider->SetSliderSize(450, 100);
+
+	soundMaster_slider->SetHandleSize(100);
+	soundBGM_slider->SetHandleSize(100);
+	soundSFX_slider->SetHandleSize(100);
+	soundAMB_slider->SetHandleSize(100);
+
+	soundMaster_slider->SetBackgroundImage(soundbar);
+	soundBGM_slider->SetBackgroundImage(soundbar);
+	soundSFX_slider->SetBackgroundImage(soundbar);
+	soundAMB_slider->SetBackgroundImage(soundbar);
+
+	soundMaster_slider->SetHandleImage(handle);
+	soundBGM_slider->SetHandleImage(handle);
+	soundSFX_slider->SetHandleImage(handle);
+	soundAMB_slider->SetHandleImage(handle);
+
+	soundMaster_slider->rectTransform->SetPosition(0, -50);
+	soundBGM_slider->rectTransform->SetPosition(0,-50);
+	soundSFX_slider->rectTransform->SetPosition(0,-50);
+	soundAMB_slider->rectTransform->SetPosition(0,-50);
 
 	controlKeyBase_Image->rectTransform->SetPosition(50, 0);
 	controlKeyBase_Image->rectTransform->SetSize(600, 400);
@@ -172,6 +234,12 @@ void Options::SceneStart()
 	controlKeyTitles[0]->rectTransform->SetPosition(-200,100);
 	controlKeyTitles[1]->rectTransform->SetPosition(-200,-100);
 
+	
+	soundMaster_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetMasterVolume(soundMaster_slider->GetComponent<Slider>()->GetValue()); });
+	soundBGM_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetBGMVolume(soundBGM_slider->GetComponent<Slider>()->GetValue()); });
+	soundSFX_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetSFXVolume(soundSFX_slider->GetComponent<Slider>()->GetValue()); });
+	soundAMB_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetAMBVolume(soundAMB_slider->GetComponent<Slider>()->GetValue()); });
+
 }
 
 void Options::Update()
@@ -182,3 +250,4 @@ void Options::Update()
 void Options::Destroyed()
 {
 }
+
