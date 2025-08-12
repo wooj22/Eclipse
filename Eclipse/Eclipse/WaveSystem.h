@@ -87,8 +87,8 @@ private:
 	bool m_waveStartCheck = true;
 
     // Spawn parameters
-    static constexpr float SPAWN_Y = 960.0f;
-    static constexpr float BOSS_SPAWN_Y = 960.0f;
+    static constexpr float SPAWN_Y = 900.0f;  // 맵 위쪽에서 스폰 (맵 높이 1920의 약 상단)
+    static constexpr float BOSS_SPAWN_Y = 900.0f;
     static constexpr float HUN_SIZE = 128.0f;
     static constexpr float BOSS_SIZE = 512.0f;
     static constexpr float SPAWN_MARGIN = 256.0f;

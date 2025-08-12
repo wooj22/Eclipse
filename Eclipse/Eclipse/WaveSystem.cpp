@@ -224,21 +224,21 @@ void WaveSystem::StartWave(int waveNumber)
     case 1:
         m_currentWaveState = WaveState::WAVE_1;
         //m_waveDuration = 2.0f;        
-		m_waveDuration = 2.0f;
+		m_waveDuration = 70.0f;
         SetupWave1Pattern();
         OutputDebugStringA("Wave 1 Started - Tutorial (HonA, HonB)\n");
         break;
 
     case 2:
         m_currentWaveState = WaveState::WAVE_2;
-        m_waveDuration = 2.0f;
+        m_waveDuration = 70.0f;
         SetupWave2Pattern();
         OutputDebugStringA("Wave 2 Started - Chain Reaction (HonA, HonB, HonC)\n");
         break;
 
     case 3:
         m_currentWaveState = WaveState::WAVE_3;
-        m_waveDuration = 2.0f;
+        m_waveDuration = 70.0f;
         SetupWave3Pattern();
         OutputDebugStringA("Wave 3 Started - Increased Difficulty (All Hons)\n");
         break;
@@ -321,19 +321,36 @@ void WaveSystem::SetupWave1Pattern()
 {
     m_currentSpawnPattern.clear();
 
-    // Wave 1: Tutorial - 공중 충돌 방지, 2초 간격으로 통일
-    float spawnInterval = 2.0f;
+    // Wave 1: Tutorial - 2-3초 간격으로 1-2마리씩 스폰
+    std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);  // 2-3초 랜덤
+    std::uniform_int_distribution<int> countDist(1, 2);  // 1-2마리 랜덤
+    std::uniform_real_distribution<float> xSpacingDist(-400.0f, 400.0f);  // X축 간격
 
-    for (int i = 0; i < 50; i++)
+    float currentTime = 0.0f;
+    int totalSpawned = 0;
+
+    while (totalSpawned < 50)
     {
-        // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
-        SpawnData data;
-        data.x = GetRandomSpawnX(); // 랜덤 위치 사용
-        data.y = SPAWN_Y;
-        data.honType = (i % 2 == 0) ? 0 : 1;  // A, B 번갈아가며 스폰
-        data.delayTime = i * spawnInterval;
+        int spawnCount = countDist(m_randomGen);
+        float centerX = GetRandomSpawnX();
+        
+        for (int j = 0; j < spawnCount && totalSpawned < 50; j++)
+        {
+            SpawnData data;
+            // 2-3개씩 묶어서 스폰할 때 X축으로 분산
+            data.x = centerX + (j - spawnCount/2.0f) * xSpacingDist(m_randomGen);
+            // X 좌표가 맵 범위를 벗어나지 않도록 조정
+            data.x = (std::max)(-1280.0f + SPAWN_MARGIN, (std::min)(1280.0f - SPAWN_MARGIN, data.x));
+            data.y = SPAWN_Y;
+            data.honType = (totalSpawned % 2 == 0) ? 0 : 1;  // A, B 번갈아가며 스폰
+            data.delayTime = currentTime;
 
-        m_currentSpawnPattern.push_back(data);
+            m_currentSpawnPattern.push_back(data);
+            totalSpawned++;
+        }
+        
+        // 다음 스폰까지 2-3초 대기
+        currentTime += intervalDist(m_randomGen);
     }
 }
 
@@ -341,21 +358,38 @@ void WaveSystem::SetupWave2Pattern()
 {
     m_currentSpawnPattern.clear();
 
-    // Wave 2: 공중 충돌 방지, 2초 간격으로 통일
-    float spawnInterval = 2.0f;
+    // Wave 2: 2-3초 간격으로 1-2마리씩 스폰
+    std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);  // 2-3초 랜덤
+    std::uniform_int_distribution<int> countDist(1, 2);  // 1-2마리 랜덤
+    std::uniform_real_distribution<float> xSpacingDist(-400.0f, 400.0f);  // X축 간격
 
-    for (int i = 0; i < 50; i++)
+    float currentTime = 0.0f;
+    int totalSpawned = 0;
+
+    while (totalSpawned < 50)
     {
-        // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
-        SpawnData data;
-        data.x = GetRandomSpawnX(); // 랜덤 위치 사용
-        data.y = SPAWN_Y;
+        int spawnCount = countDist(m_randomGen);
+        float centerX = GetRandomSpawnX();
+        
+        for (int j = 0; j < spawnCount && totalSpawned < 50; j++)
+        {
+            SpawnData data;
+            // 2-3개씩 묶어서 스폰할 때 X축으로 분산
+            data.x = centerX + (j - spawnCount/2.0f) * xSpacingDist(m_randomGen);
+            // X 좌표가 맵 범위를 벗어나지 않도록 조정
+            data.x = (std::max)(-1280.0f + SPAWN_MARGIN, (std::min)(1280.0f - SPAWN_MARGIN, data.x));
+            data.y = SPAWN_Y;
 
-        // HonA, HonB, HonC 순환 패턴
-        data.honType = i % 3;  // 0: HonA, 1: HonB, 2: HonC
+            // HonA, HonB, HonC 순환 패턴
+            data.honType = totalSpawned % 3;  // 0: HonA, 1: HonB, 2: HonC
 
-        data.delayTime = i * spawnInterval;
-        m_currentSpawnPattern.push_back(data);
+            data.delayTime = currentTime;
+            m_currentSpawnPattern.push_back(data);
+            totalSpawned++;
+        }
+        
+        // 다음 스폰까지 2-3초 대기
+        currentTime += intervalDist(m_randomGen);
     }
 }
 
@@ -363,27 +397,43 @@ void WaveSystem::SetupWave3Pattern()
 {
     m_currentSpawnPattern.clear();
 
-    // Wave 3: 공중 충돌 방지, 2초 간격으로 통일
-    float spawnInterval = 2.0f;
+    // Wave 3: 2-3초 간격으로 2-3마리씩 스폰 (난이도 증가)
+    std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);  // 2-3초 랜덤
+    std::uniform_int_distribution<int> countDist(2, 3);  // 2-3마리 랜덤
+    std::uniform_real_distribution<float> xSpacingDist(-300.0f, 300.0f);  // X축 간격
 
-    for (int i = 0; i < 50; i++)
+    float currentTime = 0.0f;
+    int totalSpawned = 0;
+
+    while (totalSpawned < 50)
     {
-        // 한 번에 하나씩 스폰하되 랜덤 위치에 배치
-        SpawnData data;
-        data.x = GetRandomSpawnX(); // 랜덤 위치 사용
-        data.y = SPAWN_Y;
+        int spawnCount = countDist(m_randomGen);
+        float centerX = GetRandomSpawnX();
+        
+        for (int j = 0; j < spawnCount && totalSpawned < 50; j++)
+        {
+            SpawnData data;
+            // 2-3개씩 묶어서 스폰할 때 X축으로 분산
+            data.x = centerX + (j - spawnCount/2.0f) * xSpacingDist(m_randomGen);
+            // X 좌표가 맵 범위를 벗어나지 않도록 조정
+            data.x = (std::max)(-1280.0f + SPAWN_MARGIN, (std::min)(1280.0f - SPAWN_MARGIN, data.x));
+            data.y = SPAWN_Y;
 
-        // 모든 타입 포함한 순환 패턴
-        if (i % 4 == 3) {
-            data.honType = 3;  // HonD (25% 비율)
+            // 모든 타입 포함한 순환 패턴
+            if (totalSpawned % 4 == 3) {
+                data.honType = 3;  // HonD (25% 비율)
+            }
+            else {
+                data.honType = totalSpawned % 3;  // HonA, HonB, HonC (75% 비율)
+            }
+
+            data.delayTime = currentTime;
+            m_currentSpawnPattern.push_back(data);
+            totalSpawned++;
         }
-        else {
-            data.honType = i % 3;  // HonA, HonB, HonC (75% 비율)
-        }
-
-        data.delayTime = i * spawnInterval;
-
-        m_currentSpawnPattern.push_back(data);
+        
+        // 다음 스폰까지 2-3초 대기
+        currentTime += intervalDist(m_randomGen);
     }
 }
 
@@ -394,14 +444,19 @@ void WaveSystem::SetupBossPattern()
     // Boss wave: 1 boss + continuous hon spawning
     SpawnBoss();
 
-    // Hons that spawn with boss
-    float spawnInterval = 3.0f;
+    // Hons that spawn with boss - 2-3초 간격으로 2-3마리씩
+    std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);  // 2-3초 랜덤
+    std::uniform_int_distribution<int> countDist(2, 3);  // 2-3마리 랜덤
     float bossWidth = 400.0f; // 보스 크기 고려한 안전 거리
 
-    for (int i = 0; i < 20; i++)
+    float currentTime = 5.0f;  // 보스 스폰 후 5초부터 시작
+    int totalGroups = 20;  // 총 20번의 스폰 그룹
+
+    for (int i = 0; i < totalGroups; i++)
     {
-        // 한 번에 3개씩 스폰
-        for (int j = 0; j < 3; j++)
+        int spawnCount = countDist(m_randomGen);
+        
+        for (int j = 0; j < spawnCount; j++)
         {
             SpawnData data;
 
@@ -433,10 +488,13 @@ void WaveSystem::SetupBossPattern()
                 data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
             }
 
-            data.delayTime = 5.0f + (i * spawnInterval);  // Start after 5 seconds
+            data.delayTime = currentTime;
 
             m_currentSpawnPattern.push_back(data);
         }
+        
+        // 다음 스폰까지 2-3초 대기
+        currentTime += intervalDist(m_randomGen);
     }
 }
 
