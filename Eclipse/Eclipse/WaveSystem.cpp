@@ -108,6 +108,7 @@ void WaveSystem::Update()
 		}
 	}
 
+	m_isUpdatingHons = true;
 	for (int i = static_cast<int>(m_activeHons.size()) - 1; i >= 0; --i)
 	{
 		GameObject* hon = m_activeHons[i];
@@ -118,6 +119,7 @@ void WaveSystem::Update()
 			continue;
 		}
 	}
+	m_isUpdatingHons = false;
 
 	if (m_waveElapsedTime >= m_waveDuration)
 	{
@@ -257,6 +259,8 @@ void WaveSystem::ResetWaveSystem()
 void WaveSystem::OnHonDestroyed(GameObject* hon)
 {
 	if (!hon) return;
+	if (m_isUpdatingHons) return; // Update 중이면 무시
+	
 	auto it = std::find(m_activeHons.begin(), m_activeHons.end(), hon);
 	if (it != m_activeHons.end())
 	{

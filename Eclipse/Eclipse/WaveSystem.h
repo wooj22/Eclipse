@@ -72,6 +72,7 @@ private:
     // Active hons tracking
     std::vector<GameObject*> m_activeHons;
     GameObject* m_activeBoss;
+    bool m_isUpdatingHons = false;
     
     // Random generator
     std::mt19937 m_randomGen;
