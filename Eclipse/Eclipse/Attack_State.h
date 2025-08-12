@@ -26,7 +26,7 @@ class Attack_State : public MovementStateBase
 
     // ¿‹ªÛ
     float afterimageTimer = 0.0f;
-    float afterimageInterval = 0.02f;
+    float afterimageInterval = 0.01f;
     void CreateAfterImage(MovementFSM* fsm);
 
 public:
