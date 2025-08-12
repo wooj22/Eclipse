@@ -43,7 +43,6 @@ void Slider::Update()
             mousePos.y >= slideAreaMin.y && mousePos.y <= slideAreaMax.y);
 
     // drag
-    static bool isDragging = false;
     if (Input::GetMouseButtonDown(0) && mouseInside) isDragging = true;
     if (Input::GetMouseButtonUp(0))isDragging = false;
 

@@ -49,6 +49,11 @@ void Woo_Scene::Awake()
 	auto newSprite = ResourceManager::Get().CreateSprite(texture, "handle");
 	ui_slider->SetHandleImage(newSprite);
 
+	ui_slider2 = CreateObject<UI_Slider>();
+	ui_slider2->SetSliderSize(1000, 30);
+	ui_slider2->SetHandleSize(40);
+	ui_slider2->rectTransform->SetPosition(300, 300);
+
 	// map border test
 	GameObject* mapBorder = CreateObject<GameObject>({-500,0});
 	mapBorder->AddComponent<Transform>();

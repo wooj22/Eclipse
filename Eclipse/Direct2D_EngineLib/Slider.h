@@ -19,6 +19,7 @@ class Slider : public I_UI
 {
 private:
     float value = 0.5f;         // slider fill amount
+    bool isDragging = false;
 
 public:
     // Slider GameObject Reacttransfom (Area)
