@@ -441,14 +441,23 @@ void PlayUI::ClickChatButton() {
 	switch (GameManager::Get().waveCount)
 	{
 	case 3:
-		bossHP->SetActive(true);
 		GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->DirectingBossWave();
-		break;
+		return;
 	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
+	WaveStartData();
+}
 
+void PlayUI::BossIntroEnd()
+{
+	bossHP->SetActive(true);
+	WaveStartData();
+}
+
+void PlayUI::WaveStartData()
+{
 	GameManager::Get().WaveStart();
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);

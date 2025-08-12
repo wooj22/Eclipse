@@ -10,7 +10,7 @@ Chat::Chat()
 	AddChat(0, ChatCondition::None, L"달이… 검게 물들었구나.");
 	AddChat(0, ChatCondition::None, L"어둠 속에서… 타락한 영혼들이 돌아왔다.");
 	AddChat(0, ChatCondition::None, L"등불이 꺼지지 않기를…");
-	AddChat(0, ChatCondition::None, L"그들을 막지 않으면 더는 되돌릴 수 없어.\n영혼을 50회 정화(처치)하세요.");
+	AddChat(0, ChatCondition::None, L"그들을 막지 않으면 더는 되돌릴 수 없어.\n영혼을 20회 정화(처치)하세요.");
 
 	// 웨이브 1
 	AddChat(1, ChatCondition::Success, L"그대 덕에 잠시나마 숨을 쉴 수 있었어.");
@@ -23,7 +23,7 @@ Chat::Chat()
 
 	AddChat(1, ChatCondition::None, L"더 깊은 어둠에서 길을 잃은 혼들…");
 	AddChat(1, ChatCondition::None, L"그들은 기억조차 없겠지.");
-	AddChat(1, ChatCondition::None, L"이번에도 그들을 인도할 수 있겠어?\n연쇄를 30회 진행하세요.");
+	AddChat(1, ChatCondition::None, L"이번에도 그들을 인도할 수 있겠어?\n연쇄를 10회 진행하세요.");
 
 	// 웨이브 2
 	AddChat(2, ChatCondition::Success, L"좋아, 지금까지는 잘 버텼어.");
