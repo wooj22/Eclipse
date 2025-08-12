@@ -1,6 +1,7 @@
 #include "MoonShadowController.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "GameManager.h"
+#include "MoonLight.h"
 
 void MoonShadowController::Awake() 
 {
@@ -22,6 +23,9 @@ void MoonShadowController::Update()
 		{
 			isStop = true;
 			tr->SetPosition(moonTr->GetWorldPosition());
+
+			// ºû »ý¼º
+			Instantiate<MoonLight>(moonTr->GetWorldPosition());
 		}
 	}
 }

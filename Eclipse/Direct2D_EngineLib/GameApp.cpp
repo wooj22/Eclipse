@@ -94,8 +94,6 @@ void GameApp::Init()
 	UpdateWindow(hWnd);
 	OutputDebugStringA("[Woo Engine] Window Create\n");
 
-	// 타이틀바 제거
-	SetWindowLong(hWnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
 
 	CoInitialize(nullptr);			// com 객체 초기화	
 	
