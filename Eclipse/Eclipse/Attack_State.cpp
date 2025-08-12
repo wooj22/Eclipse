@@ -30,24 +30,55 @@ void Attack_State::Enter(MovementFSM* fsm)
     // 애니메이션 재생 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", true);
 
-    // [ 공격 이동 ] 
-    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
-    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
+    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 현재 위치 
+
+    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
-    float actualDistance = (((toMouse.Magnitude()) < (baseMaxDistance)) ? (toMouse.Magnitude()) : (baseMaxDistance)); // sts::min 
-	direction = toMouse.Normalized(); // 방향 벡터 
-    targetPos = startPos + direction * actualDistance;
+    float actualDistance = (toMouse.Magnitude() < baseMaxDistance) ? toMouse.Magnitude() : baseMaxDistance;
+    direction = toMouse.Normalized();
 
-    // 속도 계산: 거리 / 시간
-    moveSpeed = actualDistance / desiredTime;
+
+    if (!fsm->GetPlayerFSM()->GetIsGround()) // 땅에 없을 때만 이동 계산
+    {
+		//Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치
+
+  //      // 이동 거리 제한 (마우스보다 멀리 못 감)
+  //      float actualDistance = (toMouse.Magnitude() < baseMaxDistance) ? toMouse.Magnitude() : baseMaxDistance;
+  //      direction = toMouse.Normalized();
+        targetPos = startPos + direction * actualDistance;
+
+        // 속도 계산 : 거리 / 시간
+        moveSpeed = actualDistance / desiredTime;
+    }
+    else
+    {
+        // 땅에 있을 때는 제자리에서 공격
+        // direction = Vector2::zero;
+        targetPos = toMouse.Normalized();
+        moveSpeed = 0.0f;
+    }
+
+
+ //   // [ 공격 이동 ] 
+ //   startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 시작 위치
+ //   Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
+
+ //   // 이동 거리 제한 (마우스보다 멀리 못 감)
+ //   float actualDistance = (((toMouse.Magnitude()) < (baseMaxDistance)) ? (toMouse.Magnitude()) : (baseMaxDistance)); // sts::min 
+	//direction = toMouse.Normalized(); // 방향 벡터 
+ //   targetPos = startPos + direction * actualDistance;
+
+ //   // 속도 계산: 거리 / 시간
+ //   moveSpeed = actualDistance / desiredTime;
+
 
     // 방향 벡터 저장 
     fsm->GetPlayerFSM()->attackDirection = direction;
 
-    Vector2 dir = fsm->GetPlayerFSM()->attackDirection;
-    std::string dbg = "[Attack_State] AttackDirection: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ")\n";
-    OutputDebugStringA(dbg.c_str());
+    //Vector2 dir = fsm->GetPlayerFSM()->attackDirection;
+    //std::string dbg = "[Attack_State] AttackDirection: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ")\n";
+    //OutputDebugStringA(dbg.c_str());
 
 
     // [ 이펙트, 충돌 ]
@@ -59,11 +90,6 @@ void Attack_State::Enter(MovementFSM* fsm)
     // playerAttack_Parent 회전 : ( 원본 이미지가 위쪽 방향 기준 -> 시계방향 -90도 회전 적용 )
     fsm->GetPlayerFSM()->GetPlayerAttackParent()->GetComponent<Transform>()->SetRotation(angleDeg + 180.0f);
    
-    // 공격 범위 활성화
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(true); 
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(true); 
-
-
     // 공격 이펙트 애니메이션 
     auto anim = fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Animator>();
     if (anim)
@@ -90,8 +116,18 @@ void Attack_State::Update(MovementFSM* fsm)
 
 void Attack_State::FixedUpdate(MovementFSM* fsm)
 {
-    if (!fsm->GetPlayerFSM()->GetRigidbody() || !fsm->GetPlayerFSM()->GetTransform()) 
-    { OutputDebugStringA("!fsm->GetPlayerFSM()->GetRigidbody() || !fsm->GetPlayerFSM()->GetTransform() \n"); return; }
+    if (!fsm->GetPlayerFSM()->GetRigidbody() || !fsm->GetPlayerFSM()->GetTransform()) return;
+
+    if (timer >= desiredTime)
+    {
+        if (fsm->GetPlayerFSM()->GetIsGround()) { fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>()); return; }
+        else { fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>()); return; }
+    }
+
+    if (direction == Vector2::zero) return;
+
+    // 이동 유지
+    fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(direction * moveSpeed);
 
     Vector2 currentPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();
     float traveled = (currentPos - startPos).Magnitude();
@@ -110,15 +146,6 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
         fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
     }
-    
-    if( timer >= desiredTime)
-    {
-        fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Fall_State>());
-        return;
-    }
-
-    // 이동 유지
-    fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(direction * moveSpeed);
 }
 
 void Attack_State::Exit(MovementFSM* fsm)
@@ -130,9 +157,6 @@ void Attack_State::Exit(MovementFSM* fsm)
     // fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->Deactivate();
-
-    //fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<SpriteRenderer>()->SetEnabled(false); 
-    //fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<CircleCollider>()->SetEnabled(false); 
 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", false);
 

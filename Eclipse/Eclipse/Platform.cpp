@@ -36,9 +36,9 @@ Platform::Platform()
 	// [ Platform ] : 왼쪽 하단 순서 
 
 	// 0
-	box_object1 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -370.0f, -845.0f });
+	box_object1 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -370.0f, -840.0f });
 	cemetery1 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ 380.0f, -840.0f });
-	box_object2 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 900.0f, -845.0f });
+	box_object2 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 900.0f, -840.0f });
 
 	// 1
 	platform_long1 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Long_Grass>({ -630.0f, -700.0f });
@@ -55,20 +55,20 @@ Platform::Platform()
 	platform_middle2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ -1080.0f, -460.0f });
 	platform_wall2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Wall>({ -1230.0f, -280.0f });
 	platform_middle3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle>({ -365.0f, -460.0f });
-	box_object3 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -445.0f, -385.0f });
+	box_object3 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -445.0f, -380.0f });
 
 	// 4
 	platform_short2 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ -950.0f, -340.0f });
 	cemetery4 = SceneManager::Get().GetCurrentScene()->CreateObject<Cemetery>({ -980.0f, -260.0f });
 	platform_middle4 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 675.0f, -340.0f });
-	box_object4 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 575.0f, -270.0f });
+	box_object4 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ 575.0f, -265.0f });
 
 	// 5
 	platform_middle5 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Middle_Grass>({ 50.0f, -220.0f });
 
 	// 6
 	platform_long3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Long_Grass>({ -635.0f, -100.0f });
-	box_object5 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -670.0f, -30.0f });
+	box_object5 = SceneManager::Get().GetCurrentScene()->CreateObject<BoxObject>({ -670.0f, -25.0f });
 	platform_short3 = SceneManager::Get().GetCurrentScene()->CreateObject<Platform_Short>({ 790.0f, -100.0f });
 
 	// 7

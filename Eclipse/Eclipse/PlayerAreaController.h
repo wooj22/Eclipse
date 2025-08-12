@@ -1,10 +1,14 @@
 #pragma once
 #include "../Direct2D_EngineLib/Script.h"
 
-// 플레이어의 어택 충돌 영역 컨트롤러 
 
+class PlayerFSM; 
+
+// 플레이어의 어택 충돌 영역 컨트롤러
 class PlayerAreaController : public Script
 {
+	PlayerFSM* playerFSM = nullptr; // 플레이어 FSM
+
 public:
 	// script component cycle
 	void Awake() override;

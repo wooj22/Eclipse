@@ -384,7 +384,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.35, 0.35);
+        transform->SetScale(0.4, 0.4);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Box.png"), "Box");

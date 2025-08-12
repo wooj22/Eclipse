@@ -23,6 +23,8 @@ class PlayerAttackArea : public GameObject
 	Animator* animator;  
 	AttackAnimatorController* animController;
 
+	// PlayerFSM* playerFSM = nullptr; // 플레이어 FSM
+
 public:
 	PlayerAttackArea() : GameObject("PlayerAttackArea", "PlayerAttackArea")
 	{
@@ -37,7 +39,6 @@ public:
 		animator->SetController(animController);
 
 		spriteRenderer->layer = 2;
-		
 	}
 	~PlayerAttackArea() override
 	{
@@ -81,4 +82,5 @@ public:
 		spriteRenderer->SetEnabled(false);
 		collider->SetEnabled(false);
 	}
+
 };

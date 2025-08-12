@@ -32,6 +32,7 @@ void PlayScene::Awake()
 	playerAttackArea->GetComponent<SpriteRenderer>()->SetEnabled(false);
 	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+	// playerAttackArea->GetComponent<PlayerAreaController>()->SetPlayerFSM(player->GetComponent<PlayerFSM>());
 
 	// [ player SkillEffect ]
 	skillEffect = CreateObject<PlayerSkillEffect>();
