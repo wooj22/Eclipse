@@ -139,8 +139,8 @@ public:
 	Vector2 MouseWorldPos;					// 실시간 마우스 월드 좌표 
 
 	// attack 
-	float maxAttackDistance = 150.0f;       // 공격 시, 최대 이동 거리 
-	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f -> 0.7f
+	float maxAttackDistance = 230.0f;       // 공격 시, 최대 이동 거리 
+	float attackDesiredTime = 0.2f;         // 도달 시간 0.3f -> 0.7f
 	Vector2 attackDirection;                // 공격 방향 벡터
 	bool isBulletAttack = false;          // 불릿 타임 공격 여부
 
@@ -154,7 +154,7 @@ public:
 	// getter
 	bool GetIsGround() const { return isGround; }
 	bool GetIsSpace() const { return isSpace; }
-	bool GetisShift() const { return isShift; }   // 임시 대쉬
+	bool GetisShift() const { return isShift; }   
 	bool GetIsA() const { return isA; }
 	bool GetIsD() const { return isD; }
 	bool GetIsS() const { return isS; }
