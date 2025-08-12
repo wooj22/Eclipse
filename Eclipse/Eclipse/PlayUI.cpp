@@ -314,6 +314,7 @@ void PlayUI::SceneStart()
 	skillWindowClose_Button->button->onClickListeners.AddListener(
 		this, [this]() {
 			skillWindowBackGround_Image->SetActive(false);
+			GameManager::Get().canUseMouse = true;
 		});
 }
 
@@ -413,6 +414,7 @@ void PlayUI::Update()
 			pauseWindow->SetActive(!pauseActive);
 			GameManager::Get().canUseMouse = pauseActive;
 			skillWindowBackGround_Image->SetActive(false);
+			Time::SetTimeScale(pauseActive ? 1 : 0);
 		}
 		else
 		{
@@ -586,6 +588,7 @@ void PlayUI::CheckPauseUI()
 	{
 		Time::SetTimeScale(0);
 		skillWindowBackGround_Image->SetActive(false);
+		GameManager::Get().canUseMouse = false;
 	}
 	else
 	{
