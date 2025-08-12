@@ -479,14 +479,14 @@ void PlayUI::WaveStartData()
 void PlayUI::StartWaveInfo(int waveNumber)
 {
 	std::wstring waveText;
-	if (waveNumber < 5)
+	if (waveNumber < 4)
 	{
 		waveText = L"공세 " + std::to_wstring(waveNumber) + L"막";
 		bgmSource->SetClip(bgmClip_Wave);
 	}
 	else
 	{
-		waveText = L"Boss";
+		waveText = L"공세 종막";
 		bgmSource->SetClip(bgmClip_Boss);
 	}
 	waveInfo_Text->screenTextRenderer->SetText(waveText);
