@@ -77,6 +77,10 @@ protected: AudioSource* audioSource = nullptr;
 public:
 	HonController();
 
+protected:
+	void OpacityDirecting();
+
+public:
 	// direction
 	void SetDirection(Vector2 dir);
 	Vector2 Getdirection();

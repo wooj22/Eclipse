@@ -27,7 +27,12 @@ void HonBController::Update()
 	if (destroyPending)
 	{
 		if (!audioSource->IsPlaying()) gameObject->Destroy();
-		return;
+		else
+		{
+			// opacity 연출
+			OpacityDirecting();
+			return;
+		}
 	}
 
 	// moving
@@ -66,6 +71,9 @@ void HonBController::Update()
 		// descent move
 		tr->Translate(descentDirection * descentSpeed * Time::GetDeltaTime());
 	}
+
+	// opacity 연출
+	OpacityDirecting();
 }
 
 void HonBController::OnDestroy()
