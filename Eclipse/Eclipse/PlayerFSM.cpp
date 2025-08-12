@@ -63,8 +63,10 @@ void PlayerFSM::Update()
 {
 	InputSetting(); // input 키값 확인
 
-	// [ Q E 스킬 ]
-	UpdateSkillCooldowns(); 
+	// [ 쿨타임 감소 ]
+	UpdateSkillCooldowns();  
+	UpdateDashCooldown(); 
+
 	if (isQ) { TryUseAbsorb(); }
 	if (isE) { TryUseRelease(); }
 	if (isF) { GameManager::Get().g_playUI->PlayerInteraction(); }
@@ -77,7 +79,7 @@ void PlayerFSM::Update()
 
 	FlipXSetting(); // [ FlipX Setting - 실제 이동 방향 기준 ]
 
-	UpdateDashCooldown(); // dash 쿨타임 업데이트
+	
 
 	if (isAbsorbSkillActive) 
 	{
@@ -238,24 +240,6 @@ void PlayerFSM::OnAirAttack() // 어떤 점프 상태에서든 공격했다면 해당 플래그를 �
 }
 
 
-// dash
-void PlayerFSM::UpdateDashCooldown() // Dash 쿨타임 업데이트
-{
-	if (dashCooldownTimer > 0.0f)
-	{
-		dashCooldownTimer -= Time::GetDeltaTime();  // 쿨타임 타이머를 감소시킴
-	}
-}
-
-bool PlayerFSM::CanDash() const // 대시가 가능한지 체크
-{
-	return dashCooldownTimer <= 0.0f;  // 쿨타임이 끝났으면 대시 가능
-}
-
-void PlayerFSM::ResetDashCooldown() // 대시 후 쿨타임 초기화
-{
-	dashCooldownTimer = dashCooldown;
-}
 
 // [ Q E skill ]
 void PlayerFSM::TryUseAbsorb() // [ 흡수 ] 
@@ -407,8 +391,7 @@ void PlayerFSM::UpdateSkillCooldowns()
 	{
 		GameManager::Get().absorbCoolTime = (absorbCooldownTimer -= Time::GetDeltaTime());
 	}
-	else if(GameManager::Get().canUseAbsorb == false)
-		GameManager::Get().CanAbsorb();
+	else if(GameManager::Get().canUseAbsorb == false) GameManager::Get().CanAbsorb();
 }
 
 bool PlayerFSM::CanUseAbsorb() const
@@ -522,3 +505,34 @@ float PlayerFSM::GetSkillCooldown() const
 	float cooldownReduction = GameManager::Get().GetSkillBonus(SkillType::SkillCooldownDown); 
 	return ((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction); // std::max
 } 
+
+float PlayerFSM::GetDashCooldown() const
+{
+	float baseCooldown = dashCooldown; // 기본 쿨타임
+	float cooldownReduction = GameManager::Get().GetSkillBonus(SkillType::Dash);
+	return ((0.0f) > (baseCooldown - cooldownReduction)) ? (0.0f) : (baseCooldown - cooldownReduction); // std::max
+}
+
+
+// [ dash 쿨타임 업데이트 ]
+void PlayerFSM::UpdateDashCooldown()
+{
+	if (dashCooldownTimer > 0.0f)
+	{
+		dashCooldownTimer -= Time::GetDeltaTime();  
+		if (dashCooldownTimer < 0.0f) dashCooldownTimer = 0.0f;
+	}
+
+	//std::string debugStr = "[PlayerFSM] 남은 Dash 쿨타임 = " + std::to_string(dashCooldownTimer) + "\n";
+	//OutputDebugStringA(debugStr.c_str());
+}
+
+bool PlayerFSM::CanDash() const
+{
+	return dashCooldownTimer <= 0.0f;  // 남은 쿨타임이 0이면 가능
+}
+
+void PlayerFSM::ResetDashCooldown()
+{
+	dashCooldownTimer = GetDashCooldown(); // 현재 스킬 레벨 반영
+}

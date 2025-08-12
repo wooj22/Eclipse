@@ -4,14 +4,14 @@
 void Quest::Awake()
 {
 	questLines.push_back(L"");//웨이브 카운터와 동일한 인덱스용
-	questLines.push_back(L"영혼을 50회\n정화(처치)하세요.");
-	questLines.push_back(L"연쇄를 30회\n진행하세요.");
+	questLines.push_back(L"영혼을 20회\n정화(처치)하세요.");
+	questLines.push_back(L"연쇄를 10회\n진행하세요.");
 	questLines.push_back(L"루나를 보호하세요.");
 	questLines.push_back(L"녹스를 처치하세요.");
 
 	questMaxCount.push_back(0);//웨이브 카운터와 동일한 인덱스용
-	questMaxCount.push_back(50);
-	questMaxCount.push_back(30);
+	questMaxCount.push_back(20);
+	questMaxCount.push_back(10);
 	questMaxCount.push_back(5);
 	questMaxCount.push_back(1);
 

@@ -10,6 +10,8 @@
 #include "PauseWindow.h"
 #include "BossHp.h"
 #include "tooltip.h"
+#include "MoonShadowController.h"
+#include "CameraController.h"
 #include <vector>
 
 // »ç¿îµå
@@ -129,6 +131,9 @@ public:
 	}
 	bool ChatActiveCheck() { return chat_Image->IsActive(); }
 	void ClickChatButton();
+
+	void BossIntroEnd();
+	void WaveStartData();
 
 	void AllSkillCheat();
 	void ResetAllSkillCheat();

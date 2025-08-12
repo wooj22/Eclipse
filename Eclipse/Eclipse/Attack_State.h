@@ -14,11 +14,20 @@ class Attack_State : public MovementStateBase
     float timer = 0.0f;
     float moveSpeed = 0.0f;
 
+    bool airAttack = false;
+
     Vector2 startPos;
     Vector2 targetPos;
     Vector2 direction;
 
+	bool isAttackStart = false; // 공격 시작 여부
+
     float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
+
+    // 잔상
+    float afterimageTimer = 0.0f;
+    float afterimageInterval = 0.02f;
+    void CreateAfterImage(MovementFSM* fsm);
 
 public:
     void Enter(MovementFSM* fsm) override;

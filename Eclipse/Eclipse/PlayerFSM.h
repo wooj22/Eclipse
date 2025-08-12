@@ -141,8 +141,9 @@ public:
 
 	// attack 
 	float maxAttackDistance = 150.0f;       // 공격 시, 최대 이동 거리 
-	float attackDesiredTime = 0.7f;         // 도달 시간 0.3f -> 0.7f
+	float attackDesiredTime = 0.3f;         // 도달 시간 0.3f -> 0.7f
 	Vector2 attackDirection;                // 공격 방향 벡터
+	bool isBulletAttack = false;          // 불릿 타임 공격 여부
 
 	// boss
 	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머
@@ -235,8 +236,13 @@ public:
 	int airAttackCount = 0;
 
 	// dash 
-	float dashCooldown = 1.5f;         // 대시 쿨타임 (2초)
+	float dashCooldown = 2.0f;         // 대시 쿨타임 (2초)
 	float dashCooldownTimer = 0.0f;    // 대시 쿨타임 타이머
+
+	void UpdateDashCooldown();
+	bool CanDash() const;
+	void ResetDashCooldown();
+	float GetDashCooldown() const;
 
 	// jump 
 	void OnGround();
@@ -246,10 +252,6 @@ public:
 
 	bool isAttackIgnore = false; // 어택 일정시간 무시 
 
-	// dash 
-	void UpdateDashCooldown(); 
-	bool CanDash() const;
-	void ResetDashCooldown();
 
 	// Q 흡수 
 	bool isAbsorbSkillActive = false;

@@ -27,6 +27,10 @@ void Fall_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer = 0.0f;
     fsm->GetPlayerFSM()->didFastFall = false; 
 
+    // bool isRight = fsm->GetPlayerFSM()->GetLastFlipX(); 
+    // if(isRight) fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(10.0f, 0.0f));
+    // else fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-10.0f, 0.0f));
+
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
 }
@@ -61,8 +65,7 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Hanging ]
-    if (!fsm->GetPlayerFSM()->GetIsGround() /*&& GameManager::Get().CheckUnlock(SkillType::WallJump)*/ 
-        && fsm->GetPlayerFSM()->canHanging)
+    if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->canHanging)
     {
         if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
         {
@@ -79,7 +82,7 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Dash ]
-    if (fsm->GetPlayerFSM()->GetisShift() && GameManager::Get().CheckUnlock(SkillType::Dash) && fsm->GetPlayerFSM()->CanDash())
+    if (fsm->GetPlayerFSM()->GetisShift() && fsm->GetPlayerFSM()->CanDash())
     {
         fsm->ChangeState(std::make_unique<Dash_State>());
         return;
@@ -133,6 +136,18 @@ void Fall_State::FixedUpdate(MovementFSM* fsm)
         fsm->GetPlayerFSM()->GetRigidbody()->gravityScale = fsm->GetPlayerFSM()->fastFallGravity;
     }
 
+    if (fsm->GetPlayerFSM()->didFastFall)
+    {
+        // 잔상 
+        afterimageTimer += Time::GetDeltaTime();
+        if (afterimageTimer >= afterimageInterval)
+        {
+            afterimageTimer = 0.0f;
+
+            CreateAfterImage(fsm);
+        }
+    }
+
     // [ 좌우 이동 ]
     inputX = fsm->GetPlayerFSM()->GetInputX();
     curVelX = fsm->GetPlayerFSM()->GetRigidbody()->velocity.x;
@@ -162,4 +177,44 @@ void Fall_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", false);
 
     fsm->GetPlayerFSM()->GetAudioSource()->Stop();
+}
+
+void Fall_State::CreateAfterImage(MovementFSM* fsm)
+{
+    PlayerFSM* player = fsm->GetPlayerFSM();
+    if (!player) return;
+
+    // 현재 스프라이트 가져오기
+    SpriteRenderer* playerRenderer = player->GetSpriteRenderer();
+    if (!playerRenderer) return;
+
+    shared_ptr<Sprite> currentSprite = playerRenderer->sprite;
+    if (!currentSprite || !currentSprite->texture || !currentSprite->texture->texture2D)
+    {
+        OutputDebugStringA("AfterImage sprite에 texture가 없음!\n");
+        return;
+    }
+
+    // 위치 및 방향
+    Vector2 position = player->GetTransform()->GetPosition();
+    bool flipX = playerRenderer->flipX;
+
+    // 잔상 오브젝트 생성 
+    GameObject* afterImage = player->Instantiate<GameObject>();
+    afterImage->AddComponent<Transform>()->SetScale(player->GetTransform()->GetScale());
+    afterImage->GetComponent<Transform>()->SetPosition(position);
+
+    // 렌더러 추가
+    auto renderer = afterImage->AddComponent<SpriteRenderer>();
+    renderer->sprite = currentSprite;
+    renderer->flipX = flipX;
+    renderer->flipY = playerRenderer->flipY;
+    renderer->SetAlpha(0.1f);
+    renderer->SetColor(1.0f, 1.0f, 0.8f);
+    renderer->renderMode = RenderMode::Lit_ColorTint;
+    renderer->layer = 1;
+
+    // 잔상 스크립트
+    auto afterImageScript = afterImage->AddComponent<AfterImage>();
+    afterImageScript->SetInitialAlpha(0.4f);
 }

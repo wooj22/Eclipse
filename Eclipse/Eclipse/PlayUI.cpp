@@ -441,14 +441,26 @@ void PlayUI::ClickChatButton() {
 	switch (GameManager::Get().waveCount)
 	{
 	case 3:
-		bossHP->SetActive(true);
-
-		break;
+		GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->DirectingBossWave();
+		GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
+		chat_Button->SetActive(false);
+		chat_Image->SetActive(false);
+		return;
 	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 		return;
 	}
+	WaveStartData();
+}
 
+void PlayUI::BossIntroEnd()
+{
+	bossHP->SetActive(true);
+	WaveStartData();
+}
+
+void PlayUI::WaveStartData()
+{
 	GameManager::Get().WaveStart();
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
@@ -461,19 +473,20 @@ void PlayUI::ClickChatButton() {
 	hon_Image->SetActive(true);
 	stop_Button->SetActive(true);
 	quest_Image->SetActive(true);
+	GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
 }
 
 void PlayUI::StartWaveInfo(int waveNumber)
 {
 	std::wstring waveText;
-	if (waveNumber < 5)
+	if (waveNumber < 4)
 	{
 		waveText = L"공세 " + std::to_wstring(waveNumber) + L"막";
 		bgmSource->SetClip(bgmClip_Wave);
 	}
 	else
 	{
-		waveText = L"Boss";
+		waveText = L"공세 종막";
 		bgmSource->SetClip(bgmClip_Boss);
 	}
 	waveInfo_Text->screenTextRenderer->SetText(waveText);

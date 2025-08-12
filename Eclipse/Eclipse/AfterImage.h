@@ -18,13 +18,12 @@ public:
     void Awake() override
     {
         renderer = gameObject->GetComponent<SpriteRenderer>();
+        renderer->layer = 23;
     }
 
     void Update() override
     {
         if (!renderer) return;
-
-        // OutputDebugStringA("AfterImage Update µÇ´ÂÁß.. \n");
 
         timer += Time::GetDeltaTime();
         float t = timer / lifeTime;

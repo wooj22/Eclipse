@@ -57,10 +57,14 @@ BackGround01_Moon::BackGround01_Moon()
 	spriteRenderer = AddComponent<SpriteRenderer>();
 	parallax = AddComponent<ParallaxLayer>();
 
+	name = "Moon";
+	tag = "Moon";
+
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Environment/BG02.png");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "BackGround01_Moon");
 	spriteRenderer->sprite = new_sprite;
 	spriteRenderer->layer = -9;
+	spriteRenderer->renderMode = RenderMode::Lit_Glow;
 
 	parallax->parallaxFactor = 0.8;
 }

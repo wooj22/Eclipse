@@ -18,7 +18,7 @@ public:
 
 		// 프레임별 서로 다른 시간 비중 적용
 		float shortTime = 1.0f;  // 기본 가중치
-		float longTime = 3.0f;   // 느리게 보이는 가중치
+		float longTime = 2.0f;   // 느리게 보이는 가중치
 
 		// 각 프레임 가중치 배열 (총 11개)
 		std::vector<float> weights;
