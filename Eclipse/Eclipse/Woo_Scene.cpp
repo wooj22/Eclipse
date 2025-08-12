@@ -6,9 +6,7 @@
 void Woo_Scene::Awake()
 {
 	// camera init
-	cam = CreateObject<GameObject>();
-	cam->AddComponent<Transform>();
-	cam->AddComponent<Camera>(1920, 1080); 
+	cam = CreateObject<InGameCamera>();
 
 	// gameobject
 	// [Title Sample]
@@ -86,18 +84,6 @@ void Woo_Scene::Awake()
 	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
 	playerAttackArea->SetActive(false);
 	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // ÇÃ·¹ÀÌ¾î FSM¿¡ ¿¬°á
-
-	// camera tartget
-	Camera* camera = cam->GetComponent<Camera>();
-	camera->SetTarget(player->transform);
-	camera->SetTargetTraceSpeed(250.0f);
-	camera->SetTargetTraceLimitX(30.0f);
-	camera->SetTargetTraceLimitY(50.0f);
-
-	// camera map condition
-	Rect mapRect;
-	mapRect.size = { 2560, 1920 }; // map position
-	camera->SetMapCondition(mapRect);
 
 	/* À±¸ðÇÜ²¨ */
 	playUI = CreateObject<PlayUI>();

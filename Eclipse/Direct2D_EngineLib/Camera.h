@@ -16,7 +16,7 @@ class Camera : public Component
 private:
 	Transform* transform = nullptr;
 	Vector2 viewSize = { 1920.0f, 1080.0f };
-	float zoom = 2.f;
+	float zoom = 1.f;
 
 	// matrix
 	D2D1::Matrix3x2F worldMatrix = D2D1::Matrix3x2F::Identity();
