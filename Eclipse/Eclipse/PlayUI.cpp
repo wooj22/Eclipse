@@ -442,7 +442,7 @@ void PlayUI::ClickChatButton() {
 	{
 	case 3:
 		bossHP->SetActive(true);
-
+		GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->DirectingBossWave();
 		break;
 	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
