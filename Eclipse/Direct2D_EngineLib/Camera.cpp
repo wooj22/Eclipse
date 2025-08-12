@@ -62,8 +62,18 @@ void Camera::Update()
     }
     transform->Translate(shakeOffset);
 
-    // matrix udpate
-    worldMatrix = transform->GetWorldMatrix();
+    // zoom
+    Vector2 camPos = transform->GetWorldPosition();
+    float scale = 1.0f / zoom;
+
+    D2D1::Matrix3x2F zoomMatrix =
+        D2D1::Matrix3x2F::Translation(-camPos.x, -camPos.y) *
+        D2D1::Matrix3x2F::Scale(scale, scale) *
+        D2D1::Matrix3x2F::Translation(camPos.x, camPos.y);
+
+
+    // maxtrix update
+    worldMatrix = zoomMatrix * transform->GetWorldMatrix();
     inverseMatrix = worldMatrix;
     inverseMatrix.Invert();
 
