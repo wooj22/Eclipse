@@ -72,7 +72,6 @@ void TitleUI::SceneStart()
 	end_Button->rectTransform->SetSize(300, 50);
 	end_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink,0));
 
-	//TODOMO : 이미지로하면 텍스트는 제거
 	play_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	play_Button->screenTextRenderer->SetText(L"새로하기");
 	play_Button->screenTextRenderer->SetFontSize(30);
