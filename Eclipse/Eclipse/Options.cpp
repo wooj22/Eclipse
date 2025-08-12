@@ -241,6 +241,10 @@ void Options::SceneStart()
 	controlKeyTitles[1]->rectTransform->SetPosition(-200, -125);
 	controlKeyTitles[1]->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
 
+	soundMaster_slider->slider->SetValue(AudioSystem::Get().GetMasterVolume());
+	soundBGM_slider->slider->SetValue(AudioSystem::Get().GetBGMVolume());
+	soundSFX_slider->slider->SetValue(AudioSystem::Get().GetSFXVolume());
+	soundAMB_slider->slider->SetValue(AudioSystem::Get().GetAMBVolume());
 	
 	soundMaster_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetMasterVolume(soundMaster_slider->GetComponent<Slider>()->GetValue()); });
 	soundBGM_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetBGMVolume(soundBGM_slider->GetComponent<Slider>()->GetValue()); });
