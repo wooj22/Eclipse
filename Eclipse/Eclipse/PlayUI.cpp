@@ -84,7 +84,7 @@ void PlayUI::Awake()
 	// audioSource 채널 그룹 지정 및 사운드 재생
 	bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
 	sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
-	//bgmSource->SetVolume(1);
+	// bgmSource->SetVolume(1);
 	bgmSource->SetLoop(true);
 	bgmSource->SetClip(bgmClip_Main);
 	bgmSource->Play();
@@ -94,6 +94,8 @@ void PlayUI::Awake()
 
 	sfxSource->SetLoop(false);
 	sfxSource->SetClip(sfxClip_Button1);
+
+	// SoundManager::Get().FadeInMaster(2.0f);
 }
 
 void PlayUI::SceneStart()
@@ -364,6 +366,7 @@ void PlayUI::SceneStart()
 			GameManager::Get().canUseMouse = true;
 			ButtonClickSound();
 		});
+
 }
 
 void PlayUI::Update()

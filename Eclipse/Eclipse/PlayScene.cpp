@@ -46,6 +46,7 @@ void PlayScene::Start()
 	__super::Start();
 
 	// Ambient sounds will play periodically through the AmbientSoundManager's Update method
+
 }
 
 void PlayScene::Update()
