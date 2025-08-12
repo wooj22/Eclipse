@@ -158,7 +158,7 @@ void TitleUI::SceneStart()
 
 void TitleUI::Update()
 {
-	titleSpell_Image->transform->Rotate(0.05);
+	titleSpell_Image->transform->Rotate(5 * Time::GetDeltaTime());
 
 	glowtimer += Time::GetDeltaTime();  // 매 프레임 시간 누적
 
