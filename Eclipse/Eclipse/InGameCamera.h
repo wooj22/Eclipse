@@ -12,7 +12,6 @@ private:
 	Transform* transform;
 	Camera* camera;
 	CameraController* controller;
-	// TODO :: Camera Controller
 
 public:
 	InGameCamera()

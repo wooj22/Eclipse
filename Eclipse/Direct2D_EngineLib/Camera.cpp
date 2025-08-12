@@ -140,7 +140,8 @@ void Camera::TargetTrace()
         // trace
         if (moveDir.x != 0.0f || moveDir.y != 0.0f)
         {
-            transform->Translate(moveDir.Normalized() * targetTraceSpeed * Time::GetDeltaTime());
+            transform->Translate(moveDir.Normalized().x * targetTraceXSpeed * Time::GetDeltaTime(),
+                moveDir.Normalized().y * targetTraceYSpeed * Time::GetDeltaTime());
         }
     }
 }

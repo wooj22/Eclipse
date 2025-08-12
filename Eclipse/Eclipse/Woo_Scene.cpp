@@ -70,7 +70,8 @@ void Woo_Scene::Awake()
 	/*--------------------------------------------------*/
 	/* º±πŒ¿Ã≤® */
 	// [ player ] 
-	player = CreateObject<Player>({300,0});
+	player = CreateObject<Player>();
+	player->transform->SetPosition(0, 500);
 
 	// [ playerAttack_Parent ]
 	playerAttack_Parent = CreateObject<GameObject>();

@@ -52,6 +52,24 @@ void ScriptSystem::Update()
 	}
 }
 
+// LateUpdate -> Update Loop 이후 호출
+void ScriptSystem::LateUpdate()
+{
+	// pending_components push
+	for (Script* script : pending_components)
+	{
+		components.push_back(script);
+	}
+	pending_components.clear();
+
+
+	// update
+	for (Script* script : components)
+	{
+		script->LateUpdate();
+	}
+}
+
 // fixed udpate -> deltaTime에 따라 늦어졌다면 여러번 호출하고 넘어감
 void ScriptSystem::FixedUpdate()
 {
