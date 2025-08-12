@@ -12,7 +12,7 @@ public:
 	{
 		name = "Player_Skill_Effect";
 		loop = false;
-		duration = 0.25f;
+		duration = 0.5f;
 		const std::string basePath = "../Resource/Moon/Texture/Player_Skill_Effect/";
 		const int frameCount = 8;
 		const float frameTime = duration / frameCount;

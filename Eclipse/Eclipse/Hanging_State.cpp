@@ -11,6 +11,8 @@
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
+#include "BulletTime_State.h"
+#include "Attack_State.h"
 
 
 void Hanging_State::Enter(MovementFSM * fsm)
@@ -57,6 +59,36 @@ void Hanging_State::Update(MovementFSM* fsm)
         fsm->ChangeState(std::make_unique<Fall_State>());
         return;
     }
+
+
+    // [ Attack / Bullet ]
+    if (fsm->GetPlayerFSM()->CanAttack() && fsm->GetPlayerFSM()->GetIsLButton())
+    {
+        if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
+
+        fsm->GetPlayerFSM()->holdTime += Time::GetDeltaTime();
+
+        // [ BulletTime ]
+        if (fsm->GetPlayerFSM()->CanAttack() &&
+            fsm->GetPlayerFSM()->holdTime >= fsm->GetPlayerFSM()->bulletTimeThreshold)
+        {
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
+        }
+    }
+    else
+    {
+        // [ Attack ]
+        if (fsm->GetPlayerFSM()->CanAttack() &&
+            fsm->GetPlayerFSM()->isHolding && fsm->GetPlayerFSM()->holdTime < fsm->GetPlayerFSM()->bulletTimeThreshold)
+        {
+            fsm->GetPlayerFSM()->OnAirAttack();
+            fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Attack_State>());
+        }
+
+        // ÃÊ±âÈ­
+        fsm->GetPlayerFSM()->isHolding = false; fsm->GetPlayerFSM()->holdTime = 0.0f;
+    }
+
 
     // [ Idle ] 
     if (fsm->GetPlayerFSM()->GetIsGround())

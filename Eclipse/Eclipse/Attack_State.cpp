@@ -24,8 +24,8 @@ void Attack_State::Enter(MovementFSM* fsm)
     baseMaxDistance = fsm->GetPlayerFSM()->maxAttackDistance * skillBonus;
     desiredTime = fsm->GetPlayerFSM()->attackDesiredTime;
 
-    std::string dbg = "[Attack_State] Attack MaxDist: " + std::to_string(baseMaxDistance) + "\n";
-    OutputDebugStringA(dbg.c_str());
+    //std::string dbg = "[Attack_State] Attack MaxDist: " + std::to_string(baseMaxDistance) + "\n";
+    //OutputDebugStringA(dbg.c_str());
 
     // 애니메이션 재생 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", true);
@@ -36,11 +36,18 @@ void Attack_State::Enter(MovementFSM* fsm)
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
     float actualDistance = (((toMouse.Magnitude()) < (baseMaxDistance)) ? (toMouse.Magnitude()) : (baseMaxDistance)); // sts::min 
-    direction = toMouse.Normalized();
+	direction = toMouse.Normalized(); // 방향 벡터 
     targetPos = startPos + direction * actualDistance;
 
     // 속도 계산: 거리 / 시간
     moveSpeed = actualDistance / desiredTime;
+
+    // 방향 벡터 저장 
+    fsm->GetPlayerFSM()->attackDirection = direction;
+
+    Vector2 dir = fsm->GetPlayerFSM()->attackDirection;
+    std::string dbg = "[Attack_State] AttackDirection: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ")\n";
+    OutputDebugStringA(dbg.c_str());
 
 
     // [ 이펙트, 충돌 ]
