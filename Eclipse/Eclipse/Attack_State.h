@@ -18,6 +18,8 @@ class Attack_State : public MovementStateBase
     Vector2 targetPos;
     Vector2 direction;
 
+	bool isAttackStart = false; // 공격 시작 여부
+
     float Lerp(float a, float b, float t) { return a + (b - a) * t; } // 선형보간 
 
 public:

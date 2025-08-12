@@ -10,14 +10,15 @@
 #include "../Direct2D_EngineLib/Vector2.h"
 
 #include "Fall_State.h"
-#include "../Direct2D_EngineLib/Input.h"
 
 void Attack_State::Enter(MovementFSM* fsm)
 {
     OutputDebugStringA("[Attack_State] Player의 Attack_State 진입 \n");
 
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = false;
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
+    // fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = 0.0f;
+    fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 50.0f;
 
     // 초기화 : 스킬 해금 레벨에 따라 보정
     float skillBonus = fsm->GetPlayerFSM()->GetAttackRangeBonus();
@@ -27,33 +28,32 @@ void Attack_State::Enter(MovementFSM* fsm)
     // 애니메이션 재생 
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Attack", true);
 
-    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition(); // 현재 위치 
-    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치
+    startPos = fsm->GetPlayerFSM()->GetTransform()->GetPosition();   // 현재 위치 
+    Vector2 toMouse = fsm->GetPlayerFSM()->MouseWorldPos - startPos; // 목표 위치 
 
     // 이동 거리 제한 (마우스보다 멀리 못 감)
     float actualDistance = (toMouse.Magnitude() < baseMaxDistance) ? toMouse.Magnitude() : baseMaxDistance;
     direction = toMouse.Normalized();
 
 
-    if (!fsm->GetPlayerFSM()->GetIsGround()) // 땅에 없을 때만 이동 계산
+    // [ 공중 이동 조건 ]
+    bool airAttack = !fsm->GetPlayerFSM()->GetIsGround() ||
+        (fsm->GetPlayerFSM()->isBulletAttack && fsm->GetPlayerFSM()->MouseWorldPos.y > startPos.y);
+
+    if (airAttack)
     {
         targetPos = startPos + direction * actualDistance;
-
-        // 속도 계산 : 거리 / 시간
-        moveSpeed = actualDistance / desiredTime;
-
-        std::string dbg = "[Attack_State] Attack desiredTime (Air) : " + std::to_string(desiredTime) + ")\n";
-        OutputDebugStringA(dbg.c_str());
+        moveSpeed = actualDistance / desiredTime; // 속도 계산 : 거리 / 시간
+        fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(0, 5.0f));
+        OutputDebugStringA("[Attack_State] 공중 공격 진입 \n");
     }
     else
     {
-        // 땅에 있을 때는 제자리에서 공격
+        // 땅에서 제자리 공격
         targetPos = startPos;
         targetPos = toMouse.Normalized();
         moveSpeed = 0.0f;
-
-        std::string dbg = "[Attack_State] Attack desiredTime (Ground) : " + std::to_string(desiredTime) + ")\n";
-        OutputDebugStringA(dbg.c_str());
+        OutputDebugStringA("[Attack_State] 제자리 공격 진입 \n");
     }
 
 
@@ -92,7 +92,6 @@ void Attack_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Attack);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 
-    fsm->GetPlayerFSM()->GetRigidbody()->velocity = direction * moveSpeed;
 }
 
 void Attack_State::Update(MovementFSM* fsm)
@@ -103,6 +102,11 @@ void Attack_State::Update(MovementFSM* fsm)
 void Attack_State::FixedUpdate(MovementFSM* fsm)
 {
     if (!fsm->GetPlayerFSM()->GetRigidbody() || !fsm->GetPlayerFSM()->GetTransform()) return;
+
+    if (!isAttackStart)
+    {
+       fsm->GetPlayerFSM()->GetRigidbody()->velocity = direction * moveSpeed; // 이동
+    }
 
     if (timer >= desiredTime)
     {
@@ -134,10 +138,10 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
 void Attack_State::Exit(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->OnAirAttack();
+    fsm->GetPlayerFSM()->isBulletAttack = false;
 
     fsm->GetPlayerFSM()->GetRigidbody()->useGravity = true;
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.y = 0;
-    // fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2::zero;
 
     fsm->GetPlayerFSM()->GetPlayerAttackArea()->Deactivate();
 

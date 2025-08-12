@@ -27,11 +27,12 @@ void BulletTime_State::Update(MovementFSM* fsm)
 
     fsm->GetPlayerFSM()->timer += unscaledDelta;
 
-    // [ Attack ] 마우스 왼쪽 버튼에서 손을 뗐을 때 → 공격
+    // [ Attack ] 마우스 왼쪽 버튼에서 손을 뗐을 때 -> 공격
     if (fsm->GetPlayerFSM()->GetIsLButtonUp())
     {
         Time::SetTimeScale(1.0f); 
         fsm->GetPlayerFSM()->OnAirAttack();
+        fsm->GetPlayerFSM()->isBulletAttack = true; 
         fsm->ChangeState(std::make_unique<Attack_State>());
         return;
     }
