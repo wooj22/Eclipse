@@ -291,8 +291,6 @@ void PlayerFSM::TryUseRelease() // [ 规免 ]
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist <= releaseEffectRange)
 		{
-			// 1檬 第俊 去 力芭
-			// InvokeSystem::Invoke(1.0f, obj, &GameObject::Destroy);
 			obj->Destroy(); // 去 力芭
 
 			removedCount++;

@@ -69,9 +69,18 @@ void Jump_Wall_State::Update(MovementFSM* fsm)
             fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-doubleJumpXPower, wallJumpForce));
         }
 
-        OutputDebugStringA(" 더블 점프 합니다 \n");
         fsm->GetPlayerFSM()->OnJump(JumpPhase::DoubleJump);
         fsm->GetPlayerFSM()->canDoubleJump = false;
+
+        // 더블 점프 애니메이션 재실행 
+        if (fsm->GetPlayerFSM()->GetPlayerAnimatorController()->GetSkillAvailable())
+        {
+            fsm->GetPlayerFSM()->GetAnimatorController()->ChangeAnimation(fsm->GetPlayerFSM()->GetPlayerAnimatorController()->jumpState_Y);
+        }
+        else
+        {
+            fsm->GetPlayerFSM()->GetAnimatorController()->ChangeAnimation(fsm->GetPlayerFSM()->GetPlayerAnimatorController()->jumpState);
+        }
 
         fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
     }
