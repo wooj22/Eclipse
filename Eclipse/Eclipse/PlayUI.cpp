@@ -356,7 +356,7 @@ void PlayUI::Update()
 
 	if (!GameManager::Get().canUseAbsorb)
 	{
-		float cooltime = GameManager::Get().absorbCoolTime/GameManager::Get().maxabsorbCoolTime;
+		float cooltime = (GameManager::Get().absorbCoolTime) / (10 - GameManager::Get().GetSkillBonus(SkillType::SkillCooldownDown));
 		skill1CollTimeFilter_Image->imageRenderer->fillAmount = cooltime;
 	}
 
