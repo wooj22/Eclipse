@@ -20,9 +20,6 @@ void Camera::Update()
 {
     if (!transform) return;
 
-    // target trace
-    TargetTrace();              
-
     // shake
     if (isShaking)
     {
@@ -71,6 +68,8 @@ void Camera::Update()
         D2D1::Matrix3x2F::Scale(scale, scale) *
         D2D1::Matrix3x2F::Translation(camPos.x, camPos.y);
 
+    // target trace
+    TargetTrace();
 
     // maxtrix update
     worldMatrix = zoomMatrix * transform->GetWorldMatrix();
