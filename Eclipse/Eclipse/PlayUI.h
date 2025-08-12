@@ -71,14 +71,14 @@ public:
 	UI_Image* hon_Image;			// 혼 이미지
 	UI_Text* hon_Text;				// 혼 개수 텍스트
 
-	UI_Image* skill1_Image;			// 스킬1 이미지
-	UI_Image* skill1Icon_Image;		// 스킬1 이미지
-	UI_Text* skill1_Text;			// 스킬1 텍스트
-	UI_Text* skill1CollTime_Text;	// 스킬1 쿨타임텍스트
+	UI_Image* skill1_Image;					//스킬1 이미지
+	UI_Image* skill1Icon_Image;				//스킬1 아이콘 이미지
+	UI_Image* skill1Key_Image;				//스킬1 텍스트
+	UI_Image* skill1CollTimeFilter_Image;	//스킬1 아이콘 이미지
 
 	UI_Image* skill2_Image;			// 스킬2 이미지
 	UI_Image* skill2Icon_Image;		// 스킬2 이미지
-	UI_Text* skill2_Text;			// 스킬1 텍스트
+	UI_Image* skill2Key_Image;		// 스킬1 텍스트
 
 	UI_Text* waveInfo_Text;			// 웨이브 정보 텍스트
 

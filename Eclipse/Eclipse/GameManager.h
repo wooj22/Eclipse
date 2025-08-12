@@ -99,9 +99,10 @@ public:
 	ChatCondition questState;
 
 	//플레이어 스킬
-	float absorbCoolTime;		// Q 흡수 쿨타임				PlayerFSM -> absorbCooldownTimer
-	bool canUseAbsorb;			// Q 흡수 스킬 사용 가능 여부	PlayerFSM -> isAbsorbSkillActive
-	bool canUseRelease ;		// E 방출 스킬 사용 가능 여부	PlayerFSM -> isReleaseSkillAvailable
+	float absorbCoolTime;		// Q 흡수 쿨타임				
+	float maxabsorbCoolTime;	// 현재 Q 흡수 쿨타임			
+	bool canUseAbsorb;			// Q 흡수 스킬 사용 가능 여부	
+	bool canUseRelease ;		// E 방출 스킬 사용 가능 여부	
 
 	std::unordered_map<SkillType, SkillInfo> skillTree;
 	std::unordered_map<SkillType, std::vector<float>> skillValue;
