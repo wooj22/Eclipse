@@ -275,9 +275,10 @@ public:
 	void TryUseRelease();
 	GameObject* FindNearestSoulInRange(float range);
 
-private:
+public:
 	// [ FSM setting ] 
 	void InputSetting();
+	void ResetInputs();
 	void SpeedSetting();
 	void FlipXSetting();
 

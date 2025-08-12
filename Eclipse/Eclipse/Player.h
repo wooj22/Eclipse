@@ -71,6 +71,7 @@ public:
 		rigidbody->collisionDetection = CollisionDetection::Continuous;
 
 		playerFSM = AddComponent<PlayerFSM>();
+		playerFSM->ResetInputs(); // 플레이어 생성 시, 입력값 초기화 
 
 		// [ Shadow ] 
 		player_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<Shadow>();
@@ -127,8 +128,8 @@ public:
 		// AABB 영역 
 		// collider->DebugColliderDraw();
 
-		//std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
-		//OutputDebugStringA(debugStr.c_str());
+		std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
+		OutputDebugStringA(debugStr.c_str());
 	}
 
 	void UpdateShadow()
