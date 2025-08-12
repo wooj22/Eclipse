@@ -4,6 +4,7 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/BoxCollider.h"
 #include "../Direct2D_EngineLib/Rigidbody.h"
+#include "../Direct2D_EngineLib/WorldTextRenderer.h"
 
 #include "NPCInteraction.h"
 #include "PlayUI.h"
@@ -16,6 +17,7 @@ public:
 	BoxCollider* collider;
 	NPCInteraction* script;
 	GameObject* interactImage;
+	GameObject* interactText;
 
 public:
 	// game object cycle

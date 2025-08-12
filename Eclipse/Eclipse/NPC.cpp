@@ -10,11 +10,13 @@ NPC::NPC() : GameObject("NPC") {
 	interactImage = SceneManager::Get().GetCurrentScene()->CreateObject<GameObject>();
 	interactImage->AddComponent<Transform>();
 	interactImage->AddComponent<SpriteRenderer>();
-	auto npcint = ResourceManager::Get().CreateTexture2D("../Resource/mo/NPCIntercetion.png");
-	interactImage->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(npcint, "NPCIntercetion");
-	interactImage->transform->SetParent(transform);
-	interactImage->transform->SetPosition(0, 100);
-	interactImage->transform->SetScale(0.2f, 0.2f);
+
+	
+	interactText = SceneManager::Get().GetCurrentScene()->CreateObject<GameObject>();
+	interactText->AddComponent<Transform>();
+	interactText->AddComponent<WorldTextRenderer>();
+	interactText->transform->SetParent(interactImage->transform);
+
 	interactImage->SetActive(false);
 	script->SetNPC(interactImage);
 }
@@ -26,6 +28,16 @@ void NPC::Awake()
 	rigidbody->isKinematic = true;
 	collider->isTrigger = true;
 	collider->size = {100, 100};
+
+	auto npcint = ResourceManager::Get().CreateTexture2D("../Resource/mo/F.png");
+	interactImage->GetComponent<SpriteRenderer>()->sprite = ResourceManager::Get().CreateSprite(npcint, "F");
+	interactImage->transform->SetParent(transform);
+	interactImage->transform->SetPosition(0, 100);
+	interactImage->transform->SetScale(0.5, 0.5);
+
+	interactText->transform->SetPosition(150, 0);
+	interactText->GetComponent<WorldTextRenderer>()->SetLayout(200,50);
+	interactText->GetComponent<WorldTextRenderer>()->SetText(L"상호 작용");
 }
 
 void NPC::SceneStart()
