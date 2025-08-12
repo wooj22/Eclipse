@@ -17,15 +17,15 @@ void Credit::Awake()
 
 	creditWindowBackGroundGradient_Image->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
 	background_Image->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	splitter_Image->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	close_Button->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	creditTitle_Text->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	plannerTitle_Text->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	artTitle_Text->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	programmerTitle_Text->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	plannerName_Text->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	artName_Text->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
-	programmerName_Text->rectTransform->SetParent(creditWindowBackGround_Image->rectTransform);
+	splitter_Image->rectTransform->SetParent(background_Image->rectTransform);
+	close_Button->rectTransform->SetParent(background_Image->rectTransform);
+	creditTitle_Text->rectTransform->SetParent(background_Image->rectTransform);
+	plannerTitle_Text->rectTransform->SetParent(background_Image->rectTransform);
+	artTitle_Text->rectTransform->SetParent(background_Image->rectTransform);
+	programmerTitle_Text->rectTransform->SetParent(background_Image->rectTransform);
+	plannerName_Text->rectTransform->SetParent(background_Image->rectTransform);
+	artName_Text->rectTransform->SetParent(background_Image->rectTransform);
+	programmerName_Text->rectTransform->SetParent(background_Image->rectTransform);
 
 	creditWindowBackGround_Image->SetActive(false);
 }
@@ -35,6 +35,7 @@ void Credit::SceneStart()
 	creditWindowBackGround_Image->rectTransform->SetSize(1920, 1080);
 	creditWindowBackGroundGradient_Image->rectTransform->SetSize(1920, 1080);
 	background_Image->rectTransform->SetSize(850, 600);
+	background_Image->rectTransform->SetPosition(0, -150);
 	splitter_Image->rectTransform->SetSize(63, 591);
 
 	auto WindowBackGroundImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/WindowBackGround.png");
