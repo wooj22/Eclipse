@@ -19,9 +19,10 @@ void CameraController::Start()
 {
 	// set target
 	camera->SetTarget(playerTr);
-	camera->SetTargetTraceSpeed(250.0f);
-	camera->SetTargetTraceLimitX(30.0f);
-	camera->SetTargetTraceLimitY(50.0f);
+	camera->SetTargetTraceXSpeed(450.0f);
+	camera->SetTargetTraceYSpeed(1500.0f);
+	camera->SetTargetTraceLimitX(20.0f);
+	camera->SetTargetTraceLimitY(30.0f);
 
 	// set map rect
 	camera->SetMapCondition(mapRect);

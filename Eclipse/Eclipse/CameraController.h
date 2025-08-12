@@ -15,8 +15,6 @@ private:
 
 	// ref
 	Camera* camera;
-
-	// player
 	Transform* playerTr;
 
 public:
