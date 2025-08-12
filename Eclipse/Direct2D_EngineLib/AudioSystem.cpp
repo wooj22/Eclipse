@@ -65,24 +65,52 @@ void AudioSystem::UnInit()
 
 void AudioSystem::SetMasterVolume(float volume)
 {
+	masterVolume = volume;
+
 	if (masterGroup)
 		masterGroup->setVolume(volume);
 }
 
 void AudioSystem::SetBGMVolume(float volume)
 {
+	bgmVolume = volume;
+
 	if (bgmGroup)
 		bgmGroup->setVolume(volume);
 }
 
 void AudioSystem::SetSFXVolume(float volume)
 {
+	sfxVolume = volume;
+
 	if (sfxGroup)
 		sfxGroup->setVolume(volume);
 }
 
 void AudioSystem::SetAMBVolume(float volume)
 {
+	ambVolume = volume;
+
 	if (ambGroup)
 		ambGroup->setVolume(volume);
+}
+
+float AudioSystem::GetMasterVolume()
+{
+	return masterVolume;
+}
+
+float AudioSystem::GetBGMVolume()
+{
+	return bgmVolume;
+}
+
+float AudioSystem::GetSFXVolume()
+{
+	return sfxVolume;
+}
+
+float AudioSystem::GetAMBVolume()
+{
+	return ambVolume;
 }
