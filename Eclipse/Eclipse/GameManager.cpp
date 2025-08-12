@@ -61,8 +61,8 @@ void GameManager::SkillReset()
 	skillTree[SkillType::JumpAttackExtra] = { false, 0, 1, SkillType::WallJump, 1,{100} };
 
 	skillTree[SkillType::Dash] = { false, 0, 2, SkillType::COUNT, 0,{ 50,100 } };
-	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::SkillCooldownDown, 2,{50,100} };
-	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::FastFall, 2,{ 100 } };
+	skillTree[SkillType::SkillCooldownDown] = { false, 0, 2, SkillType::Dash, 2,{50,100} };
+	skillTree[SkillType::FastFall] = { false, 0, 1, SkillType::SkillCooldownDown, 2,{ 100 } };
 
 
 	//스킬값 초기화
