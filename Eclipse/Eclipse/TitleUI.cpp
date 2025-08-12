@@ -167,6 +167,15 @@ void TitleUI::Update()
 	float glow = s * 150.0f;
 	titleLogo_Image->GetComponent<SpriteRenderer>()->SetGlowAmmount(glow);
 
+
+	if (Input::GetKeyDown(VK_ESCAPE)&&(optionUI->IsActive()|| creditUI->creditWindowBackGround_Image->IsActive()))
+	{
+		play_Button->SetActive(true);
+		optionUI->SetActive(false);
+		creditUI->creditWindowBackGround_Image->SetActive(false);
+		underscore_Image->rectTransform->SetPosition(0, -20);
+		underscore_Image->rectTransform->SetSize(150, 150);
+	}
 }
 
 void TitleUI::Destroyed()
