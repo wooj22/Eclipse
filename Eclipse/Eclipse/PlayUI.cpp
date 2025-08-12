@@ -30,12 +30,12 @@ void PlayUI::Awake()
 	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2Key_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
-	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	skillWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowSplitter_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowName_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
@@ -165,6 +165,7 @@ void PlayUI::SceneStart()
 	hon_Image->rectTransform->SetSize(70, 70);
 	auto honImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Hon.png");
 	hon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
+	//hon_Image->imageRenderer->layer = 10;
 
 	hon_Text->rectTransform->SetPosition(200, 0);
 	hon_Text->rectTransform->SetSize(330, 50);
@@ -235,9 +236,11 @@ void PlayUI::SceneStart()
 	skillWindowBackGround_Image->rectTransform->SetSize(1920, 1080);
 	skillWindowBackGroundGradient_Image->rectTransform->SetSize(1920, 1080);
 
-	skillWindowClose_Button->rectTransform->SetSize(1248, 702);
+	skillWindowClose_Button->rectTransform->SetPosition(550, 280);
+	skillWindowClose_Button->rectTransform->SetSize(83, 79);
 	auto skillWindowClose_ButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
 	skillWindowClose_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowClose_ButtonTexture, "BackButton");
+	//skillWindowClose_Button->imageRenderer->layer = 20;
 
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
@@ -277,11 +280,13 @@ void PlayUI::SceneStart()
 	skillHonBig_Image->rectTransform->SetSize(50,50);
 	skillHon_Image->rectTransform->SetPosition(480,-280);
 	skillHon_Image->rectTransform->SetSize(30,30);
+	//skillHon_Image->imageRenderer->layer = 10;
 	skillHon_Text->rectTransform->SetPosition(120,0);
 	skillHon_Text->rectTransform->SetSize(200,35);
 	skillHon_Text->screenTextRenderer->SetFontSize(25);
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillHon_Text->screenTextRenderer->SetText(L"x 000");
+	//skillHon_Text->screenTextRenderer->layer = 10;
 
 
 	// 스킬창 제목
@@ -289,7 +294,7 @@ void PlayUI::SceneStart()
 	skillWindowName_Image->rectTransform->SetSize(273, 74);
 	auto SkillWindowNameGradientTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindowName.png");
 	skillWindowName_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(SkillWindowNameGradientTexture, "SkillWindowName");
-
+	//skillWindowName_Image->imageRenderer->layer = 10;
 	
 	for (UI_Button* btn : pauseCheckButtos)
 	{
@@ -309,7 +314,10 @@ void PlayUI::SceneStart()
 				GameManager::Get().canUseMouse = true;
 		});
 
-
+	skillWindowClose_Button->button->onClickListeners.AddListener(
+		this, [this]() {
+			skillWindowBackGround_Image->SetActive(false);
+		});
 }
 
 void PlayUI::Update()
@@ -399,25 +407,40 @@ void PlayUI::Update()
 
 	// TODOMO : 아래 입력 삭제 
 
-
-
-	if (((Input::GetKeyDown(VK_ESCAPE)&& skillWindowBackGround_Image->IsActive())||Input::GetKeyDown(VK_TAB)))
+	if (Input::GetKeyDown(VK_ESCAPE))
 	{
-		if (pauseWindow->IsActive() || chat_Image->IsActive())
-			return;
-		if (skillWindowBackGround_Image->IsActive())
+		if (!skillWindowBackGround_Image->IsActive())
 		{
-			GameManager::Get().canUseMouse = true;
+			// Pause 토글
+			bool pauseActive = pauseWindow->IsActive();
+			pauseWindow->SetActive(!pauseActive);
+			GameManager::Get().canUseMouse = pauseActive;
 			skillWindowBackGround_Image->SetActive(false);
 		}
 		else
 		{
-			GameManager::Get().canUseMouse = false;
-			skillWindowBackGround_Image->SetActive(true);
+			// 스킬 창 닫기
+			GameManager::Get().canUseMouse = true;
+			skillWindowBackGround_Image->SetActive(false);
+		}
+	}
+
+	if (Input::GetKeyDown(VK_TAB))
+	{
+		if (pauseWindow->IsActive() || chat_Image->IsActive())
+			return;
+
+		bool skillActive = skillWindowBackGround_Image->IsActive();
+		skillWindowBackGround_Image->SetActive(!skillActive);
+		GameManager::Get().canUseMouse = !skillActive;
+
+		if (!skillActive)
+		{
 			sfxSource->SetClip(sfxClip_SkillUI);
 			sfxSource->Play();
 		}
 	}
+
 
 	if (Input::GetKeyDown('R'))
 	{
@@ -479,14 +502,14 @@ void PlayUI::WaveStartData()
 void PlayUI::StartWaveInfo(int waveNumber)
 {
 	std::wstring waveText;
-	if (waveNumber < 5)
+	if (waveNumber < 4)
 	{
 		waveText = L"공세 " + std::to_wstring(waveNumber) + L"막";
 		bgmSource->SetClip(bgmClip_Wave);
 	}
 	else
 	{
-		waveText = L"Boss";
+		waveText = L"공세 종막";
 		bgmSource->SetClip(bgmClip_Boss);
 	}
 	waveInfo_Text->screenTextRenderer->SetText(waveText);
@@ -569,7 +592,10 @@ void PlayUI::CheckPauseUI()
 	bool check = !pauseWindow->IsActive();
 	pauseWindow->SetActive(check);
 	if (check)
+	{
 		Time::SetTimeScale(0);
+		skillWindowBackGround_Image->SetActive(false);
+	}
 	else
 	{
 		Time::SetTimeScale(1);
