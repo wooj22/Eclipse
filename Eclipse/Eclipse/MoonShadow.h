@@ -17,7 +17,7 @@ public:
 	ParallaxLayer* parallax;
 	MoonShadowController* controller;
 
-	MoonShadow()
+	MoonShadow() : GameObject("MoonShadow", "MoonShadow")
 	{
 		transform = AddComponent<Transform>();
 		spriteRenderer = AddComponent<SpriteRenderer>();
