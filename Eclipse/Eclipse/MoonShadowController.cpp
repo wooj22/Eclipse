@@ -5,6 +5,7 @@
 void MoonShadowController::Awake() 
 {
 	tr = gameObject->transform;
+	moonTr = GameObject::Find("Moon")->transform;
 }
 
 void MoonShadowController::Update()
@@ -12,13 +13,15 @@ void MoonShadowController::Update()
 	isWaving = GameManager::Get().isWave;
 	if (!isStop && isWaving)
 	{
+		// 월식 moving
 		if(isBossWave) tr->Translate(Vector2::left * Time::GetDeltaTime() * speed * 15);
 		else tr->Translate(Vector2::left * Time::GetDeltaTime() * speed);
 
-		if (tr->GetWorldPosition().x <= 0)
+		// 월식 끝
+		if (tr->GetWorldPosition().x <= moonTr->GetWorldPosition().x)
 		{
 			isStop = true;
-			tr->SetPosition(0, 0);
+			tr->SetPosition(moonTr->GetWorldPosition());
 		}
 	}
 }

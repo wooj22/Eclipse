@@ -8,7 +8,8 @@ class MoonShadowController : public Script
 {
 private:
 	Transform* tr;
-	float speed = 5.0f;
+	Transform* moonTr;
+	float speed = 8.0f;
 	bool isWaving;
 	bool isBossWave;
 	bool isStop;
