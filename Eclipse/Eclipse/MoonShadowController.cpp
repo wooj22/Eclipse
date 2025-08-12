@@ -26,6 +26,9 @@ void MoonShadowController::Update()
 
 			// ºû »ý¼º
 			Instantiate<MoonLight>(moonTr->GetWorldPosition());
+
+			// boss wave start
+			//GameManager::Get().g_PlayUI->BossIntroEnd();
 		}
 	}
 }

@@ -8,8 +8,7 @@ class MoonLightController : public Script
 {
 private:
 	// data
-	bool increasing = true;			  // 커지는 중인지
-	float scaleSpeed = 0.05f;         // 초당 크기 변화량
+	float scaleSpeed = 0.05f;
 
 	// ref
 	Transform* tr;

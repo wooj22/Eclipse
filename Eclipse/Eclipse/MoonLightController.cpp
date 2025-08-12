@@ -11,31 +11,16 @@ void MoonLightController::Awake()
 void MoonLightController::Update()
 {
     float deltaTime = Time::GetDeltaTime();
-
     Vector2 scale = tr->GetScale();
 
-    if (increasing)
+    if (scale.x < 1.0f)
     {
         scale.x += scaleSpeed * deltaTime;
         scale.y += scaleSpeed * deltaTime;
-
-        if (scale.x >= 1.0f)
+        if (scale.x > 1.0f)
         {
             scale.x = 1.0f;
             scale.y = 1.0f;
-            increasing = false;
-        }
-    }
-    else
-    {
-        scale.x -= scaleSpeed * deltaTime;
-        scale.y -= scaleSpeed * deltaTime;
-
-        if (scale.x <= 0.8f)
-        {
-            scale.x = 0.8f;
-            scale.y = 0.8f;
-            increasing = true;
         }
     }
 

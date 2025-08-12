@@ -20,7 +20,5 @@ public:
 
 	// 보스 웨이브 연출
 	void DirectingBossWave();
-
-	// TODO :: 달 사이에 빛나는거 나중에 생각
 };
 
