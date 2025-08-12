@@ -119,7 +119,7 @@ void PlayUI::SceneStart()
 	questName_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
-	quest_Image->rectTransform->SetPosition(850, 0);
+	quest_Image->rectTransform->SetPosition(800, 0);
 	quest_Image->rectTransform->SetSize(250, 300);
 	auto questImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Quest.png");
 	quest_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(questImageTexture, "Quest");
@@ -186,6 +186,7 @@ void PlayUI::SceneStart()
 	hon_Text->screenTextRenderer->SetFontSize(40);
 
 	hon_Text->screenTextRenderer->SetText(L"x 000") ;
+	hon_Text->screenTextRenderer->SetFontName(L"덕온공주체") ;
 
 	// 스킬1
 	skill1Key_Image->rectTransform->SetParent(skill1_Image->rectTransform);
@@ -231,11 +232,11 @@ void PlayUI::SceneStart()
 	skill2_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
 
 	// 스킬창 UI
-	
-	skillWindowClose_Button->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
+
+	skillWindowBackGroundGradient_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindow_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindowSplitter_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
-	skillWindowBackGroundGradient_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
+	skillWindowClose_Button->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
@@ -253,7 +254,7 @@ void PlayUI::SceneStart()
 	skillWindowClose_Button->rectTransform->SetSize(83, 79);
 	auto skillWindowClose_ButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
 	skillWindowClose_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowClose_ButtonTexture, "BackButton");
-	//skillWindowClose_Button->imageRenderer->layer = 20;
+	//skillWindowClose_Button->imageRenderer->layer = 1;
 
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
@@ -299,6 +300,7 @@ void PlayUI::SceneStart()
 	skillHon_Text->screenTextRenderer->SetFontSize(25);
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillHon_Text->screenTextRenderer->SetText(L"x 000");
+	skillHon_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 	//skillHon_Text->screenTextRenderer->layer = 10;
 
 
