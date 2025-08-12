@@ -51,6 +51,8 @@ void Dash_State::Enter(MovementFSM* fsm)
     // ¿Àµð¿À 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Dash);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
+    fsm->GetPlayerFSM()->ResetDashCooldown();
 }
 
 void Dash_State::Update(MovementFSM* fsm)

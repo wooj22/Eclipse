@@ -79,7 +79,7 @@ void Fall_State::Update(MovementFSM* fsm)
     }
 
     // [ Dash ]
-    if (fsm->GetPlayerFSM()->GetisShift() && GameManager::Get().CheckUnlock(SkillType::Dash) && fsm->GetPlayerFSM()->CanDash())
+    if (fsm->GetPlayerFSM()->GetisShift() && fsm->GetPlayerFSM()->CanDash())
     {
         fsm->ChangeState(std::make_unique<Dash_State>());
         return;

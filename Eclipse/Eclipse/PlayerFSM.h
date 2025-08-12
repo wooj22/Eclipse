@@ -236,8 +236,13 @@ public:
 	int airAttackCount = 0;
 
 	// dash 
-	float dashCooldown = 1.5f;         // 대시 쿨타임 (2초)
+	float dashCooldown = 2.0f;         // 대시 쿨타임 (2초)
 	float dashCooldownTimer = 0.0f;    // 대시 쿨타임 타이머
+
+	void UpdateDashCooldown();
+	bool CanDash() const;
+	void ResetDashCooldown();
+	float GetDashCooldown() const;
 
 	// jump 
 	void OnGround();
@@ -247,10 +252,6 @@ public:
 
 	bool isAttackIgnore = false; // 어택 일정시간 무시 
 
-	// dash 
-	void UpdateDashCooldown(); 
-	bool CanDash() const;
-	void ResetDashCooldown();
 
 	// Q 흡수 
 	bool isAbsorbSkillActive = false;
