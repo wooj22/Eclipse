@@ -16,14 +16,14 @@ SkillWindowButton::SkillWindowButton(SkillType name) : GameObject("SkillWindowBu
 	skillLevelUpHonCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 
 	skillIcon_Image->rectTransform->SetParent(this->rectTransform);
-	skillIcon_Button->rectTransform->SetParent(this->rectTransform);
-	skillLevel_Text->rectTransform->SetParent(this->rectTransform);
+	skillIcon_Button->rectTransform->SetParent(skillIcon_Image->rectTransform);
+	skillLevel_Text->rectTransform->SetParent(skillIcon_Image->rectTransform);
 	skillName_Text->rectTransform->SetParent(this->rectTransform);
 	skillDesc_Text->rectTransform->SetParent(this->rectTransform);
 	skillColor1_Text->rectTransform->SetParent(this->rectTransform);
 	skillColor2_Text->rectTransform->SetParent(this->rectTransform);
 	skillColor3_Text->rectTransform->SetParent(this->rectTransform);
-	skillLevelUpHonCount_Text->rectTransform->SetParent(this->rectTransform);
+	skillLevelUpHonCount_Text->rectTransform->SetParent(skillIcon_Image->rectTransform);
 
 	skillIcon_Button->rectTransform->SetSize(100,100); //이미지 크기
 	skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
@@ -39,6 +39,7 @@ void SkillWindowButton::SceneStart()
 
 	auto skillIconTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillIcon.png");
 	skillIcon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
+	skillIcon_Image->rectTransform->SetPosition(-20,20);
 	//이미지 및 폰트 크기에따라 미세 조정 필요
 	skillLevel_Text->rectTransform->SetPosition(0,-50); 
 
@@ -65,17 +66,17 @@ void SkillWindowButton::SceneStart()
 	skillName_Text->screenTextRenderer->SetText(skilltext.skillname);
 	skillDesc_Text->screenTextRenderer->SetText(skilltext.skillDesc);
 
-	skillLevelUpHonCount_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillLevelUpHonCount_Text->rectTransform->SetSize(300, 50);
-	skillLevelUpHonCount_Text->rectTransform->SetPosition(GetWidthSize(skillLevelUpHonCount_Text->rectTransform->GetSize(), skillIcon_Button->rectTransform->GetSize()), -65);
+	skillLevelUpHonCount_Text->rectTransform->SetPosition(0, -80);
 
 	skillLevelUpHonCount_Text->screenTextRenderer->SetText(skilltext.skillname);
 	RefreshLevelUPHonCountText();
 
-	if (skillName == SkillType::SkillCooldownDown)
+	if (skillName == SkillType::SkillCooldownDown || skillName == SkillType::Dash)
 	{
-		skillColor1_Text->screenTextRenderer->SetText(ToWString(skillvalue[0]));
-		skillColor2_Text->screenTextRenderer->SetText(ToWString(skillvalue[1]));
+		float value = skillName == SkillType::SkillCooldownDown ? 10 : 2;
+		skillColor1_Text->screenTextRenderer->SetText(ToWString(value - skillvalue[0]));
+		skillColor2_Text->screenTextRenderer->SetText(ToWString(value - skillvalue[1]));
 		skillColor3_Text->SetActive(false);
 	}
 	else if (skillInfo.maxLevel > 1)
