@@ -30,6 +30,7 @@ void PlayUI::Awake()
 	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2Key_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	skillWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -44,6 +45,7 @@ void PlayUI::Awake()
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
+	skillHonBig_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
@@ -109,11 +111,11 @@ void PlayUI::SceneStart()
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Image->rectTransform->SetPosition(850, 0);
-	quest_Image->rectTransform->SetSize(180, 200);
+	quest_Image->rectTransform->SetSize(250, 300);
 	auto questImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Quest.png");
 	quest_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(questImageTexture, "Quest");
 	questName_Text->rectTransform->SetSize(300, 50);
-	questName_Text->rectTransform->SetPosition(0, 90);
+	questName_Text->rectTransform->SetPosition(0, 50);
 	questName_Text->screenTextRenderer->SetText(L"목표");
 	questName_Text->screenTextRenderer->SetFontSize(30);
 	questName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
@@ -216,6 +218,7 @@ void PlayUI::SceneStart()
 
 	// 스킬창 UI
 	
+	skillWindowClose_Button->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindow_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindowSplitter_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindowBackGroundGradient_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
@@ -223,6 +226,7 @@ void PlayUI::SceneStart()
 	{
 		skillButton->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	}
+	skillHonBig_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillHon_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillHon_Text->rectTransform->SetParent(skillHon_Image->rectTransform);
 	skillWindowName_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
@@ -230,6 +234,11 @@ void PlayUI::SceneStart()
 	skillWindowBackGround_Image->SetActive(false);
 	skillWindowBackGround_Image->rectTransform->SetSize(1920, 1080);
 	skillWindowBackGroundGradient_Image->rectTransform->SetSize(1920, 1080);
+
+	skillWindowClose_Button->rectTransform->SetSize(1248, 702);
+	auto skillWindowClose_ButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
+	skillWindowClose_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowClose_ButtonTexture, "BackButton");
+
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
 	skillWindow_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowImageTexture, "SkillWindow");
@@ -251,6 +260,7 @@ void PlayUI::SceneStart()
 		skillButtons[i]->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(texture, spriteName);
 	}
 	skillHon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
+	skillHonBig_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
 
 	skillButtons[0]->rectTransform->SetPosition(-400, 160);
@@ -263,6 +273,8 @@ void PlayUI::SceneStart()
 	skillButtons[7]->rectTransform->SetPosition(300, -20);
 	skillButtons[8]->rectTransform->SetPosition(300,-200);
 
+	skillHonBig_Image->rectTransform->SetPosition(0,290);
+	skillHonBig_Image->rectTransform->SetSize(50,50);
 	skillHon_Image->rectTransform->SetPosition(480,-280);
 	skillHon_Image->rectTransform->SetSize(30,30);
 	skillHon_Text->rectTransform->SetPosition(120,0);
@@ -389,8 +401,10 @@ void PlayUI::Update()
 
 
 
-	if (((Input::GetKeyDown(VK_ESCAPE)&& skillWindowBackGround_Image->IsActive())||Input::GetKeyDown(VK_TAB))&& chat_Image->IsActive() != true)
+	if (((Input::GetKeyDown(VK_ESCAPE)&& skillWindowBackGround_Image->IsActive())||Input::GetKeyDown(VK_TAB)))
 	{
+		if (pauseWindow->IsActive() || chat_Image->IsActive())
+			return;
 		if (skillWindowBackGround_Image->IsActive())
 		{
 			GameManager::Get().canUseMouse = true;
@@ -428,6 +442,7 @@ void PlayUI::ClickChatButton() {
 	{
 	case 3:
 		bossHP->SetActive(true);
+
 		break;
 	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
