@@ -22,5 +22,6 @@ public:
 
 	// component system
 	void Update();
+	void LateUpdate();
 	void FixedUpdate();
 };

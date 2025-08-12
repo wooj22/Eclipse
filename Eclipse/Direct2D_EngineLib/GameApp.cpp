@@ -121,8 +121,10 @@ void GameApp::Update()
 
 	uiSystem.Update();
 	renderSystem.Update();
-	cameraSystem.Update();
 	audioSystem.Update();
+
+	cameraSystem.Update();
+	scriptSystem.LateUpdate();
 }
 
 /// Fixed Update
