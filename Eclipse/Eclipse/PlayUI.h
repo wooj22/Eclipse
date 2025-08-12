@@ -10,6 +10,7 @@
 #include "PauseWindow.h"
 #include "BossHp.h"
 #include "tooltip.h"
+#include "MoonShadowController.h"
 #include <vector>
 
 // »ç¿îµå
