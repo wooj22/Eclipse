@@ -77,7 +77,7 @@ Options::Options() : GameObject("Optionts", "Optionts")
 	{
 		controlKeyTitles[i]->rectTransform->SetParent(controlKeyBase_Image->rectTransform);
 		controlKeyTitles[i]->screenTextRenderer->SetText(titles[i]);
-		controlKeyTitles[i]->screenTextRenderer->SetFontSize(25);
+		controlKeyTitles[i]->screenTextRenderer->SetFontSize(30);
 	}
 
 	// 이름
@@ -197,6 +197,11 @@ void Options::SceneStart()
 	soundSFX_slider->rectTransform->SetPosition(0,-50);
 	soundAMB_slider->rectTransform->SetPosition(0,-50);
 
+	soundMaster_slider->SetGuageImageAlpha();	
+	soundBGM_slider->SetGuageImageAlpha();
+	soundSFX_slider->SetGuageImageAlpha();
+	soundAMB_slider->SetGuageImageAlpha();
+
 	controlKeyBase_Image->rectTransform->SetPosition(50, 0);
 	controlKeyBase_Image->rectTransform->SetSize(600, 400);
 	auto controlKetBaseTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ControlKetBase.png");
@@ -231,8 +236,10 @@ void Options::SceneStart()
 		}
 	}
 
-	controlKeyTitles[0]->rectTransform->SetPosition(-200,100);
-	controlKeyTitles[1]->rectTransform->SetPosition(-200,-100);
+	controlKeyTitles[0]->rectTransform->SetPosition(-200, 125);
+	controlKeyTitles[0]->screenTextRenderer->SetFontName(L"덕온공주체");
+	controlKeyTitles[1]->rectTransform->SetPosition(-200, -125);
+	controlKeyTitles[1]->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	
 	soundMaster_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetMasterVolume(soundMaster_slider->GetComponent<Slider>()->GetValue()); });

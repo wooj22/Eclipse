@@ -383,7 +383,7 @@ void PlayUI::Update()
 
 
 
-	if ((Input::GetKeyDown(VK_ESCAPE)||Input::GetKeyDown(VK_TAB))&& chat_Image->IsActive() != true)
+	if (((Input::GetKeyDown(VK_ESCAPE)&& skillWindowBackGround_Image->IsActive())||Input::GetKeyDown(VK_TAB))&& chat_Image->IsActive() != true)
 	{
 		if (skillWindowBackGround_Image->IsActive())
 		{
