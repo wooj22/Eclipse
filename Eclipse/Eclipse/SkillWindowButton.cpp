@@ -109,8 +109,8 @@ void SkillWindowButton::Update()
 	{
 		glowtimer += Time::GetDeltaTime();  // 매 프레임 시간 누적
 
-		float glow = ((sinf(glowtimer * glowspeed - DirectX::XM_PIDIV2)+1.0f) / 2.0f) * 30.0f;
-		skillIcon_Button->imageRenderer->SetGlowAmmount(glow);
+		float glow = ((sinf(glowtimer * glowspeed - DirectX::XM_PIDIV2)+1.0f) / 2.0f) * 60.0f;
+		skillIcon_Image->imageRenderer->SetGlowAmmount(glow);
 	}
 }
 
@@ -171,7 +171,10 @@ void SkillWindowButton::OnClickSkillButton()
 		if (GameManager::Get().LevelUpSkill(skillName, true))
 			isEnterButton = true;
 		else
+		{
+			skillIcon_Image->imageRenderer->renderMode = RenderMode::Unlit;
 			skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
+		}
 
 		RefreshCurrentLevelText();
 		RefreshLevelUPHonCountText();
@@ -183,7 +186,8 @@ void SkillWindowButton::OnPointEnterButton()
 	// 해금 또는 레벨업 가능 체크
 	if (GameManager::Get().CanUnlock(skillName) || GameManager::Get().LevelUpSkill(skillName,true))
 	{
-		skillIcon_Button->imageRenderer->renderMode = RenderMode::Lit_Glow;
+		skillIcon_Image->imageRenderer->renderMode = RenderMode::Lit_Glow;
+		skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
 		isEnterButton = true;
 		glowtimer = 0;
 	}
@@ -197,8 +201,11 @@ void SkillWindowButton::OnPointExitButton()
 		if(GameManager::Get().CanUnlock(skillName))
 			skillIcon_Button->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 		else
+		{
 			skillIcon_Button->imageRenderer->renderMode = RenderMode::Unlit;
+		}
 
+		skillIcon_Image->imageRenderer->renderMode = RenderMode::Unlit;
 		isEnterButton = false;
 	}
 }
