@@ -28,6 +28,7 @@ void CameraController::Start()
 
 	// set map rect
 	camera->SetMapCondition(mapRect);
+	camera->SetUseMapCondition(true);
 }
 
 void CameraController::LateUpdate()
@@ -40,11 +41,9 @@ void CameraController::LateUpdate()
 	if (isZooming)
 	{
 		float delta = zoomSpeed * Time::GetDeltaTime();
-		if (currentZoom < targetZoom)
-			currentZoom = min(currentZoom + delta, targetZoom);
-		else
-			currentZoom = max(currentZoom - delta, targetZoom);
 
+		if (currentZoom < targetZoom) currentZoom = min(currentZoom + delta, targetZoom);
+		else currentZoom = max(currentZoom - delta, targetZoom);
 		camera->SetZoom(currentZoom);
 
 		// end
@@ -60,10 +59,12 @@ void CameraController::ZoomInToPlayer()
 {
 	targetZoom = 2;
 	isZooming = true;
+	camera->SetTargetTraceLimitX(3.0f);
 }
 
 void CameraController::ZoomOutFromPlayer()
 {
 	targetZoom = 1;
 	isZooming = true;
+	camera->SetTargetTraceLimitX(20.0f);
 }

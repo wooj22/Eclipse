@@ -123,8 +123,8 @@ void GameApp::Update()
 	renderSystem.Update();
 	audioSystem.Update();
 
-	cameraSystem.Update();
 	scriptSystem.LateUpdate();
+	cameraSystem.Update();
 }
 
 /// Fixed Update
