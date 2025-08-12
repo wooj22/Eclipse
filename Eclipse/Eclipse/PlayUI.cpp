@@ -136,9 +136,6 @@ void PlayUI::SceneStart()
 		this, std::bind(&PlayUI::ClickChatButton, this));
 
 	chat_Image->SetActive(false);
-	chat_Image->imageRenderer->layer = 1;
-	chat_Text->screenTextRenderer->layer = 2;
-	chat_Button->imageRenderer->layer = 3;
 	chat_Image->rectTransform->SetPosition(0, -400);
 	chat_Image->rectTransform->SetSize(800, 160);
 	auto chatImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Chat.png");
@@ -432,13 +429,7 @@ void PlayUI::Update()
 
 		bool skillActive = skillWindowBackGround_Image->IsActive();
 		skillWindowBackGround_Image->SetActive(!skillActive);
-		GameManager::Get().canUseMouse = !skillActive;
-
-		if (!skillActive)
-		{
-			sfxSource->SetClip(sfxClip_SkillUI);
-			sfxSource->Play();
-		}
+		GameManager::Get().canUseMouse = skillActive;
 	}
 
 
