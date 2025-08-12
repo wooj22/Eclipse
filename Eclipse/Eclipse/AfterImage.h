@@ -18,6 +18,7 @@ public:
     void Awake() override
     {
         renderer = gameObject->GetComponent<SpriteRenderer>();
+        renderer->layer = 23;
     }
 
     void Update() override

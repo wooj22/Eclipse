@@ -65,9 +65,7 @@ public:
 	void Update() override
 	{
 		// AABB 영역 
-		if(collider->IsEnabled()) collider->DebugColliderDraw();
-
-		// collider->DebugColliderDraw();
+		// if(collider->IsEnabled()) collider->DebugColliderDraw();
 	}
 
 	// 어택 범위 활성화 + 애니메이션 실행

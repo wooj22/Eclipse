@@ -20,6 +20,9 @@ void BulletTime_State::Enter(MovementFSM* fsm)
     Time::SetTimeScale(0.3f); // 시간 느리게
 
     fsm->GetPlayerFSM()->timer = 0.0f;
+
+    blackOut_renderer = GameObject::Find("BlackOut")->GetComponent<SpriteRenderer>();
+    blackOut_renderer->SetEnabled(true);
 }
 
 void BulletTime_State::Update(MovementFSM* fsm)
@@ -138,6 +141,8 @@ void BulletTime_State::Exit(MovementFSM* fsm)
     // 복구 
     Time::SetTimeScale(1.0f);
     fsm->GetPlayerFSM()->SetisBulletFliping(false);
+
+    blackOut_renderer->SetEnabled(false);
 }
 
 void BulletTime_State::CreateAfterImage(MovementFSM* fsm)
