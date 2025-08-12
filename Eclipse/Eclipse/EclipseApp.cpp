@@ -50,6 +50,15 @@ void EclipseApp::UnInit()
 	gameManager.UnInit();
 }
 
+void EclipseApp::Update()
+{
+	__super::Update();
+
+	float deltaTime = Time::GetDeltaTime(); 
+
+	SoundManager::Get().Update(deltaTime);
+}
+
 
 void EclipseApp::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {

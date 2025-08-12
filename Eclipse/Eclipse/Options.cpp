@@ -1,4 +1,5 @@
 #include "Options.h"
+#include "SoundManager.h"
 #include "../Direct2D_EngineLib/AudioSystem.h"
 
 Options::Options() : GameObject("Optionts", "Optionts")
@@ -236,19 +237,43 @@ void Options::SceneStart()
 		}
 	}
 
-	controlKeyTitles[0]->rectTransform->SetPosition(-200, 125);
-	controlKeyTitles[1]->rectTransform->SetPosition(-200, -125);
-
-	soundMaster_slider->slider->SetValue(AudioSystem::Get().GetMasterVolume());
-	soundBGM_slider->slider->SetValue(AudioSystem::Get().GetBGMVolume());
-	soundSFX_slider->slider->SetValue(AudioSystem::Get().GetSFXVolume());
-	soundAMB_slider->slider->SetValue(AudioSystem::Get().GetAMBVolume());
+	// Options.cpp
 	
-	soundMaster_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetMasterVolume(soundMaster_slider->GetComponent<Slider>()->GetValue()); });
-	soundBGM_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetBGMVolume(soundBGM_slider->GetComponent<Slider>()->GetValue()); });
-	soundSFX_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetSFXVolume(soundSFX_slider->GetComponent<Slider>()->GetValue()); });
-	soundAMB_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetAMBVolume(soundAMB_slider->GetComponent<Slider>()->GetValue()); });
+	// [ 기존 코드 ]
+	//controlKeyTitles[0]->rectTransform->SetPosition(-200, 125);
+	//controlKeyTitles[1]->rectTransform->SetPosition(-200, -125);
 
+	//soundMaster_slider->slider->SetValue(AudioSystem::Get().GetMasterVolume());
+	//soundBGM_slider->slider->SetValue(AudioSystem::Get().GetBGMVolume());
+	//soundSFX_slider->slider->SetValue(AudioSystem::Get().GetSFXVolume());
+	//soundAMB_slider->slider->SetValue(AudioSystem::Get().GetAMBVolume());
+	//
+	//soundMaster_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetMasterVolume(soundMaster_slider->GetComponent<Slider>()->GetValue()); });
+	//soundBGM_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetBGMVolume(soundBGM_slider->GetComponent<Slider>()->GetValue()); });
+	//soundSFX_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetSFXVolume(soundSFX_slider->GetComponent<Slider>()->GetValue()); });
+	//soundAMB_slider->slider->onValueChangedListeners.AddListener(this, [this]() { AudioSystem::Get().SetAMBVolume(soundAMB_slider->GetComponent<Slider>()->GetValue()); });
+
+	// [ 바뀐 코드 ] 
+
+	// 1. BGM 슬라이더
+	soundBGM_slider->slider->SetValue(SoundManager::Get().GetBGMVolume()); // 옵션 볼륨 기준 값
+	soundBGM_slider->slider->onValueChangedListeners.AddListener(this,
+		[this]() { SoundManager::Get().SetBGMVolume(soundBGM_slider->GetComponent<Slider>()->GetValue()); });
+
+	// 2. Master 슬라이더
+	soundMaster_slider->slider->SetValue(SoundManager::Get().GetMasterVolume());
+	soundMaster_slider->slider->onValueChangedListeners.AddListener(this,
+		[this]() { SoundManager::Get().SetMasterVolume(soundMaster_slider->GetComponent<Slider>()->GetValue()); });
+
+	// 3. SFX 슬라이더
+	soundSFX_slider->slider->SetValue(SoundManager::Get().GetSFXVolume());
+	soundSFX_slider->slider->onValueChangedListeners.AddListener(this,
+		[this]() { SoundManager::Get().SetSFXVolume(soundSFX_slider->GetComponent<Slider>()->GetValue()); });
+
+	// 4. AMB 슬라이더
+	soundAMB_slider->slider->SetValue(SoundManager::Get().GetAMBVolume());
+	soundAMB_slider->slider->onValueChangedListeners.AddListener(this,
+		[this]() { SoundManager::Get().SetAMBVolume(soundAMB_slider->GetComponent<Slider>()->GetValue()); });
 }
 
 void Options::Update()
