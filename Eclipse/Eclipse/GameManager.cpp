@@ -31,7 +31,8 @@ void GameManager::ReSetData()
 	canUseMouse = true;
 	isWave = false;
 	g_playUI = nullptr;
-	absorbCoolTime = 0;		
+	absorbCoolTime = 0;
+	maxabsorbCoolTime = 10;
 	canUseAbsorb = false;		
 	canUseRelease = false;
 	SkillReset();
@@ -261,6 +262,9 @@ void GameManager::OnNPCInteraction()
 		GameManager::Get().ChangeHonCount(g_playUI->quest->QuestReward());
 	if (g_playUI->skillWindow_Image->IsActive())
 		g_playUI->skillWindow_Image->SetActive(false);
+	g_playUI->hon_Image->SetActive(false);
+	g_playUI->stop_Button->SetActive(false);
+	g_playUI->quest_Image->SetActive(false);
 }
 
 void GameManager::ChangeBossHp(float hp)

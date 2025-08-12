@@ -24,12 +24,13 @@ void PlayUI::Awake()
 	hon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	skill1Icon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill1_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
-	skill1CollTime_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
-	skill1_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skill1CollTimeFilter_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	skill1Key_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2Icon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
-	skill2_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skill2Key_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	skillWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -44,6 +45,7 @@ void PlayUI::Awake()
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::Dash));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::SkillCooldownDown));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::FastFall));
+	skillHonBig_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
@@ -109,11 +111,11 @@ void PlayUI::SceneStart()
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Image->rectTransform->SetPosition(850, 0);
-	quest_Image->rectTransform->SetSize(180, 200);
+	quest_Image->rectTransform->SetSize(250, 300);
 	auto questImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Quest.png");
 	quest_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(questImageTexture, "Quest");
 	questName_Text->rectTransform->SetSize(300, 50);
-	questName_Text->rectTransform->SetPosition(0, 90);
+	questName_Text->rectTransform->SetPosition(0, 50);
 	questName_Text->screenTextRenderer->SetText(L"목표");
 	questName_Text->screenTextRenderer->SetFontSize(30);
 	questName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
@@ -156,7 +158,6 @@ void PlayUI::SceneStart()
 	// 혼 & 스킬 UI
 	hon_Text->rectTransform->SetParent(hon_Image->rectTransform);
 	skill1_Image->rectTransform->SetParent(hon_Image->rectTransform);
-	skill1CollTime_Text->rectTransform->SetParent(hon_Image->rectTransform);
 	skill2_Image->rectTransform->SetParent(hon_Image->rectTransform);
 
 	// 혼
@@ -173,39 +174,43 @@ void PlayUI::SceneStart()
 	hon_Text->screenTextRenderer->SetText(L"x 000") ;
 
 	// 스킬1
-	skill1CollTime_Text->rectTransform->SetParent(skill1_Image->rectTransform);
-	skill1_Text->rectTransform->SetParent(skill1_Image->rectTransform);
+	skill1Key_Image->rectTransform->SetParent(skill1_Image->rectTransform);
 	skill1Icon_Image->rectTransform->SetParent(skill1_Image->rectTransform);
+	skill1CollTimeFilter_Image->rectTransform->SetParent(skill1_Image->rectTransform);
 
-	skill1_Image->rectTransform->SetPosition(0, -125);
+	skill1_Image->rectTransform->SetPosition(0, -132);
 	skill1_Image->rectTransform->SetSize(100, 100);
 	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ.png");
 	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ");
 	auto skillIconTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillIcon.png");
 	skill1Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 
-	skill1_Text->rectTransform->SetPosition(0, 50);
-	skill1_Text->rectTransform->SetSize(50, 50);
-	skill1_Text->screenTextRenderer->SetFontSize(20);
-	skill1_Text->screenTextRenderer->SetText(L"Q");
+	skill1Key_Image->rectTransform->SetPosition(0, 50);
+	skill1Key_Image->rectTransform->SetSize(50, 50);
+	auto skill1KeyImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Q.png");
+	skill1Key_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1KeyImageTexture, "Q");
+	
 
-	skill1CollTime_Text->rectTransform->SetSize(150, 150);
-	skill1CollTime_Text->screenTextRenderer->SetFontSize(50);
+	auto skill1CollTimeFilterImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillFilter.png");
+	skill1CollTimeFilter_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1CollTimeFilterImageTexture, "SkillFilter");
+	skill1CollTimeFilter_Image->imageRenderer->SetAlpha(0.4);
+	skill1CollTimeFilter_Image->imageRenderer->fillType = FillType::Vertical;
+
 
 	// 스킬2
-	skill2_Text->rectTransform->SetParent(skill2_Image->rectTransform);
+	skill2Key_Image->rectTransform->SetParent(skill2_Image->rectTransform);
 	skill2Icon_Image->rectTransform->SetParent(skill2_Image->rectTransform);
 
-	skill2_Image->rectTransform->SetPosition(120, -125);
+	skill2_Image->rectTransform->SetPosition(120, -132);
 	skill2_Image->rectTransform->SetSize(100, 100);
 	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE.png");
 	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE");
 	skill2Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 
-	skill2_Text->rectTransform->SetPosition(0, 50);
-	skill2_Text->rectTransform->SetSize(50, 50);
-	skill2_Text->screenTextRenderer->SetFontSize(20);
-	skill2_Text->screenTextRenderer->SetText(L"E");
+	skill2Key_Image->rectTransform->SetPosition(0, 50);
+	skill2Key_Image->rectTransform->SetSize(50, 50);
+	auto skill2KeyImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/E.png");
+	skill2Key_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2KeyImageTexture, "E");
 
 	skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
 	skill1_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
@@ -213,6 +218,7 @@ void PlayUI::SceneStart()
 
 	// 스킬창 UI
 	
+	skillWindowClose_Button->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindow_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindowSplitter_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindowBackGroundGradient_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
@@ -220,6 +226,7 @@ void PlayUI::SceneStart()
 	{
 		skillButton->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	}
+	skillHonBig_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillHon_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillHon_Text->rectTransform->SetParent(skillHon_Image->rectTransform);
 	skillWindowName_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
@@ -227,6 +234,11 @@ void PlayUI::SceneStart()
 	skillWindowBackGround_Image->SetActive(false);
 	skillWindowBackGround_Image->rectTransform->SetSize(1920, 1080);
 	skillWindowBackGroundGradient_Image->rectTransform->SetSize(1920, 1080);
+
+	skillWindowClose_Button->rectTransform->SetSize(1248, 702);
+	auto skillWindowClose_ButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
+	skillWindowClose_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowClose_ButtonTexture, "BackButton");
+
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
 	skillWindow_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowImageTexture, "SkillWindow");
@@ -248,6 +260,7 @@ void PlayUI::SceneStart()
 		skillButtons[i]->skillIcon_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(texture, spriteName);
 	}
 	skillHon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
+	skillHonBig_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(honImageTexture, "Hon");
 
 
 	skillButtons[0]->rectTransform->SetPosition(-400, 160);
@@ -260,6 +273,8 @@ void PlayUI::SceneStart()
 	skillButtons[7]->rectTransform->SetPosition(300, -20);
 	skillButtons[8]->rectTransform->SetPosition(300,-200);
 
+	skillHonBig_Image->rectTransform->SetPosition(0,290);
+	skillHonBig_Image->rectTransform->SetSize(50,50);
 	skillHon_Image->rectTransform->SetPosition(480,-280);
 	skillHon_Image->rectTransform->SetSize(30,30);
 	skillHon_Text->rectTransform->SetPosition(120,0);
@@ -306,7 +321,10 @@ void PlayUI::Update()
 	}
 
 	if (!GameManager::Get().canUseAbsorb)
-		skill1CollTime_Text->screenTextRenderer->SetText(std::to_wstring(static_cast<int>(std::ceil(GameManager::Get().absorbCoolTime))));
+	{
+		float cooltime = GameManager::Get().absorbCoolTime/GameManager::Get().maxabsorbCoolTime;
+		skill1CollTimeFilter_Image->imageRenderer->fillAmount = cooltime;
+	}
 
 	if (waveInfo_Text->IsActive())
 	{
@@ -383,8 +401,10 @@ void PlayUI::Update()
 
 
 
-	if (((Input::GetKeyDown(VK_ESCAPE)&& skillWindowBackGround_Image->IsActive())||Input::GetKeyDown(VK_TAB))&& chat_Image->IsActive() != true)
+	if (((Input::GetKeyDown(VK_ESCAPE)&& skillWindowBackGround_Image->IsActive())||Input::GetKeyDown(VK_TAB)))
 	{
+		if (pauseWindow->IsActive() || chat_Image->IsActive())
+			return;
 		if (skillWindowBackGround_Image->IsActive())
 		{
 			GameManager::Get().canUseMouse = true;
@@ -422,6 +442,7 @@ void PlayUI::ClickChatButton() {
 	{
 	case 3:
 		bossHP->SetActive(true);
+
 		break;
 	case 4:
 		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
@@ -437,6 +458,9 @@ void PlayUI::ClickChatButton() {
 	quest->RefreshQuestCountText(0);
 	questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	if (skillWindowBackGround_Image->IsActive()) skillWindowBackGround_Image->SetActive(false);
+	hon_Image->SetActive(true);
+	stop_Button->SetActive(true);
+	quest_Image->SetActive(true);
 }
 
 void PlayUI::StartWaveInfo(int waveNumber)
@@ -515,14 +539,16 @@ void PlayUI::ChangeHonCountText()
 
 void PlayUI::ActivateAbsorb()
 {
-	skill1_Image->imageRenderer->renderMode = RenderMode::Unlit;
-	skill1CollTime_Text->SetActive(false);
+	skill1CollTimeFilter_Image->SetActive(false);
+	/*skill1_Image->imageRenderer->renderMode = RenderMode::Unlit;
+	skill1CollTime_Text->SetActive(false);*/
 }
 
 void PlayUI::DeactivateAbsorb()
 {
-	skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-	skill1CollTime_Text->SetActive(true);
+	skill1CollTimeFilter_Image->SetActive(true);
+	/*skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+	skill1CollTime_Text->SetActive(true);*/
 }
 
 void PlayUI::CheckPauseUI()

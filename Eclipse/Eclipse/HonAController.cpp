@@ -92,7 +92,7 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	if (other->gameObject->tag == "EndLine")
 	{
 		// score
-		GameManager::Get().ChangeHonCount(-1);
+		GameManager::Get().ChangeHonCount(-10);
 		gameObject->Destroy();
 	}
 

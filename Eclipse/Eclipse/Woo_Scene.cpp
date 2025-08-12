@@ -35,6 +35,13 @@ void Woo_Scene::Awake()
 	// [BackGround Map]
 	mapBackGround = CreateObject<MapBackGround>();
 
+	// [Moon Shadow]
+	moonShadow = CreateObject<MoonShadow>();
+	moonShadow->transform->Translate(1000, 0);
+
+	// [Fade Manager]
+	fadeObject = CreateObject<FadeObject>();
+
 	// [Ground Sample]
 	ground = CreateObject<Map_Woo>({ 0, -800 });
 
@@ -70,7 +77,8 @@ void Woo_Scene::Awake()
 	/*--------------------------------------------------*/
 	/* º±πŒ¿Ã≤® */
 	// [ player ] 
-	player = CreateObject<Player>({300,0});
+	player = CreateObject<Player>();
+	player->transform->SetPosition(0, 500);
 
 	// [ playerAttack_Parent ]
 	playerAttack_Parent = CreateObject<GameObject>();

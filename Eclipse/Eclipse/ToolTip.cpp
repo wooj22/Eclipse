@@ -36,7 +36,9 @@ void tooltip::Awake()
 
 void tooltip::SceneStart()
 {
-	tooltipBackGround_Image->rectTransform->SetSize(250, 150);
+	tooltipBackGround_Image->rectTransform->SetSize(300, 200);
+	auto toolTipTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ToolTip.png");
+	tooltipBackGround_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(toolTipTexture, "ToolTip");
 
 	tooltip_Image->rectTransform->SetPosition(-80,25);
 	tooltip_Image->rectTransform->SetSize(80, 80);
@@ -45,12 +47,12 @@ void tooltip::SceneStart()
 	tooltipName_Text->rectTransform->SetSize(90, 50);
 	tooltipName_Text->screenTextRenderer->SetFontSize(30);
 	tooltipName_Text->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
-	tooltipName_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	tooltipName_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 
 	tooltipDescribe_Text->rectTransform->SetPosition(45, 0);
 	tooltipDescribe_Text->rectTransform->SetSize(160, 50);
 	tooltipDescribe_Text->screenTextRenderer->SetFontSize(17);
-	tooltipDescribe_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	tooltipDescribe_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 
 }
 

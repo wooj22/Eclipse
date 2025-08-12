@@ -74,7 +74,7 @@ BackGround02_Mount::BackGround02_Mount()
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Environment/BG01.png");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "BackGround02_Mount");
 	spriteRenderer->sprite = new_sprite;
-	spriteRenderer->layer = -8;
+	spriteRenderer->layer = -5;
 
 	parallax->parallaxFactor = 0.7;
 }
@@ -88,7 +88,7 @@ BackGround03_Tree::BackGround03_Tree()
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Environment/BG03.png");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "BackGround03_Tree");
 	spriteRenderer->sprite = new_sprite;
-	spriteRenderer->layer = -7;
+	spriteRenderer->layer = -4;
 
 	parallax->parallaxFactor = 0.3;
 }
@@ -102,7 +102,7 @@ BackGround04_Grass::BackGround04_Grass()
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Environment/BG04.png");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "BackGround04_Grass");
 	spriteRenderer->sprite = new_sprite;
-	spriteRenderer->layer = -6;
+	spriteRenderer->layer = -3;
 
 	parallax->parallaxFactor = 0.2;
 }
@@ -115,7 +115,7 @@ BackGround05_Ground::BackGround05_Ground()
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Environment/BG05.png");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "BackGround05_Ground");
 	spriteRenderer->sprite = new_sprite;
-	spriteRenderer->layer = -5;
+	spriteRenderer->layer = -2;
 }
 
 BackGround06_House::BackGround06_House()
@@ -126,7 +126,7 @@ BackGround06_House::BackGround06_House()
 	auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Environment/BG06.png");
 	auto new_sprite = ResourceManager::Get().CreateSprite(texture, "BackGround06_House");
 	spriteRenderer->sprite = new_sprite;
-	spriteRenderer->layer = -4;
+	spriteRenderer->layer = -1;
 }
 
 BackGround07_Trash::BackGround07_Trash()

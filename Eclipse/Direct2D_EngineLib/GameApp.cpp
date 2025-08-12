@@ -92,8 +92,10 @@ void GameApp::Init()
 
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
-
 	OutputDebugStringA("[Woo Engine] Window Create\n");
+
+	// 타이틀바 제거
+	SetWindowLong(hWnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
 
 	CoInitialize(nullptr);			// com 객체 초기화	
 	
@@ -121,8 +123,10 @@ void GameApp::Update()
 
 	uiSystem.Update();
 	renderSystem.Update();
-	cameraSystem.Update();
 	audioSystem.Update();
+
+	scriptSystem.LateUpdate();
+	cameraSystem.Update();
 }
 
 /// Fixed Update

@@ -10,13 +10,17 @@ class Camera;
 class CameraController : public Script
 {
 private:
+	// zoom data
+	float currentZoom = 1.0f;
+	float targetZoom = 1.0f;
+	float zoomSpeed = 2.0f;
+	bool isZooming = false;
+
 	// map rect
 	Rect mapRect;
 
 	// ref
 	Camera* camera;
-
-	// player
 	Transform* playerTr;
 
 public:
@@ -24,6 +28,11 @@ public:
 
 	void Awake() override;
 	void Start() override;
-	void Update() override;
+	void LateUpdate() override;
+
+public:
+	// func
+	void ZoomInToPlayer();
+	void ZoomOutFromPlayer();
 };
 

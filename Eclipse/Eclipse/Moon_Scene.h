@@ -1,7 +1,6 @@
 #pragma once
 #include "../Direct2D_EngineLib/Scene.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "../Direct2D_EngineLib/Camera.h"
 #include "../Direct2D_EngineLib/UI_Text.h"
 
 #include "Player.h"
@@ -21,9 +20,14 @@
 #include "Platform.h"
 #include "PlayerSkillEffcet.h"
 
+#include "InGameCamera.h"
+
 class Moon_Scene : public Scene
 {
 private:
+	// camera
+	InGameCamera* camera;
+
 	// [ background ]
 	MapBackGround* mapBackGround;
 

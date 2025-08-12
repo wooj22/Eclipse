@@ -5,12 +5,12 @@
 void PlayScene::Awake()
 {
 	// camera
-	camera = CreateObject<GameObject>();
-	camera->AddComponent<Transform>();
-	auto camCompo = camera->AddComponent<Camera>(1920, 1080);
+	camera = CreateObject<InGameCamera>();
 
 	// create object
 	mapBackGround = CreateObject<MapBackGround>();
+	moonShadow = CreateObject<MoonShadow>();
+	moonShadow->transform->Translate(1000, 0);
 
 	// UI
 	playUI = CreateObject<PlayUI>();
@@ -41,17 +41,6 @@ void PlayScene::Awake()
 
 	// [ Platform ]
 	platform_map = CreateObject<Platform>();
-
-	// boundary condition
-	Rect mapRect;
-	mapRect.size = { 2560, 1920 };
-
-	// camera target
-	camCompo->SetTarget(player->transform);
-	camCompo->SetTargetTraceSpeed(400.0f);
-	camCompo->SetTargetTraceLimitX(30.0f);
-	camCompo->SetTargetTraceLimitY(100.0f);
-	camCompo->SetMapCondition(mapRect);
 
 	//wave
 	waveSystemObj = CreateObject<GameObject>();
