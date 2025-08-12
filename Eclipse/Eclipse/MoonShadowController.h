@@ -13,6 +13,7 @@ private:
 	bool isWaving;
 	bool isBossWave;
 	bool isStop;
+	bool isAfterMoving;
 
 public:
 	void Awake() override;
@@ -20,5 +21,8 @@ public:
 
 	// 보스 웨이브 연출
 	void DirectingBossWave();
+
+	// 보스 웨이브 연출 이후 다시 이동
+	void AfterMovingStart();
 };
 
