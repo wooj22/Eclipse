@@ -236,10 +236,10 @@ void HonCController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 
 
 // Player Attack
-void HonCController::TakeDamageByPlayer()
+void HonCController::TakeDamageByPlayer(Vector2 dir)
 {
 	// collision acttion
 	CollisionStart();
-	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+	moveDirection = dir;
 	TakeDamage(2);
 }

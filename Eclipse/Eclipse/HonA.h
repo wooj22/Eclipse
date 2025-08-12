@@ -62,10 +62,5 @@ public:
 	{
 		delete animatorController;
 	}
-
-	void Update() override
-	{
-		collider->DebugColliderDraw();
-	}
 };
 

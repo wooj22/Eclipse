@@ -208,10 +208,10 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 }
 
 // Player Attack
-void HonAController::TakeDamageByPlayer()
+void HonAController::TakeDamageByPlayer(Vector2 dir)
 {
 	// collision acttion
 	CollisionStart();
-	moveDirection = (tr->GetWorldPosition() - playerTr->GetWorldPosition()).Normalized();
+	moveDirection = dir;
 	TakeDamage(2);
 }

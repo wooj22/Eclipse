@@ -33,6 +33,6 @@ public:
 	void OnTriggerEnter(ICollider* other, const ContactInfo& contact) override;
 
 	// player attack
-	void TakeDamageByPlayer() override;
+	void TakeDamageByPlayer(Vector2 dir) override;
 };
 

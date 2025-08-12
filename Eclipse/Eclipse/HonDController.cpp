@@ -122,7 +122,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 
 
 // Player Attack
-void HonDController::TakeDamageByPlayer()
+void HonDController::TakeDamageByPlayer(Vector2 dir)
 {
 	TakeDamage(2);
 }

@@ -99,7 +99,7 @@ public:
 	void Die();
 
 	// player attack
-	virtual void TakeDamageByPlayer() {}
+	virtual void TakeDamageByPlayer(Vector2 dir) {}
 
 	// collision moving flag
 	void CollisionEnd();
