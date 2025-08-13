@@ -199,12 +199,13 @@ void PlayUI::SceneStart()
 	skill1Icon_Image->rectTransform->SetParent(skill1_Image->rectTransform);
 	skill1CollTimeFilter_Image->rectTransform->SetParent(skill1_Image->rectTransform);
 
-	skill1_Image->rectTransform->SetPosition(0, -132);
-	skill1_Image->rectTransform->SetSize(100, 100);
-	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ_Deactivate.png");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
-	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ_Deactivate");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
+	skill1_Image->rectTransform->SetPosition(-3, -132);
+	skill1_Image->rectTransform->SetSize(134.5, 120);
+	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ_Activate.png");
+	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ_Activate");
 	auto skillIconTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillIcon.png");
 	skill1Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
+	skill1Icon_Image->SetActive(false);
 
 	skill1Key_Image->rectTransform->SetPosition(0, 50);
 	skill1Key_Image->rectTransform->SetSize(50, 50);
@@ -234,7 +235,6 @@ void PlayUI::SceneStart()
 	skill2Key_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2KeyImageTexture, "E");
 
 	skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-	skill1_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
 	skill2_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
 
 	// 스킬창 UI
@@ -530,7 +530,9 @@ void PlayUI::ClickChatButton() {
 		if(GameManager::Get().questIndex<3)GameManager::Get().isQuest = true;
 		quest->RefreshQuestText();
 		quest->RefreshQuestCountText(-1);
+		bool check = skill1Icon_Image->IsActive();
 		hon_Image->SetActive(true);
+		skill1Icon_Image->SetActive(check);
 		stop_Button->SetActive(true);
 		quest_Image->SetActive(true);
 		GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
@@ -556,7 +558,9 @@ void PlayUI::WaveStartData()
 	quest->RefreshQuestCountText(0);
 	questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	if (skillWindowBackGround_Image->IsActive()) skillWindowBackGround_Image->SetActive(false);
+	bool check = skill1Icon_Image->IsActive();
 	hon_Image->SetActive(true);
+	skill1Icon_Image->SetActive(check);
 	stop_Button->SetActive(true);
 	quest_Image->SetActive(true); 
 	timer_Text->SetActive(true);
@@ -644,15 +648,41 @@ void PlayUI::ChangeHonCountText()
 void PlayUI::ActivateAbsorb()
 {
 	skill1CollTimeFilter_Image->SetActive(false);
-	/*skill1_Image->imageRenderer->renderMode = RenderMode::Unlit;
-	skill1CollTime_Text->SetActive(false);*/
+	skill1_Image->rectTransform->SetSize(134.5, 120);
+	skill1_Image->rectTransform->SetPosition(-3, -132);
+	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ_Activate.png");
+	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ_Activate");
+	skill1Icon_Image->SetActive(false);
 }
 
 void PlayUI::DeactivateAbsorb()
 {
 	skill1CollTimeFilter_Image->SetActive(true);
-	/*skill1_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
-	skill1CollTime_Text->SetActive(true);*/
+	skill1_Image->rectTransform->SetSize(100, 100);
+	skill1_Image->rectTransform->SetPosition(0, -132);
+	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ_Deactivate.png");
+	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ_Deactivate");
+	skill1Icon_Image->SetActive(true);
+}
+
+void PlayUI::ActivateRelease()
+{
+	skill2_Image->imageRenderer->renderMode = RenderMode::Unlit;
+	//skill2_Image->rectTransform->SetPosition(117, -132);
+	skill2_Image->rectTransform->SetSize(134.5, 120);
+	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE_Activate.png");
+	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE_Activate");
+	skill2Icon_Image->SetActive(false);
+}
+
+void PlayUI::DeactivateRelease()
+{
+	skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint; 
+	//skill2_Image->rectTransform->SetPosition(120, -132);
+	skill2_Image->rectTransform->SetSize(100, 100);
+	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE_Deactivate.png");
+	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE_Deactivate");
+	skill2Icon_Image->SetActive(true);
 }
 
 void PlayUI::CheckPauseUI()

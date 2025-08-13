@@ -129,6 +129,10 @@ public:
 	void ActivateAbsorb();
 	void DeactivateAbsorb();
 
+	void ActivateRelease();
+
+	void DeactivateRelease();
+
 	void ChatSetActive(bool check) {
 		chat_Image->SetActive(check);
 		chat_Button->SetActive(false);
