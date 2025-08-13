@@ -6,20 +6,17 @@ void Quest::Awake()
 	questLines.push_back(L"");//웨이브 카운터와 동일한 인덱스용
 	questLines.push_back(L"좌측 이동 (A)\n우측 이동 (D)\n점프 (SPACE)");
 	questLines.push_back(L"기본공격 (좌 클릭)\n불릿타임 (좌 홀딩)\n대시 (SHIFT)");
-	questLines.push_back(L"영혼을 20회\n정화(처치)하세요.");
-	questLines.push_back(L"");
+	questLines.push_back(L"영혼을 10회\n처치하세요.");
 	questLines.push_back(L"TAP을 눌러 \n스킬을 배우세요.");
-	questLines.push_back(L"연쇄를 10회\n진행하세요.");
-	questLines.push_back(L"");
+	questLines.push_back(L"연쇄를 5회\n진행하세요.");
 	questLines.push_back(L"TAP을 눌러 \n스킬을 배우세요.");
 	questLines.push_back(L"루나를 보호하세요.");
-	questLines.push_back(L"");
 	questLines.push_back(L"TAP을 눌러 \n스킬을 배우세요.");
 	questLines.push_back(L"녹스를 처치하세요.");
 
 	questMaxCount.push_back(0);//웨이브 카운터와 동일한 인덱스용
-	questMaxCount.push_back(20);
 	questMaxCount.push_back(10);
+	questMaxCount.push_back(5);
 	questMaxCount.push_back(5);
 	questMaxCount.push_back(1);
 
