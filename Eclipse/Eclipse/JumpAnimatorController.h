@@ -77,7 +77,7 @@ public:
 	// 점프 애니메이션 재생
 	void PlayJump()
 	{
-		OutputDebugStringA("[JumpAnimatorController] Jump Animation Start\n");
+		// OutputDebugStringA("[JumpAnimatorController] Jump Animation Start\n");
 		ChangeAnimation(jumpEffectState);
 	}
 

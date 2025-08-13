@@ -85,7 +85,7 @@ void Fall_State::Update(MovementFSM* fsm)
     if (!fsm->GetPlayerFSM()->isAttackIgnore && 
         fsm->GetPlayerFSM()->CanAttack() && 
         fsm->GetPlayerFSM()->GetIsLButton() && 
-        !fsm->GetPlayerFSM()->canFallAttack)
+        fsm->GetPlayerFSM()->canFallAttack)
     {
         if (!fsm->GetPlayerFSM()->isHolding) { fsm->GetPlayerFSM()->isHolding = true;   fsm->GetPlayerFSM()->holdTime = 0.0f; }
 
@@ -99,7 +99,7 @@ void Fall_State::Update(MovementFSM* fsm)
             fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<BulletTime_State>());
         }
     }
-    else if(!fsm->GetPlayerFSM()->isAttackIgnore && !fsm->GetPlayerFSM()->canFallAttack)
+    else if(!fsm->GetPlayerFSM()->isAttackIgnore && fsm->GetPlayerFSM()->canFallAttack)
     {
         // [ Attack ]
         if (fsm->GetPlayerFSM()->CanAttack() &&

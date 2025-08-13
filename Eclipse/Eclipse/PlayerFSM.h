@@ -44,7 +44,7 @@ private:
 	std::unique_ptr<MovementFSM> movementFSM;
 	std::unique_ptr<ActionFSM> actionFSM;
 
-private:
+public:
 	// Jump - skill 
 	std::map<JumpPhase, bool> canAttackAfterJump;
 
@@ -253,6 +253,7 @@ public:
 	void OnJump(JumpPhase jumpType);	// 해당 점프 타입만 true, 나머지 false
 	bool CanAttack();					// 공격 가능 조건 판별
 	void OnAirAttack();					// 공격 시 현재 가능한 점프 타입의 플래그 false
+	void DebugCanAttack();
 
 	bool isAttackIgnore = false; // 어택 일정시간 무시 
 

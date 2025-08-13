@@ -272,6 +272,8 @@ void PlayerFSM::OnGround()
 	canAttackAfterJump[JumpPhase::NormalJump] = true;
 	canAttackAfterJump[JumpPhase::DoubleJump] = true;
 	canAttackAfterJump[JumpPhase::WallJump] = true;
+
+	DebugCanAttack();
 }
 
 void PlayerFSM::OnJump(JumpPhase jumpType)
@@ -285,6 +287,8 @@ void PlayerFSM::OnJump(JumpPhase jumpType)
 
 	// 해당 점프만 true로 설정
 	canAttackAfterJump[jumpType] = true;
+
+	DebugCanAttack();
 }
 
 bool PlayerFSM::CanAttack()
@@ -311,8 +315,31 @@ void PlayerFSM::OnAirAttack() // 어떤 점프 상태에서든 공격했다면 해당 플래그를 �
 			break; // 한 번만 차감
 		}
 	}
+
+	DebugCanAttack();
 }
 
+void PlayerFSM::DebugCanAttack()
+{
+	std::ostringstream oss;
+	oss << "[canAttackAfterJump] ";
+	for (const auto& pair : canAttackAfterJump)
+	{
+		std::string jumpName;
+		switch (pair.first)
+		{
+		case JumpPhase::NormalJump: jumpName = "NormalJump"; break;
+		case JumpPhase::DoubleJump: jumpName = "DoubleJump"; break;
+		case JumpPhase::WallJump:   jumpName = "WallJump";   break;
+		default: jumpName = "Unknown"; break;
+		}
+
+		oss << jumpName << "=" << (pair.second ? "true" : "false") << " ";
+	}
+	oss << "\n";
+
+	OutputDebugStringA(oss.str().c_str());
+}
 
 
 // [ Q E skill ]
@@ -633,10 +660,13 @@ void PlayerFSM::PlayLandingEffect()
 	if (!landingEffect) return;
 
 	auto tr = landingEffect->GetComponent<Transform>();
-	tr->SetPosition(transform->GetWorldPosition() + Vector2(1, -85)); 
+	// tr->SetPosition(transform->GetWorldPosition() + Vector2(7, -85)); 
 
 	auto renderer = landingEffect->GetComponent<SpriteRenderer>();
 	renderer->flipX = spriteRenderer->flipX; 
+
+	Vector2 offset = lastFlipX ? Vector2(-8, -90) : Vector2(8, -90);
+	tr->SetPosition(transform->GetWorldPosition() + offset);
 
 	auto anim = landingEffect->GetComponent<Animator>();
 	if (anim)

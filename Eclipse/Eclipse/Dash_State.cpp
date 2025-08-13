@@ -70,7 +70,6 @@ void Dash_State::Enter(MovementFSM* fsm)
         }
     }
 
-
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Dash);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
@@ -151,6 +150,12 @@ void Dash_State::Exit(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Dash", false);
 
     fsm->GetPlayerFSM()->GetAudioSource()->Stop();
+
+    // NormalJump 플래그를 유지하도록 설정
+    auto& attacks = fsm->GetPlayerFSM()->canAttackAfterJump;
+    attacks[JumpPhase::NormalJump] = true;
+    attacks[JumpPhase::DoubleJump] = true;
+    attacks[JumpPhase::WallJump] = true;
 }
 
 
