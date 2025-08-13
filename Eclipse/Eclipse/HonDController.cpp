@@ -67,9 +67,6 @@ void HonDController::Update()
 		// descent move
 		tr->Translate(descentDirection * descentSpeed * Time::GetDeltaTime());
 	}
-
-	// opacity ø¨√‚
-	OpacityDirecting();
 }
 
 
