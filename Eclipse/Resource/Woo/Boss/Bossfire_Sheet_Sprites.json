@@ -1,0 +1,277 @@
+{
+    "texture": "Bossfire_Sheet.png",
+    "textureWidth": 6000,
+    "textureHeight": 7200,
+    "sprites": [
+        {
+            "name": "Bossfire_Sheet_0",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_1",
+            "x": 1200.0,
+            "y": 0.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_2",
+            "x": 2400.0,
+            "y": 0.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_3",
+            "x": 3600.0,
+            "y": 0.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_4",
+            "x": 4800.0,
+            "y": 0.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_5",
+            "x": 0.0,
+            "y": 1200.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_6",
+            "x": 1200.0,
+            "y": 1200.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_7",
+            "x": 2400.0,
+            "y": 1200.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_8",
+            "x": 3600.0,
+            "y": 1200.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_9",
+            "x": 4800.0,
+            "y": 1200.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_10",
+            "x": 0.0,
+            "y": 2400.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_11",
+            "x": 1200.0,
+            "y": 2400.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_12",
+            "x": 2400.0,
+            "y": 2400.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_13",
+            "x": 3600.0,
+            "y": 2400.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_14",
+            "x": 4800.0,
+            "y": 2400.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_15",
+            "x": 0.0,
+            "y": 3600.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_16",
+            "x": 1200.0,
+            "y": 3600.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_17",
+            "x": 2400.0,
+            "y": 3600.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_18",
+            "x": 3600.0,
+            "y": 3600.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_19",
+            "x": 4800.0,
+            "y": 3600.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_20",
+            "x": 0.0,
+            "y": 4800.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_21",
+            "x": 1200.0,
+            "y": 4800.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_22",
+            "x": 2400.0,
+            "y": 4800.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_23",
+            "x": 3600.0,
+            "y": 4800.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_24",
+            "x": 4800.0,
+            "y": 4800.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_25",
+            "x": 0.0,
+            "y": 6000.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_26",
+            "x": 1200.0,
+            "y": 6000.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_27",
+            "x": 2400.0,
+            "y": 6000.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_28",
+            "x": 3600.0,
+            "y": 6000.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        },
+        {
+            "name": "Bossfire_Sheet_29",
+            "x": 4800.0,
+            "y": 6000.0,
+            "width": 1200.0,
+            "height": 1200.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+        }
+    ]
+}
