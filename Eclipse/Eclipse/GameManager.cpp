@@ -32,7 +32,6 @@ void GameManager::ReSetData()
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;
-	maxabsorbCoolTime = 10;
 	canUseAbsorb = false;		
 	canUseRelease = false;
 	SkillReset();

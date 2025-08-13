@@ -51,7 +51,8 @@ private:
 	shared_ptr<AudioClip> sfxClip_ChangeScene = nullptr;
 
 public:
-	UI_Text* timer_Text;			// 웨이브 타이머
+	UI_Image* timer_Image;			// 웨이브 타이머 이미지
+	UI_Text* timer_Text;			// 웨이브 타이머 텍스트
 
 	UI_Button* stop_Button;			// 일시 정지 버튼
 	PauseWindow* pauseWindow;
@@ -66,6 +67,7 @@ public:
 	Quest* quest;					// 퀘스트 스크립트
 
 	UI_Image* chat_Image;			// 대화창 이미지
+	UI_Image* chatNext_Image;		// 대화창 next 이미지
 	UI_Text* chat_Text;				// 대화창 텍스트
 	UI_Button* chat_Button;			// 퀘스트 수락 버튼
 	Chat* chat;						// 대화창 스크립트
@@ -82,7 +84,7 @@ public:
 	UI_Image* skill2Icon_Image;		// 스킬2 이미지
 	UI_Image* skill2Key_Image;		// 스킬1 텍스트
 
-	UI_Text* waveInfo_Text;			// 웨이브 정보 텍스트
+	UI_Image* waveInfo_Image;		// 웨이브 정보 이미지
 
 	tooltip* tooltip1;
 	tooltip* tooltip2;

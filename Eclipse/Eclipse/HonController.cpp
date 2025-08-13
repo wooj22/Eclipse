@@ -8,9 +8,31 @@ HonController::HonController()
 	SFX_HonMerge = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/s_Merge.wav");
 }
 
+// 투명화 연출
+void HonController::OpacityDirecting()
+{
+	float targetAlpha = alphaData[hp];
+	float currentAlpha = sr->GetAlpha();
+	float changeSpeed = 2;
+
+	if (currentAlpha < targetAlpha)
+		currentAlpha = min(currentAlpha + changeSpeed * Time::GetDeltaTime(), targetAlpha);
+	else if (currentAlpha > targetAlpha)
+		currentAlpha = max(currentAlpha - changeSpeed * Time::GetDeltaTime(), targetAlpha);
+
+	sr->SetAlpha(currentAlpha);
+}
+
 // direction
-void HonController::SetDirection(Vector2 dir) { moveDirection = dir; }
-Vector2 HonController::Getdirection() { return moveDirection; }
+void HonController::SetDirection(Vector2 dir)
+{ 
+	moveDirection = dir; 
+}
+
+Vector2 HonController::Getdirection() 
+{ 
+	return moveDirection; 
+}
 
 // size
 void HonController::SetSize(float s)
@@ -19,22 +41,40 @@ void HonController::SetSize(float s)
 	if (tr) tr->SetScale(size, size);
 }
 
-float HonController::GetSize() { return size; }
+float HonController::GetSize() 
+{ 
+	return size; 
+}
 
 // collision move speed
-void HonController::SetSpeedUpRate(float r) { collisionSpeed = collisionSpeedDefalut * r; }
+void HonController::SetSpeedUpRate(float r) 
+{ 
+	collisionSpeed = collisionSpeedDefalut * r; 
+}
 
 // descent speed
-void HonController::SetDescentSpeed(float s) { descentSpeed = s; }
-float HonController::GetSDescentpeed() { return descentSpeed; }
+void HonController::SetDescentSpeed(float s) 
+{
+	descentSpeed = s; 
+}
+
+float HonController::GetSDescentpeed()
+{ 
+	return descentSpeed;
+}
 
 // hp
 void HonController::SetHp(int h) 
 {
 	hp = h; 
-	if(sr) sr->SetAlpha(alphaData[hp]);
+	//if(sr) sr->SetAlpha(alphaData[hp]);
 }
-int HonController::GetHp() { return hp; }
+
+int HonController::GetHp() 
+{
+	return hp; 
+}
+
 void HonController::TakeDamage(int damage)
 {
 	if (destroyPending) return;
@@ -47,7 +87,7 @@ void HonController::TakeDamage(int damage)
 	}
 
 	// effect
-	sr->SetAlpha(alphaData[hp]);
+	//sr->SetAlpha(alphaData[hp]);
 }
 
 void HonController::Die()
@@ -79,7 +119,7 @@ void HonController::Die()
 	}
 
 	// component off
-	sr->SetEnabled(false);
+	//sr->SetEnabled(false);
 	collider->SetEnabled(false);
 
 	// sound
@@ -91,8 +131,17 @@ void HonController::Die()
 }
 
 // collision moving flag
-void HonController::CollisionEnd() { isCollisionMoving = false; collisionMovingDelta = 0; }
-void HonController::CollisionStart() { isCollisionMoving = true; collisionMovingDelta = 0; }
+void HonController::CollisionEnd() 
+{ 
+	isCollisionMoving = false;
+	collisionMovingDelta = 0; 
+}
+
+void HonController::CollisionStart()
+{ 
+	isCollisionMoving = true;
+	collisionMovingDelta = 0; 
+}
 
 // HonC 끌어당기는 함수
 void HonController::HonC_PullMe(Vector2 pos)

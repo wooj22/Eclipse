@@ -72,7 +72,6 @@ void TitleUI::SceneStart()
 	end_Button->rectTransform->SetSize(300, 50);
 	end_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink,0));
 
-	//TODOMO : 이미지로하면 텍스트는 제거
 	play_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	play_Button->screenTextRenderer->SetText(L"새로하기");
 	play_Button->screenTextRenderer->SetFontSize(30);
@@ -158,7 +157,7 @@ void TitleUI::SceneStart()
 
 void TitleUI::Update()
 {
-	titleSpell_Image->transform->Rotate(0.05);
+	titleSpell_Image->transform->Rotate(5 * Time::GetDeltaTime());
 
 	glowtimer += Time::GetDeltaTime();  // 매 프레임 시간 누적
 
@@ -167,6 +166,15 @@ void TitleUI::Update()
 	float glow = s * 150.0f;
 	titleLogo_Image->GetComponent<SpriteRenderer>()->SetGlowAmmount(glow);
 
+
+	if (Input::GetKeyDown(VK_ESCAPE)&&(optionUI->IsActive()|| creditUI->creditWindowBackGround_Image->IsActive()))
+	{
+		play_Button->SetActive(true);
+		optionUI->SetActive(false);
+		creditUI->creditWindowBackGround_Image->SetActive(false);
+		underscore_Image->rectTransform->SetPosition(0, -20);
+		underscore_Image->rectTransform->SetSize(150, 150);
+	}
 }
 
 void TitleUI::Destroyed()

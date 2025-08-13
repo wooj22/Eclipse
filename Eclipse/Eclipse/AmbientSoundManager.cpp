@@ -15,7 +15,7 @@ AmbientSoundManager::AmbientSoundManager() : GameObject("AmbientSoundManager", "
     windSound->SetChannelGroup(AudioSystem::Get().GetAMBGroup());
     auto windClip = ResourceManager::Get().CreateAudioClip("../Resource/Aron/AMB/s_Wind.wav");
     windSound->SetClip(windClip);
-    windSound->SetLoop(true);
+    windSound->SetLoop(false);
     windSound->SetVolume(0.8f);
     
     // Owl sounds
@@ -65,6 +65,16 @@ void AmbientSoundManager::Update()
     GameObject::Update();
     
     float deltaTime = Time::GetDeltaTime();
+    
+    // Update wind timer
+    windTimer += deltaTime;
+    if (windTimer >= windInterval)
+    {
+        PlayWindSound();
+        windTimer = 0.0f;
+        // Randomize next interval (play every 30-50 seconds)
+        windInterval = 30.0f + (rand() % 20);
+    }
     
     // Update owl timer
     owlTimer += deltaTime;

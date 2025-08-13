@@ -28,7 +28,12 @@ void HonAController::Update()
 	if (destroyPending)
 	{
 		if (!audioSource->IsPlaying()) gameObject->Destroy();
-		return;
+		else
+		{
+			// opacity 연출
+			OpacityDirecting();
+			return;
+		}
 	}
 
 	// moving
@@ -67,6 +72,9 @@ void HonAController::Update()
 		// descent move
 		tr->Translate(descentDirection * descentSpeed * Time::GetDeltaTime());
 	}
+
+	// opacity 연출
+	OpacityDirecting();
 }
 
 void HonAController::OnDestroy()
@@ -164,7 +172,6 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 				CollisionEnd();
 				SetDescentSpeed(descentSpeed * 0.6);
 				SetHp(3);
-				sr->SetAlpha(alphaData[hp]);
 				is2A = true;
 				 
 				// sound

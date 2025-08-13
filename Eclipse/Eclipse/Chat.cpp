@@ -68,6 +68,7 @@ void Chat::NextChat()
 		{
 			finished = true;
 			GameManager::Get().g_playUI->chat_Button->SetActive(true);
+			GameManager::Get().g_playUI->chatNext_Image->SetActive(false);
 		}
 	}
 }
