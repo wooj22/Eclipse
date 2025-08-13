@@ -12,9 +12,11 @@
 
 void PlayUI::Awake()
 {  
+	soundManager = AddComponent<SoundManager>();
+	soundManager->FadeInMaster(2);
 	success_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	fail_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
-	fail_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
+	//fail_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 
 	//해당 씬에 게임 오브젝트 생성
 	timer_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -116,26 +118,26 @@ void PlayUI::SceneStart()
 
 	success_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 	fail_Text->screenTextRenderer->SetFontName(L"덕온공주체");
-	fail_Button->screenTextRenderer->SetText(L"다시하기");
-	fail_Button->screenTextRenderer->SetFontName(L"덕온공주체");
+	//fail_Button->screenTextRenderer->SetText(L"다시하기");
+	//fail_Button->screenTextRenderer->SetFontName(L"덕온공주체");
 	success_Text->screenTextRenderer->SetFontSize(100);
 	success_Text->rectTransform->SetSize(1920,200);
 	fail_Text->screenTextRenderer->SetFontSize(100);
 	fail_Text->rectTransform->SetSize(1920, 200);
-	fail_Button->screenTextRenderer->SetFontSize(50);
-	fail_Button->rectTransform->SetPosition(0, -400);
-	fail_Button->rectTransform->SetSize(1920, 200);
-	fail_Button->imageRenderer->SetColor(0,0,0);
+	//fail_Button->screenTextRenderer->SetFontSize(50);
+	//fail_Button->rectTransform->SetPosition(0, -400);
+	//fail_Button->rectTransform->SetSize(1920, 200);
+	//fail_Button->imageRenderer->SetColor(0,0,0);
 	success_Text->screenTextRenderer->layer = 31;
 	fail_Text->screenTextRenderer->layer = 31;
-	fail_Button->screenTextRenderer->layer = 31;
+	//fail_Button->screenTextRenderer->layer = 31;
 	success_Text->SetActive(false);
 	fail_Text->SetActive(false);
-	fail_Button->SetActive(false);
+	//fail_Button->SetActive(false);
 
 	success_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	success_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-	fail_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	//fail_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 
 
 	pauseCheckButtos = { stop_Button, pauseWindow->close_Button, pauseWindow->continuGame_Button };
@@ -181,6 +183,7 @@ void PlayUI::SceneStart()
 	questName_Text->screenTextRenderer->SetText(L"목표");
 	questName_Text->screenTextRenderer->SetFontSize(30);
 	questName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
+	quest_Text->rectTransform->SetPosition(0, -20);
 	quest_Text->rectTransform->SetSize(200, 50);
 	quest2_Text->rectTransform->SetPosition(0, -25);
 	quest2_Text->rectTransform->SetSize(200, 50);
@@ -405,25 +408,19 @@ void PlayUI::SceneStart()
 			ButtonClickSound();
 		});
 
-	fail_Button->button->onClickListeners.AddListener(
+	/*fail_Button->button->onClickListeners.AddListener(
 		this, [this]() {
-			skillWindowBackGround_Image->SetActive(false);
+			/*skillWindowBackGround_Image->SetActive(false);
 			pauseWindow->SetActive(false);
 			stop_Button->SetActive(true);
 			fail_Text->SetActive(false);
 			fail_Button->SetActive(false);
-			bossHP->SetActive(false);
-			GameManager::Get().canUseMouse = true;
-			GameManager::Get().questIndex = 8;
-			GameManager::Get().waveCount = 3;
-			GameManager::Get().isQuest = false;
-			GameManager::Get().questState = ChatCondition::Wave;
-			GameManager::Get().isWave = false;
-			chat->SetSequenceCount(8);
-			chat->SetCondition();
+			auto a = GameManager::Get().waveTime;
+			fail_Text->screenTextRenderer->SetText(L"");
+			BossReTry();
 			ButtonClickSound();
 			fade->FadeIn();
-		});
+		}); */
 }
 
 void PlayUI::Update()
@@ -593,14 +590,7 @@ void PlayUI::Update()
 
 	if (Input::GetKeyDown(VK_F4))
 	{
-		GameManager::Get().questIndex = 8;
-		GameManager::Get().waveCount = 3;
-		GameManager::Get().isQuest = false;
-		GameManager::Get().questState = ChatCondition::Wave;
-		GameManager::Get().canUseMouse = true;
-		GameManager::Get().isWave = false;
-		chat->SetSequenceCount(8);
-		chat->SetCondition();
+		BossReTry();
 	}
 
 	if (Input::GetKeyDown(VK_F5))
@@ -620,7 +610,9 @@ void PlayUI::Update()
 
 	if (Input::GetKeyDown(VK_F8))
 	{
-		GameObject::Find("Boss")->GetComponent<BossController>()->TakeDamage(5);
+		auto boss = GameObject::Find("Boss");
+		if(boss)
+			boss->GetComponent<BossController>()->TakeDamage(5);
 	}
 
 }
@@ -857,7 +849,7 @@ void PlayUI::FailEvent()
 
 	GameManager::Get().canUseMouse = false;
 	fail_Text->SetActive(true);
-	fail_Button->SetActive(true);
+	//fail_Button->SetActive(true);
 	stop_Button->SetActive(true);
 
 	fail_Text->GetComponent<Typer>()->SetTextRenderer(fail_Text->screenTextRenderer);
@@ -876,4 +868,18 @@ void PlayUI::SuccessEvent()
 	success_Text->GetComponent<Typer>()->SetTextRenderer(success_Text->screenTextRenderer);
 	success_Text->GetComponent<Typer>()->SetAudioSource(success_Text->GetComponent<AudioSource>());
 	success_Text->GetComponent<Typer>()->StartTyping(L"달빛이 돌아왔다.");
+}
+
+void PlayUI::BossReTry()
+{
+	GameManager::Get().questIndex = 8;
+	GameManager::Get().waveCount = 3;
+	GameManager::Get().isQuest = false;
+	GameManager::Get().questState = ChatCondition::Wave;
+	GameManager::Get().canUseMouse = true;
+	GameManager::Get().isWave = false;
+	chat->SetSequenceCount(8);
+	chat->SetCondition();
+	GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->ReStart();
+	GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 }

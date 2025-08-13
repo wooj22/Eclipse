@@ -220,6 +220,9 @@ void GameManager::FinishWave()
 			InvokeSystem::Invoke(4.0f, [this]() {
 				g_playUI->FailEvent();
 				});
+			InvokeSystem::Invoke(6.0f, []() {
+				SceneManager::Get().ChangeScene(6);
+				});
 			return;
 		}
 	}
@@ -297,6 +300,8 @@ float GameManager::GetSkillBonus(SkillType type)
 
 void GameManager::OnNPCInteraction()
 {
+
+	if(GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->IsEclipseDirecting()) return;
 	g_playUI->ChatSetActive(true);
 	canUseMouse = false;
 	if(questState == ChatCondition::Success)

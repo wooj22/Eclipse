@@ -1,6 +1,7 @@
 #pragma once
 #include "../Direct2D_EngineLib/AudioSystem.h"
 #include "../Direct2D_EngineLib/Script.h"
+#include "../Direct2D_EngineLib/Time.h"
 
 #include <algorithm>
 
