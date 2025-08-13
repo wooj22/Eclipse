@@ -34,15 +34,6 @@ void Attack_State::Enter(MovementFSM* fsm)
     float actualDistance = (toMouse.Magnitude() < baseMaxDistance) ? toMouse.Magnitude() : baseMaxDistance;
     direction = toMouse.Normalized();
 
-    // 원하는 거리 만큼 떨어진 위치 계산
-    float desiredDistance = 100.0f;  // 원하는 거리
-    Vector2 targetPosition = startPos + direction * desiredDistance;
-
-    // PlayerAttackArea 콜라이더 위치 설정
-    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Transform>()->SetPosition(targetPosition);
-	std::string debugStr = "[Attack_State] PlayerAttackArea 위치 설정 : " + std::to_string(targetPosition.x) + ", " + std::to_string(targetPosition.y) + "\n";
-	OutputDebugStringA(debugStr.c_str());
-
     // [ 공중 이동 조건 ]
     airAttack = !fsm->GetPlayerFSM()->GetIsGround() || (fsm->GetPlayerFSM()->isBulletAttack && fsm->GetPlayerFSM()->MouseWorldPos.y > startPos.y);
 
@@ -77,11 +68,9 @@ void Attack_State::Enter(MovementFSM* fsm)
     float angleRad = atan2(direction.y, direction.x);
     float angleDeg = angleRad * (180.0f / 3.14159265f);
 
-    // playerAttack_Parent 회전 : ( 원본 이미지가 위쪽 방향 기준 -> 시계방향 -90도 회전 적용 )
-    // fsm->GetPlayerFSM()->GetPlayerAttackParent()->GetComponent<Transform>()->SetRotation(angleDeg + 180.0f);
-
-	// playerAttackArea 위치 설정
-	// fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Transform>()->SetPosition(startPos + direction * 50.0f);
+    // PlayerAttackArea 콜라이더 위치/회전 설정
+    attackAreaPosition = startPos + direction * attackAreaDistance;
+    fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Transform>()->SetPosition(attackAreaPosition);
 	fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Transform>()->SetRotation(angleDeg + 180.0f); // -90도 회전 적용
    
     // 공격 이펙트 애니메이션 
@@ -119,8 +108,7 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
     if (toMouse.Magnitude() > 0.001f) // 0나누기 방지
     {
         Vector2 direction = toMouse.Normalized();
-        float desiredDistance = 100.0f; // 원하는 거리
-        Vector2 attackAreaPos = playerPos + direction * desiredDistance;
+        Vector2 attackAreaPos = playerPos + direction * attackAreaDistance;
 
         // 공격 영역 위치 갱신
         fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Transform>()->SetPosition(attackAreaPos);
