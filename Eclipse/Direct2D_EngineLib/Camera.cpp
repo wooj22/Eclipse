@@ -71,14 +71,14 @@ void Camera::Update()
     // target trace
     TargetTrace();
 
+    // map boundary condition
+    if (useMapCondition)
+        MapBoundaryCondition();
+
     // maxtrix update
     worldMatrix = zoomMatrix * transform->GetWorldMatrix();
     inverseMatrix = worldMatrix;
-    inverseMatrix.Invert();
-
-    // map boundary condition
-    if (useMapCondition)        
-	    MapBoundaryCondition();     
+    inverseMatrix.Invert();  
 }
 
 void Camera::OnDestroy_Inner()
@@ -128,19 +128,28 @@ void Camera::TargetTrace()
 {
     if (target && useTargetTrace)
     {
-        // dist
-        Vector2 dist = target->GetWorldPosition() - transform->GetWorldPosition();
+        Vector2 targetPos = target->GetWorldPosition();
+        Vector2 currentPos = transform->GetWorldPosition();
+        Vector2 dist = targetPos - currentPos;
 
-        // direction
-        Vector2 moveDir;
-        if (std::abs(dist.x) > targetTraceLimitX) moveDir.x = (dist.x > 0 ? 1 : -1);
-        if (std::abs(dist.y) > targetTraceLimitY) moveDir.y = (dist.y > 0 ? 1 : -1);
+        // trace limit
+        if (std::abs(dist.x) <= targetTraceLimitX) dist.x = 0;
+        if (std::abs(dist.y) <= targetTraceLimitY) dist.y = 0;
 
         // trace
-        if (moveDir.x != 0.0f || moveDir.y != 0.0f)
+        if (dist.x != 0 || dist.y != 0)
         {
-            transform->Translate(moveDir.Normalized().x * targetTraceXSpeed * Time::GetDeltaTime(),
-                moveDir.Normalized().y * targetTraceYSpeed * Time::GetDeltaTime());
+            Vector2 dir = dist.Normalized();
+
+            // move
+            float moveX = dir.x * targetTraceXSpeed * Time::GetDeltaTime();
+            float moveY = dir.y * targetTraceYSpeed * Time::GetDeltaTime();
+
+            // 오버슈팅 방지
+            if (std::abs(moveX) > std::abs(dist.x)) moveX = dist.x;
+            if (std::abs(moveY) > std::abs(dist.y)) moveY = dist.y;
+
+            transform->Translate(moveX, moveY);
         }
     }
 }

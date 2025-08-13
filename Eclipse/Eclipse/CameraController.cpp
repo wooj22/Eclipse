@@ -22,7 +22,7 @@ void CameraController::Start()
 	// set target
 	camera->SetTarget(playerTr);
 	camera->SetTargetTraceXSpeed(450.0f);
-	camera->SetTargetTraceYSpeed(1500.0f);
+	camera->SetTargetTraceYSpeed(800.0f);
 	camera->SetTargetTraceLimitX(20.0f);
 	camera->SetTargetTraceLimitY(30.0f);
 
