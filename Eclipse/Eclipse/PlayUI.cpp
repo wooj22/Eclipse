@@ -460,8 +460,6 @@ void PlayUI::Update()
 		);
 	}
 
-	// TODOMO : 아래 입력 삭제 
-
 	if (Input::GetKeyDown(VK_ESCAPE))
 	{
 		if (!skillWindowBackGround_Image->IsActive())
