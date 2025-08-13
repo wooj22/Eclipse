@@ -112,6 +112,10 @@ void Attack_State::FixedUpdate(MovementFSM* fsm)
 
         // 공격 영역 위치 갱신
         fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Transform>()->SetPosition(attackAreaPos);
+		// 공격 영역 회전 갱신
+		float angleRad = atan2(direction.y, direction.x);
+		float angleDeg = angleRad * (180.0f / 3.14159265f);
+		fsm->GetPlayerFSM()->GetPlayerAttackArea()->GetComponent<Transform>()->SetRotation(angleDeg + 180.0f); // -90도 회전 적용
     }
 
     // 잔상 

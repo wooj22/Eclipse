@@ -58,7 +58,7 @@ void PlayerFSM::Awake()
 void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
-	// GameManager::Get().AllSkillUnlock();
+	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
@@ -217,14 +217,19 @@ void PlayerFSM::SpeedSetting()
 // 이동속도 감소
 void PlayerFSM::SetSpeedDownRate(float rate)
 {
-	float currentTime = Time::GetDeltaTime();
+	float currentTime = Time::GetTotalTime();
 
+	// 마지막 호출 이후 2초 이내면 무시
 	if (currentTime - lastSpeedDownTime < speedDownIgnoreTime) return;
 
+	// 감속 적용
 	speedDownTimer = speedDownDuration;
 	speedDownRate = rate;
 	isSpeedDown = true;
+
 	lastSpeedDownTime = currentTime;
+
+
 
 	OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
 }
