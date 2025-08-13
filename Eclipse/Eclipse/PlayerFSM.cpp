@@ -20,6 +20,7 @@
 #include "HonController.h"
 #include "SkillAnimatorController.h"
 #include "PlayerSkillEffcet.h"
+#include "LandingAnimatorController.h"
 
 
 
@@ -37,6 +38,7 @@ void PlayerFSM::Awake()
 	animatorController = gameObject->GetComponent<Animator>()->controller;
 	audioSource = gameObject->GetComponent<AudioSource>();
 	playerAnimatorController = dynamic_cast<PlayerAnimatorController*>(animatorController);
+	landingAnimatorController = dynamic_cast<LandingAnimatorController*>(animatorController);
 
 	// [ AudioClip ] 
 	SFX_Player_Move1 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Footstep1.wav");
@@ -61,6 +63,16 @@ void PlayerFSM::Start()
 
 void PlayerFSM::Update()
 {
+	if (spawnDelay > 0.0f) 
+	{
+		spawnDelay -= Time::GetDeltaTime();
+		ResetInputs(); // 입력 초기화
+		rigidbody->velocity = Vector2(0, 0);
+		return;
+	}
+
+	movementFSM->Update();
+
 	InputSetting(); // input 키값 확인
 
 	// [ 쿨타임 감소 ]
@@ -71,8 +83,6 @@ void PlayerFSM::Update()
 	if (isE) { TryUseRelease(); }
 	if (isF) { GameManager::Get().g_playUI->PlayerInteraction(); }
 
-	movementFSM->Update();
-
 	MouseWorldPos = Camera::GetScreenToWorldPosition(Input::GetMouseScreenPosition());
 
 	SpeedSetting(); // [ Speed Setting ]
@@ -80,7 +90,6 @@ void PlayerFSM::Update()
 	FlipXSetting(); // [ FlipX Setting - 실제 이동 방향 기준 ]
 
 	
-
 	if (isAbsorbSkillActive) 
 	{
 		AttractionTargetHon(); // [ Q 스킬 상태 ]: 타겟 혼이 플레이어 쪽으로 작아지면서 다가오기
@@ -122,6 +131,9 @@ void PlayerFSM::OnDestroy()
 void PlayerFSM::InputSetting()
 {
 	isF = Input::GetKeyDown('F');
+
+	//std::string debugStr = "[PlayerFSM] GameManager::Get().canUseMouse : " + std::to_string(GameManager::Get().canUseMouse) + "\n";
+	//OutputDebugStringA(debugStr.c_str());
 
 	if (!GameManager::Get().canUseMouse) // 모든 입력값 초기화
 	{
@@ -202,7 +214,20 @@ void PlayerFSM::SpeedSetting()
 	 //OutputDebugStringA(debugStr.c_str());
 }
 
+// 이동속도 감소
+void PlayerFSM::SetSpeedDownRate(float rate)
+{
+	float currentTime = Time::GetDeltaTime();
 
+	if (currentTime - lastSpeedDownTime < speedDownIgnoreTime) return;
+
+	speedDownTimer = speedDownDuration;
+	speedDownRate = rate;
+	isSpeedDown = true;
+	lastSpeedDownTime = currentTime;
+
+	OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
+}
 
 // *-------------- [ Skill ] --------------*
 
@@ -304,11 +329,11 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist <= releaseEffectRange)
 		{
-			obj->Destroy(); // 혼 제거
-
+			// obj->Destroy(); // 혼 제거
+			obj->GetComponent<HonController>()->TakeDamage(5);
 			removedCount++;
-			GameManager::Get().ChangeHonCount(10);
-			GameManager::Get().ChangeQuestCount(1);
+			// GameManager::Get().ChangeHonCount(10);
+			// GameManager::Get().ChangeQuestCount(1);
 		}
 	}
 
@@ -421,7 +446,10 @@ bool PlayerFSM::CanUseRelease() const
 
 void PlayerFSM::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
+	if (other->gameObject->name == "Hon")
+	{
 
+	}
 }
 
 void PlayerFSM::OnTriggerStay(ICollider* other, const ContactInfo& contact)

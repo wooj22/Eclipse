@@ -35,7 +35,7 @@ class Rigidbody;
 class PlayerAttackArea;
 class PlayerAnimatorController;
 class PlayerSkillEffect;
-
+class LandingAnimatorController;
 
 class PlayerFSM : public Script
 {
@@ -53,6 +53,8 @@ public:
 	ActionFSM* GetActionFSM() { return actionFSM.get(); }
 
 private:
+	float spawnDelay = 0.1f; // 0.1초 입력, FSM, 물리 차단
+
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 460.0f; // 400.0f;
@@ -104,6 +106,8 @@ private:
 	PlayerAnimatorController* playerAnimatorController = nullptr;
 	PlayerSkillEffect* skillEffect = nullptr;
 
+	LandingAnimatorController* landingAnimatorController = nullptr;
+
 public:
 	// [ Audio ]
 	shared_ptr<AudioClip> SFX_Player_Jump = nullptr;
@@ -144,11 +148,13 @@ public:
 	Vector2 attackDirection;                // 공격 방향 벡터
 	bool isBulletAttack = false;          // 불릿 타임 공격 여부
 
-	// boss
+	// boss / hon 
 	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머
 	float speedDownDuration = 1.0f;  // 속도 감소 지속 시간 (고정)
 	float speedDownRate = 1.0f;      // 곱해질 속도 비율 
+	float speedDownIgnoreTime = 2.0f; // 속도 감소 무시 시간 
 	bool isSpeedDown = false;
+	float lastSpeedDownTime = -100.0f;
 
 public:
 	// getter
@@ -173,14 +179,7 @@ public:
 	float GetWalkSpeed() const { return walkSpeed; }
 
 	// 이동속도 감소
-	void SetSpeedDownRate(float rate)
-	{
-		speedDownTimer = speedDownDuration; // 고정된 지속 시간으로 초기화
-		speedDownRate = rate;               
-		isSpeedDown = true;
-
-		OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
-	}
+	void SetSpeedDownRate(float rate);
 
 	bool GetIsWall() const { return isWall; }
 	bool GetIsWallLeft() const { return isWallLeft; }

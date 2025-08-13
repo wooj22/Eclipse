@@ -27,9 +27,26 @@ void PlayerAreaController::OnDestroy()
 
 void PlayerAreaController::OnTriggerEnter(ICollider* other, const ContactInfo& contact) 
 {
+	//std::string debugStr = "[PlayerAreaController] OnTriggerEnter: " + other->gameObject->name + "와 Trigger충돌" + "\n";
+ //   OutputDebugStringA(debugStr.c_str());
+
+	//if (other->gameObject->tag == "Hon")
+	//{
+	//	other->gameObject->GetComponent<HonController>()->TakeDamageByPlayer(playerFSM->attackDirection);
+	//	OutputDebugStringA("Hon을 공격 함 \n");
+	//}
+}
+
+void PlayerAreaController::OnTriggerStay(ICollider* other, const ContactInfo& contact)
+{
+	std::string debugStr = "[PlayerAreaController] OnTriggerStay: " + other->gameObject->name + "와 Trigger충돌" + "\n";
+	OutputDebugStringA(debugStr.c_str());
+
 	if (other->gameObject->tag == "Hon")
 	{
 		other->gameObject->GetComponent<HonController>()->TakeDamageByPlayer(playerFSM->attackDirection);
-		OutputDebugStringA("Hon과 충돌 함 \n");
+		OutputDebugStringA("Hon을 공격 함 \n");
 	}
 }
+
+

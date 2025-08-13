@@ -141,17 +141,17 @@ void SkillWindowButton::RefreshCurrentLevelText()
 		to_wstring(skillinfo.unlockLevel) + L"/" + to_wstring(maxSkillLevel));
 
 	// 먼저 전부 초기화 (FloralWhite)
-	skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-	skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
-	skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
+	skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Gray));
+	skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Gray));
+	skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Gray));
 
 	// 현재 레벨 칸만 빨간색
 	if (skillinfo.unlockLevel == 1)
-		skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+		skillColor1_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
 	else if (skillinfo.unlockLevel == 2)
-		skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+		skillColor2_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
 	else if (skillinfo.unlockLevel == 3)
-		skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
+		skillColor3_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::FloralWhite));
 }
 
 void SkillWindowButton::RefreshLevelUPHonCountText()

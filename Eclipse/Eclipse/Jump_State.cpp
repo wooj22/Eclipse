@@ -16,6 +16,7 @@
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include "AfterImage.h"
+#include "LandingAnimatorController.h"
 
 
 
@@ -39,6 +40,17 @@ void Jump_State::Enter(MovementFSM* fsm)
 
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
+
+    //// 점프 이펙트 재생
+    //auto anim = GameObject::Find("PlayerLandingEffect")->GetComponent<Animator>();
+    //if (anim)
+    //{
+	   // auto landingAnimCtrl = dynamic_cast<LandingAnimatorController*>(anim->controller);
+	   // if (landingAnimCtrl)
+	   // {
+		  //  landingAnimCtrl->PlayLanding();
+	   // }
+    //}
 
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Jump);

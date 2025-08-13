@@ -19,21 +19,6 @@ void PlayScene::Awake()
 	// [ player ] 
 	player = CreateObject<Player>();
 
-	// [ playerAttack_Parent ]
-	playerAttack_Parent = CreateObject<GameObject>();
-	auto playerAttack_Parent_tr = playerAttack_Parent->AddComponent<Transform>();
-	playerAttack_Parent_tr->SetParent(player->transform);
-	playerAttack_Parent_tr->SetPosition(0.0f, 0.0f);
-	player->playerFSM->SetPlayerAttackParent(playerAttack_Parent);
-
-	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
-	playerAttackArea = CreateObject<PlayerAttackArea>();
-	playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent->transform);
-	playerAttackArea->GetComponent<SpriteRenderer>()->SetEnabled(false);
-	playerAttackArea->GetComponent<CircleCollider>()->SetEnabled(false);
-	player->playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
-	// playerAttackArea->GetComponent<PlayerAreaController>()->SetPlayerFSM(player->GetComponent<PlayerFSM>());
-
 	// [ player SkillEffect ]
 	skillEffect = CreateObject<PlayerSkillEffect>();
 	skillEffect->GetComponent<Transform>()->SetParent(player->transform);

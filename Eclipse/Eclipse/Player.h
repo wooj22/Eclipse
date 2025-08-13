@@ -17,6 +17,8 @@
 
 #include "AfterImage.h"
 #include "Shadow.h"
+#include "PlayerLandingEffect.h"
+#include "PlayerAttackArea.h"
 
 
 
@@ -42,7 +44,19 @@ public:
 	PlayerFSM* playerFSM;
 
 	// [ player setting ]
-	float playerGravityScale = 100; 
+	float playerGravityScale = 100;
+
+
+	// ------------------------
+
+	// [ playerAttack_Parent ]
+	GameObject* playerAttack_Parent = nullptr; 
+	Transform* playerAttack_Parent_transform = nullptr; 
+
+	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역
+	PlayerAttackArea* playerAttackArea = nullptr;
+
+	// -----------------------
 
 	// [ Shadow ]
 	GameObject* player_Shadow = nullptr; // 그림자 오브젝트
@@ -54,12 +68,17 @@ public:
 	Transform* blackOut_transform = nullptr;
 	SpriteRenderer* blackOut_spriteRenderer = nullptr;
 
+	// [ Landing ] 
+	PlayerLandingEffect* playerLandingEffect = nullptr;
+
+
 public:
 	float GetPlayerGravityScale() const { return playerGravityScale; }
 
 public:
 	Player() : GameObject("Player", "Player")
 	{
+		// [ Player ]
 		transform = AddComponent<Transform>();
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
@@ -73,6 +92,17 @@ public:
 		playerFSM = AddComponent<PlayerFSM>();
 		playerFSM->ResetInputs(); // 플레이어 생성 시, 입력값 초기화 
 
+
+		// [ playerAttack_Parent ]
+		playerAttack_Parent = SceneManager::Get().GetCurrentScene()->CreateObject<GameObject>();
+		playerAttack_Parent_transform = playerAttack_Parent->AddComponent<Transform>();
+
+
+		// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
+		playerAttackArea = SceneManager::Get().GetCurrentScene()->CreateObject<PlayerAttackArea>();
+
+		// ------------- 
+
 		// [ Shadow ] 
 		player_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<Shadow>();
 
@@ -82,6 +112,9 @@ public:
 		blackOut->tag = "BlackOut";
 		blackOut_transform = blackOut->AddComponent<Transform>();
 		blackOut_spriteRenderer = blackOut->AddComponent<SpriteRenderer>();
+
+		// [ Landing Effect ]
+		playerLandingEffect = SceneManager::Get().GetCurrentScene()->CreateObject<PlayerLandingEffect>();
 
 		// [ Audio ]
 		audioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
@@ -98,7 +131,8 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(-20, -790);
+		// [ Player ]
+		transform->SetPosition(-20, -785);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -107,6 +141,17 @@ public:
 		rigidbody->useGravity = true;
 		rigidbody->gravityScale = playerFSM->defaultGravity;
 		rigidbody->mass = 1.4f; 
+
+
+		// [ playerAttack_Parent ]
+		playerAttack_Parent_transform->SetParent(transform);
+		playerFSM->SetPlayerAttackParent(playerAttack_Parent); // 플레이어 FSM에 연결
+
+		// [ playerAttackArea ] 
+		// playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent_transform);
+		playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+
+		// -----------------
 
 		// [ 그림자 ]
 		shadow_transform = player_Shadow->GetComponent<Transform>();
@@ -118,6 +163,9 @@ public:
 		blackOut_spriteRenderer->layer = 20;
 		blackOut_spriteRenderer->SetAlpha(0.5f);
 		blackOut_spriteRenderer->SetEnabled(false);
+
+		// [ Landing Effect ]
+		playerLandingEffect->transform->SetParent(transform);
 	}
 
 
@@ -128,8 +176,8 @@ public:
 		// AABB 영역 
 		// collider->DebugColliderDraw();
 
-		std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
-		OutputDebugStringA(debugStr.c_str());
+		//std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
+		//OutputDebugStringA(debugStr.c_str());
 	}
 
 	void UpdateShadow()

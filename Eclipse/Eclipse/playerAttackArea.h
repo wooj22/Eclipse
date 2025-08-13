@@ -23,7 +23,6 @@ class PlayerAttackArea : public GameObject
 	Animator* animator;  
 	AttackAnimatorController* animController;
 
-	// PlayerFSM* playerFSM = nullptr; // 플레이어 FSM
 
 public:
 	PlayerAttackArea() : GameObject("PlayerAttackArea", "PlayerAttackArea")
@@ -47,11 +46,12 @@ public:
 
 	void Awake() override
 	{
-		transform->SetPosition(-200.0f, 0.0f);
+		transform->SetPosition(0.0f, 0.0f);
+		// transform->SetPosition(0.0f, 0.0f);
 		transform->SetRotation(0.0f);
-		transform->SetScale(1.3f, 1.3f); 
+		transform->SetScale(0.7f, 0.7f); 
 
-		collider->offset = { 50.0f, 0.0f };
+		collider->offset = { 0.0f, 0.0f };
 		collider->radius = 130.0f; 
 		collider->isTrigger = true;
 
@@ -65,7 +65,8 @@ public:
 	void Update() override
 	{
 		// AABB 영역 
-		// if(collider->IsEnabled()) collider->DebugColliderDraw();
+		if(collider->IsEnabled()) collider->DebugColliderDraw();
+		// collider->DebugColliderDraw();
 	}
 
 	// 어택 범위 활성화 + 애니메이션 실행
@@ -80,5 +81,4 @@ public:
 		spriteRenderer->SetEnabled(false);
 		collider->SetEnabled(false);
 	}
-
 };
