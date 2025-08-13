@@ -46,6 +46,7 @@ void BossController::Update()
 	{
 		Move();
 		AttackHandler();
+		if (isHit) HitEffect();
 	}
 	else
 	{
@@ -205,12 +206,39 @@ void BossController::Attack_DropShell()
 /*--------------------  boss hit  ---------------------*/
 void BossController::TakeDamage(int damage)
 {
+	// hit effect
+	isHit = true;
+	hitTimer = 0.f;
+	blinkStep = 0;
+
+	// damage
 	hp -= damage;
 	GameManager::Get().ChangeBossHp(hp / MAX_HP);
 	if (hp < 0)
 	{
 		hp = 0;
 		Die();
+	}
+}
+
+void BossController::HitEffect()
+{
+	hitTimer += Time::GetDeltaTime();
+
+	if (hitTimer >= blinkInterval)
+	{
+		hitTimer -= blinkInterval;
+		blinkStep++;
+
+		if (blinkStep % 2 == 0) sr->SetAlpha(1.0f);
+		else sr->SetAlpha(0.4f);	
+	}
+
+	// end
+	if (blinkStep >= 6)
+	{
+		sr->SetAlpha(1.0f);
+		isHit = false;
 	}
 }
 
@@ -221,8 +249,6 @@ void BossController::Die()
 
 	// wave4 quest
 	GameManager::Get().ChangeQuestCount(4);
-
-	// TODO :: 웨이브 종료 전달
 }
 
 // 투명화 연출
