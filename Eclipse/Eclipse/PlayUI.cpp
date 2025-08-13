@@ -90,7 +90,7 @@ void PlayUI::Awake()
 	bgmClip_Main = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Main.wav");
 	bgmClip_Wave = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Battle.wav");
 	bgmClip_Boss = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Boss.wav");
-	//bgmClip_Clear = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Clear.wav");
+	bgmClip_Clear = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/BGM/s_Clear.wav");
 	
 	sfxClip_Button1 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_1.wav");
 	sfxClip_Button2 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_2.wav");
@@ -277,8 +277,8 @@ void PlayUI::SceneStart()
 
 	skill2_Image->rectTransform->SetPosition(120, -132);
 	skill2_Image->rectTransform->SetSize(100, 100);
-	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE_Deactivate.png");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
-	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE_Deactivate");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
+	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE_Deactivate.png");
+	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE_Deactivate");
 	skill2Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 
 	skill2Key_Image->rectTransform->SetPosition(0, 50);
@@ -882,4 +882,11 @@ void PlayUI::BossReTry()
 	chat->SetCondition();
 	GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->ReStart();
 	GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+}
+
+void PlayUI::ClearSound()
+{
+	bgmSource->SetLoop(true);
+	bgmSource->SetClip(bgmClip_Clear);
+	bgmSource->Play();
 }

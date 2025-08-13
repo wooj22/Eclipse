@@ -321,6 +321,11 @@ void GameManager::OnNPCInteraction()
 		g_playUI->chatNext_Image->SetActive(false);
 	}
 
+	if (waveCount == 4)
+	{
+		g_playUI->ClearSound();
+	}
+
 }
 
 void GameManager::ChangeBossHp(float hp)

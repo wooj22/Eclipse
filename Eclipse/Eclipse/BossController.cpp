@@ -47,9 +47,6 @@ void BossController::Update()
 		Move();
 		AttackHandler();
 		if (isHit) HitEffect();
-
-		// debug
-		if (Input::GetKeyDown('0')) TakeDamage(5);
 	}
 	else
 	{

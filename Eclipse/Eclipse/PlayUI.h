@@ -46,7 +46,7 @@ private:
 	shared_ptr<AudioClip> bgmClip_Main = nullptr;
 	shared_ptr<AudioClip> bgmClip_Wave = nullptr;
 	shared_ptr<AudioClip> bgmClip_Boss = nullptr;
-	//shared_ptr<AudioClip> bgmClip_Clear = nullptr;
+	shared_ptr<AudioClip> bgmClip_Clear = nullptr;
 	shared_ptr<AudioClip> sfxClip_Button1 = nullptr;
 	shared_ptr<AudioClip> sfxClip_Button2 = nullptr;
 	shared_ptr<AudioClip> sfxClip_SkillUI = nullptr;
@@ -174,4 +174,6 @@ public:
 	void FailEvent();
 	void SuccessEvent();
 	void BossReTry();
+
+	void ClearSound();
 };
