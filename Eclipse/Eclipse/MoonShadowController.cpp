@@ -28,7 +28,7 @@ void MoonShadowController::Update()
 	// boss wave 시작 전 연출
 	if (!isStop && isBossWave)
 	{
-		tr->Translate(Vector2::left * Time::GetDeltaTime() * speed * 15);
+		tr->Translate(Vector2::left * Time::GetDeltaTime() * speed * 20);
 		// 월식
 		if (tr->GetWorldPosition().x <= moonTr->GetWorldPosition().x)
 		{
