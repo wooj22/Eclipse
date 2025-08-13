@@ -26,7 +26,7 @@ void BossController::Awake()
 
 	// resource
 	auto texture1 = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Boss/Boss_Idle.png");
-	attackFace = ResourceManager::Get().CreateSprite(texture1, "BossIdleFace");
+	idleFace = ResourceManager::Get().CreateSprite(texture1, "BossIdleFace");
 
 	auto texture2 = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Boss/Boss_Fight.png");
 	attackFace = ResourceManager::Get().CreateSprite(texture2, "BossAttackFace");
@@ -50,12 +50,6 @@ void BossController::Update()
 	else
 	{
 		OpacityDirecting();
-	}
-
-	// test :: player -> take damage
-	if (Input::GetKeyDown('F'))
-	{
-		TakeDamage(10);
 	}
 }
 
@@ -89,6 +83,9 @@ void BossController::AttackHandler()
 			Attack(currentAttackIndex);
 			isAttacking = true;
 
+			// face
+			bossFace->sprite = attackFace;
+
 			// attack coolTime reset
 			attackDeltaTime = 0;
 		}
@@ -103,6 +100,9 @@ void BossController::AttackHandler()
 		if (attackRepeatDeltaTime >= attackRepeatCoolTime)
 		{
 			Attack(currentAttackIndex);
+
+			// face
+			bossFace->sprite = idleFace;
 
 			// attack index set
 			currentAttackIndex =
