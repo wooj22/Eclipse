@@ -69,7 +69,7 @@ protected:
 
 	// player 
 	Transform* playerTr = nullptr;
-	float palyer_deceleration = 0.2;
+	float palyer_deceleration = 0.1;
 
 	// ref component
 	Transform* tr = nullptr;
