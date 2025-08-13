@@ -148,7 +148,7 @@ public:
 		playerFSM->SetPlayerAttackParent(playerAttack_Parent); // 플레이어 FSM에 연결
 
 		// [ playerAttackArea ] 
-		playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent_transform);
+		// playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent_transform);
 		playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
 
 		// -----------------

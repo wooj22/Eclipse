@@ -154,6 +154,7 @@ public:
 	float speedDownRate = 1.0f;      // 곱해질 속도 비율 
 	float speedDownIgnoreTime = 2.0f; // 속도 감소 무시 시간 
 	bool isSpeedDown = false;
+	float lastSpeedDownTime = -100.0f;
 
 public:
 	// getter
@@ -178,14 +179,7 @@ public:
 	float GetWalkSpeed() const { return walkSpeed; }
 
 	// 이동속도 감소
-	void SetSpeedDownRate(float rate)
-	{
-		speedDownTimer = speedDownDuration; // 고정된 지속 시간으로 초기화
-		speedDownRate = rate;               
-		isSpeedDown = true;
-
-		OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
-	}
+	void SetSpeedDownRate(float rate);
 
 	bool GetIsWall() const { return isWall; }
 	bool GetIsWallLeft() const { return isWallLeft; }

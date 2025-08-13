@@ -214,7 +214,20 @@ void PlayerFSM::SpeedSetting()
 	 //OutputDebugStringA(debugStr.c_str());
 }
 
+// 이동속도 감소
+void PlayerFSM::SetSpeedDownRate(float rate)
+{
+	float currentTime = Time::GetDeltaTime();
 
+	if (currentTime - lastSpeedDownTime < speedDownIgnoreTime) return;
+
+	speedDownTimer = speedDownDuration;
+	speedDownRate = rate;
+	isSpeedDown = true;
+	lastSpeedDownTime = currentTime;
+
+	OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
+}
 
 // *-------------- [ Skill ] --------------*
 
