@@ -298,7 +298,7 @@ void WaveSystem::SetupWave1Pattern()
 			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;
 			data.honType = (m_randomGen() % 2 == 0) ? 0 : 1;  // A, B 랜덤
-			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+			data.delayTime = currentTime + (j * 0.7f);  // 동시 스폰시 약간의 지연
 
 			m_currentSpawnPattern.push_back(data);
 		}
@@ -327,7 +327,7 @@ void WaveSystem::SetupWave2Pattern()
 			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;
 			data.honType = m_randomGen() % 3;  // A, B, C 랜덤
-			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+			data.delayTime = currentTime + (j * 0.7f);  // 동시 스폰시 약간의 지연
 
 			m_currentSpawnPattern.push_back(data);
 		}
@@ -372,7 +372,7 @@ void WaveSystem::SetupWave3Pattern()
 			data.x = GetRandomSpawnX();
 			data.y = SPAWN_Y;
 			data.honType = m_randomGen() % 3;  // A, B, C만 랜덤
-			data.delayTime = currentTime + (j * 0.2f);
+			data.delayTime = currentTime + (j * 0.7f);
 
 			m_currentSpawnPattern.push_back(data);
 		}
@@ -438,7 +438,7 @@ void WaveSystem::SetupBossPattern()
 				data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
 			}
 
-			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+			data.delayTime = currentTime + (j * 1.0f);  // 동시 스폰시 약간의 지연
 
 			m_currentSpawnPattern.push_back(data);
 		}
