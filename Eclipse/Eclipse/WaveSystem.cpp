@@ -21,6 +21,7 @@
 #include <cmath>
 #include "PlayUI.h"
 #include "Chat.h"
+#include "BossController.h"
 
 // Define constants
 const float SPAWN_MARGIN = 50.0f;
@@ -121,7 +122,8 @@ void WaveSystem::Update()
 	}
 	m_isUpdatingHons = false;
 
-	if (m_waveElapsedTime >= m_waveDuration)
+	// wave 종료
+	if (m_waveElapsedTime >= m_waveDuration || (m_currentWaveState == WaveState::WAVE_BOSS && GameObject::Find("Boss")->GetComponent< BossController>()->GetBossDie()))
 	{
 		char debugMsg[256];
 		sprintf_s(debugMsg, "Wave %d time expired! Notifying GameManager.\n", static_cast<int>(m_currentWaveState));
