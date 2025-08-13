@@ -339,7 +339,7 @@ void WaveSystem::SetupWave3Pattern()
 	m_currentSpawnPattern.clear();
 
 	// Wave 3: 2-3초마다 1-2마리 랜덤 스폰 (A, B, C)
-	// HonD는 6초마다 정확히 한 마리씩 스폰
+	// HonD는 5초마다 정확히 한 마리씩 스폰
 	float currentTime = 0.0f;
 	float lastHonDSpawnTime = 0.0f;
 	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
@@ -347,8 +347,8 @@ void WaveSystem::SetupWave3Pattern()
 
 	while (currentTime < 70.0f)
 	{
-		// HonD는 6초마다 정확히 스폰
-		if (currentTime - lastHonDSpawnTime >= 6.0f)
+		// HonD는 5초마다 정확히 스폰
+		if (currentTime - lastHonDSpawnTime >= 5.0f)
 		{
 			SpawnData honDData;
 			honDData.x = GetRandomSpawnX();
