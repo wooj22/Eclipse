@@ -9,6 +9,7 @@ class Transform;
 class SpriteRenderer;
 class Rigidbody;
 class CircleCollider;
+class Sprite;
 
 class BossController : public Script
 {
@@ -23,6 +24,7 @@ private:
 
 	// flag
 	bool isDie;
+	bool isHit;
 	bool isGoal;
 	bool isAttacking = false;
 
@@ -52,6 +54,16 @@ private:
 	// start dealy
 	float bossStartTime = 7.0f;
 	float bossStartDeltaTime;
+
+	// hit effect
+	const float blinkInterval = 0.08f;
+	float hitTimer = 0.f;
+	int blinkStep = 0;
+
+	// face sprite
+	SpriteRenderer* bossFace;
+	std::shared_ptr<Sprite> idleFace;
+	std::shared_ptr<Sprite> attackFace;
 
 	// player 
 	Transform* playerTr;
@@ -90,7 +102,8 @@ public: void TakeDamage(int damage);
 private: 
 	void Die();
 
-	// 투명화 연출
+	// 연출
+	void HitEffect();
 	void OpacityDirecting();
 
 public:

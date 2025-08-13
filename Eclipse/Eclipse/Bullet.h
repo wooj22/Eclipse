@@ -27,16 +27,16 @@ public:
 		name = "Bullet";
 		tag = "Bullet";
 
-		transform->SetScale(0.3, 0.3);
+		transform->SetScale(0.4, 0.4);
 
-		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Sample/Boss_Bullet.png");
+		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Boss/BossBullet.png");
 		auto new_sprite = ResourceManager::Get().CreateSprite(texture, "Bullet");
 		spriteRenderer->sprite = new_sprite;
 		spriteRenderer->layer = 10;
 
 		rigidbody->isKinematic = true;
 		collider->isTrigger = true;
-		collider->radius = 60;
+		collider->radius = 27;
 
 		spriteRenderer->renderMode = RenderMode::Lit_Glow;
 	}

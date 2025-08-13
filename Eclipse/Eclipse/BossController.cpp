@@ -6,20 +6,33 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "Bullet.h"
 #include "../Direct2D_EngineLib/Camera.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
+#include "Bullet.h"
 #include "GameManager.h"
 #include "PlayerFSM.h"
 
 /*-----------------  component life cycle  ----------------*/
 void BossController::Awake()
 {
+	// component
 	tr = gameObject->transform;
 	sr = gameObject->GetComponent<SpriteRenderer>();
 	rb = gameObject->GetComponent<Rigidbody>();
 	collider = gameObject->GetComponent<CircleCollider>();
 
+	bossFace = GameObject::Find("BossFace")->GetComponent<SpriteRenderer>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
+
+	// resource
+	auto texture1 = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Boss/Boss_Idle.png");
+	idleFace = ResourceManager::Get().CreateSprite(texture1, "BossIdleFace");
+
+	auto texture2 = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Boss/Boss_Fight.png");
+	attackFace = ResourceManager::Get().CreateSprite(texture2, "BossAttackFace");
+
+	// face set
+	bossFace->sprite = idleFace;
 }
 
 void BossController::Start()
@@ -33,16 +46,11 @@ void BossController::Update()
 	{
 		Move();
 		AttackHandler();
+		if (isHit) HitEffect();
 	}
 	else
 	{
 		OpacityDirecting();
-	}
-
-	// test :: player -> take damage
-	if (Input::GetKeyDown('F'))
-	{
-		TakeDamage(10);
 	}
 }
 
@@ -76,6 +84,9 @@ void BossController::AttackHandler()
 			Attack(currentAttackIndex);
 			isAttacking = true;
 
+			// face
+			bossFace->sprite = attackFace;
+
 			// attack coolTime reset
 			attackDeltaTime = 0;
 		}
@@ -90,6 +101,9 @@ void BossController::AttackHandler()
 		if (attackRepeatDeltaTime >= attackRepeatCoolTime)
 		{
 			Attack(currentAttackIndex);
+
+			// face
+			bossFace->sprite = idleFace;
 
 			// attack index set
 			currentAttackIndex =
@@ -192,12 +206,39 @@ void BossController::Attack_DropShell()
 /*--------------------  boss hit  ---------------------*/
 void BossController::TakeDamage(int damage)
 {
+	// hit effect
+	isHit = true;
+	hitTimer = 0.f;
+	blinkStep = 0;
+
+	// damage
 	hp -= damage;
 	GameManager::Get().ChangeBossHp(hp / MAX_HP);
 	if (hp < 0)
 	{
 		hp = 0;
 		Die();
+	}
+}
+
+void BossController::HitEffect()
+{
+	hitTimer += Time::GetDeltaTime();
+
+	if (hitTimer >= blinkInterval)
+	{
+		hitTimer -= blinkInterval;
+		blinkStep++;
+
+		if (blinkStep % 2 == 0) sr->SetAlpha(1.0f);
+		else sr->SetAlpha(0.4f);	
+	}
+
+	// end
+	if (blinkStep >= 6)
+	{
+		sr->SetAlpha(1.0f);
+		isHit = false;
 	}
 }
 
@@ -208,8 +249,6 @@ void BossController::Die()
 
 	// wave4 quest
 	GameManager::Get().ChangeQuestCount(4);
-
-	// TODO :: 웨이브 종료 전달
 }
 
 // 투명화 연출

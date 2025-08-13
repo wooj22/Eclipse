@@ -149,11 +149,10 @@ void PauseWindow::SceneStart()
 	soundAMB_slider->SetGuageImageAlpha();
 
 	// 밑줄 이미지
-	underscore_Image->AddComponent<Animator>();
-	underscore_Image->GetComponent<Animator>()->SetController(linecontroller);
 	underscore_Image->rectTransform->SetPosition(0, -20);
-	underscore_Image->rectTransform->SetSize(150, 150);
-	underscore_Image->imageRenderer->layer = 99;
+	underscore_Image->rectTransform->SetSize(200, 150);
+	auto underscoreTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Underscore.png");
+	underscore_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(underscoreTexture, "Underscore");
 	underscore_Image->SetActive(false); // 초기에는 밑줄 이미지 비활성화
 
 	for (UI_Button* btn : eventButtons)

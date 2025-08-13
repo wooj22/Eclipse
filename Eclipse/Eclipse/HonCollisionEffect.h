@@ -24,6 +24,7 @@ public:
 
 		animatorController = new HCAnimatorController();
 		animator->SetController(animatorController);
+		spriteRenderer->layer = 12;
 	}
 
 	void Update() override

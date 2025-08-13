@@ -6,20 +6,28 @@
 
 
 struct WaveChatGroup {
-	int waveIndex;
+	int Index;
 	ChatCondition condition;
 	std::vector<std::wstring> lines;
+}; 
+
+struct ChatStep {
+	ChatCondition condition;
+	int index; // 대화 ID or 퀘스트 ID
 };
+
 
 class Chat : public Script
 {
 private:
 	std::vector<WaveChatGroup> chatGroups;
 	std::vector<std::wstring> currentLines;
-	ChatCondition chatCondition;
-	int chatCount;				// 대화 카운트 
+	std::vector<ChatStep> sequence;
+	ChatCondition curchatCondition;
+	int chatCount = 0;				// 대화 카운트 
 	bool finished = false;
 	UI_Text* chatText;
+	int sequenceCount = 0;
 
 public:
 	Chat();
@@ -28,7 +36,11 @@ public:
 	void NextChat();
 	void AddChat(int waveIndex, ChatCondition condition, const std::wstring& line);
 	void AddChatCount() { chatCount++; }
+	void AddSequenceCount() { sequenceCount++; }
+	void SetFinished(bool value) { finished = value; }
 	bool GetFinished() { return finished; }
-	void SetCondition(ChatCondition condition);
+	int GetLineSize() { return currentLines.size(); }
+	ChatCondition GetChatCondition() { return curchatCondition; }
+	void SetCondition(ChatCondition chatCondition = ChatCondition::Quest);
 };
 

@@ -63,6 +63,8 @@ public:
 	UI_Image* quest_Image;			// 퀘스트창 이미지
 	UI_Text* questName_Text;		// 퀘스트창 제목
 	UI_Text* quest_Text;			// 퀘스트창 텍스트
+	UI_Text* quest2_Text;			// 퀘스트창 텍스트
+	UI_Text* quest3_Text;			// 퀘스트창 텍스트
 	UI_Text* questCount_Text;		// 퀘스트 미션 카운트 텍스트
 	Quest* quest;					// 퀘스트 스크립트
 

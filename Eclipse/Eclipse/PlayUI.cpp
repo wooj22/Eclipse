@@ -17,6 +17,8 @@ void PlayUI::Awake()
 	quest_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	questName_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	quest_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	quest2_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	quest3_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	questCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	chat_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	chatNext_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -90,17 +92,20 @@ void PlayUI::SceneStart()
 	pauseCheckButtos = { stop_Button, pauseWindow->close_Button, pauseWindow->continuGame_Button };
 
 	// 웨이브 타이머 UI
-	timer_Image->rectTransform->SetPosition(0, 380);
+	timer_Image->rectTransform->SetPosition(0, 360);
 	timer_Image->rectTransform->SetSize(190, 190);
 	auto timerTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Timer.png");
 	timer_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(timerTexture, "Timer");
-	timer_Image->SetActive(false);
 
-	timer_Text->rectTransform->SetParent(timer_Image->rectTransform);
-	timer_Text->rectTransform->SetPosition(0, 20);
+	timer_Text->rectTransform->SetPosition(0, 380);
 	timer_Text->rectTransform->SetSize(500, 40);
 	timer_Text->screenTextRenderer->SetFontSize(70);
 	timer_Text->screenTextRenderer->SetFontName(L"덕온공주체");
+	timer_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black,1.0f));
+	timer_Text->screenTextRenderer->layer = 1;
+
+	timer_Text->SetActive(false);
+	timer_Image->SetActive(false);
 
 	waveInfo_Image->rectTransform->SetSize(631, 346);
 	waveInfo_Image->SetActive(false);
@@ -115,6 +120,8 @@ void PlayUI::SceneStart()
 	// 퀘스트 창 UI
 	questName_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
+	quest2_Text->rectTransform->SetParent(quest_Image->rectTransform);
+	quest3_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Image->rectTransform->SetPosition(800, 0);
 	quest_Image->rectTransform->SetSize(250, 300);
@@ -126,12 +133,14 @@ void PlayUI::SceneStart()
 	questName_Text->screenTextRenderer->SetFontSize(30);
 	questName_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 	quest_Text->rectTransform->SetSize(200, 50);
-	/*quest_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
-	quest_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);*/
+	quest2_Text->rectTransform->SetPosition(0, -25);
+	quest2_Text->rectTransform->SetSize(200, 50);
+	quest3_Text->rectTransform->SetPosition(0, -50);
+	quest3_Text->rectTransform->SetSize(200, 50);
+
+
 	questCount_Text->rectTransform->SetPosition(0, -50);
 	questCount_Text->rectTransform->SetSize(200, 0);
-	/*questCount_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
-	questCount_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);*/
 	quest = quest_Image->AddComponent<Quest>();
 
 
@@ -154,7 +163,7 @@ void PlayUI::SceneStart()
 	chatNext_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(nextImageTexture, "Next");
 
 
-	chat_Text->rectTransform->SetSize(400, 50);
+	chat_Text->rectTransform->SetSize(600, 50);
 	chat_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	chat_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
 
@@ -306,7 +315,7 @@ void PlayUI::SceneStart()
 	skillWindowName_Image->rectTransform->SetSize(273, 74);
 	auto SkillWindowNameGradientTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindowName.png");
 	skillWindowName_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(SkillWindowNameGradientTexture, "SkillWindowName");
-	//skillWindowName_Image->imageRenderer->layer = 10;
+	skillWindowName_Image->imageRenderer->layer = 1;
 	
 	for (UI_Button* btn : pauseCheckButtos)
 	{
@@ -495,19 +504,37 @@ void PlayUI::Destroyed()
 
 void PlayUI::ClickChatButton() {
 
-	switch (GameManager::Get().waveCount)
+	if (chat->GetChatCondition() == ChatCondition::Wave)
 	{
-	case 3:
-		GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->DirectingBossWave();
-		GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
+		switch (GameManager::Get().waveCount)
+		{
+		case 3:
+			GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->DirectingBossWave();
+			GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
+			chat_Button->SetActive(false);
+			chat_Image->SetActive(false);
+			return;
+		case 4:
+			SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
+			return;
+		}
+		WaveStartData();
+	}
+	else 
+	{
+		GameManager::Get().questIndex++;
 		chat_Button->SetActive(false);
 		chat_Image->SetActive(false);
-		return;
-	case 4:
-		SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
-		return;
+		GameManager::Get().canUseMouse = true;
+		GameManager::Get().isQuest = true;
+		quest->RefreshQuestText();
+		quest->RefreshQuestCountText(-1);
+		hon_Image->SetActive(true);
+		stop_Button->SetActive(true);
+		quest_Image->SetActive(true);
+		GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
+		chat->SetCondition();
 	}
-	WaveStartData();
 }
 
 void PlayUI::BossIntroEnd()
@@ -518,6 +545,7 @@ void PlayUI::BossIntroEnd()
 
 void PlayUI::WaveStartData()
 {
+	GameManager::Get().questIndex++;
 	GameManager::Get().WaveStart();
 	chat_Button->SetActive(false);
 	chat_Image->SetActive(false);
@@ -530,6 +558,7 @@ void PlayUI::WaveStartData()
 	hon_Image->SetActive(true);
 	stop_Button->SetActive(true);
 	quest_Image->SetActive(true); 
+	timer_Text->SetActive(true);
 	timer_Image->SetActive(true);
 	GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
 }
