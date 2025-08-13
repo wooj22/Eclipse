@@ -10,11 +10,28 @@ class BossCollisionEffectClip : public AnimationClip
 public:
 	BossCollisionEffectClip()
 	{
-		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Hon/Texture/HonA.png");
-		LoadSpriteSheetFromJson(texture, "../Resource/Woo/Hon/Data/SpriteSheet/HonA_sprites.json");
-		LoadAnimationClipFromJson(texture, "../Resource/Woo/Hon/Data/AnimationClip/HonA_Idle_AniClip.json");
-	
+		name = "BossCollisionEffect";
 		loop = false;
+		duration = 0.3f;
+
+		const std::string basePath = "../Resource/Woo/Effect/boss_monster/";
+		const int frameCount = 4;
+		const float frameTime = duration / frameCount;
+
+		for (int i = 0; i < frameCount; ++i)
+		{
+			char filename[256];
+			sprintf_s(filename, "%sboss_attack_000%d.png", basePath.c_str(), i);
+
+			auto texture = ResourceManager::Get().CreateTexture2D(filename);
+			auto sprite = ResourceManager::Get().CreateSprite(texture, "BossCollisionEffect" + std::to_string(i));
+
+			AnimationFrame frame;
+			frame.sprite = sprite;
+			frame.time = i * frameTime;
+
+			frames.push_back(frame);
+		}
 	}
 };
 
