@@ -47,10 +47,11 @@ public:
 	void Awake() override
 	{
 		transform->SetPosition(-200.0f, 0.0f);
+		// transform->SetPosition(0.0f, 0.0f);
 		transform->SetRotation(0.0f);
 		transform->SetScale(1.3f, 1.3f); 
 
-		collider->offset = { 50.0f, 0.0f };
+		collider->offset = { 0.0f, 0.0f };
 		collider->radius = 130.0f; 
 		collider->isTrigger = true;
 
@@ -65,6 +66,7 @@ public:
 	{
 		// AABB 영역 
 		// if(collider->IsEnabled()) collider->DebugColliderDraw();
+		collider->DebugColliderDraw();
 	}
 
 	// 어택 범위 활성화 + 애니메이션 실행
@@ -79,5 +81,4 @@ public:
 		spriteRenderer->SetEnabled(false);
 		collider->SetEnabled(false);
 	}
-
 };

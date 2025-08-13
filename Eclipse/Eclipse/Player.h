@@ -18,6 +18,7 @@
 #include "AfterImage.h"
 #include "Shadow.h"
 #include "PlayerLandingEffect.h"
+#include "PlayerAttackArea.h"
 
 
 
@@ -43,7 +44,19 @@ public:
 	PlayerFSM* playerFSM;
 
 	// [ player setting ]
-	float playerGravityScale = 100; 
+	float playerGravityScale = 100;
+
+
+	// ------------------------
+
+	// [ playerAttack_Parent ]
+	GameObject* playerAttack_Parent = nullptr; 
+	Transform* playerAttack_Parent_transform = nullptr; 
+
+	// [ playerAttack ] Attack 이펙트 & 콜라이더 영역
+	PlayerAttackArea* playerAttackArea = nullptr;
+
+	// -----------------------
 
 	// [ Shadow ]
 	GameObject* player_Shadow = nullptr; // 그림자 오브젝트
@@ -65,6 +78,7 @@ public:
 public:
 	Player() : GameObject("Player", "Player")
 	{
+		// [ Player ]
 		transform = AddComponent<Transform>();
 		spriteRenderer = AddComponent<SpriteRenderer>();
 		rigidbody = AddComponent<Rigidbody>();
@@ -77,6 +91,17 @@ public:
 
 		playerFSM = AddComponent<PlayerFSM>();
 		playerFSM->ResetInputs(); // 플레이어 생성 시, 입력값 초기화 
+
+
+		// [ playerAttack_Parent ]
+		playerAttack_Parent = SceneManager::Get().GetCurrentScene()->CreateObject<GameObject>();
+		playerAttack_Parent_transform = playerAttack_Parent->AddComponent<Transform>();
+
+
+		// [ playerAttack ] Attack 이펙트 & 콜라이더 영역 
+		playerAttackArea = SceneManager::Get().GetCurrentScene()->CreateObject<PlayerAttackArea>();
+
+		// ------------- 
 
 		// [ Shadow ] 
 		player_Shadow = SceneManager::Get().GetCurrentScene()->CreateObject<Shadow>();
@@ -106,6 +131,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
+		// [ Player ]
 		transform->SetPosition(-20, -785);
 		transform->SetScale(0.5, 0.5);
 
@@ -115,6 +141,17 @@ public:
 		rigidbody->useGravity = true;
 		rigidbody->gravityScale = playerFSM->defaultGravity;
 		rigidbody->mass = 1.4f; 
+
+
+		// [ playerAttack_Parent ]
+		playerAttack_Parent_transform->SetParent(transform);
+		playerFSM->SetPlayerAttackParent(playerAttack_Parent); // 플레이어 FSM에 연결
+
+		// [ playerAttackArea ] 
+		playerAttackArea->GetComponent<Transform>()->SetParent(playerAttack_Parent_transform);
+		playerFSM->SetPlayerAttackArea(playerAttackArea); // 플레이어 FSM에 연결
+
+		// -----------------
 
 		// [ 그림자 ]
 		shadow_transform = player_Shadow->GetComponent<Transform>();

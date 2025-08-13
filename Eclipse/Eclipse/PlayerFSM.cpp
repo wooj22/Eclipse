@@ -433,7 +433,10 @@ bool PlayerFSM::CanUseRelease() const
 
 void PlayerFSM::OnTriggerEnter(ICollider* other, const ContactInfo& contact)
 {
+	if (other->gameObject->name == "Hon")
+	{
 
+	}
 }
 
 void PlayerFSM::OnTriggerStay(ICollider* other, const ContactInfo& contact)
