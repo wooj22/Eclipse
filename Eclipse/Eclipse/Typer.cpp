@@ -1,7 +1,23 @@
 #include "Typer.h"
 #include "../Direct2D_EngineLib/ScreenTextRenderer.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
+#include "../Direct2D_EngineLib/AudioClip.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include <cstdlib>
+#include <ctime>
+
+void Typer::Awake()
+{
+    // Sound Clip
+    typingSound[0] = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/Typing/Typing1.wav");
+    typingSound[1] = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/Typing/Typing2.wav");
+    typingSound[2] = ResourceManager::Get().CreateAudioClip("../Resource/Woo/Sound/Typing/Typing3.wav");
+
+    // seed
+    srand((unsigned int)time(nullptr));
+}
 
 void Typer::Update()
 {
@@ -14,7 +30,7 @@ void Typer::Update()
 // 타이핑을 모두 완료하면 isTyping이 true가 된다.
 void Typer::TypingDirecting()
 {
-	if (!isTyping || target_text.empty() || !textRenderer)
+	if (!isTyping || target_text.empty() || !textRenderer || audioSource)
 		return;
 
 	timer += Time::GetDeltaTime();
@@ -31,6 +47,11 @@ void Typer::TypingDirecting()
             cur_text += nextChar;
             textRenderer->SetText(cur_text);
             timer = 0.0f;
+
+            // sound
+            soundIndex = rand() % SOUND_COUNT;
+            audioSource->SetClip(typingSound[soundIndex]);
+            audioSource->PlayOneShot();
         }
     }
     else
