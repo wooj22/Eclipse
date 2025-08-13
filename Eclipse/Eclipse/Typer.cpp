@@ -30,11 +30,8 @@ void Typer::Update()
 // 타이핑을 모두 완료하면 isTyping이 true가 된다.
 void Typer::TypingDirecting()
 {
-	if (!isTyping || target_text.empty() || !textRenderer)
+	if (!isTyping || target_text.empty() || !textRenderer || !audioSource)
 		return;
-
-	/*if (!isTyping || target_text.empty() || !textRenderer || audioSource)
-		return;*/
 
 	timer += Time::GetDeltaTime();
 
@@ -52,9 +49,9 @@ void Typer::TypingDirecting()
             timer = 0.0f;
 
             // sound
-		   /* soundIndex = rand() % SOUND_COUNT;
+		    soundIndex = rand() % SOUND_COUNT;
 			audioSource->SetClip(typingSound[soundIndex]);
-			audioSource->PlayOneShot();*/
+			audioSource->PlayOneShot();
         }
     }
     else
