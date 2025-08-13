@@ -4,6 +4,7 @@
 #include "BossController.h"
 #include "Quest.h"
 #include "Chat.h"
+#include "../Direct2D_EngineLib/InvokeSystem.h"
 
 
 
@@ -214,12 +215,34 @@ void GameManager::FinishWave()
 		g_playUI->quest->QuestFail();
 		if (waveCount == 4)
 		{
-			SceneManager::Get().ChangeScene(6);
+			g_playUI->fade->FadeOut();
+			GameManager::Get().canUseMouse = false;
+			InvokeSystem::Invoke(4.0f, [this]() {
+				g_playUI->FailEvent();
+				});
 			return;
 		}
 	}
 	else
+	{
 		g_playUI->quest->QuestSuccess();
+		if (waveCount == 4)
+		{
+			g_playUI->fade->FadeOut();
+			GameManager::Get().canUseMouse = false;
+			InvokeSystem::Invoke(4.0f, [this]() {
+				g_playUI->SuccessEvent();
+				});
+
+			InvokeSystem::Invoke(6.0f, [this]() {
+				g_playUI->success_Text->SetActive(false);
+				g_playUI->stop_Button->SetActive(true);
+				GameManager::Get().canUseMouse = true;
+				g_playUI->stop_Button->SetActive(true);
+				g_playUI->fade->FadeIn();
+				});
+		}
+	}
 
 	g_playUI->chat->SetCondition(questState);
 }

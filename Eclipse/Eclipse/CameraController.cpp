@@ -33,10 +33,6 @@ void CameraController::Start()
 
 void CameraController::LateUpdate()
 {
-	// test
-	if(Input::GetKeyDown('I'))ZoomInToPlayer();
-	if (Input::GetKeyDown('O'))ZoomOutFromPlayer();
-
 	// zoom
 	if (isZooming)
 	{

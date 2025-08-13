@@ -67,9 +67,9 @@ void tooltip::Destroyed()
 
 void tooltip::ChangeInfo(const std::wstring& name)
 {
-	if (name == L"Ignis") rectTransform->SetPosition(-780, 100);
-	else if (name == L"Umbra") rectTransform->SetPosition(-780, -100);
-	else rectTransform->SetPosition(-780 , 0);
+	if (name == L"Ignis") rectTransform->SetPosition(775, -200);
+	else if (name == L"Umbra") rectTransform->SetPosition(775, -400);
+	else rectTransform->SetPosition(775 , -300);
 
 	auto it = textInfo.find(name);
 	if (it != textInfo.end())

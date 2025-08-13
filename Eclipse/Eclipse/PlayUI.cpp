@@ -4,11 +4,18 @@
 #include "Quest.h"
 #include "NPC.h"
 #include "EclipseApp.h"
+#include "FadeManager.h"
+#include "BossController.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include "../Direct2D_EngineLib/InvokeSystem.h"
 #include <algorithm>
 
 void PlayUI::Awake()
 {  
+	success_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	fail_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	fail_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
+
 	//해당 씬에 게임 오브젝트 생성
 	timer_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	timer_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
@@ -58,9 +65,20 @@ void PlayUI::Awake()
 	tooltip2 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
 
 	chatTyper = chat_Text->AddComponent<Typer>();
+	success_Text->AddComponent<Typer>();
+	fail_Text->AddComponent<Typer>();
+
 	chatAudioSource = chat_Text->AddComponent<AudioSource>();
 	chatAudioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
 	chatAudioSource->SetLoop(false);
+
+	successAudioSource = success_Text->AddComponent<AudioSource>();
+	successAudioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+	successAudioSource->SetLoop(false);
+
+	failAudioSource = fail_Text->AddComponent<AudioSource>();
+	failAudioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+	failAudioSource->SetLoop(false);
 
 	// audio source 컴포넌트 생성
 	bgmSource = AddComponent<AudioSource>();
@@ -76,7 +94,7 @@ void PlayUI::Awake()
 	sfxClip_Button2 = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Button/s_Button_2.wav");
 	sfxClip_SkillUI = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/SkillUI/s_SkillUI.wav");
 	sfxClip_SkillActive = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/SKillUI/s_Skillactive.wav");
-	//sfxClip_GameOver = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Scene/s_Defeat.wav");
+	sfxClip_GameOver = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Scene/s_Defeat.wav");
 	//sfxClip_ChangeScene = ResourceManager::Get().CreateAudioClip("../Resource/Audio/UI/SFX/Scene/s_Fadeinout.wav");
 	
 
@@ -94,6 +112,32 @@ void PlayUI::Awake()
 
 void PlayUI::SceneStart()
 {
+	fade = GameObject::Find("FadeManager")->GetComponent<FadeManager>();
+
+	success_Text->screenTextRenderer->SetFontName(L"덕온공주체");
+	fail_Text->screenTextRenderer->SetFontName(L"덕온공주체");
+	fail_Button->screenTextRenderer->SetText(L"다시하기");
+	fail_Button->screenTextRenderer->SetFontName(L"덕온공주체");
+	success_Text->screenTextRenderer->SetFontSize(100);
+	success_Text->rectTransform->SetSize(1920,200);
+	fail_Text->screenTextRenderer->SetFontSize(100);
+	fail_Text->rectTransform->SetSize(1920, 200);
+	fail_Button->screenTextRenderer->SetFontSize(50);
+	fail_Button->rectTransform->SetPosition(0, -400);
+	fail_Button->rectTransform->SetSize(1920, 200);
+	fail_Button->imageRenderer->SetColor(0,0,0);
+	success_Text->screenTextRenderer->layer = 31;
+	fail_Text->screenTextRenderer->layer = 31;
+	fail_Button->screenTextRenderer->layer = 31;
+	success_Text->SetActive(false);
+	fail_Text->SetActive(false);
+	fail_Button->SetActive(false);
+
+	success_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	success_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	fail_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+
+
 	pauseCheckButtos = { stop_Button, pauseWindow->close_Button, pauseWindow->continuGame_Button };
 
 	// 웨이브 타이머 UI
@@ -360,6 +404,26 @@ void PlayUI::SceneStart()
 			GameManager::Get().canUseMouse = true;
 			ButtonClickSound();
 		});
+
+	fail_Button->button->onClickListeners.AddListener(
+		this, [this]() {
+			skillWindowBackGround_Image->SetActive(false);
+			pauseWindow->SetActive(false);
+			stop_Button->SetActive(true);
+			fail_Text->SetActive(false);
+			fail_Button->SetActive(false);
+			bossHP->SetActive(false);
+			GameManager::Get().canUseMouse = true;
+			GameManager::Get().questIndex = 8;
+			GameManager::Get().waveCount = 3;
+			GameManager::Get().isQuest = false;
+			GameManager::Get().questState = ChatCondition::Wave;
+			GameManager::Get().isWave = false;
+			chat->SetSequenceCount(8);
+			chat->SetCondition();
+			ButtonClickSound();
+			fade->FadeIn();
+		});
 }
 
 void PlayUI::Update()
@@ -460,8 +524,6 @@ void PlayUI::Update()
 		);
 	}
 
-	// TODOMO : 아래 입력 삭제 
-
 	if (Input::GetKeyDown(VK_ESCAPE))
 	{
 		if (!skillWindowBackGround_Image->IsActive())
@@ -469,9 +531,9 @@ void PlayUI::Update()
 			// Pause 토글
 			bool pauseActive = pauseWindow->IsActive();
 			pauseWindow->SetActive(!pauseActive);
-			GameManager::Get().canUseMouse = pauseActive;
 			skillWindowBackGround_Image->SetActive(false);
 			Time::SetTimeScale(pauseActive ? 1 : 0);
+			GameManager::Get().canUseMouse = chat_Image->IsActive() ? false : pauseActive;
 		}
 		else
 		{
@@ -492,14 +554,73 @@ void PlayUI::Update()
 	}
 
 
-	if (Input::GetKeyDown('R'))
+	if (Input::GetKeyDown(VK_F1))
 	{
-		GameManager::Get().SkillReset();
+		GameManager::Get().questIndex = 2;
+		GameManager::Get().waveCount = 0; 
+		GameManager::Get().isQuest = false;
+		GameManager::Get().questState = ChatCondition::Wave;
+		GameManager::Get().canUseMouse = true;
+		GameManager::Get().isWave = false;
+		chat->SetSequenceCount(2);
+		chat->SetCondition();
+	}
+
+	if (Input::GetKeyDown(VK_F2))
+	{
+		GameManager::Get().questIndex = 4;
+		GameManager::Get().waveCount = 1;
+		GameManager::Get().isQuest = false;
+		GameManager::Get().questState = ChatCondition::Wave;
+		GameManager::Get().canUseMouse = true;
+		GameManager::Get().isWave = false;
+		chat->SetSequenceCount(4);
+		chat->SetCondition();
+		
 	}
 
 	if (Input::GetKeyDown(VK_F3))
 	{
-		GameManager::Get().ChangeHonCount(100);
+		GameManager::Get().questIndex = 6;
+		GameManager::Get().waveCount = 2;
+		GameManager::Get().isQuest = false;
+		GameManager::Get().questState = ChatCondition::Wave;
+		GameManager::Get().canUseMouse = true;
+		GameManager::Get().isWave = false;
+		chat->SetSequenceCount(6);
+		chat->SetCondition();
+	}
+
+	if (Input::GetKeyDown(VK_F4))
+	{
+		GameManager::Get().questIndex = 8;
+		GameManager::Get().waveCount = 3;
+		GameManager::Get().isQuest = false;
+		GameManager::Get().questState = ChatCondition::Wave;
+		GameManager::Get().canUseMouse = true;
+		GameManager::Get().isWave = false;
+		chat->SetSequenceCount(8);
+		chat->SetCondition();
+	}
+
+	if (Input::GetKeyDown(VK_F5))
+	{
+		GameManager::Get().AllSkillUnlock();
+	}
+
+	if (Input::GetKeyDown(VK_F6))
+	{
+		GameManager::Get().SkillReset();
+	}
+
+	if (Input::GetKeyDown(VK_F7))
+	{
+		GameManager::Get().ChangeHonCount(1180);
+	}
+
+	if (Input::GetKeyDown(VK_F8))
+	{
+		GameObject::Find("Boss")->GetComponent<BossController>()->TakeDamage(5);
 	}
 
 }
@@ -527,7 +648,10 @@ void PlayUI::ClickChatButton() {
 	{
 		if (GameManager::Get().waveCount == 4 )
 		{
-			SceneManager::Get().ChangeScene(EclipseApp::END);
+			fade->FadeOut();
+			InvokeSystem::Invoke(2.0f, []() {
+				SceneManager::Get().ChangeScene(EclipseApp::END);
+				});
 			return;
 		}
 		GameManager::Get().questIndex++;
@@ -726,4 +850,30 @@ void PlayUI::ButtonClickSound()
 {
 	sfxSource->SetClip(sfxClip_Button2);
 	sfxSource->Play();
+}
+
+void PlayUI::FailEvent()
+{
+
+	GameManager::Get().canUseMouse = false;
+	fail_Text->SetActive(true);
+	fail_Button->SetActive(true);
+	stop_Button->SetActive(true);
+
+	fail_Text->GetComponent<Typer>()->SetTextRenderer(fail_Text->screenTextRenderer);
+	fail_Text->GetComponent<Typer>()->SetAudioSource(fail_Text->GetComponent<AudioSource>());
+	fail_Text->GetComponent<Typer>()->StartTyping(L"이 밤은 끝나지 않았다.");
+	sfxSource->SetClip(sfxClip_GameOver);
+	sfxSource->Play();
+}
+
+void PlayUI::SuccessEvent()
+{
+	GameManager::Get().canUseMouse = false;
+	success_Text->SetActive(true);
+	stop_Button->SetActive(false);
+
+	success_Text->GetComponent<Typer>()->SetTextRenderer(success_Text->screenTextRenderer);
+	success_Text->GetComponent<Typer>()->SetAudioSource(success_Text->GetComponent<AudioSource>());
+	success_Text->GetComponent<Typer>()->StartTyping(L"달빛이 돌아왔다.");
 }

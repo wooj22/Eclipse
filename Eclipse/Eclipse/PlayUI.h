@@ -13,6 +13,7 @@
 #include "MoonShadowController.h"
 #include "CameraController.h"
 #include "Typer.h"
+#include "FadeManager.h"
 #include "../Direct2D_EngineLib/AudioSource.h"
 #include <vector>
 
@@ -49,7 +50,7 @@ private:
 	shared_ptr<AudioClip> sfxClip_Button2 = nullptr;
 	shared_ptr<AudioClip> sfxClip_SkillUI = nullptr;
 	shared_ptr<AudioClip> sfxClip_SkillActive = nullptr;
-	//shared_ptr<AudioClip> sfxClip_GameOver = nullptr;
+	shared_ptr<AudioClip> sfxClip_GameOver = nullptr;
 	shared_ptr<AudioClip> sfxClip_ChangeScene = nullptr;
 
 public:
@@ -113,6 +114,14 @@ public:
 	AudioSource* bgmSource = nullptr;
 	AudioSource* sfxSource = nullptr;
 
+	FadeManager* fade;
+	UI_Text* success_Text;
+	UI_Text* fail_Text;
+	UI_Button* fail_Button;
+
+	AudioSource* successAudioSource;
+	AudioSource* failAudioSource;
+
 public:
 	// game object cycle
 	PlayUI() : GameObject("PlayUI","PlayUI") {}
@@ -158,4 +167,7 @@ public:
 	void SkillActiveSound();
 	void ButtonEnterSound();
 	void ButtonClickSound();
+
+	void FailEvent();
+	void SuccessEvent();
 };

@@ -47,6 +47,9 @@ void BossController::Update()
 		Move();
 		AttackHandler();
 		if (isHit) HitEffect();
+
+		// debug
+		if (Input::GetKeyDown('0')) TakeDamage(5);
 	}
 	else
 	{
@@ -122,15 +125,15 @@ void BossController::Attack(int attackIndex)
 	{
 	case BossController::RoundShell:
 		Attack_RoundShell();
-		Camera::GetMainCamera()->Shake(7, 12, 0.5);
+		Camera::GetMainCamera()->Shake(7, 10, 0.7);
 		break;
 	case BossController::DiffusedShell:
 		Attack_DiffusedShell();
-		Camera::GetMainCamera()->Shake(7, 7, 0.5);
+		Camera::GetMainCamera()->Shake(10, 10, 0.7);
 		break;
 	case BossController::DropShell:
 		Attack_DropShell();
-		Camera::GetMainCamera()->Shake(5, 7, 3.5, 0.8);
+		Camera::GetMainCamera()->Shake(12, 8, 3.5, 1.5);
 		break;
 	default:
 		break;

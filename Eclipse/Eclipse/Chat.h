@@ -36,7 +36,7 @@ public:
 	void NextChat();
 	void AddChat(int waveIndex, ChatCondition condition, const std::wstring& line);
 	void AddChatCount() { chatCount++; }
-	void AddSequenceCount() { sequenceCount++; }
+	void SetSequenceCount(int num) { sequenceCount = num; }
 	void SetFinished(bool value) { finished = value; }
 	bool GetFinished() { return finished; }
 	int GetLineSize() { return currentLines.size(); }
