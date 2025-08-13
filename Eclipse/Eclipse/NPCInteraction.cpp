@@ -4,7 +4,7 @@
 
 void NPCInteraction::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
-	if (!GameManager::Get().isWave &&  other->gameObject->name == "Player" && !interactionImage->IsActive() && !GameManager::Get().g_playUI->ChatActiveCheck())
+	if (!GameManager::Get().isWave && !GameManager::Get().isQuest &&  other->gameObject->name == "Player" && !interactionImage->IsActive() && !GameManager::Get().g_playUI->ChatActiveCheck())
 		interactionImage->SetActive(true);
 }
 

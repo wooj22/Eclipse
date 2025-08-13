@@ -27,13 +27,15 @@ void GameManager::ReSetData()
 	honCount = 0;
 	waveCount = 0;
 	questCount = 0;
-	questState = ChatCondition::None;
+	questIndex = 0;
+	questState = ChatCondition::Quest;
 	canUseMouse = true;
 	isWave = false;
 	g_playUI = nullptr;
 	absorbCoolTime = 0;
 	canUseAbsorb = false;		
 	canUseRelease = false;
+	quests = { false, false, false };
 	SkillReset();
 }
 
@@ -232,6 +234,19 @@ void GameManager::ChangeQuestCount(int waveidx)
 	}
 }
 
+void GameManager::CheckQuest(int questidx, int idx)
+{
+	if (questidx == questIndex)
+	{
+		quests[idx] = true;
+
+		if (std::all_of(quests.begin(), quests.end(), [](bool q) { return q; }))
+		{
+			isQuest = false;
+			quests = { false, false, false };
+		}
+	}
+}
 
 
 float GameManager::GetSkillBonus(SkillType type)
@@ -266,6 +281,14 @@ void GameManager::OnNPCInteraction()
 	g_playUI->quest_Image->SetActive(false);
 
 	GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomInToPlayer();
+
+	if (g_playUI->chat->GetLineSize() == 1)
+	{
+		g_playUI->chat->SetFinished(true);
+		g_playUI->chat_Button->SetActive(true);
+		g_playUI->chatNext_Image->SetActive(false);
+	}
+
 }
 
 void GameManager::ChangeBossHp(float hp)

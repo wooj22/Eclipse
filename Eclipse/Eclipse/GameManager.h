@@ -7,7 +7,7 @@
 
 class PlayUI;
 
-enum class ChatCondition { None, Success, Fail };
+enum class ChatCondition { Quest, Wave, Success, Fail  };
 
 enum class SkillType {
 	KnockbackDistanceUp,	// 1-1	충돌 비거리 증가	최대 3
@@ -94,10 +94,13 @@ public:
 	int waveCount;				// UI 에서 넘겨 줄 웨이브 카운트
 	bool isWave;				// UI 에서 넘겨 줄 웨이브 시작 여부
 	float waveTime;				// 웨이브에서 넘겨줄 웨이브 타임
+	bool isQuest;				// UI 에서 넘겨 줄 퀘스트 시작 여부
 
 	//퀘스트
+	int questIndex;
 	int questCount;
 	ChatCondition questState;
+	std::vector<bool> quests;
 
 	//플레이어 스킬
 	float absorbCoolTime;		// Q 흡수 쿨타임				
@@ -138,6 +141,7 @@ public:
 
 	// 퀘스트 관련 함수
 	void ChangeQuestCount(int waveidx);
+	void CheckQuest(int questidx, int idx);
 
 	// 스킬 수치 값 
 	float GetSkillBonus(SkillType type);
