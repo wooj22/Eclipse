@@ -102,6 +102,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [boss collision]
 	if (other->gameObject->tag == "Boss")
 	{
+		Instantiate<BossHitEffect>(tr->GetWorldPosition());
 		other->gameObject->GetComponent<BossController>()->TakeDamage(1);
 		gameObject->Destroy();
 	}
