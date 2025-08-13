@@ -12,6 +12,9 @@
 #include "GameManager.h"
 #include "PlayerFSM.h"
 #include "Attack_State.h"
+#include "HonCollisionEffect.h"
+#include "BossHitEffect.h"
+
 
 /* Hon Type Enum */
 enum class HonType

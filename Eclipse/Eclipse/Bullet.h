@@ -38,13 +38,7 @@ public:
 		collider->isTrigger = true;
 		collider->radius = 60;
 
-		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
-		spriteRenderer->SetGlowAmmount(15);
-	}
-
-	void Update() override
-	{
-		collider->DebugColliderDraw();
+		spriteRenderer->renderMode = RenderMode::Lit_Glow;
 	}
 };
 

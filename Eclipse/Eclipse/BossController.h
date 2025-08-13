@@ -14,7 +14,7 @@ class BossController : public Script
 {
 private:
 	// data
-	const float MAX_HP = 50;
+	const float MAX_HP = 15;
 
 	// stat
 	float hp = MAX_HP;
@@ -85,13 +85,17 @@ private:
 	void Attack_DiffusedShell();
 	void Attack_DropShell();
 
-
 	// boss hit
 public: void TakeDamage(int damage);
-private: void Die();
+private: 
+	void Die();
+
+	// 투명화 연출
+	void OpacityDirecting();
 
 public:
 	float GetBossMaxHp() { return MAX_HP; }
 	float GetBossHp() { return hp; }
+	bool GetBossDie() { return isDie; }
 };
 

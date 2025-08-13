@@ -44,7 +44,7 @@ public:
 
 		// color matrix test
 		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
-		spriteRenderer->SetGlowAmmount(150);
+		spriteRenderer->SetGlowAmmount(100);
 	}
 };
 

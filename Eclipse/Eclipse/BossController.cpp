@@ -34,6 +34,10 @@ void BossController::Update()
 		Move();
 		AttackHandler();
 	}
+	else
+	{
+		OpacityDirecting();
+	}
 
 	// test :: player -> take damage
 	if (Input::GetKeyDown('F'))
@@ -135,8 +139,6 @@ void BossController::Attack_RoundShell()
 
 		GameObject* bullet = Instantiate<Bullet>(center);
 		BulletController* bc = bullet->GetComponent<BulletController>();
-		bullet->GetComponent<SpriteRenderer>()->SetColor(1, 1, 1);
-
 		bc->SetDirection(dir);
 		bc->SetSpeed(250);
 	}
@@ -166,8 +168,6 @@ void BossController::Attack_DiffusedShell()
 
 		GameObject* bullet = Instantiate<Bullet>(bossPos);
 		BulletController* bc = bullet->GetComponent<BulletController>();
-		bullet->GetComponent<SpriteRenderer>()->SetColor(0, 0, 1);
-
 		bc->SetDirection(rotated.Normalized());
 		bc->SetSpeed(350);
 	}
@@ -184,13 +184,10 @@ void BossController::Attack_DropShell()
 
 		GameObject* bullet = Instantiate<Bullet>(spawnPos);
 		BulletController* bc = bullet->GetComponent<BulletController>();
-		bullet->GetComponent<SpriteRenderer>()->SetColor(0, 1, 0);
-
 		bc->SetDirection(Vector2::down);
 		bc->SetSpeed(500);
 	}
 }
-
 
 /*--------------------  boss hit  ---------------------*/
 void BossController::TakeDamage(int damage)
@@ -207,14 +204,26 @@ void BossController::TakeDamage(int damage)
 void BossController::Die()
 {
 	isDie = true;
+	collider->SetEnabled(false);
 
 	// wave4 quest
 	GameManager::Get().ChangeQuestCount(4);
 
-	// TODO :: GameManager 게임 성공 전달
-	// TODO :: die animation? or 연출 or Destroy
+	// TODO :: 웨이브 종료 전달
+}
 
-	this->gameObject->Destroy();
+// 투명화 연출
+void BossController::OpacityDirecting()
+{
+	float currentAlpha = sr->GetAlpha();
+	float changeSpeed = 2;
+
+	if (currentAlpha < 0)
+		currentAlpha = min(currentAlpha + changeSpeed * Time::GetDeltaTime(), 0);
+	else if (currentAlpha > 0)
+		currentAlpha = max(currentAlpha - changeSpeed * Time::GetDeltaTime(), 0);
+
+	sr->SetAlpha(currentAlpha);
 }
 
 /*-----------------  trigger event  -----------------*/ 
