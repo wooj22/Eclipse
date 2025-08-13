@@ -3,6 +3,7 @@
 #include "../Direct2D_EngineLib/AnimationBaseState.h"
 #include "../Direct2D_EngineLib/AnimatorController.h"
 #include "../Direct2D_EngineLib/ResourceManager.h"
+#include "../Direct2D_EngineLib/SpriteRenderer.h"
 
 class LandingEffectClip : public AnimationClip
 {
@@ -38,18 +39,46 @@ class LandingEffectState : public AnimationBaseState
 public:
 	LandingEffectState(AnimationClip* c, AnimatorController* ac) : AnimationBaseState(c, ac) {}
 
-	void Enter() override {}
+private:
+	SpriteRenderer* spriteRenderer;
 
-	void Update(float dt) override
-	{
-		// 마지막 프레임까지 재생이 끝나면 종료
-		if (!clip->loop && clip->GetFrameIndexAtTime(controller->currentTime) == clip->frames.size() - 1)
+	void Enter() override
+    {
+		spriteRenderer = GameObject::Find("PlayerLandingEffect")->GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer)  spriteRenderer->SetAlpha(1.0f); // 알파 초기화
+    }
+
+    void Update(float dt) override
+    {
+		if (!spriteRenderer) return;
+
+		int frameIndex = clip->GetFrameIndexAtTime(controller->currentTime);
+		int totalFrames = static_cast<int>(clip->frames.size());
+
+		float alpha = 1.0f;
+
+		if (frameIndex >= 2) // 3번째 프레임부터 감소 
+		{
+			int fadeFrames = totalFrames - 3; // 3번째부터 마지막 전 프레임까지
+			float t = static_cast<float>(frameIndex - 2) / fadeFrames; // 0~1
+			alpha = 1.0f - t * 0.9f; // 마지막 프레임 0.1
+		}
+
+		spriteRenderer->SetAlpha(alpha);
+
+		if (!clip->loop && frameIndex == totalFrames - 1)
 		{
 			controller->playing = false;
-			controller->ChangeAnimation(nullptr);  // 상태 초기화
+			controller->ChangeAnimation(nullptr);
+			spriteRenderer->SetAlpha(1.0f);
 		}
-	}
-	void Exit() override {}
+    }
+
+    void Exit() override
+    {
+        if (spriteRenderer)  spriteRenderer->SetAlpha(1.0f); // 알파 복귀
+    }
 };
 
 

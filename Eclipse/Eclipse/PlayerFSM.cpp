@@ -629,14 +629,11 @@ void PlayerFSM::ResetDashCooldown()
 
 void PlayerFSM::PlayLandingEffect()
 {
-	//audioSource->SetClip(SFX_Player_Land);
-	//audioSource->PlayOneShot();
-
 	auto landingEffect = GameObject::Find("PlayerLandingEffect");
 	if (!landingEffect) return;
 
 	auto tr = landingEffect->GetComponent<Transform>();
-	tr->SetPosition(transform->GetWorldPosition() + Vector2(5, -85)); 
+	tr->SetPosition(transform->GetWorldPosition() + Vector2(1, -85)); 
 
 	auto renderer = landingEffect->GetComponent<SpriteRenderer>();
 	renderer->flipX = spriteRenderer->flipX; 
