@@ -9,19 +9,19 @@ class LandingEffectClip : public AnimationClip
 public:
 	LandingEffectClip()
 	{
-		name = "Player_Skill_Effect";
+		name = "Player_Landing_Effect";
 		loop = false;
 		duration = 0.5f;
-		const std::string basePath = "../Resource/Moon/Texture/Player_Skill_Effect/";
+		const std::string basePath = "../Resource/Moon/Texture/Player_Landing_Effect/";
 		const int frameCount = 8;
 		const float frameTime = duration / frameCount;
 		for (int i = 0; i < frameCount; ++i)
 		{
 			char filename[256];
-			sprintf_s(filename, "%sSkill (%d).png", basePath.c_str(), i);
+			sprintf_s(filename, "%sLanding (%d).png", basePath.c_str(), i);
 
 			auto texture = ResourceManager::Get().CreateTexture2D(filename);
-			auto sprite = ResourceManager::Get().CreateSprite(texture, "Skill_" + std::to_string(i));
+			auto sprite = ResourceManager::Get().CreateSprite(texture, "Landing_" + std::to_string(i));
 
 			AnimationFrame frame;
 			frame.sprite = sprite;

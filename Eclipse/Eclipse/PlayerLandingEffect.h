@@ -24,7 +24,7 @@ public:
 		animController = new LandingAnimatorController();
 		landingAnimator->SetController(animController);
 
-		spriteRenderer->layer = 30; // 21;
+		spriteRenderer->layer = 24; // 21;
 
 	}
 	~PlayerLandingEffect() override
@@ -34,7 +34,7 @@ public:
 
 	void Awake() override
 	{
-		transform->SetPosition(0.0f, 0.0f);
-		transform->SetScale(1.0f, 1.0f);
+		transform->SetPosition(0.0f, -140.0f);
+		transform->SetScale(1.2f, 1.2f);
 	}
 };
