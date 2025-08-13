@@ -1,7 +1,6 @@
 #include "TitleUI.h"
 #include "../Direct2D_EngineLib/GameApp.h"
 #include "EclipseApp.h"
-#include "SoundManager.h"
 
 void TitleUI::Awake()
 {
@@ -16,7 +15,7 @@ void TitleUI::Awake()
 
 	// audioSource 채널 그룹 지정 및 사운드 재생
 	bgmSource->SetChannelGroup(AudioSystem::Get().GetBGMGroup());
-	// bgmSource->SetVolume(1);
+	bgmSource->SetVolume(1);
 	std::wostringstream oss;
 	oss << L"float = " << std::fixed << std::setprecision(2) << bgmSource->GetVolume() << L"\n"; // 2자리
 	OutputDebugStringW(oss.str().c_str());
@@ -24,9 +23,6 @@ void TitleUI::Awake()
 	bgmSource->SetClip(bgmClip);
 	bgmSource->SetLoop(true);
 	bgmSource->Play();
-
-	// SoundManager 기준 최종 볼륨 적용
-	bgmSource->SetVolume(SoundManager::Get().GetFinalBGMVolume());
 
 	sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
 	sfxSource->SetClip(sfxClip_Button1);
@@ -261,6 +257,5 @@ void TitleUI::ChangePlayScene()
 {
 	sfxSource->SetClip(sfxClip_Button2);
 	sfxSource->Play();
-
 	SceneManager::Get().ChangeScene(EclipseApp::PLAY);
 }

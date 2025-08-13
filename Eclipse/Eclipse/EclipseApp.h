@@ -21,6 +21,4 @@ public:
 	void Init() override;
 	void UnInit() override;
 	void MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) override;
-
-	void Update() override;
 };

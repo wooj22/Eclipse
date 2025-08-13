@@ -6,7 +6,6 @@
 #include "EclipseApp.h"
 #include "../Direct2D_EngineLib/Input.h"
 #include <algorithm>
-#include "SoundManager.h"
 
 void PlayUI::Awake()
 {  
@@ -88,9 +87,6 @@ void PlayUI::Awake()
 	bgmSource->SetLoop(true);
 	bgmSource->SetClip(bgmClip_Main);
 	bgmSource->Play();
-
-	// SoundManager 기준 최종 볼륨 
-	bgmSource->SetVolume(SoundManager::Get().GetFinalBGMVolume());
 
 	sfxSource->SetLoop(false);
 	sfxSource->SetClip(sfxClip_Button1);
