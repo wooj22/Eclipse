@@ -65,7 +65,7 @@ public:
 	void Update() override
 	{
 		// AABB ¿µ¿ª 
-		if(collider->IsEnabled()) collider->DebugColliderDraw();
+		// if(collider->IsEnabled()) collider->DebugColliderDraw();
 		// collider->DebugColliderDraw();
 	}
 

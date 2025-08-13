@@ -107,7 +107,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 };
 
@@ -140,7 +140,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 
 };
@@ -174,7 +174,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 };
 
@@ -207,7 +207,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 };
 
@@ -240,7 +240,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 };
 
@@ -273,7 +273,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 };
 
@@ -305,7 +305,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 };
 
@@ -337,7 +337,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+        // collider->DebugColliderDraw();
     }
 };
 
@@ -362,7 +362,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+       // collider->DebugColliderDraw();
     }
 };
 
@@ -397,7 +397,7 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+       // collider->DebugColliderDraw();
     }
 
 };
@@ -432,6 +432,6 @@ public:
 
     void Update() override
     {
-        collider->DebugColliderDraw();
+       // collider->DebugColliderDraw();
     }
 };
