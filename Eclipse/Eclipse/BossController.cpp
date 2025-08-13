@@ -135,8 +135,6 @@ void BossController::Attack_RoundShell()
 
 		GameObject* bullet = Instantiate<Bullet>(center);
 		BulletController* bc = bullet->GetComponent<BulletController>();
-		bullet->GetComponent<SpriteRenderer>()->SetColor(1, 1, 1);
-
 		bc->SetDirection(dir);
 		bc->SetSpeed(250);
 	}
@@ -166,8 +164,6 @@ void BossController::Attack_DiffusedShell()
 
 		GameObject* bullet = Instantiate<Bullet>(bossPos);
 		BulletController* bc = bullet->GetComponent<BulletController>();
-		bullet->GetComponent<SpriteRenderer>()->SetColor(0, 0, 1);
-
 		bc->SetDirection(rotated.Normalized());
 		bc->SetSpeed(350);
 	}
@@ -184,8 +180,6 @@ void BossController::Attack_DropShell()
 
 		GameObject* bullet = Instantiate<Bullet>(spawnPos);
 		BulletController* bc = bullet->GetComponent<BulletController>();
-		bullet->GetComponent<SpriteRenderer>()->SetColor(0, 1, 0);
-
 		bc->SetDirection(Vector2::down);
 		bc->SetSpeed(500);
 	}
