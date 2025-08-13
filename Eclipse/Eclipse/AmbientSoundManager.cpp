@@ -31,6 +31,7 @@ AmbientSoundManager::AmbientSoundManager() : GameObject("AmbientSoundManager", "
         owlSource->SetLoop(false);
         owlSource->SetVolume(0.9f);
         owlSounds.push_back(owlSource);
+        animalSounds.push_back(owlSource);  // Add to combined list
     }
     
     // Wolf sounds
@@ -46,6 +47,7 @@ AmbientSoundManager::AmbientSoundManager() : GameObject("AmbientSoundManager", "
         wolfSource->SetLoop(false);
         wolfSource->SetVolume(0.8f);
         wolfSounds.push_back(wolfSource);
+        animalSounds.push_back(wolfSource);  // Add to combined list
     }
 }
 
@@ -74,24 +76,13 @@ void AmbientSoundManager::Update()
         windInterval = 30.0f + (rand() % 20);
     }
     
-    // Update owl timer
-    owlTimer += deltaTime;
-    if (owlTimer >= owlInterval)
+    // Update animal sound timer (owl and wolf combined)
+    animalSoundTimer += deltaTime;
+    if (animalSoundTimer >= animalSoundInterval)
     {
-        PlayRandomOwlSound();
-        owlTimer = 0.0f;
-        // Randomize next interval
-        owlInterval = 8.0f + (rand() % 8);
-    }
-    
-    // Update wolf timer
-    wolfTimer += deltaTime;
-    if (wolfTimer >= wolfInterval)
-    {
-        PlayRandomWolfSound();
-        wolfTimer = 0.0f;
-        // Randomize next interval
-        wolfInterval = 12.0f + (rand() % 10);
+        PlayRandomAnimalSound();
+        animalSoundTimer = 0.0f;
+        // Fixed 8 second interval
     }
 }
 
@@ -111,26 +102,14 @@ void AmbientSoundManager::StopWindSound()
     }
 }
 
-void AmbientSoundManager::PlayRandomOwlSound()
+void AmbientSoundManager::PlayRandomAnimalSound()
 {
-    if (!owlSounds.empty())
+    if (!animalSounds.empty())
     {
-        int randomIndex = rand() % owlSounds.size();
-        if (owlSounds[randomIndex])
+        int randomIndex = rand() % animalSounds.size();
+        if (animalSounds[randomIndex])
         {
-            owlSounds[randomIndex]->Play();
-        }
-    }
-}
-
-void AmbientSoundManager::PlayRandomWolfSound()
-{
-    if (!wolfSounds.empty())
-    {
-        int randomIndex = rand() % wolfSounds.size();
-        if (wolfSounds[randomIndex])
-        {
-            wolfSounds[randomIndex]->Play();
+            animalSounds[randomIndex]->Play();
         }
     }
 }
