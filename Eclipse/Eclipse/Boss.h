@@ -40,21 +40,16 @@ public:
 		spriteRenderer->layer = 10;
 
 		transform->SetPosition(0, 500);
-		transform->SetScale(0.5, 0.5);
+		transform->SetScale(0.65, 0.65);
 
 		rigidbody->isKinematic = true;
 		collider->isTrigger = true;
-		collider->radius = 450;
+		collider->radius = 430;
 		collider->offset = { 0,-40 };
 
 		// color matrix test
 		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
 		spriteRenderer->SetGlowAmmount(100);
-	}
-
-	void Update() override
-	{
-		collider->DebugColliderDraw();
 	}
 };
 
