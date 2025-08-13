@@ -136,7 +136,7 @@ void WaveSystem::Update()
 		{
 			if (hon && hon->IsActive())
 			{
-				hon->SetActive(false);
+				hon->Destroy();
 			}
 		}
 		OutputDebugStringA("Wave cleanup completed.\n");
@@ -233,13 +233,13 @@ void WaveSystem::StopWave()
 	{
 		if (hon && hon->IsActive())
 		{
-			hon->SetActive(false);
+			hon->Destroy();
 		}
 	}
 
 	if (m_activeBoss && m_activeBoss->IsActive())
 	{
-		m_activeBoss->SetActive(false);
+		m_activeBoss->SetActive(false);		// 보스쪽에서 알아서 삭제함
 		m_activeBoss = nullptr;
 	}
 
