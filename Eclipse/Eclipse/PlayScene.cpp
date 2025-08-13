@@ -36,6 +36,8 @@ void PlayScene::Awake()
 	// ambient sound
 	ambientSoundManager = CreateObject<AmbientSoundManager>();
 
+	// fade object
+	fadeObject = CreateObject<FadeObject>();
 }
 
 void PlayScene::Start()

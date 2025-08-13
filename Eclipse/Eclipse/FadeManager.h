@@ -8,7 +8,7 @@ class FadeManager : public Script
 {
 private:
 	// fade data
-	float fadeSpeed = 1.0f;
+	float fadeSpeed = 0.5f;
 	bool isFading = false;
 	float currentAlpha = 1.0f;
 	float targetAlpha = 1.0f;
@@ -19,6 +19,7 @@ private:
 public:
 	// cycle
 	void Awake() override;
+	void Start() override;
 	void Update() override;
 
 	// func

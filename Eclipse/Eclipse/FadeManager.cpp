@@ -9,12 +9,13 @@ void FadeManager::Awake()
     currentAlpha = ir->GetAlpha();
 }
 
+void FadeManager::Start()
+{
+    FadeIn();
+}
+
 void FadeManager::Update() 
 {
-    // test
-	if (Input::GetKeyDown('I'))FadeIn();
-	if (Input::GetKeyDown('O'))FadeOut();
-
     // fade
     if (isFading)
     {
@@ -38,12 +39,12 @@ void FadeManager::Update()
 
 void FadeManager::FadeIn() 
 {
-	targetAlpha = 1.0f;
+	targetAlpha = 0;
 	isFading = true;
 }
 
 void FadeManager::FadeOut() 
 {
-	targetAlpha = 0.0f;
+	targetAlpha = 1.0f;
 	isFading = true;
 }
