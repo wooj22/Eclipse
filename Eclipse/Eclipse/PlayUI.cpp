@@ -312,7 +312,8 @@ void PlayUI::SceneStart()
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillHon_Text->screenTextRenderer->SetText(L"x 000");
 	skillHon_Text->screenTextRenderer->SetFontName(L"덕온공주체");
-	//skillHon_Text->screenTextRenderer->layer = 10;
+	skillHon_Image->imageRenderer->layer = 1;
+	skillHon_Text->screenTextRenderer->layer = 1;
 
 
 	// 스킬창 제목
@@ -357,6 +358,7 @@ void PlayUI::SceneStart()
 		this, [this]() {
 			skillWindowBackGround_Image->SetActive(false);
 			GameManager::Get().canUseMouse = true;
+			ButtonClickSound();
 		});
 }
 
