@@ -116,6 +116,7 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [boss collision]
 	if (other->gameObject->tag == "Boss")
 	{
+		Instantiate<BossHitEffect>(tr->GetWorldPosition());
 		other->gameObject->GetComponent<BossController>()->TakeDamage(1);
 		gameObject->Destroy();
 	}
@@ -139,6 +140,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		{
 			// score
 			GameManager::Get().ChangeHonCount(10);
+
+			// effect
+			Instantiate<HonCollisionEffect>(tr->GetWorldPosition());
 
 			// hp cheak
 			TakeDamage(1);
@@ -177,6 +181,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// score
 			GameManager::Get().ChangeHonCount(10);
 
+			// effect
+			Instantiate<HonCollisionEffect>(tr->GetWorldPosition());
+
 			// wave2 quest
 			GameManager::Get().ChangeQuestCount(2);
 
@@ -194,6 +201,9 @@ void HonCController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		}
 		case HonType::C:		// ø¨º‚ π›¿¿ C-C
 		{
+			// effect
+			Instantiate<HonCollisionEffect>(tr->GetWorldPosition());
+
 			// hp check
 			TakeDamage(1);
 			otherController->TakeDamage(1);

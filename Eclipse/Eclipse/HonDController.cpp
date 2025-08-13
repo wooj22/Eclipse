@@ -67,9 +67,6 @@ void HonDController::Update()
 		// descent move
 		tr->Translate(descentDirection * descentSpeed * Time::GetDeltaTime());
 	}
-
-	// opacity ¿¬Ãâ
-	OpacityDirecting();
 }
 
 
@@ -105,6 +102,7 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 	// [boss collision]
 	if (other->gameObject->tag == "Boss")
 	{
+		Instantiate<BossHitEffect>(tr->GetWorldPosition());
 		other->gameObject->GetComponent<BossController>()->TakeDamage(1);
 		gameObject->Destroy();
 	}
@@ -120,6 +118,9 @@ void HonDController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 		HonController* otherController = otherGameObject->GetComponent<HonController>();
 		if (otherController->destroyPending) return;
 		string honType = otherGameObject->name;
+
+		// effect
+		Instantiate<HonCollisionEffect>(tr->GetWorldPosition());
 
 		// collision acttion
 		otherController->isCollisionD = true;
