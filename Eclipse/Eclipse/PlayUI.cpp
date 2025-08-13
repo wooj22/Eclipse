@@ -10,6 +10,7 @@
 void PlayUI::Awake()
 {  
 	//해당 씬에 게임 오브젝트 생성
+	timer_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	timer_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	stop_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	pauseWindow = SceneManager::Get().GetCurrentScene()->CreateObject<PauseWindow>();
@@ -18,6 +19,7 @@ void PlayUI::Awake()
 	quest_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	questCount_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	chat_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
+	chatNext_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	chat_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
 	chat_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	hon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
@@ -29,13 +31,12 @@ void PlayUI::Awake()
 	skill2Icon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skill2Key_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
-	waveInfo_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	waveInfo_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGround_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowBackGroundGradient_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindow_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowSplitter_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillWindowName_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
-	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::MoveSpeedUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::AttackRangeUp));
 	skillButtons.push_back(SceneManager::Get().GetCurrentScene()->CreateObject<SkillWindowButton>({ 0,0 }, nullptr, SkillType::KnockbackDistanceUp));
@@ -48,6 +49,7 @@ void PlayUI::Awake()
 	skillHonBig_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Image = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Image>();
 	skillHon_Text = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Text>();
+	skillWindowClose_Button = SceneManager::Get().GetCurrentScene()->CreateObject<UI_Button>();
 	bossHP = SceneManager::Get().GetCurrentScene()->CreateObject<BossHP>();
 	npc = SceneManager::Get().GetCurrentScene()->CreateObject<NPC>({ 0,-800 });
 	tooltip1 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
@@ -88,16 +90,20 @@ void PlayUI::SceneStart()
 	pauseCheckButtos = { stop_Button, pauseWindow->close_Button, pauseWindow->continuGame_Button };
 
 	// 웨이브 타이머 UI
-	timer_Text->rectTransform->SetPosition(0, 400);
+	timer_Image->rectTransform->SetPosition(0, 380);
+	timer_Image->rectTransform->SetSize(190, 190);
+	auto timerTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Timer.png");
+	timer_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(timerTexture, "Timer");
+	timer_Image->SetActive(false);
+
+	timer_Text->rectTransform->SetParent(timer_Image->rectTransform);
+	timer_Text->rectTransform->SetPosition(0, 20);
 	timer_Text->rectTransform->SetSize(500, 40);
-	timer_Text->screenTextRenderer->SetFontSize(140);
+	timer_Text->screenTextRenderer->SetFontSize(70);
 	timer_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 
-	//waveInfo_Text->rectTransform->SetPosition(0, 400);
-	waveInfo_Text->rectTransform->SetSize(1920, 40);
-	waveInfo_Text->screenTextRenderer->SetFontSize(200);
-	waveInfo_Text->SetActive(false);
-	waveInfo_Text->screenTextRenderer->SetFontName(L"덕온공주체");
+	waveInfo_Image->rectTransform->SetSize(631, 346);
+	waveInfo_Image->SetActive(false);
 
 	// 일시 정지 버튼
 	stop_Button->rectTransform->SetPosition(920, 500);
@@ -110,7 +116,7 @@ void PlayUI::SceneStart()
 	questName_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	quest_Text->rectTransform->SetParent(quest_Image->rectTransform);
 	questCount_Text->rectTransform->SetParent(quest_Image->rectTransform);
-	quest_Image->rectTransform->SetPosition(850, 0);
+	quest_Image->rectTransform->SetPosition(800, 0);
 	quest_Image->rectTransform->SetSize(250, 300);
 	auto questImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Quest.png");
 	quest_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(questImageTexture, "Quest");
@@ -130,27 +136,31 @@ void PlayUI::SceneStart()
 
 
 	// 대화창 UI
+	chatNext_Image->rectTransform->SetParent(chat_Image->rectTransform);
 	chat_Text->rectTransform->SetParent(chat_Image->rectTransform);
 	chat_Button->rectTransform->SetParent(chat_Image->rectTransform);
 	chat_Button->button->onClickListeners.AddListener(
 		this, std::bind(&PlayUI::ClickChatButton, this));
 
 	chat_Image->SetActive(false);
-	chat_Image->imageRenderer->layer = 1;
-	chat_Text->screenTextRenderer->layer = 2;
-	chat_Button->imageRenderer->layer = 3;
 	chat_Image->rectTransform->SetPosition(0, -400);
 	chat_Image->rectTransform->SetSize(800, 160);
 	auto chatImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Chat.png");
 	chat_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatImageTexture, "Chat");
 	
+	chatNext_Image->rectTransform->SetPosition(350, -40);
+	chatNext_Image->rectTransform->SetSize(25, 22);
+	auto nextImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/Next.png");
+	chatNext_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(nextImageTexture, "Next");
+
+
 	chat_Text->rectTransform->SetSize(400, 50);
 	chat_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	chat_Text->screenTextRenderer->SetVerticalAlign(TextVerticalAlign::Top);
 
 	chat = chat_Text->AddComponent<Chat>();
-	chat_Button->rectTransform->SetPosition(300, -40);
-	chat_Button->rectTransform->SetSize(100, 50);
+	chat_Button->rectTransform->SetPosition(240, -40);
+	chat_Button->rectTransform->SetSize(184, 49);
 	auto chatButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton.png");
 	chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonTexture, "ChatButton");
 
@@ -173,6 +183,7 @@ void PlayUI::SceneStart()
 	hon_Text->screenTextRenderer->SetFontSize(40);
 
 	hon_Text->screenTextRenderer->SetText(L"x 000") ;
+	hon_Text->screenTextRenderer->SetFontName(L"덕온공주체") ;
 
 	// 스킬1
 	skill1Key_Image->rectTransform->SetParent(skill1_Image->rectTransform);
@@ -181,8 +192,8 @@ void PlayUI::SceneStart()
 
 	skill1_Image->rectTransform->SetPosition(0, -132);
 	skill1_Image->rectTransform->SetSize(100, 100);
-	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ.png");
-	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ");
+	auto skill1ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillQ_Deactivate.png");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
+	skill1_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill1ImageTexture, "SkillQ_Deactivate");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
 	auto skillIconTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillIcon.png");
 	skill1Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 
@@ -204,8 +215,8 @@ void PlayUI::SceneStart()
 
 	skill2_Image->rectTransform->SetPosition(120, -132);
 	skill2_Image->rectTransform->SetSize(100, 100);
-	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE.png");
-	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE");
+	auto skill2ImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillE_Deactivate.png");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
+	skill2_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skill2ImageTexture, "SkillE_Deactivate");//TODOMO : 활성화 비활성화 이미지로 수정해야함 크기가 달라서 못하는중...
 	skill2Icon_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillIconTexture, "SkillIcon");
 
 	skill2Key_Image->rectTransform->SetPosition(0, 50);
@@ -218,11 +229,11 @@ void PlayUI::SceneStart()
 	skill2_Image->imageRenderer->SetColor(0.4, 0.4, 0.4);
 
 	// 스킬창 UI
-	
-	skillWindowClose_Button->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
+
+	skillWindowBackGroundGradient_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindow_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	skillWindowSplitter_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
-	skillWindowBackGroundGradient_Image->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
+	skillWindowClose_Button->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
 	for (auto& skillButton : skillButtons)
 	{
 		skillButton->rectTransform->SetParent(skillWindowBackGround_Image->rectTransform);
@@ -240,7 +251,7 @@ void PlayUI::SceneStart()
 	skillWindowClose_Button->rectTransform->SetSize(83, 79);
 	auto skillWindowClose_ButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/BackButton.png");
 	skillWindowClose_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(skillWindowClose_ButtonTexture, "BackButton");
-	//skillWindowClose_Button->imageRenderer->layer = 20;
+	//skillWindowClose_Button->imageRenderer->layer = 1;
 
 	skillWindow_Image->rectTransform->SetSize(1248, 702);
 	auto skillWindowImageTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/SkillWindow.png");
@@ -286,6 +297,7 @@ void PlayUI::SceneStart()
 	skillHon_Text->screenTextRenderer->SetFontSize(25);
 	skillHon_Text->screenTextRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 	skillHon_Text->screenTextRenderer->SetText(L"x 000");
+	skillHon_Text->screenTextRenderer->SetFontName(L"덕온공주체");
 	//skillHon_Text->screenTextRenderer->layer = 10;
 
 
@@ -303,6 +315,19 @@ void PlayUI::SceneStart()
 	}
 	tooltipName = { L"index",L"Ignis",L"Dark",L"Luna",L"Nox"};
 
+	chat_Button->button->onPointEnterListeners.AddListener(
+		this, [this]() {
+			chat_Button->imageRenderer->SetAlpha(1);
+			auto chatButtonPressedTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton_pressed.png");
+			chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonPressedTexture, "ChatButtonPress");
+		});
+
+	chat_Button->button->onPointExitListeners.AddListener(
+		this, [this]() {
+				auto chatButtonTexture = ResourceManager::Get().CreateTexture2D("../Resource/mo/ChatButton.png");
+				chat_Button->imageRenderer->sprite = ResourceManager::Get().CreateSprite(chatButtonTexture, "ChatButton");
+		});
+
 	stop_Button->button->onPointEnterListeners.AddListener(
 		this, []() {
 			GameManager::Get().canUseMouse = false;
@@ -310,13 +335,14 @@ void PlayUI::SceneStart()
 
 	stop_Button->button->onPointExitListeners.AddListener(
 		this, [this]() {
-			if(pauseWindow->IsActive())
+			if(!pauseWindow->IsActive())
 				GameManager::Get().canUseMouse = true;
 		});
 
 	skillWindowClose_Button->button->onClickListeners.AddListener(
 		this, [this]() {
 			skillWindowBackGround_Image->SetActive(false);
+			GameManager::Get().canUseMouse = true;
 		});
 }
 
@@ -330,11 +356,11 @@ void PlayUI::Update()
 
 	if (!GameManager::Get().canUseAbsorb)
 	{
-		float cooltime = GameManager::Get().absorbCoolTime/GameManager::Get().maxabsorbCoolTime;
+		float cooltime = (GameManager::Get().absorbCoolTime) / (10 - GameManager::Get().GetSkillBonus(SkillType::SkillCooldownDown));
 		skill1CollTimeFilter_Image->imageRenderer->fillAmount = cooltime;
 	}
 
-	if (waveInfo_Text->IsActive())
+	if (waveInfo_Image->IsActive())
 	{
 		if (waveInfoTimer < waveIntoTime)
 		{
@@ -357,13 +383,13 @@ void PlayUI::Update()
 
 			// clamp 알파값 (0 ~ 1)
 			alpha = std::max(0.0f, std::min(1.0f, alpha));
-			waveInfo_Text->screenTextRenderer->SetAlpha(alpha);
+			waveInfo_Image->imageRenderer->SetAlpha(alpha);
 		}
 		else
 		{
 			waveInfoTimer = 0;
-			waveInfo_Text->screenTextRenderer->SetAlpha(0);
-			waveInfo_Text->SetActive(false);
+			waveInfo_Image->imageRenderer->SetAlpha(0);
+			waveInfo_Image->SetActive(false);
 		}
 	}
 
@@ -405,6 +431,19 @@ void PlayUI::Update()
 		}
 	}
 
+	if (chat_Image->IsActive() && !chat_Button->IsActive())
+	{
+		// 원래 위치
+		Vector2 curPos = chatNext_Image->rectTransform->GetPosition();
+
+		float offsetY = sinf(Time::GetTotalTime() * 3.0f) * 0.5f;
+
+		chatNext_Image->rectTransform->SetPosition(
+			curPos.x,
+			curPos.y + offsetY
+		);
+	}
+
 	// TODOMO : 아래 입력 삭제 
 
 	if (Input::GetKeyDown(VK_ESCAPE))
@@ -416,6 +455,7 @@ void PlayUI::Update()
 			pauseWindow->SetActive(!pauseActive);
 			GameManager::Get().canUseMouse = pauseActive;
 			skillWindowBackGround_Image->SetActive(false);
+			Time::SetTimeScale(pauseActive ? 1 : 0);
 		}
 		else
 		{
@@ -432,13 +472,7 @@ void PlayUI::Update()
 
 		bool skillActive = skillWindowBackGround_Image->IsActive();
 		skillWindowBackGround_Image->SetActive(!skillActive);
-		GameManager::Get().canUseMouse = !skillActive;
-
-		if (!skillActive)
-		{
-			sfxSource->SetClip(sfxClip_SkillUI);
-			sfxSource->Play();
-		}
+		GameManager::Get().canUseMouse = skillActive;
 	}
 
 
@@ -495,28 +529,32 @@ void PlayUI::WaveStartData()
 	if (skillWindowBackGround_Image->IsActive()) skillWindowBackGround_Image->SetActive(false);
 	hon_Image->SetActive(true);
 	stop_Button->SetActive(true);
-	quest_Image->SetActive(true);
+	quest_Image->SetActive(true); 
+	timer_Image->SetActive(true);
 	GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
 }
 
 void PlayUI::StartWaveInfo(int waveNumber)
 {
-	std::wstring waveText;
+	std::string stageImagePath;
 	if (waveNumber < 4)
 	{
-		waveText = L"공세 " + std::to_wstring(waveNumber) + L"막";
+		stageImagePath = "../Resource/mo/Stage0" + std::to_string(waveNumber) + ".png";
 		bgmSource->SetClip(bgmClip_Wave);
 	}
 	else
 	{
-		waveText = L"공세 종막";
+		stageImagePath = "../Resource/mo/Stage04.png"; // Boss Stage
 		bgmSource->SetClip(bgmClip_Boss);
 	}
-	waveInfo_Text->screenTextRenderer->SetText(waveText);
-	
+
+	// Texture/Sprite 생성 후 적용
+	auto texture = ResourceManager::Get().CreateTexture2D(stageImagePath);
+	waveInfo_Image->imageRenderer->sprite = ResourceManager::Get().CreateSprite(texture, "Stage" + std::to_string(waveNumber));
+
 	waveInfoTimer = 0;
-	waveInfo_Text->SetActive(true);
-	waveInfo_Text->screenTextRenderer->SetAlpha(0);
+	waveInfo_Image->SetActive(true);
+	waveInfo_Image->imageRenderer->SetAlpha(0);
 
 	tooltipInfoTimer = 0;
 
@@ -595,6 +633,7 @@ void PlayUI::CheckPauseUI()
 	{
 		Time::SetTimeScale(0);
 		skillWindowBackGround_Image->SetActive(false);
+		GameManager::Get().canUseMouse = false;
 	}
 	else
 	{

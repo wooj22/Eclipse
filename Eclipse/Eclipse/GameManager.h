@@ -101,7 +101,6 @@ public:
 
 	//플레이어 스킬
 	float absorbCoolTime;		// Q 흡수 쿨타임				
-	float maxabsorbCoolTime;	// 현재 Q 흡수 쿨타임			
 	bool canUseAbsorb;			// Q 흡수 스킬 사용 가능 여부	
 	bool canUseRelease ;		// E 방출 스킬 사용 가능 여부	
 

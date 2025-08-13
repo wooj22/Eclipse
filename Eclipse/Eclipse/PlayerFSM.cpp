@@ -123,8 +123,13 @@ void PlayerFSM::InputSetting()
 {
 	isF = Input::GetKeyDown('F');
 
-	if (!GameManager::Get().canUseMouse) return;
+	if (!GameManager::Get().canUseMouse) // 모든 입력값 초기화
+	{
+		ResetInputs(); 
+		return;
+	}
 
+	// [ 입력 허용 ]
 	inputX = Input::GetAxisHorizontal();
 	inputY = Input::GetAxisVertical();
 
@@ -136,28 +141,36 @@ void PlayerFSM::InputSetting()
 	isShift = Input::GetKey(VK_SHIFT);
 	isSpace = Input::GetKeyDown(VK_SPACE);
 
-	if (GameManager::Get().canUseMouse) // 마우스 사용 가능 할 때 
-	{
-		// LMB
-		isLButton = Input::GetKey(VK_LBUTTON);
-		isLButtonDown = Input::GetKeyDown(VK_LBUTTON);
-		isLButtonUp = Input::GetKeyUp(VK_LBUTTON);
+	// 마우스 입력
+	isLButton = Input::GetKey(VK_LBUTTON);
+	isLButtonDown = Input::GetKeyDown(VK_LBUTTON);
+	isLButtonUp = Input::GetKeyUp(VK_LBUTTON);
 
-		// RMB
-		isRButton = Input::GetKey(VK_RBUTTON);
-		isRButtonDown = Input::GetKeyDown(VK_RBUTTON);
-		isRButtonUp = Input::GetKeyUp(VK_RBUTTON);
-	}
-	else
-	{
-		isLButton = false;
-		isLButtonDown = false;
-		isLButtonUp = false;
+	isRButton = Input::GetKey(VK_RBUTTON);
+	isRButtonDown = Input::GetKeyDown(VK_RBUTTON);
+	isRButtonUp = Input::GetKeyUp(VK_RBUTTON);
+}
 
-		isRButton = false;
-		isRButtonDown = false;
-		isRButtonUp = false;
-	}
+void PlayerFSM::ResetInputs() 
+{
+	inputX = 0.0f;
+	inputY = 0.0f;
+
+	isA = false;
+	isD = false;
+	isS = false;
+	isQ = false;
+	isE = false;
+	isShift = false;
+	isSpace = false;
+	// isF = false;
+
+	isLButton = false;
+	isLButtonDown = false;
+	isLButtonUp = false;
+	isRButton = false;
+	isRButtonDown = false;
+	isRButtonUp = false;
 }
 
 void PlayerFSM::FlipXSetting()

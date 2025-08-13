@@ -78,7 +78,6 @@ void PauseWindow::SceneStart()
 	quitGame_Button->rectTransform->SetSize(200, 30);
 	quitGame_Button->imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::LightPink, 0));
 
-	//TODOMO : 이미지로하면 텍스트는 제거
 	continuGame_Button->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Cyan));
 	continuGame_Button->screenTextRenderer->SetText(L"이어하기");
 	continuGame_Button->screenTextRenderer->SetFontSize(30);
