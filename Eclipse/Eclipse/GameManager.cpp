@@ -193,13 +193,13 @@ void GameManager::UseAbsorb()
 void GameManager::CanRelease()
 {
 	canUseRelease = true;
-	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::Unlit;
+	g_playUI->ActivateRelease();
 }
 
 void GameManager::UseRelease()
 {
 	canUseRelease = false;
-	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+	g_playUI->DeactivateRelease();
 }
 
 void GameManager::FinishWave()

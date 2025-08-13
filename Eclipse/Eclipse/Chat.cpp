@@ -54,9 +54,12 @@ Chat::Chat()
 	AddChat(3, ChatCondition::Success, L"네 덕분에 그 빛은 꺼지지 않았다.");
 	AddChat(3, ChatCondition::Fail, L"그 빛이 꺼진 만큼, 이 밤은 더욱 길어질 것이다.");
 
+	// 퀘스트 4
+	AddChat(4, ChatCondition::Quest, L"이번 전투로 모은 혼을 잊지 마라.");
+	AddChat(4, ChatCondition::Quest, L"더 강해져야 다음에도 지켜낼 수 있다.\n\n(녹스를 처치하세요.)");//퀘스트는 회색으로 가능한지
+
 	// 웨이브 시작 3
-	AddChat(3, ChatCondition::Wave, L"이번 전투로 모은 혼을 잊지 마라.");
-	AddChat(3, ChatCondition::Wave, L"더 강해져야 다음에도 지켜낼 수 있다.\n\n(녹스를 처치하세요.)");//퀘스트는 회색으로 가능한지
+	AddChat(3, ChatCondition::Wave, L"이젠, 틈도 없고, 뒤로 물러날 곳도 없어. 그를 막아야해.\n\n(녹스를 처치하세요.)");//퀘스트는 회색으로 가능한지
 
 	// 웨이브 4
 	AddChat(4, ChatCondition::Success, L"…끝났다. 달빛이 돌아오고, 혼문이 닫혔다.");
@@ -74,6 +77,7 @@ Chat::Chat()
 	sequence.push_back({ ChatCondition::Quest, 3 });
 	sequence.push_back({ ChatCondition::Wave, 2 });
 	sequence.push_back({ ChatCondition::Success, 3 });
+	sequence.push_back({ ChatCondition::Quest, 4 });
 	sequence.push_back({ ChatCondition::Wave, 3 });
 	sequence.push_back({ ChatCondition::Success, 4 });
 

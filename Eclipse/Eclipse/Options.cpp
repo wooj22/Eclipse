@@ -77,7 +77,7 @@ Options::Options() : GameObject("Optionts", "Optionts")
 	{
 		controlKeyTitles[i]->rectTransform->SetParent(controlKeyBase_Image->rectTransform);
 		controlKeyTitles[i]->screenTextRenderer->SetText(titles[i]);
-		controlKeyTitles[i]->screenTextRenderer->SetFontSize(30);
+		controlKeyTitles[i]->screenTextRenderer->SetFontSize(22);
 	}
 
 	// 이름
@@ -237,9 +237,7 @@ void Options::SceneStart()
 	}
 
 	controlKeyTitles[0]->rectTransform->SetPosition(-200, 125);
-	controlKeyTitles[0]->screenTextRenderer->SetFontName(L"덕온공주체");
 	controlKeyTitles[1]->rectTransform->SetPosition(-200, -125);
-	controlKeyTitles[1]->screenTextRenderer->SetFontName(L"덕온공주체");
 
 	soundMaster_slider->slider->SetValue(AudioSystem::Get().GetMasterVolume());
 	soundBGM_slider->slider->SetValue(AudioSystem::Get().GetBGMVolume());
