@@ -34,6 +34,10 @@ void BossController::Update()
 		Move();
 		AttackHandler();
 	}
+	else
+	{
+		OpacityDirecting();
+	}
 
 	// test :: player -> take damage
 	if (Input::GetKeyDown('F'))
@@ -185,7 +189,6 @@ void BossController::Attack_DropShell()
 	}
 }
 
-
 /*--------------------  boss hit  ---------------------*/
 void BossController::TakeDamage(int damage)
 {
@@ -201,14 +204,26 @@ void BossController::TakeDamage(int damage)
 void BossController::Die()
 {
 	isDie = true;
+	collider->SetEnabled(false);
 
 	// wave4 quest
 	GameManager::Get().ChangeQuestCount(4);
 
-	// TODO :: GameManager 게임 성공 전달
-	// TODO :: die animation? or 연출 or Destroy
+	// TODO :: 웨이브 종료 전달
+}
 
-	this->gameObject->Destroy();
+// 투명화 연출
+void BossController::OpacityDirecting()
+{
+	float currentAlpha = sr->GetAlpha();
+	float changeSpeed = 2;
+
+	if (currentAlpha < 0)
+		currentAlpha = min(currentAlpha + changeSpeed * Time::GetDeltaTime(), 0);
+	else if (currentAlpha > 0)
+		currentAlpha = max(currentAlpha - changeSpeed * Time::GetDeltaTime(), 0);
+
+	sr->SetAlpha(currentAlpha);
 }
 
 /*-----------------  trigger event  -----------------*/ 
