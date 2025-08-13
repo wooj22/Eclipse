@@ -29,6 +29,10 @@ class Attack_State : public MovementStateBase
     float afterimageInterval = 0.015f;
     void CreateAfterImage(MovementFSM* fsm);
 
+    // 공격 범위 
+    float attackAreaDistance = 100.0f;
+    Vector2 attackAreaPosition = { 0, 0 };
+
 public:
     void Enter(MovementFSM* fsm) override;
     void Update(MovementFSM* fsm) override;
