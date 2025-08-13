@@ -72,14 +72,14 @@ void GameApp::Init()
 
 	SIZE clientSize = { width, height };
 	RECT clientRect = { 0, 0, clientSize.cx, clientSize.cy };
-	AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);
+	//AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);
 
 	// window 창 생성  -> WM_NCCREATE 메시지 발생
 	hWnd = CreateWindowEx(
 		0,
 		winClassName.c_str(),
 		titleName.c_str(),
-		WS_OVERLAPPEDWINDOW,
+		WS_POPUP,		// 테두리 없음/ WS_OVERLAPPEDWINDOW (테두리 있음)
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		clientRect.right - clientRect.left,
