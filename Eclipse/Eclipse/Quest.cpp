@@ -17,29 +17,15 @@ void Quest::Awake()
 	questLines.push_back(L"녹스를 처치하세요.");
 
 	questMaxCount.push_back(0);//웨이브 카운터와 동일한 인덱스용
-	questMaxCount.push_back(0);
-	questMaxCount.push_back(0);
 	questMaxCount.push_back(20);
-	questMaxCount.push_back(0);
-	questMaxCount.push_back(0);
 	questMaxCount.push_back(10);
-	questMaxCount.push_back(0);
-	questMaxCount.push_back(0);
 	questMaxCount.push_back(5);
-	questMaxCount.push_back(0);
 	questMaxCount.push_back(1);
 
 	questReward.push_back(0);//웨이브 카운터와 동일한 인덱스용
-	questReward.push_back(0);
-	questReward.push_back(0);
 	questReward.push_back(100);
-	questReward.push_back(0);
-	questReward.push_back(0);
 	questReward.push_back(150);
-	questReward.push_back(0);
-	questReward.push_back(0);
 	questReward.push_back(200);
-	questReward.push_back(0);
 	questReward.push_back(0);
 }
 
@@ -63,7 +49,7 @@ void Quest::RefreshQuestCountText(int num)
 	if (num == -1)
 		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetText(L"");
 	else
-		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetText(L"[   "+ to_wstring(num) + L"    /    " + to_wstring(questMaxCount[GameManager::Get().questIndex]) + L"   ]");
+		GameManager::Get().g_playUI->questCount_Text->screenTextRenderer->SetText(L"[   "+ to_wstring(num) + L"    /    " + to_wstring(questMaxCount[GameManager::Get().waveCount]) + L"   ]");
 }
 
 void Quest::QuestSuccess()
