@@ -21,7 +21,6 @@ class Jump_State : public MovementStateBase
     float afterimageInterval = 0.01f;
     void CreateAfterImage(MovementFSM* fsm);
 
-
 public:
     void Enter(MovementFSM* fsm) override;
     void Update(MovementFSM* fsm) override;

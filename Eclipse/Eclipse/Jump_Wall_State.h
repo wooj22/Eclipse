@@ -10,7 +10,7 @@ public:
     void Exit(MovementFSM* fsm) override;
 
 private:
-    float wallJumpForce;
+    float wallJumpForce = 1600.0f ;
     float jumpXPower = 500.0f;
     float doubleJumpXPower = 200.0f;
 

@@ -11,10 +11,12 @@
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
 #include "GameManager.h"
+// #include "JumpEffect.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+
 #include "AfterImage.h"
 #include "LandingAnimatorController.h"
 #include "JumpAnimatorController.h"
@@ -72,6 +74,23 @@ void Jump_State::Enter(MovementFSM* fsm)
 void Jump_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
+
+    // Jump 이펙트 fsm->GetPlayerFSM()->GetLastFlipX() 에 따라서 x축 이동
+    auto jumpEffect = GameObject::Find("PlayerJumpEffect");
+    if (!jumpEffect) return;
+
+    auto jump_tr = jumpEffect->GetComponent<Transform>();
+    if (!jump_tr) return;
+
+    // 방향 확인
+    bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
+    float moveSpeed = 70.0f; 
+
+    // deltaTime 곱해서 프레임 독립적 이동
+    float moveX = (facingRight ? -1.0f : 1.0f) * moveSpeed * Time::GetDeltaTime();
+
+    jump_tr->Translate(moveX, 0.0f);
+
 
     // 두번째 Jump 실행 
     if (GameManager::Get().CheckUnlock(SkillType::DoubleJump) && fsm->GetPlayerFSM()->canDoubleJump
