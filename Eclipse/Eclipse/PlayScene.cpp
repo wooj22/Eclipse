@@ -1,6 +1,7 @@
 #include "PlayScene.h"
 #include "EclipseApp.h"
 #include "../Direct2D_EngineLib/SceneManager.h"
+#include "PerformanceChecker.h"
 
 void PlayScene::Awake()
 {
@@ -38,6 +39,9 @@ void PlayScene::Awake()
 
 	// fade object
 	fadeObject = CreateObject<FadeObject>();
+
+	// performace cheker
+	CreateObject<PerformanceChecker>();
 }
 
 void PlayScene::Start()
