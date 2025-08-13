@@ -350,7 +350,7 @@ void WaveSystem::SetupWave3Pattern()
 		if (currentTime >= 70.0f) break;
 
 		for (int j = 0; j < spawnCount; j++)
-		{
+		{ 
 			SpawnData data;
 			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;

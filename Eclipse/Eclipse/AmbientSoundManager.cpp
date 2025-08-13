@@ -24,9 +24,7 @@ AmbientSoundManager::AmbientSoundManager() : GameObject("AmbientSoundManager", "
         AudioSource* owlSource = AddComponent<AudioSource>();
         owlSource->SetChannelGroup(AudioSystem::Get().GetAMBGroup());
         
-        std::string filename = "../Resource/Aron/AMB/s_Owl";
-        if (i > 1) filename += std::to_string(i);
-        filename += ".wav";
+        std::string filename = "../Resource/Aron/AMB/s_Owl" + std::to_string(i) + ".wav";
         
         auto owlClip = ResourceManager::Get().CreateAudioClip(filename);
         owlSource->SetClip(owlClip);
