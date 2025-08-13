@@ -33,6 +33,7 @@ void MoonShadowController::Update()
 		if (tr->GetWorldPosition().x <= moonTr->GetWorldPosition().x)
 		{
 			isStop = true;
+			isDirecting = false;
 			tr->SetPosition(moonTr->GetWorldPosition());
 			Instantiate<MoonLight>(moonTr->GetWorldPosition());
 			
@@ -54,6 +55,7 @@ void MoonShadowController::Update()
 void MoonShadowController::DirectingBossWave()
 {
 	isBossWave = true;
+	isDirecting = true;
 
 	// 연출
 	Camera::GetMainCamera()->UseTargetTrace(false);
@@ -65,4 +67,19 @@ void MoonShadowController::AfterMovingStart()
 {
 	isAfterMoving = true;
 	Camera::GetMainCamera()->UseTargetTrace(true);
+}
+
+void MoonShadowController::ReStart()
+{
+	// restart
+	isStop = false;
+	isBossWave = true;
+	isDirecting = true;
+	
+	isAfterMoving = false;
+	tr->SetPosition(moonTr->GetWorldPosition().x + 100, moonTr->GetWorldPosition().y);
+
+	// 연출
+	Camera::GetMainCamera()->UseTargetTrace(false);
+	Camera::GetMainCamera()->gameObject->transform->SetPosition(0, 250);
 }
