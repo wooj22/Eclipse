@@ -47,7 +47,7 @@ void MoonShadowController::Update()
 	// boss wave
 	if (isAfterMoving && isWaving)
 	{
-		tr->Translate(Vector2::left * Time::GetDeltaTime() * speed);
+		tr->Translate(Vector2::left * Time::GetDeltaTime() * speed * 20);
 	}
 }
 
