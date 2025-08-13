@@ -1,5 +1,7 @@
 #include "Chat.h"
+#include "Typer.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
 
 Chat::Chat()
 {
@@ -98,13 +100,31 @@ void Chat::NextChat()
 {
 	if (!finished)
 	{
-		chatCount++;
-		chatText->screenTextRenderer->SetText(currentLines[chatCount]);
-		if (chatCount == currentLines.size() - 1)
+		if (!chatText->GetComponent<Typer>()->IsTypingEnd())
 		{
-			finished = true;
-			GameManager::Get().g_playUI->chat_Button->SetActive(true);
-			GameManager::Get().g_playUI->chatNext_Image->SetActive(false);
+			chatText->GetComponent<Typer>()->EndTyping();
+		}
+		else
+		{
+			chatCount++;
+			/*chatText->screenTextRenderer->SetText(currentLines[chatCount]);*/
+
+			chatText->GetComponent<Typer>()->SetTextRenderer(chatText->screenTextRenderer);
+			chatText->GetComponent<Typer>()->SetAudioSource(chatText->GetComponent<AudioSource>());
+			chatText->GetComponent<Typer>()->StartTyping(currentLines[chatCount]);
+			if (chatCount == currentLines.size() - 1)
+			{
+				finished = true;
+				GameManager::Get().g_playUI->chat_Button->SetActive(true);
+				GameManager::Get().g_playUI->chatNext_Image->SetActive(false);
+			}
+		}
+	}
+	else
+	{
+		if (!chatText->GetComponent<Typer>()->IsTypingEnd())
+		{
+			chatText->GetComponent<Typer>()->EndTyping();
 		}
 	}
 }
@@ -148,6 +168,11 @@ void Chat::SetCondition(ChatCondition chatCondition)
 		}
 	}
 
-	chatText->screenTextRenderer->SetText(currentLines[chatCount]);
+	/*chatText->screenTextRenderer->SetText(currentLines[chatCount]);*/
+	chatText->GetComponent<Typer>()->SetTextRenderer(chatText->screenTextRenderer);
+	chatText->GetComponent<Typer>()->SetAudioSource(chatText->GetComponent<AudioSource>());
+	chatText->GetComponent<Typer>()->StartTyping(currentLines[chatCount]);
+
+
 	if (currentLines.size() == 1) finished = true;
 }

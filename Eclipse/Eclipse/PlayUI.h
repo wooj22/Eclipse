@@ -12,6 +12,8 @@
 #include "tooltip.h"
 #include "MoonShadowController.h"
 #include "CameraController.h"
+#include "Typer.h"
+#include "../Direct2D_EngineLib/AudioSource.h"
 #include <vector>
 
 // 사운드
@@ -71,6 +73,8 @@ public:
 	UI_Image* chat_Image;			// 대화창 이미지
 	UI_Image* chatNext_Image;		// 대화창 next 이미지
 	UI_Text* chat_Text;				// 대화창 텍스트
+	Typer* chatTyper;				// 대화창 타입퍼
+	AudioSource* chatAudioSource;	// 대화창 오디오
 	UI_Button* chat_Button;			// 퀘스트 수락 버튼
 	Chat* chat;						// 대화창 스크립트
 
