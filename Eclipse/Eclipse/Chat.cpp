@@ -32,11 +32,13 @@ Chat::Chat()
 
 	// 웨이브 종료 1
 	AddChat(1, ChatCondition::Success, L"잠시나마 숨을 돌릴 수 있겠어. 하지만 방심은 금물이야.");
-	AddChat(1, ChatCondition::Fail, L"혼들은 여전히 떠돌고 있어. 더 거세게 덮쳐올 거야.");
+	AddChat(1, ChatCondition::Success, L"네 안의 힘은 아직 완전하지 않아.\n싸움에서 모은 혼으로 네 능력을 키워라.");
+	AddChat(1, ChatCondition::Success, L"TAB을 눌러 봐. 새로운 힘을 배울 수 있을 거야.");
 
-	// 퀘스트 2
-	AddChat(2, ChatCondition::Quest, L"네 안의 힘은 아직 완전하지 않아.\n싸움에서 모은 혼으로 네 능력을 키워라.");
-	AddChat(2, ChatCondition::Quest, L"TAB을 눌러 봐. 새로운 힘을 배울 수 있을 거야.");
+	AddChat(1, ChatCondition::Fail, L"혼들은 여전히 떠돌고 있어. 더 거세게 덮쳐올 거야.");
+	AddChat(1, ChatCondition::Fail, L"네 안의 힘은 아직 완전하지 않아.\n싸움에서 모은 혼으로 네 능력을 키워라.");
+	AddChat(1, ChatCondition::Fail, L"TAB을 눌러 봐. 새로운 힘을 배울 수 있을 거야.");
+
 
 	//  웨이브 시작 1
 	AddChat(1, ChatCondition::Wave, L"힘이 조금은 자리 잡았군...\n혼문이 완전히 닫히지 않는 한, 놈들은 끝없이 몰려올 것이다.");
@@ -44,21 +46,22 @@ Chat::Chat()
 
 	// 웨이브 종료 2 
 	AddChat(2, ChatCondition::Success, L"좋아, 지금까지는 잘 버텼어. 다음에 올 폭풍을 대비하자.");
-	AddChat(2, ChatCondition::Fail, L"이 속도로는 버티기 힘들다. 다음 번에는 반드시 막아내야 한다.");
+	AddChat(2, ChatCondition::Success, L"혼을 모아둔 건 잊지 않았겠지?\n새로운 능력을 익혀라.");
 
-	// 퀘스트 3
-	AddChat(3, ChatCondition::Quest, L"혼을 모아둔 건 잊지 않았겠지?\n새로운 능력을 익혀라.");
+	AddChat(2, ChatCondition::Fail, L"이 속도로는 버티기 힘들다. 다음 번에는 반드시 막아내야 한다.");
+	AddChat(2, ChatCondition::Fail, L"혼을 모아둔 건 잊지 않았겠지?\n새로운 능력을 익혀라.");
 
 	// 웨이브 시작 2
 	AddChat(2, ChatCondition::Wave, L"이번엔 타락하지 않은 혼이 내려오고 있어.\n그 영혼을 지켜내라.\n\n(루나를 보호하세요.)");//퀘스트는 회색으로 가능한지
 
 	// 웨이브 종료 3
 	AddChat(3, ChatCondition::Success, L"네 덕분에 그 빛은 꺼지지 않았다.");
-	AddChat(3, ChatCondition::Fail, L"그 빛이 꺼진 만큼, 이 밤은 더욱 길어질 것이다.");
+	AddChat(3, ChatCondition::Success, L"이번 전투로 모은 혼을 잊지 마라.");
+	AddChat(3, ChatCondition::Success, L"더 강해져야 다음에도 지켜낼 수 있다.\n\n(녹스를 처치하세요.)");//퀘스트는 회색으로 가능한지
 
-	// 퀘스트 4
-	AddChat(4, ChatCondition::Quest, L"이번 전투로 모은 혼을 잊지 마라.");
-	AddChat(4, ChatCondition::Quest, L"더 강해져야 다음에도 지켜낼 수 있다.\n\n(녹스를 처치하세요.)");//퀘스트는 회색으로 가능한지
+	AddChat(3, ChatCondition::Fail, L"그 빛이 꺼진 만큼, 이 밤은 더욱 길어질 것이다.");
+	AddChat(3, ChatCondition::Quest, L"이번 전투로 모은 혼을 잊지 마라.");
+	AddChat(3, ChatCondition::Quest, L"더 강해져야 다음에도 지켜낼 수 있다.\n\n(녹스를 처치하세요.)");//퀘스트는 회색으로 가능한지
 
 	// 웨이브 시작 3
 	AddChat(3, ChatCondition::Wave, L"이젠, 틈도 없고, 뒤로 물러날 곳도 없어. 그를 막아야 해.\n\n(녹스를 처치하세요.)");//퀘스트는 회색으로 가능한지
@@ -73,13 +76,10 @@ Chat::Chat()
 	sequence.push_back({ ChatCondition::Quest, 1 });
 	sequence.push_back({ ChatCondition::Wave, 0 });
 	sequence.push_back({ ChatCondition::Success, 1 });
-	sequence.push_back({ ChatCondition::Quest, 2 });
 	sequence.push_back({ ChatCondition::Wave, 1 });
 	sequence.push_back({ ChatCondition::Success, 2 });
-	sequence.push_back({ ChatCondition::Quest, 3 });
 	sequence.push_back({ ChatCondition::Wave, 2 });
 	sequence.push_back({ ChatCondition::Success, 3 });
-	sequence.push_back({ ChatCondition::Quest, 4 });
 	sequence.push_back({ ChatCondition::Wave, 3 });
 	sequence.push_back({ ChatCondition::Success, 4 });
 
@@ -158,6 +158,7 @@ void Chat::SetCondition(ChatCondition chatCondition)
 	currentLines.clear();
 	if (chatCondition == ChatCondition::Quest) chatCondition = seq.condition;
 	curchatCondition = seq.condition;
+	GameManager::Get().questState = curchatCondition;
 
 	// index는 퀘스트 번호 또는 웨이브 번호
 	for (const auto& group : chatGroups)
