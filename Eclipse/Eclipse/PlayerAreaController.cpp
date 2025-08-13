@@ -27,8 +27,8 @@ void PlayerAreaController::OnDestroy()
 
 void PlayerAreaController::OnTriggerEnter(ICollider* other, const ContactInfo& contact) 
 {
-	std::string debugStr = "[PlayerAreaController] OnTriggerEnter: " + other->gameObject->name + "客 Trigger面倒" + "\n";
-    OutputDebugStringA(debugStr.c_str());
+	//std::string debugStr = "[PlayerAreaController] OnTriggerEnter: " + other->gameObject->name + "客 Trigger面倒" + "\n";
+ //   OutputDebugStringA(debugStr.c_str());
 
 	if (other->gameObject->tag == "Hon")
 	{

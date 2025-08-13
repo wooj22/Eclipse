@@ -19,6 +19,7 @@
 #include "Shadow.h"
 #include "PlayerLandingEffect.h"
 #include "PlayerAttackArea.h"
+#include "PlayerJumpEffect.h"
 
 
 
@@ -71,9 +72,13 @@ public:
 	// [ Landing ] 
 	PlayerLandingEffect* playerLandingEffect = nullptr;
 
+	// [ Jump ]
+	PlayerJumpEffect* playerJumpEffect = nullptr;
+
 
 public:
 	float GetPlayerGravityScale() const { return playerGravityScale; }
+
 
 public:
 	Player() : GameObject("Player", "Player")
@@ -115,6 +120,9 @@ public:
 
 		// [ Landing Effect ]
 		playerLandingEffect = SceneManager::Get().GetCurrentScene()->CreateObject<PlayerLandingEffect>();
+
+		// [ Jump Effect ]
+		playerJumpEffect = SceneManager::Get().GetCurrentScene()->CreateObject<PlayerJumpEffect>();
 
 		// [ Audio ]
 		audioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
@@ -166,6 +174,9 @@ public:
 
 		// [ Landing Effect ]
 		playerLandingEffect->transform->SetParent(transform);
+
+		// [ Jump Effect ]
+		// playerJumpEffect->transform->SetParent(transform);
 	}
 
 

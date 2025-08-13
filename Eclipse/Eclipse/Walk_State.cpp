@@ -83,6 +83,20 @@ void Walk_State::FixedUpdate(MovementFSM* fsm)
 {
     // Move 실행 
     fsm->GetPlayerFSM()->GetRigidbody()->velocity.x = fsm->GetPlayerFSM()->GetInputX() * fsm->GetPlayerFSM()->GetCurSpeed();
+
+    // 왼쪽과 오른쪽 눌렀을 때 퀘스트 완료를 할거임.
+    if (GameManager::Get().isQuest && GameManager::Get().questIndex == 1)
+    {
+        if (fsm->GetPlayerFSM()->GetRigidbody()->velocity.x > 0)
+        {
+            GameManager::Get().CheckQuest(1, 0);
+        }
+	    else if (fsm->GetPlayerFSM()->GetRigidbody()->velocity.x < 0)
+	    {
+            GameManager::Get().CheckQuest(1, 1);
+	    }
+    }
+
 }
 
 void Walk_State::Exit(MovementFSM* fsm)

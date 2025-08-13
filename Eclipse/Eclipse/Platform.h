@@ -294,7 +294,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.4, 0.4);
+        transform->SetScale(0.7, 0.7);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Wall.png"), "Platform_Wall");
@@ -326,7 +326,7 @@ public:
 
     void Awake() override
     {
-        transform->SetScale(0.4, 0.4);
+        transform->SetScale(0.7, 0.7);
 
         spriteRenderer->sprite
             = ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Platform_Wall_Grass.png"), "Platform_Wall_Grass");

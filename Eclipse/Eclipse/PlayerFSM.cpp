@@ -58,11 +58,13 @@ void PlayerFSM::Awake()
 void PlayerFSM::Start()
 {
 	// [ 스킬 해금 ] 테스트 위해서 
-	// GameManager::Get().AllSkillUnlock();
+	GameManager::Get().AllSkillUnlock();
 }
 
 void PlayerFSM::Update()
 {
+	float dt = Time::GetDeltaTime();
+
 	if (spawnDelay > 0.0f) 
 	{
 		spawnDelay -= Time::GetDeltaTime();
@@ -109,6 +111,19 @@ void PlayerFSM::Update()
 		}
 	}
 	
+	// 색상 타이머 업데이트
+	if (speedDownColorTimer > 0.0f)
+	{
+		speedDownColorTimer -= dt;
+		if (speedDownColorTimer <= 0.0f)
+		{
+			// 색상 원래대로
+			spriteRenderer->renderMode = RenderMode::Unlit;
+			spriteRenderer->SetBrightness(1.0f);
+			OutputDebugStringA("[PlayerFSM] 속도 감소 색상 해제\n");
+		}
+	}
+
 	// [ FSM 상태 ] 
 	//MovementStateBase* currentState = GetMovementFSM()->GetCurrentState();
 	//if (currentState)
@@ -217,14 +232,22 @@ void PlayerFSM::SpeedSetting()
 // 이동속도 감소
 void PlayerFSM::SetSpeedDownRate(float rate)
 {
-	float currentTime = Time::GetDeltaTime();
+	float currentTime = Time::GetTotalTime();
 
+	// 마지막 호출 이후 2초 이내면 무시
 	if (currentTime - lastSpeedDownTime < speedDownIgnoreTime) return;
 
+	// 감속 적용
 	speedDownTimer = speedDownDuration;
 	speedDownRate = rate;
 	isSpeedDown = true;
+
 	lastSpeedDownTime = currentTime;
+
+	// 0.5초 동안만 플레이어 spriteRenderer의 색상 변경
+	spriteRenderer->renderMode = RenderMode::UnlitColorTint;
+	spriteRenderer->SetBrightness(0.5f);
+	speedDownColorTimer = 0.3f; 
 
 	OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
 }
@@ -456,7 +479,7 @@ void PlayerFSM::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 	// mo_dev
 	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck()
-		&& !GameManager::Get().isWave && Input::GetKey('F'))
+		&& !GameManager::Get().isWave && Input::GetKey('F') && !GameManager::Get().isQuest)
 	{
 		// GameManager::Get().g_playUI->ChatSetActive(true);
 		GameManager::Get().OnNPCInteraction();

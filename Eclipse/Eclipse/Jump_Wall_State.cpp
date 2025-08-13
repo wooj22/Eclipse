@@ -27,7 +27,7 @@ void Jump_Wall_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->OnJump(JumpPhase::WallJump);
 
     elapsedTime = 0.0f;  // 시간
-    wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
+    // wallJumpForce = fsm->GetPlayerFSM()->GetJumpForce();
     fsm->GetPlayerFSM()->GetRigidbody()->velocity = Vector2(0, 0); // 수직 속도
 
 

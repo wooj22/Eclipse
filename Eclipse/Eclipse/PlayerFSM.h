@@ -59,7 +59,7 @@ private:
 	float curSpeed = 0;
 	float walkSpeed = 460.0f; // 400.0f;
 	float dashSpeed = 0.0f;
-	float jumpForce = 1500.0f; // 3000.0f;
+	float jumpForce = 2000.0f; // 3000.0f;
 
 	bool isSpeedDownRate = false;
 
@@ -155,6 +155,7 @@ public:
 	float speedDownIgnoreTime = 2.0f; // 속도 감소 무시 시간 
 	bool isSpeedDown = false;
 	float lastSpeedDownTime = -100.0f;
+	float speedDownColorTimer = 0.0f; // 색상 변경 타이머
 
 public:
 	// getter

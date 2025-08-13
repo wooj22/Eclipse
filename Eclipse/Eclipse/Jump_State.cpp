@@ -11,12 +11,15 @@
 #include "PlayerFSM.h"
 #include "PlayerAnimatorController.h"
 #include "GameManager.h"
+// #include "JumpEffect.h"
 
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
+
 #include "AfterImage.h"
 #include "LandingAnimatorController.h"
+#include "JumpAnimatorController.h"
 
 
 
@@ -41,16 +44,30 @@ void Jump_State::Enter(MovementFSM* fsm)
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
 
-    //// 점프 이펙트 재생
-    //auto anim = GameObject::Find("PlayerLandingEffect")->GetComponent<Animator>();
-    //if (anim)
-    //{
-	   // auto landingAnimCtrl = dynamic_cast<LandingAnimatorController*>(anim->controller);
-	   // if (landingAnimCtrl)
-	   // {
-		  //  landingAnimCtrl->PlayLanding();
-	   // }
-    //}
+
+    // [ 점프 이펙트 재생 (좌우반전) ]
+    auto jumpEffect = GameObject::Find("PlayerJumpEffect");
+    auto jump_tr = jumpEffect->GetComponent<Transform>();
+    auto jump_renderer = jumpEffect->GetComponent<SpriteRenderer>();
+
+    bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
+    jump_renderer->flipX = facingRight;
+
+    Vector2 offset = facingRight ? Vector2(-30, -60) : Vector2(30, -60);
+    jump_tr->SetPosition(fsm->GetPlayerFSM()->GetTransform()->GetWorldPosition() + offset);
+
+    auto anim = GameObject::Find("PlayerJumpEffect")->GetComponent<Animator>();
+    if (anim)
+    {
+	    auto jumpAnimCtrl = dynamic_cast<JumpAnimatorController*>(anim->controller);
+	    if (jumpAnimCtrl)
+	    {
+            jumpAnimCtrl->PlayJump();
+	    }
+    }
+
+    if (GameManager::Get().isQuest && GameManager::Get().questIndex == 1)
+        GameManager::Get().CheckQuest(1, 2);
 
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Jump);
@@ -60,6 +77,23 @@ void Jump_State::Enter(MovementFSM* fsm)
 void Jump_State::Update(MovementFSM* fsm)
 {
     fsm->GetPlayerFSM()->timer += Time::GetDeltaTime();
+
+    // Jump 이펙트 fsm->GetPlayerFSM()->GetLastFlipX() 에 따라서 x축 이동
+    auto jumpEffect = GameObject::Find("PlayerJumpEffect");
+    if (!jumpEffect) return;
+
+    auto jump_tr = jumpEffect->GetComponent<Transform>();
+    if (!jump_tr) return;
+
+    // 방향 확인
+    bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
+    float moveSpeed = 70.0f; 
+
+    // deltaTime 곱해서 프레임 독립적 이동
+    float moveX = (facingRight ? -1.0f : 1.0f) * moveSpeed * Time::GetDeltaTime();
+
+    jump_tr->Translate(moveX, 0.0f);
+
 
     // 두번째 Jump 실행 
     if (GameManager::Get().CheckUnlock(SkillType::DoubleJump) && fsm->GetPlayerFSM()->canDoubleJump
@@ -89,7 +123,7 @@ void Jump_State::Update(MovementFSM* fsm)
     }
 
     // [ Hanging ]
-    if (!fsm->GetPlayerFSM()->GetIsGround() /*&& GameManager::Get().CheckUnlock(SkillType::WallJump)*/ && fsm->GetPlayerFSM()->canHanging)
+    if (!fsm->GetPlayerFSM()->GetIsGround() && fsm->GetPlayerFSM()->canHanging)
     {
         if (fsm->GetPlayerFSM()->GetIsWallLeft() && fsm->GetPlayerFSM()->GetInputX() < -0.5f)
         {
