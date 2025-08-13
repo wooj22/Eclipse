@@ -28,6 +28,7 @@ void GameManager::ReSetData()
 	waveCount = 0;
 	questCount = 0;
 	questIndex = 0;
+	isQuest = false;
 	questState = ChatCondition::Quest;
 	canUseMouse = true;
 	isWave = false;

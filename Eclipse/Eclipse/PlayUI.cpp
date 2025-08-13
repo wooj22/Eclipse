@@ -526,7 +526,7 @@ void PlayUI::ClickChatButton() {
 		chat_Button->SetActive(false);
 		chat_Image->SetActive(false);
 		GameManager::Get().canUseMouse = true;
-		//GameManager::Get().isQuest = true;
+		GameManager::Get().isQuest = true;
 		quest->RefreshQuestText();
 		quest->RefreshQuestCountText(-1);
 		hon_Image->SetActive(true);
