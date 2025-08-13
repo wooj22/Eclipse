@@ -497,7 +497,14 @@ void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
 		// OutputDebugStringA("Ground과 충돌 했습니다.\n");
-		isGround = true;
+		// isGround = true;
+
+		// 공중에서 착지한 경우만 처리
+		if (!isGround)
+		{
+			isGround = true;  // 이제 땅에 있음
+			PlayLandingEffect(); // 착지 이펙트 재생
+		}
 	}
 	else if (other->gameObject->name == "Wall")
 	{
@@ -599,4 +606,30 @@ bool PlayerFSM::CanDash() const
 void PlayerFSM::ResetDashCooldown()
 {
 	dashCooldownTimer = GetDashCooldown(); // 현재 스킬 레벨 반영
+}
+
+
+// -------------------------
+
+
+void PlayerFSM::PlayLandingEffect()
+{
+	auto landingEffect = GameObject::Find("PlayerLandingEffect");
+	if (!landingEffect) return;
+
+	auto tr = landingEffect->GetComponent<Transform>();
+	tr->SetPosition(transform->GetWorldPosition() + Vector2(5, -85)); 
+
+	auto renderer = landingEffect->GetComponent<SpriteRenderer>();
+	renderer->flipX = spriteRenderer->flipX; 
+
+	auto anim = landingEffect->GetComponent<Animator>();
+	if (anim)
+	{
+		auto landingAnimCtrl = dynamic_cast<LandingAnimatorController*>(anim->controller);
+		if (landingAnimCtrl)
+		{
+			landingAnimCtrl->PlayLanding();
+		}
+	}
 }

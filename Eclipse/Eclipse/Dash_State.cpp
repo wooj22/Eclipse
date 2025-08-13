@@ -57,7 +57,7 @@ void Dash_State::Enter(MovementFSM* fsm)
     bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
     jump_renderer->flipX = facingRight;
 
-    Vector2 offset = facingRight ? Vector2(-30, -950) : Vector2(30, -950);
+    Vector2 offset = facingRight ? Vector2(-30, -90) : Vector2(30, -90);
     jump_tr->SetPosition(fsm->GetPlayerFSM()->GetTransform()->GetWorldPosition() + offset);
 
     auto anim = GameObject::Find("PlayerJumpEffect")->GetComponent<Animator>();

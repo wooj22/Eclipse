@@ -173,7 +173,7 @@ public:
 		blackOut_spriteRenderer->SetEnabled(false);
 
 		// [ Landing Effect ]
-		playerLandingEffect->transform->SetParent(transform);
+		// playerLandingEffect->transform->SetParent(transform);
 
 		// [ Jump Effect ]
 		// playerJumpEffect->transform->SetParent(transform);

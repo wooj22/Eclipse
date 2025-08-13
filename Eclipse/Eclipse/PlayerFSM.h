@@ -252,6 +252,8 @@ public:
 
 	bool isAttackIgnore = false; // 어택 일정시간 무시 
 
+	void PlayLandingEffect();
+
 
 	// Q 흡수 
 	bool isAbsorbSkillActive = false;
