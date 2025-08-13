@@ -90,6 +90,9 @@ void Attack_State::Enter(MovementFSM* fsm)
     // ¿Àµð¿À 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Attack);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
+    if (GameManager::Get().isQuest && GameManager::Get().questIndex == 2)
+        GameManager::Get().CheckQuest(2, 0);
 }
 
 void Attack_State::Update(MovementFSM* fsm)

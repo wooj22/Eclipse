@@ -66,6 +66,9 @@ void Jump_State::Enter(MovementFSM* fsm)
 	    }
     }
 
+    if (GameManager::Get().isQuest && GameManager::Get().questIndex == 1)
+        GameManager::Get().CheckQuest(1, 2);
+
     // ¿Àµð¿À 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Jump);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();

@@ -127,6 +127,9 @@ void BulletTime_State::Update(MovementFSM* fsm)
 
         CreateAfterImage(fsm);
     }
+
+    if (GameManager::Get().isQuest && GameManager::Get().questIndex == 2)
+        GameManager::Get().CheckQuest(2, 1);
 }
 
 void BulletTime_State::FixedUpdate(MovementFSM* fsm)

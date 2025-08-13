@@ -9,6 +9,7 @@
 #include "../Direct2D_EngineLib/SpriteRenderer.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "AfterImage.h"
+#include "JumpAnimatorController.h"
 
 
 void Dash_State::Enter(MovementFSM* fsm)
@@ -47,11 +48,37 @@ void Dash_State::Enter(MovementFSM* fsm)
     // 애니메이션
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Dash", true);
 
+
+    // [ 점프 이펙트 재생 (좌우반전) ]
+    auto jumpEffect = GameObject::Find("PlayerJumpEffect");
+    auto jump_tr = jumpEffect->GetComponent<Transform>();
+    auto jump_renderer = jumpEffect->GetComponent<SpriteRenderer>();
+
+    bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
+    jump_renderer->flipX = facingRight;
+
+    Vector2 offset = facingRight ? Vector2(-30, -60) : Vector2(30, -60);
+    jump_tr->SetPosition(fsm->GetPlayerFSM()->GetTransform()->GetWorldPosition() + offset);
+
+    auto anim = GameObject::Find("PlayerJumpEffect")->GetComponent<Animator>();
+    if (anim)
+    {
+        auto jumpAnimCtrl = dynamic_cast<JumpAnimatorController*>(anim->controller);
+        if (jumpAnimCtrl)
+        {
+            jumpAnimCtrl->PlayJump();
+        }
+    }
+
+
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Dash);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 
     fsm->GetPlayerFSM()->ResetDashCooldown();
+
+    if(GameManager::Get().isQuest && GameManager::Get().questIndex == 2)
+        GameManager::Get().CheckQuest(2, 2);
 }
 
 void Dash_State::Update(MovementFSM* fsm)

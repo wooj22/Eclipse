@@ -155,6 +155,7 @@ public:
 	float speedDownIgnoreTime = 2.0f; // 속도 감소 무시 시간 
 	bool isSpeedDown = false;
 	float lastSpeedDownTime = -100.0f;
+	float speedDownColorTimer = 0.0f; // 색상 변경 타이머
 
 public:
 	// getter
