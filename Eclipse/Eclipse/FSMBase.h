@@ -26,7 +26,14 @@ public:
     void ChangeState(std::unique_ptr<StateType> newState)
     {
         if (currentState)
+        {
             currentState->Exit(static_cast<OwnerType*>(this));
+            previousState = currentState.get(); // 이전 상태 저장
+        }
+        else
+        {
+            previousState = nullptr;
+        }
 
         currentState = std::move(newState);
 
@@ -37,5 +44,10 @@ public:
     StateType* GetCurrentState() const
     {
         return currentState.get();
+    }
+
+    StateType* GetPreviousState() const
+    {
+        return previousState;
     }
 };

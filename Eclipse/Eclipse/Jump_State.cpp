@@ -44,34 +44,12 @@ void Jump_State::Enter(MovementFSM* fsm)
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
 
-
-    // [ 점프 이펙트 재생 (좌우반전) ]
-    auto jumpEffect = GameObject::Find("PlayerJumpEffect");
-    auto jump_tr = jumpEffect->GetComponent<Transform>();
-    auto jump_renderer = jumpEffect->GetComponent<SpriteRenderer>();
-
-    bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
-    jump_renderer->flipX = facingRight;
-
-    Vector2 offset = facingRight ? Vector2(-30, -60) : Vector2(30, -60);
-    jump_tr->SetPosition(fsm->GetPlayerFSM()->GetTransform()->GetWorldPosition() + offset);
-
-    auto anim = GameObject::Find("PlayerJumpEffect")->GetComponent<Animator>();
-    if (anim)
-    {
-	    auto jumpAnimCtrl = dynamic_cast<JumpAnimatorController*>(anim->controller);
-	    if (jumpAnimCtrl)
-	    {
-            jumpAnimCtrl->PlayJump();
-	    }
-    }
-
-    if (GameManager::Get().isQuest && GameManager::Get().questIndex == 1)
-        GameManager::Get().CheckQuest(1, 2);
-
     // 오디오 
     fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Jump);
     fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
+
+    if (GameManager::Get().isQuest && GameManager::Get().questIndex == 1)
+        GameManager::Get().CheckQuest(1, 2);
 }
 
 void Jump_State::Update(MovementFSM* fsm)
