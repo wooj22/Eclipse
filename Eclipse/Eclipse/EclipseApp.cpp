@@ -54,7 +54,9 @@ void EclipseApp::Update()
 {
 	__super::Update();
 
-	soundManager.Update();
+	float deltaTime = Time::GetDeltaTime(); 
+
+	SoundManager::Get().Update(deltaTime);
 }
 
 

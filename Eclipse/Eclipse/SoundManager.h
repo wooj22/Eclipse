@@ -1,7 +1,6 @@
 #pragma once
 #include "../Direct2D_EngineLib/Singleton.h"
 #include "../Direct2D_EngineLib/AudioSystem.h"
-#include "../Direct2D_EngineLib/Time.h"
 #include <algorithm>
 
 template<typename T>
@@ -15,8 +14,6 @@ T Clamp(T value, T minVal, T maxVal)
 class SoundManager : public Singleton<SoundManager>
 {
 private:
-    float deltaTime;
-
     float masterVolume = 1.0f;
     float bgmVolume = 1.0f;
     float sfxVolume = 1.0f;
@@ -27,6 +24,7 @@ private:
 
 
 private:
+
     void ApplyVolumes()
     {
         AudioSystem::Get().SetMasterVolume(masterVolume);
@@ -40,7 +38,7 @@ private:
 
     struct FadeInfo
     {
-        float start = 1.0f;      // 페이드 시작 시점 볼륨
+        float current = 1.0f;
         float target = 1.0f;
         float duration = 0.0f;
         float elapsed = 0.0f;
@@ -54,19 +52,19 @@ public:
     SoundManager() = default;
     ~SoundManager() = default;
 
-    void Update()
+    void Update(float deltaTime)
     {
         if (!masterFade.active) return;
 
-        float deltaTime = Time::GetDeltaTime();
         masterFade.elapsed += deltaTime;
-
         float t = (((masterFade.elapsed / masterFade.duration) < (1.0f)) ? (masterFade.elapsed / masterFade.duration) : (1.0f));
-        masterVolume = masterFade.start + t * (masterFade.target - masterFade.start);
+        masterFade.current = masterFade.current + t * (masterFade.target - masterFade.current);
 
-        ApplyVolumes();
-
-        if (t >= 1.0f) masterFade.active = false;
+        if (t >= 1.0f)
+        {
+            masterVolume = masterFade.target; // 완료 시 옵션값 업데이트
+            masterFade.active = false;
+        }
     }
 
 
@@ -82,6 +80,7 @@ public:
     float GetSFXVolume() const { return sfxVolume; }
     float GetAMBVolume() const { return ambVolume; }
 
+
     // BGM 스케일
     void SetBGMScale(float scale) { bgmScale = Clamp(scale, 0.0f, 1.0f); ApplyVolumes(); }
     float GetBGMScale() const { return bgmScale; }
@@ -91,11 +90,13 @@ public:
         return Clamp(bgmVolume, 0.0f, 1.0f) * bgmScale * bgmBaseScale;
     }
 
+
     // [ 페이드 인/아웃 ]
+
     void FadeMaster(float targetVolume, float duration)
     {
-        masterFade.start = masterVolume;        // 현재 볼륨 기록
         masterFade.target = Clamp(targetVolume, 0.0f, 1.0f);
+        masterFade.current = masterVolume;
         masterFade.duration = duration;
         masterFade.elapsed = 0.0f;
         masterFade.active = true;
@@ -107,4 +108,3 @@ public:
     // 페이드 아웃: 마스터 볼륨을 0으로 점점 줄임
     void FadeOutMaster(float duration) { FadeMaster(0.0f, duration); }
 };
-

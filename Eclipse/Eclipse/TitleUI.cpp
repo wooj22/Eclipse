@@ -25,7 +25,7 @@ void TitleUI::Awake()
 	bgmSource->SetLoop(true);
 	bgmSource->Play();
 
-	// SoundManager 기준 최종 볼륨
+	// SoundManager 기준 최종 볼륨 적용
 	bgmSource->SetVolume(SoundManager::Get().GetFinalBGMVolume());
 
 	sfxSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
@@ -129,6 +129,7 @@ void TitleUI::SceneStart()
 		btn->button->onClickListeners.AddListener(
 			this, std::bind(&TitleUI::OnClickOptionUI, this,btn));
 	}
+
 
 	optionUI->close_Button->button->onClickListeners.AddListener(
 		this, [this]() {
@@ -260,12 +261,6 @@ void TitleUI::ChangePlayScene()
 {
 	sfxSource->SetClip(sfxClip_Button2);
 	sfxSource->Play();
+
 	SceneManager::Get().ChangeScene(EclipseApp::PLAY);
-
-	// SoundManager::Get().FadeOutMaster(2.0f);
-
-	// 2초 후에 씬 전환
-	//InvokeSystem::Invoke(2.0f, []() {
-	//	SceneManager::Get().ChangeScene(EclipseApp::PLAY);
-	//	});
 }
