@@ -58,11 +58,7 @@ void PlayScene::Start()
 	// game object -> SceneStart()
 	__super::Start();
 
-	// start ambient wind sound
-	if (ambientSoundManager)
-	{
-		ambientSoundManager->PlayWindSound();
-	}
+	// Ambient sounds will play periodically through the AmbientSoundManager's Update method
 }
 
 void PlayScene::Update()

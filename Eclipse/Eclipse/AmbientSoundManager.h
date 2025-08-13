@@ -15,8 +15,12 @@ private:
     
     float owlTimer = 0.0f;
     float wolfTimer = 0.0f;
-    float owlInterval = 10.0f;
-    float wolfInterval = 15.0f;
+    float windTimer = 0.0f;
+    float owlInterval = 40.0f;
+    float wolfInterval = 60.0f;
+    float windInterval = 15.0f;
+    float windDuration = 20.0f;
+    bool isWindPlaying = false;
 
 public:
     AmbientSoundManager();
