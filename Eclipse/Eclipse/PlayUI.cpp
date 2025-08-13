@@ -506,22 +506,23 @@ void PlayUI::ClickChatButton() {
 
 	if (chat->GetChatCondition() == ChatCondition::Wave)
 	{
-		switch (GameManager::Get().waveCount)
+		if(GameManager::Get().waveCount== 3)
 		{
-		case 3:
 			GameObject::Find("MoonShadow")->GetComponent<MoonShadowController>()->DirectingBossWave();
 			GameObject::Find("InGameCamera")->GetComponent<CameraController>()->ZoomOutFromPlayer();
 			chat_Button->SetActive(false);
 			chat_Image->SetActive(false);
-			return;
-		case 4:
-			SceneManager::Get().ChangeScene(EclipseApp::END);// TODOMO : 추후 크레딧으로 변경
 			return;
 		}
 		WaveStartData();
 	}
 	else 
 	{
+		if (GameManager::Get().waveCount == 4 )
+		{
+			SceneManager::Get().ChangeScene(EclipseApp::END);
+			return;
+		}
 		GameManager::Get().questIndex++;
 		chat_Button->SetActive(false);
 		chat_Image->SetActive(false);
