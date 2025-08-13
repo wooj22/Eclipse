@@ -17,6 +17,7 @@
 
 #include "AfterImage.h"
 #include "Shadow.h"
+#include "PlayerLandingEffect.h"
 
 
 
@@ -54,6 +55,10 @@ public:
 	Transform* blackOut_transform = nullptr;
 	SpriteRenderer* blackOut_spriteRenderer = nullptr;
 
+	// [ Landing ] 
+	PlayerLandingEffect* playerLandingEffect = nullptr;
+
+
 public:
 	float GetPlayerGravityScale() const { return playerGravityScale; }
 
@@ -83,6 +88,9 @@ public:
 		blackOut_transform = blackOut->AddComponent<Transform>();
 		blackOut_spriteRenderer = blackOut->AddComponent<SpriteRenderer>();
 
+		// [ Landing Effect ]
+		playerLandingEffect = SceneManager::Get().GetCurrentScene()->CreateObject<PlayerLandingEffect>();
+
 		// [ Audio ]
 		audioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
 
@@ -98,7 +106,7 @@ public:
 		playerAnimatorController = new PlayerAnimatorController();
 		animator->SetController(playerAnimatorController);
 
-		transform->SetPosition(-20, -790);
+		transform->SetPosition(-20, -785);
 		transform->SetScale(0.5, 0.5);
 
 		collider->offset = { 10.0f, -55.0f };
@@ -118,6 +126,13 @@ public:
 		blackOut_spriteRenderer->layer = 20;
 		blackOut_spriteRenderer->SetAlpha(0.5f);
 		blackOut_spriteRenderer->SetEnabled(false);
+
+		// [ Landing Effect ]
+		playerLandingEffect->transform->SetParent(transform);
+		//playerLandingEffect->spriteRenderer->sprite
+		//	= ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Cemetery.png"), "Cemetery");
+
+		// playerLandingEffect->GetComponent<LandingAnimatorController>()->PlayLanding();
 	}
 
 
@@ -128,8 +143,8 @@ public:
 		// AABB ¿µ¿ª 
 		// collider->DebugColliderDraw();
 
-		std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
-		OutputDebugStringA(debugStr.c_str());
+		//std::string debugStr = "[Player] position = ( " + std::to_string(transform->GetPosition().x) + " , " + std::to_string(transform->GetPosition().y) + " ) \n";
+		//OutputDebugStringA(debugStr.c_str());
 	}
 
 	void UpdateShadow()

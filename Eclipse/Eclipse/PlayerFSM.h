@@ -35,7 +35,7 @@ class Rigidbody;
 class PlayerAttackArea;
 class PlayerAnimatorController;
 class PlayerSkillEffect;
-
+class LandingAnimatorController;
 
 class PlayerFSM : public Script
 {
@@ -53,6 +53,8 @@ public:
 	ActionFSM* GetActionFSM() { return actionFSM.get(); }
 
 private:
+	float spawnDelay = 0.1f; // 0.1초 입력, FSM, 물리 차단
+
 	// stat
 	float curSpeed = 0;
 	float walkSpeed = 460.0f; // 400.0f;
@@ -103,6 +105,8 @@ private:
 
 	PlayerAnimatorController* playerAnimatorController = nullptr;
 	PlayerSkillEffect* skillEffect = nullptr;
+
+	LandingAnimatorController* landingAnimatorController = nullptr;
 
 public:
 	// [ Audio ]
