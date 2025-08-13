@@ -11,7 +11,7 @@ public:
 	{
 		name = "Player_Landing_Effect";
 		loop = false;
-		duration = 0.5f;
+		duration = 0.3f;
 		const std::string basePath = "../Resource/Moon/Texture/Player_Landing_Effect/";
 		const int frameCount = 8;
 		const float frameTime = duration / frameCount;

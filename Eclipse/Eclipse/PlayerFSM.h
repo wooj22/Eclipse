@@ -118,6 +118,8 @@ public:
 	shared_ptr<AudioClip> SFX_Player_Move2 = nullptr;
 	shared_ptr<AudioClip> SFX_Player_Move3 = nullptr;
 	shared_ptr<AudioClip> SFX_Player_Move4 = nullptr;
+	shared_ptr<AudioClip> SFX_Player_Q = nullptr;
+	shared_ptr<AudioClip> SFX_Player_E = nullptr;
 
 
 public:
@@ -150,7 +152,7 @@ public:
 
 	// boss / hon 
 	float speedDownTimer = 0.0f;     // 실제로 줄어드는 타이머
-	float speedDownDuration = 1.0f;  // 속도 감소 지속 시간 (고정)
+	float speedDownDuration = 0.5f;  // 속도 감소 지속 시간 (고정)
 	float speedDownRate = 1.0f;      // 곱해질 속도 비율 
 	float speedDownIgnoreTime = 2.0f; // 속도 감소 무시 시간 
 	bool isSpeedDown = false;

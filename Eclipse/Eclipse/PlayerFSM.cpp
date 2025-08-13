@@ -21,6 +21,7 @@
 #include "SkillAnimatorController.h"
 #include "PlayerSkillEffcet.h"
 #include "LandingAnimatorController.h"
+#include "HonController.h"
 
 
 
@@ -49,6 +50,8 @@ void PlayerFSM::Awake()
 	SFX_Player_Land = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Rending.wav");
 	SFX_Player_Attack = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Attack.wav");
 	SFX_Player_Dash = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Dash.wav");
+	SFX_Player_Q = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_Q.wav");
+	SFX_Player_E = ResourceManager::Get().CreateAudioClip("../Resource/Audio/Moon/Player_E.wav");
 
 	// [ FSM 초기화 ]
 	movementFSM = std::make_unique<MovementFSM>();
@@ -246,7 +249,7 @@ void PlayerFSM::SetSpeedDownRate(float rate)
 
 	// 0.5초 동안만 플레이어 spriteRenderer의 색상 변경
 	spriteRenderer->renderMode = RenderMode::UnlitColorTint;
-	spriteRenderer->SetBrightness(0.5f);
+	spriteRenderer->SetBrightness(0.3f);
 	speedDownColorTimer = 0.5f; 
 
 	OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
@@ -328,6 +331,9 @@ void PlayerFSM::TryUseAbsorb() // [ 흡수 ]
 
 		GameManager::Get().UseAbsorb();
 		GameManager::Get().CanRelease();
+
+		audioSource->SetClip(SFX_Player_Q);
+		audioSource->PlayOneShot();
 	}
 	else
 	{
@@ -352,11 +358,8 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist <= releaseEffectRange)
 		{
-			// obj->Destroy(); // 혼 제거
 			obj->GetComponent<HonController>()->TakeDamage(5);
 			removedCount++;
-			// GameManager::Get().ChangeHonCount(10);
-			// GameManager::Get().ChangeQuestCount(1);
 		}
 	}
 
@@ -378,6 +381,9 @@ void PlayerFSM::TryUseRelease() // [ 방출 ]
 	// 애니메이션 상태 변환
 	playerAnimatorController->SetSkillAvailable(false);
 
+	audioSource->SetClip(SFX_Player_E);
+	audioSource->PlayOneShot();
+
 	std::string debugStr = "[Skill] E 방출 성공 - " + std::to_string(removedCount) + "개 혼 제거됨\n";
 	OutputDebugStringA(debugStr.c_str());
 
@@ -391,7 +397,7 @@ GameObject* PlayerFSM::FindNearestSoulInRange(float range)
 
 	for (auto* obj : GameObject::FindAllWithTag("Hon"))
 	{
-		if( obj->name == "HonD" ) continue;
+		if( obj->name == "HonD" || obj->GetComponent<HonController>()->destroyPending) continue;
 
 		float dist = (obj->GetComponent<Transform>()->GetPosition() - transform->GetPosition()).Magnitude();
 		if (dist < range && dist < closestDist)
@@ -497,13 +503,13 @@ void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 	if (other->gameObject->name == "Ground" && contact.normal.y > 0.5)
 	{
 		// OutputDebugStringA("Ground과 충돌 했습니다.\n");
-		// isGround = true;
 
 		// 공중에서 착지한 경우만 처리
 		if (!isGround)
 		{
-			isGround = true;  // 이제 땅에 있음
-			PlayLandingEffect(); // 착지 이펙트 재생
+			isGround = true; 
+
+			PlayLandingEffect(); // 착지 이펙트
 		}
 	}
 	else if (other->gameObject->name == "Wall")
@@ -614,6 +620,9 @@ void PlayerFSM::ResetDashCooldown()
 
 void PlayerFSM::PlayLandingEffect()
 {
+	//audioSource->SetClip(SFX_Player_Land);
+	//audioSource->PlayOneShot();
+
 	auto landingEffect = GameObject::Find("PlayerLandingEffect");
 	if (!landingEffect) return;
 

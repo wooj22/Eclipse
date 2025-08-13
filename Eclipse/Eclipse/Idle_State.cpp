@@ -30,6 +30,10 @@ void Idle_State::Enter(MovementFSM* fsm)
 
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Idle", true);
+
+    // 오디오 
+    // fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Land);
+    // fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
 }
 
 void Idle_State::Update(MovementFSM* fsm)

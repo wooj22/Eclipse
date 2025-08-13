@@ -27,10 +27,6 @@ void Fall_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->timer = 0.0f;
     fsm->GetPlayerFSM()->didFastFall = false; 
 
-    // bool isRight = fsm->GetPlayerFSM()->GetLastFlipX(); 
-    // if(isRight) fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(10.0f, 0.0f));
-    // else fsm->GetPlayerFSM()->GetRigidbody()->AddImpulse(Vector2(-10.0f, 0.0f));
-
     // 애니메이션 재생
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Jump", true);
 }
@@ -45,9 +41,6 @@ void Fall_State::Update(MovementFSM* fsm)
     // [ Idle ]
     if (fsm->GetPlayerFSM()->GetIsGround())
     {
-        fsm->GetPlayerFSM()->GetAudioSource()->SetClip(fsm->GetPlayerFSM()->SFX_Player_Land);
-        fsm->GetPlayerFSM()->GetAudioSource()->PlayOneShot();
-
         fsm->GetPlayerFSM()->GetMovementFSM()->ChangeState(std::make_unique<Idle_State>());
         return;
     }
