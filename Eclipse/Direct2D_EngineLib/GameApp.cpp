@@ -72,7 +72,7 @@ void GameApp::Init()
 
 	SIZE clientSize = { width, height };
 	RECT clientRect = { 0, 0, clientSize.cx, clientSize.cy };
-	//AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);
+	//AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);		// 윈도우 모드 기준 크기 맞춤
 
 	// window 창 생성  -> WM_NCCREATE 메시지 발생
 	hWnd = CreateWindowEx(
