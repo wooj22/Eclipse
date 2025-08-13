@@ -3,6 +3,7 @@
 #include "../Direct2D_EngineLib/RectTransform.h"
 #include "../Direct2D_EngineLib/ScreenTextRenderer.h"
 #include "../Direct2D_EngineLib/Input.h"
+#include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/ResourceManager.h"
 
 class PerformanceChecker : public GameObject
@@ -10,6 +11,9 @@ class PerformanceChecker : public GameObject
 private:
 	RectTransform* rectTransform;
 	ScreenTextRenderer* textRenderer;
+
+	float timeAccumulator = 0.0f;
+	int frameCount = 0;
 
 public:
 	PerformanceChecker() : GameObject("PerformanceChecker")
@@ -22,6 +26,8 @@ public:
 		rectTransform->SetSize(500,300);
 		textRenderer->SetHorizontalAlign(TextHorizontalAlign::Left);
 		textRenderer->layer = 50;
+
+		textRenderer->SetEnabled(false);
 	}
 
 	void Update() override
@@ -38,8 +44,19 @@ public:
 			ResourceManager::Get().Trim();
 		}
 
-		// update text
-		textRenderer->SetText(ResourceManager::Get().GetMemoryUsageWString());
+		// frame & memory
+		timeAccumulator += Time::GetDeltaTime();
+		frameCount++;
+
+		if (timeAccumulator >= 1.0f)
+		{
+			int fps = frameCount;
+			textRenderer->SetText(L"FPS: " + std::to_wstring(fps) +
+				L"\n" + ResourceManager::Get().GetMemoryUsageWString());
+
+			frameCount = 0;
+			timeAccumulator = 0.0f;
+		}
 	}
 };
 
