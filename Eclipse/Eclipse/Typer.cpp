@@ -6,7 +6,6 @@
 void Typer::Update()
 {
 	TypingDirecting();
-	if(Input::GetKeyDown('F')) EndTyping();
 }
 
 // 타이핑 연출

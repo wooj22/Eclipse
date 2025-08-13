@@ -12,8 +12,8 @@ private:
 	ScreenTextRenderer* textRenderer = nullptr;
 	wstring target_text = L"";
 	wstring cur_text = L"";
-	float typingSpeed = 10.0f;
-	float spacingDelay = 0.3f;
+	float typingSpeed = 50.0f;
+	float spacingDelay = 0.05f;
 	float timer = 0.0f;
 	bool isTyping;
 
