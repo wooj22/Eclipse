@@ -57,6 +57,11 @@ void PlayUI::Awake()
 	tooltip1 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
 	tooltip2 = SceneManager::Get().GetCurrentScene()->CreateObject<tooltip>();
 
+	chatTyper = chat_Text->AddComponent<Typer>();
+	chatAudioSource = chat_Text->AddComponent<AudioSource>();
+	chatAudioSource->SetChannelGroup(AudioSystem::Get().GetSFXGroup());
+	chatAudioSource->SetLoop(false);
+
 	// audio source 컴포넌트 생성
 	bgmSource = AddComponent<AudioSource>();
 	sfxSource = AddComponent<AudioSource>();
