@@ -134,7 +134,11 @@ bool GameManager::LevelUpSkill(SkillType skill, bool check )
 		honCount -= info.skillCost[info.unlockLevel];
 		info.unlocked = true;
 		info.unlockLevel = 1;
-		if (g_playUI != nullptr) g_playUI->ChangeHonCountText();
+		if (g_playUI != nullptr)
+		{
+			g_playUI->ChangeHonCountText();
+			g_playUI->SkillActiveSound();
+		}
 		return true;
 	}
 
@@ -181,7 +185,6 @@ void GameManager::CanAbsorb()
 {
 	canUseAbsorb = true;
 	g_playUI->ActivateAbsorb();
-	g_playUI->SkillActiveSound();
 }
 
 void GameManager::UseAbsorb()
