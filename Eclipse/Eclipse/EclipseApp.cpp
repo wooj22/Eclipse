@@ -13,6 +13,17 @@ void EclipseApp::Init()
 	gameManager.Init();
 	__super::Init();
 
+	// 마우스 자동 스케일링 x
+	SetProcessDPIAware();
+
+	// cursor
+	hCursor = LoadCursorFromFile(L"../Resource/cursor.cur");
+	if (hCursor)
+	{
+		SetCursor(hCursor);
+		SetClassLongPtr(GetActiveWindow(), GCLP_HCURSOR, (LONG_PTR)hCursor);
+	}
+
 	// matrix init
 	Transform::unityMatrix =
 		D2D1::Matrix3x2F::Scale(1.0f, -1.0f) * Transform::unityMatrix *
@@ -49,5 +60,7 @@ void EclipseApp::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 		break;
+	case WM_SETCURSOR:
+		SetCursor(hCursor);
 	}
 }
