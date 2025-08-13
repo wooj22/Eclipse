@@ -13,7 +13,7 @@ public:
 	ImageRenderer* imageRenderer = nullptr;
 	FadeManager* fadeManager = nullptr;
 
-	FadeObject()
+	FadeObject() : GameObject("FadeManager")
 	{
 		rectTransform = AddComponent<RectTransform>();
 		imageRenderer = AddComponent<ImageRenderer>();
@@ -21,7 +21,6 @@ public:
 
 		rectTransform->SetSize(1920, 1080);
 		imageRenderer->SetBaseColor(D2D1::ColorF(D2D1::ColorF::Black));
-		imageRenderer->SetAlpha(0);
 		imageRenderer->layer = 30;
 	}
 };

@@ -12,6 +12,7 @@
 #include "WaveSystem.h"
 #include "AmbientSoundManager.h"
 #include "PlayerSkillEffcet.h"
+#include "FadeObject.h"
 
 class PlayScene : public Scene
 {
@@ -44,6 +45,9 @@ private:
 	
 	// Ambient Sound
 	AmbientSoundManager* ambientSoundManager;
+
+	// Fade Manager
+	FadeObject* fadeObject;
 
 public:
 	PlayScene() = default;
