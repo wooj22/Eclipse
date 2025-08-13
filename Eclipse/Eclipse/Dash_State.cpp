@@ -49,7 +49,7 @@ void Dash_State::Enter(MovementFSM* fsm)
     fsm->GetPlayerFSM()->GetAnimatorController()->SetBool("Dash", true);
 
 
-    // [ 점프 이펙트 재생 (좌우반전) ]
+    // [ 대시 이펙트 재생 (좌우반전) ]
     auto jumpEffect = GameObject::Find("PlayerJumpEffect");
     auto jump_tr = jumpEffect->GetComponent<Transform>();
     auto jump_renderer = jumpEffect->GetComponent<SpriteRenderer>();
@@ -57,7 +57,7 @@ void Dash_State::Enter(MovementFSM* fsm)
     bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
     jump_renderer->flipX = facingRight;
 
-    Vector2 offset = facingRight ? Vector2(-30, -60) : Vector2(30, -60);
+    Vector2 offset = facingRight ? Vector2(-30, -950) : Vector2(30, -950);
     jump_tr->SetPosition(fsm->GetPlayerFSM()->GetTransform()->GetWorldPosition() + offset);
 
     auto anim = GameObject::Find("PlayerJumpEffect")->GetComponent<Animator>();
@@ -96,6 +96,22 @@ void Dash_State::Update(MovementFSM* fsm)
 
         return;
     }
+
+    // Jump 이펙트 fsm->GetPlayerFSM()->GetLastFlipX() 에 따라서 x축 이동
+    auto jumpEffect = GameObject::Find("PlayerJumpEffect");
+    if (!jumpEffect) return;
+
+    auto jump_tr = jumpEffect->GetComponent<Transform>();
+    if (!jump_tr) return;
+
+    // 방향 확인
+    bool facingRight = fsm->GetPlayerFSM()->GetLastFlipX();
+    float moveSpeed = 100.0f;
+
+    // deltaTime 곱해서 프레임 독립적 이동
+    float moveX = (facingRight ? -1.0f : 1.0f) * moveSpeed * Time::GetDeltaTime();
+
+    jump_tr->Translate(moveX, 0.0f);
 }
 
 void Dash_State::FixedUpdate(MovementFSM* fsm)

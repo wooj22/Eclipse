@@ -247,7 +247,7 @@ void PlayerFSM::SetSpeedDownRate(float rate)
 	// 0.5초 동안만 플레이어 spriteRenderer의 색상 변경
 	spriteRenderer->renderMode = RenderMode::UnlitColorTint;
 	spriteRenderer->SetBrightness(0.5f);
-	speedDownColorTimer = 0.3f; 
+	speedDownColorTimer = 0.5f; 
 
 	OutputDebugStringA("[PlayerFSM] 속도 감소 적용\n");
 }
