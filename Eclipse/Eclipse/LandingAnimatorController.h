@@ -77,6 +77,7 @@ public:
 	// 점프/착지 애니메이션 재생
 	void PlayLanding()
 	{
+		OutputDebugStringA("[LandingAnimatorController] Landing Animation Start\n");
 		ChangeAnimation(landingEffectState);
 	}
 

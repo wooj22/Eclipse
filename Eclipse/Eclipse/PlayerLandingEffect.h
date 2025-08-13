@@ -35,6 +35,6 @@ public:
 	void Awake() override
 	{
 		transform->SetPosition(0.0f, 0.0f);
-		transform->SetScale(50.0f, 50.0f);
+		transform->SetScale(1.0f, 1.0f);
 	}
 };

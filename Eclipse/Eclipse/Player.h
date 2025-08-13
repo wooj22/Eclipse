@@ -129,10 +129,6 @@ public:
 
 		// [ Landing Effect ]
 		playerLandingEffect->transform->SetParent(transform);
-		//playerLandingEffect->spriteRenderer->sprite
-		//	= ResourceManager::Get().CreateSprite(ResourceManager::Get().CreateTexture2D("../Resource/Moon/Cemetery.png"), "Cemetery");
-
-		// playerLandingEffect->GetComponent<LandingAnimatorController>()->PlayLanding();
 	}
 
 

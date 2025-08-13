@@ -132,8 +132,8 @@ void PlayerFSM::InputSetting()
 {
 	isF = Input::GetKeyDown('F');
 
-	std::string debugStr = "[PlayerFSM] GameManager::Get().canUseMouse : " + std::to_string(GameManager::Get().canUseMouse) + "\n";
-	OutputDebugStringA(debugStr.c_str());
+	//std::string debugStr = "[PlayerFSM] GameManager::Get().canUseMouse : " + std::to_string(GameManager::Get().canUseMouse) + "\n";
+	//OutputDebugStringA(debugStr.c_str());
 
 	if (!GameManager::Get().canUseMouse) // 모든 입력값 초기화
 	{
