@@ -15,7 +15,7 @@ class BossController : public Script
 {
 private:
 	// data
-	const float MAX_HP = 15;
+	const float MAX_HP = 10;
 
 	// stat
 	float hp = MAX_HP;
