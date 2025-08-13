@@ -336,39 +336,51 @@ void WaveSystem::SetupWave3Pattern()
 {
 	m_currentSpawnPattern.clear();
 
-	// Wave 3: 2-3초마다 2-3마리 랜덤 스폰 (모든 타입)
+	// Wave 3: 2-3초마다 1-2마리 랜덤 스폰 (A, B, C)
+	// HonD는 6초마다 정확히 한 마리씩 스폰
 	float currentTime = 0.0f;
+	float lastHonDSpawnTime = 0.0f;
 	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
 	std::uniform_int_distribution<int> countDist(1, 2);
 
 	while (currentTime < 70.0f)
 	{
+		// HonD는 6초마다 정확히 스폰
+		if (currentTime - lastHonDSpawnTime >= 6.0f)
+		{
+			SpawnData honDData;
+			honDData.x = GetRandomSpawnX();
+			honDData.y = SPAWN_Y;
+			honDData.honType = 3;  // HonD
+			honDData.delayTime = currentTime;
+			m_currentSpawnPattern.push_back(honDData);
+			lastHonDSpawnTime = currentTime;
+		}
+
+		// 일반 몬스터 스폰 (A, B, C)
 		float spawnInterval = intervalDist(m_randomGen);  // 2-3초 랜덤
-		int spawnCount = countDist(m_randomGen);  // 2-3마리 랜덤
+		int spawnCount = countDist(m_randomGen);  // 1-2마리 랜덤
 
 		currentTime += spawnInterval;
 		if (currentTime >= 70.0f) break;
 
 		for (int j = 0; j < spawnCount; j++)
-		{ 
+		{
 			SpawnData data;
-			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
+			data.x = GetRandomSpawnX();
 			data.y = SPAWN_Y;
-
-			// 모든 타입 포함한 랜덤 패턴 (D는 21% 확률)
-			int randomNum = m_randomGen() % 100;
-			if (randomNum < 21) {
-				data.honType = 3;  // HonD (25% 비율)
-			}
-			else {
-				data.honType = (randomNum - 21) % 3;  //나머지 79%를 A, B, C가 균등 분배 (각각 26.3%)
-			}
-
-			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+			data.honType = m_randomGen() % 3;  // A, B, C만 랜덤
+			data.delayTime = currentTime + (j * 0.2f);
 
 			m_currentSpawnPattern.push_back(data);
 		}
 	}
+	
+	// delayTime 기준으로 정렬 (시간 순서대로 스폰되도록)
+	std::sort(m_currentSpawnPattern.begin(), m_currentSpawnPattern.end(),
+		[](const SpawnData& a, const SpawnData& b) {
+			return a.delayTime < b.delayTime;
+		});
 }
 
 void WaveSystem::SetupBossPattern()
@@ -387,7 +399,7 @@ void WaveSystem::SetupBossPattern()
 	while (currentTime < 80.0f)
 	{
 		float spawnInterval = intervalDist(m_randomGen);  // 2-3초 랜덤
-		int spawnCount = countDist(m_randomGen);  // 2-3마리 랜덤
+		int spawnCount = countDist(m_randomGen);  // 1-2마리 랜덤
 
 		currentTime += spawnInterval;
 		if (currentTime >= 80.0f) break;
