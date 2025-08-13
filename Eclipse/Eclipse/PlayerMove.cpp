@@ -29,23 +29,12 @@ void PlayerMove::Update()
 	{
 		GameManager::Get().isWave = false;
 	}
-
-	if (Input::GetKeyDown(VK_F1))
-	{
-		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);
-	}
-
-	if (Input::GetKeyDown(VK_F2))
-	{
-		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Fail);
-	}
 }
 void PlayerMove::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
 	if (other->gameObject->name == "NPC" && !GameManager::Get().g_playUI->ChatActiveCheck() 
 		&& !GameManager::Get().isWave && Input::GetKey('F'))
 	{
-		GameManager::Get().g_playUI->chat->SetCondition(ChatCondition::Success);// 추후 제거
 		GameManager::Get().g_playUI->ChatSetActive(true);
 	}
 }
