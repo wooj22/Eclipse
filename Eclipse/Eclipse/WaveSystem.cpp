@@ -339,7 +339,7 @@ void WaveSystem::SetupWave3Pattern()
 	// Wave 3: 2-3초마다 2-3마리 랜덤 스폰 (모든 타입)
 	float currentTime = 0.0f;
 	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
-	std::uniform_int_distribution<int> countDist(2, 3);
+	std::uniform_int_distribution<int> countDist(1, 2);
 
 	while (currentTime < 70.0f)
 	{
@@ -355,13 +355,13 @@ void WaveSystem::SetupWave3Pattern()
 			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;
 
-			// 모든 타입 포함한 랜덤 패턴 (D는 25% 확률)
+			// 모든 타입 포함한 랜덤 패턴 (D는 21% 확률)
 			int randomNum = m_randomGen() % 100;
-			if (randomNum < 25) {
+			if (randomNum < 21) {
 				data.honType = 3;  // HonD (25% 비율)
 			}
 			else {
-				data.honType = (randomNum - 25) % 3;  // HonA, HonB, HonC (75% 비율)
+				data.honType = (randomNum - 21) % 3;  //나머지 79%를 A, B, C가 균등 분배 (각각 26.3%)
 			}
 
 			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
@@ -382,7 +382,7 @@ void WaveSystem::SetupBossPattern()
 	float currentTime = 5.0f;  // Start after 5 seconds
 	float bossWidth = 400.0f;  // 보스 크기 고려한 안전 거리
 	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
-	std::uniform_int_distribution<int> countDist(2, 3);
+	std::uniform_int_distribution<int> countDist(1, 2);
 
 	while (currentTime < 80.0f)
 	{
