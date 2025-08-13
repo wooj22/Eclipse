@@ -262,7 +262,7 @@ void WaveSystem::OnHonDestroyed(GameObject* hon)
 {
 	if (!hon) return;
 	if (m_isUpdatingHons) return; // Update 중이면 무시
-	
+
 	auto it = std::find(m_activeHons.begin(), m_activeHons.end(), hon);
 	if (it != m_activeHons.end())
 	{
@@ -377,7 +377,7 @@ void WaveSystem::SetupWave3Pattern()
 			m_currentSpawnPattern.push_back(data);
 		}
 	}
-	
+
 	// delayTime 기준으로 정렬 (시간 순서대로 스폰되도록)
 	std::sort(m_currentSpawnPattern.begin(), m_currentSpawnPattern.end(),
 		[](const SpawnData& a, const SpawnData& b) {
