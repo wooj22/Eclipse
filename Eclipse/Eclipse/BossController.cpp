@@ -263,6 +263,7 @@ void BossController::OpacityDirecting()
 		currentAlpha = max(currentAlpha - changeSpeed * Time::GetDeltaTime(), 0);
 
 	sr->SetAlpha(currentAlpha);
+	bossFace->SetAlpha(currentAlpha);
 }
 
 /*-----------------  trigger event  -----------------*/ 
