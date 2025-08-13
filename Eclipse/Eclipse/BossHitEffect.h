@@ -24,6 +24,7 @@ public:
 
 		animatorController = new BCAnimatorController();
 		animator->SetController(animatorController);
+		spriteRenderer->layer = 12;
 	}
 
 	void Update() override
