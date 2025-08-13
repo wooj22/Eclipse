@@ -127,6 +127,14 @@ void PlayerFSM::Update()
 		}
 	}
 
+	if (landingSound)
+	{
+		audioSource->SetClip(SFX_Player_Land);
+		audioSource->PlayOneShot();
+		landingSound = false;
+	}
+
+
 	// [ FSM »óÅÂ ] 
 	//MovementStateBase* currentState = GetMovementFSM()->GetCurrentState();
 	//if (currentState)
@@ -510,6 +518,7 @@ void PlayerFSM::OnCollisionEnter(ICollider* other, const ContactInfo& contact)
 			isGround = true; 
 
 			PlayLandingEffect(); // ÂøÁö ÀÌÆåÆ®
+			landingSound = true;
 		}
 	}
 	else if (other->gameObject->name == "Wall")

@@ -121,6 +121,8 @@ public:
 	shared_ptr<AudioClip> SFX_Player_Q = nullptr;
 	shared_ptr<AudioClip> SFX_Player_E = nullptr;
 
+	bool landingSound = false;
+
 
 public:
 	// [ FSM 변수 ] : GameManager 에서 해금된 상태 가져와서 각 상태에서 조건 적용 
