@@ -101,7 +101,7 @@ void PlayUI::SceneStart()
 	timer_Text->rectTransform->SetSize(500, 40);
 	timer_Text->screenTextRenderer->SetFontSize(70);
 	timer_Text->screenTextRenderer->SetFontName(L"´ö¿Â°øÁÖÃ¼");
-	timer_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::Black,1.0f));
+	timer_Text->screenTextRenderer->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	timer_Text->screenTextRenderer->layer = 1;
 
 	timer_Text->SetActive(false);
@@ -526,7 +526,7 @@ void PlayUI::ClickChatButton() {
 		chat_Button->SetActive(false);
 		chat_Image->SetActive(false);
 		GameManager::Get().canUseMouse = true;
-		GameManager::Get().isQuest = true;
+		if(GameManager::Get().questIndex<3)GameManager::Get().isQuest = true;
 		quest->RefreshQuestText();
 		quest->RefreshQuestCountText(-1);
 		hon_Image->SetActive(true);
