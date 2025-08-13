@@ -28,6 +28,10 @@ public:
 
 	void Update() override
 	{
-		// TODO :: animation 재생 한번 끝나면 destory
+		// animation 재생 한번 끝나면 destory
+		if (animatorController->currentTime >= animatorController->curState->clip->duration)
+		{
+			Destroy();
+		}
 	}
 };
