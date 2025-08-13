@@ -29,6 +29,7 @@ void MoonShadowController::Update()
 	if (!isStop && isBossWave)
 	{
 		tr->Translate(Vector2::left * Time::GetDeltaTime() * speed * 25);
+
 		// 월식
 		if (tr->GetWorldPosition().x <= moonTr->GetWorldPosition().x)
 		{
@@ -73,13 +74,6 @@ void MoonShadowController::ReStart()
 {
 	// restart
 	isStop = false;
-	isBossWave = true;
-	isDirecting = true;
-	
 	isAfterMoving = false;
 	tr->SetPosition(moonTr->GetWorldPosition().x + 100, moonTr->GetWorldPosition().y);
-
-	// 연출
-	Camera::GetMainCamera()->UseTargetTrace(false);
-	Camera::GetMainCamera()->gameObject->transform->SetPosition(0, 250);
 }
