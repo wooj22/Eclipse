@@ -129,40 +129,13 @@ void EndScene::Update()
 			SceneManager::Get().ChangeScene(EclipseApp::MENU);  // 메뉴 씬으로 전환
 		}
 	}
-
-	// scene change
-	if (Input::GetKeyDown('1'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::MOON);
-	}
-	if (Input::GetKeyDown('2'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::YUNMO);
-	}
-	if (Input::GetKeyDown('3'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::ARON);
-	}
-	if (Input::GetKeyDown('4'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::WOO);
-	}
-	if (Input::GetKeyDown('5'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::MENU);
-	}
-	if (Input::GetKeyDown('6'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::PLAY);
-	}
-	if (Input::GetKeyDown('7'))
-	{
-		SceneManager::Get().ChangeScene(EclipseApp::END);
-	}
 }
 
 void EndScene::Exit()
 {
 	// game object -> destroy()
 	__super::Exit();
+	credits.clear();
+	endTimer = 0.0f;
+	isEnded = false;
 }
