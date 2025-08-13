@@ -133,6 +133,36 @@
     <Filter Include="03. Script\Woo\Hon\Base">
       <UniqueIdentifier>{f5c36a9e-6bcb-4980-830d-63a1a0e57a92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\Woo\Effect">
+      <UniqueIdentifier>{42d58567-ae1b-4eff-beae-e4e8169dc11d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Woo\Map">
+      <UniqueIdentifier>{04929b3a-ae3a-4490-8803-3eae7c1132fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Woo\Camera">
+      <UniqueIdentifier>{f947f7f8-0dd4-492d-9a6e-b8a811520c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Woo\Fade">
+      <UniqueIdentifier>{d9e7d5c3-8a27-4997-8a48-2ab5a48e9669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Animation\Woo\Effect">
+      <UniqueIdentifier>{10607e7d-7521-403e-b01a-e1b63ea8a709}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Animation\Woo\NPC">
+      <UniqueIdentifier>{e25de88d-62c7-4a92-b99a-f84a503ad8d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo\Fade">
+      <UniqueIdentifier>{d21fc19f-8ad2-4326-9fd0-42eb6694ba68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo\Camera">
+      <UniqueIdentifier>{a96ac7dc-f0a2-410b-b822-03218a1e3059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo\Map">
+      <UniqueIdentifier>{80b610dc-c966-4657-8f84-3f48c067ae3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Script\Woo\Typer">
+      <UniqueIdentifier>{8897345e-a18e-41df-990b-7db931b556b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EclipseApp.cpp">
@@ -300,12 +330,6 @@
     <ClCompile Include="BossHP.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MapBackGround.cpp">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ParallaxLayer.cpp">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PauseWindow.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
@@ -317,6 +341,66 @@
     </ClCompile>
     <ClCompile Include="EndScene.cpp">
       <Filter>01. Scene\dev</Filter>
+    </ClCompile>
+    <ClCompile Include="Credit.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LineClip.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFace.cpp">
+      <Filter>02. GameObject\Woo\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossHitEffect.cpp">
+      <Filter>02. GameObject\Woo\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeObject.cpp">
+      <Filter>02. GameObject\Woo\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameCamera.cpp">
+      <Filter>02. GameObject\Woo\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBackGround.cpp">
+      <Filter>02. GameObject\Woo\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MoonLight.cpp">
+      <Filter>02. GameObject\Woo\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MoonShadow.cpp">
+      <Filter>02. GameObject\Woo\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="BossAnimatorController.cpp">
+      <Filter>04. Animation\Woo\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BCAnimatorController.cpp">
+      <Filter>04. Animation\Woo\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="HCAnimatorController.cpp">
+      <Filter>04. Animation\Woo\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="NpcAnimatorController.cpp">
+      <Filter>04. Animation\Woo\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="HonCollisionEffect.cpp">
+      <Filter>02. GameObject\Woo\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="MoonLightController.cpp">
+      <Filter>03. Script\Woo\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MoonShadowController.cpp">
+      <Filter>03. Script\Woo\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="ParallaxLayer.cpp">
+      <Filter>03. Script\Woo\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeManager.cpp">
+      <Filter>03. Script\Woo\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>03. Script\Woo\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Typer.cpp">
+      <Filter>03. Script\Woo\Typer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -545,12 +629,6 @@
     <ClInclude Include="Cemetery.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MapBackGround.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ParallaxLayer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PauseWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -562,6 +640,87 @@
     </ClInclude>
     <ClInclude Include="ToolTip.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackAnimatorController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Credit.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpAnimatorController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LandingAnimatorController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LineClip.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerJumpEffect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLandingEffect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSkillEffcet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillAnimatorController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BossFace.h">
+      <Filter>02. GameObject\Woo\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossHitEffect.h">
+      <Filter>02. GameObject\Woo\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeObject.h">
+      <Filter>02. GameObject\Woo\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameCamera.h">
+      <Filter>02. GameObject\Woo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBackGround.h">
+      <Filter>02. GameObject\Woo\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MoonLight.h">
+      <Filter>02. GameObject\Woo\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MoonShadow.h">
+      <Filter>02. GameObject\Woo\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="BossAnimatorController.h">
+      <Filter>04. Animation\Woo\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BCAnimatorController.h">
+      <Filter>04. Animation\Woo\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="HCAnimatorController.h">
+      <Filter>04. Animation\Woo\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="NpcAnimatorController.h">
+      <Filter>04. Animation\Woo\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="HonCollisionEffect.h">
+      <Filter>02. GameObject\Woo\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="MoonLightController.h">
+      <Filter>03. Script\Woo\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MoonShadowController.h">
+      <Filter>03. Script\Woo\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ParallaxLayer.h">
+      <Filter>03. Script\Woo\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeManager.h">
+      <Filter>03. Script\Woo\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h">
+      <Filter>03. Script\Woo\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Typer.h">
+      <Filter>03. Script\Woo\Typer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

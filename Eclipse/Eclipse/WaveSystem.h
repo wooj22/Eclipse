@@ -102,6 +102,10 @@ private:
     void SetupWave3Pattern();
     void SetupBossPattern();
     
+    // Helper functions for spawn collision checking
+    bool IsSpawnPositionSafeForABC(float x, float y, const std::vector<SpawnData>& existingHonDSpawns, float currentTime);
+    static constexpr float MIN_DISTANCE_FROM_HOND = 300.0f; // Minimum distance to avoid accidental collisions
+    
     // Spawn functions
     void SpawnHon(int honType, float x, float y);
     void SpawnBoss();

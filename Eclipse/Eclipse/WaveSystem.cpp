@@ -262,7 +262,7 @@ void WaveSystem::OnHonDestroyed(GameObject* hon)
 {
 	if (!hon) return;
 	if (m_isUpdatingHons) return; // Update 중이면 무시
-	
+
 	auto it = std::find(m_activeHons.begin(), m_activeHons.end(), hon);
 	if (it != m_activeHons.end())
 	{
@@ -298,7 +298,7 @@ void WaveSystem::SetupWave1Pattern()
 			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;
 			data.honType = (m_randomGen() % 2 == 0) ? 0 : 1;  // A, B 랜덤
-			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+			data.delayTime = currentTime + (j * 0.7f);  // 동시 스폰시 약간의 지연
 
 			m_currentSpawnPattern.push_back(data);
 		}
@@ -327,7 +327,7 @@ void WaveSystem::SetupWave2Pattern()
 			data.x = GetRandomSpawnX(); // 랜덤 위치 사용
 			data.y = SPAWN_Y;
 			data.honType = m_randomGen() % 3;  // A, B, C 랜덤
-			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+			data.delayTime = currentTime + (j * 0.7f);  // 동시 스폰시 약간의 지연
 
 			m_currentSpawnPattern.push_back(data);
 		}
@@ -339,7 +339,7 @@ void WaveSystem::SetupWave3Pattern()
 	m_currentSpawnPattern.clear();
 
 	// Wave 3: 2-3초마다 1-2마리 랜덤 스폰 (A, B, C)
-	// HonD는 6초마다 정확히 한 마리씩 스폰
+	// HonD는 5초마다 정확히 한 마리씩 스폰
 	float currentTime = 0.0f;
 	float lastHonDSpawnTime = 0.0f;
 	std::uniform_real_distribution<float> intervalDist(2.0f, 3.0f);
@@ -347,8 +347,8 @@ void WaveSystem::SetupWave3Pattern()
 
 	while (currentTime < 70.0f)
 	{
-		// HonD는 6초마다 정확히 스폰
-		if (currentTime - lastHonDSpawnTime >= 6.0f)
+		// HonD는 5초마다 정확히 스폰
+		if (currentTime - lastHonDSpawnTime >= 5.0f)
 		{
 			SpawnData honDData;
 			honDData.x = GetRandomSpawnX();
@@ -372,12 +372,12 @@ void WaveSystem::SetupWave3Pattern()
 			data.x = GetRandomSpawnX();
 			data.y = SPAWN_Y;
 			data.honType = m_randomGen() % 3;  // A, B, C만 랜덤
-			data.delayTime = currentTime + (j * 0.2f);
+			data.delayTime = currentTime + (j * 0.7f);
 
 			m_currentSpawnPattern.push_back(data);
 		}
 	}
-	
+
 	// delayTime 기준으로 정렬 (시간 순서대로 스폰되도록)
 	std::sort(m_currentSpawnPattern.begin(), m_currentSpawnPattern.end(),
 		[](const SpawnData& a, const SpawnData& b) {
@@ -438,7 +438,7 @@ void WaveSystem::SetupBossPattern()
 				data.honType = honType;  // 0: HonA, 1: HonB, 2: HonC
 			}
 
-			data.delayTime = currentTime + (j * 0.2f);  // 동시 스폰시 약간의 지연
+			data.delayTime = currentTime + (j * 1.0f);  // 동시 스폰시 약간의 지연
 
 			m_currentSpawnPattern.push_back(data);
 		}

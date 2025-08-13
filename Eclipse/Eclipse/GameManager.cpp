@@ -134,7 +134,11 @@ bool GameManager::LevelUpSkill(SkillType skill, bool check )
 		honCount -= info.skillCost[info.unlockLevel];
 		info.unlocked = true;
 		info.unlockLevel = 1;
-		if (g_playUI != nullptr) g_playUI->ChangeHonCountText();
+		if (g_playUI != nullptr)
+		{
+			g_playUI->ChangeHonCountText();
+			g_playUI->SkillActiveSound();
+		}
 		return true;
 	}
 
@@ -181,7 +185,6 @@ void GameManager::CanAbsorb()
 {
 	canUseAbsorb = true;
 	g_playUI->ActivateAbsorb();
-	g_playUI->SkillActiveSound();
 }
 
 void GameManager::UseAbsorb()
@@ -193,13 +196,13 @@ void GameManager::UseAbsorb()
 void GameManager::CanRelease()
 {
 	canUseRelease = true;
-	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::Unlit;
+	g_playUI->ActivateRelease();
 }
 
 void GameManager::UseRelease()
 {
 	canUseRelease = false;
-	g_playUI->skill2_Image->imageRenderer->renderMode = RenderMode::UnlitColorTint;
+	g_playUI->DeactivateRelease();
 }
 
 void GameManager::FinishWave()
@@ -275,8 +278,8 @@ void GameManager::OnNPCInteraction()
 	canUseMouse = false;
 	if(questState == ChatCondition::Success)
 		GameManager::Get().ChangeHonCount(g_playUI->quest->QuestReward());
-	if (g_playUI->skillWindow_Image->IsActive())
-		g_playUI->skillWindow_Image->SetActive(false);
+	if (g_playUI->skillWindowBackGround_Image->IsActive())
+		g_playUI->skillWindowBackGround_Image->SetActive(false);
 	g_playUI->hon_Image->SetActive(false);
 	g_playUI->stop_Button->SetActive(false);
 	g_playUI->quest_Image->SetActive(false);

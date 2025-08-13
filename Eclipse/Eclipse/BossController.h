@@ -15,12 +15,12 @@ class BossController : public Script
 {
 private:
 	// data
-	const float MAX_HP = 15;
+	const float MAX_HP = 10;
 
 	// stat
 	float hp = MAX_HP;
 	float speed = 25;
-	float palyer_deceleration = 0.2;
+	float palyer_deceleration = 0.1;
 
 	// flag
 	bool isDie;

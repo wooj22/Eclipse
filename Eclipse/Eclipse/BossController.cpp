@@ -214,7 +214,7 @@ void BossController::TakeDamage(int damage)
 	// damage
 	hp -= damage;
 	GameManager::Get().ChangeBossHp(hp / MAX_HP);
-	if (hp < 0)
+	if (hp <= 0)
 	{
 		hp = 0;
 		Die();
@@ -263,6 +263,7 @@ void BossController::OpacityDirecting()
 		currentAlpha = max(currentAlpha - changeSpeed * Time::GetDeltaTime(), 0);
 
 	sr->SetAlpha(currentAlpha);
+	bossFace->SetAlpha(currentAlpha);
 }
 
 /*-----------------  trigger event  -----------------*/ 
