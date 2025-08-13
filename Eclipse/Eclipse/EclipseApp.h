@@ -7,8 +7,10 @@ class EclipseApp : public GameApp
 {
 private:
 	GameManager gameManager;
+
 public:
 	enum SceneName { MOON, YUNMO, ARON, WOO, MENU, PLAY, END };	// scene enum
+	HCURSOR hCursor;
 
 	EclipseApp(int inputWidth, int inputHeight)
 		: GameApp(inputWidth, inputHeight) {
