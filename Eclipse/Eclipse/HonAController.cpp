@@ -188,6 +188,9 @@ void HonAController::OnTriggerEnter(ICollider* other, const ContactInfo& contact
 			// score
 			GameManager::Get().ChangeHonCount(10);
 
+			// effect
+			Instantiate<HonCollisionEffect>(tr->GetWorldPosition());
+
 			// hp cheak
 			TakeDamage(1);
 			otherController->TakeDamage(1);

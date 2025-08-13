@@ -13,6 +13,8 @@ public:
 		auto texture = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Hon/Texture/HonA.png");
 		LoadSpriteSheetFromJson(texture, "../Resource/Woo/Hon/Data/SpriteSheet/HonA_sprites.json");
 		LoadAnimationClipFromJson(texture, "../Resource/Woo/Hon/Data/AnimationClip/HonA_Idle_AniClip.json");
+	
+		loop = false;
 	}
 };
 
