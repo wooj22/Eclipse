@@ -9,6 +9,7 @@ class Transform;
 class SpriteRenderer;
 class Rigidbody;
 class CircleCollider;
+class Sprite;
 
 class BossController : public Script
 {
@@ -52,6 +53,11 @@ private:
 	// start dealy
 	float bossStartTime = 7.0f;
 	float bossStartDeltaTime;
+
+	// face sprite
+	SpriteRenderer* bossFace;
+	std::shared_ptr<Sprite> idleFace;
+	std::shared_ptr<Sprite> attackFace;
 
 	// player 
 	Transform* playerTr;

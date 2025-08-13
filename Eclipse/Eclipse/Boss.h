@@ -5,8 +5,11 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/CircleCollider.h"
 #include "../Direct2D_EngineLib/AnimatorController.h"
+#include "../Direct2D_EngineLib/SceneManager.h"
+#include "../Direct2D_EngineLib/Scene.h"
 #include "BossAnimatorController.h"
 #include "BossController.h"
+#include "BossFace.h"
 
 /* 보스 웨이브에 등장하는 Boss GameObject 선언 클래스 */
 
@@ -21,7 +24,11 @@ public:
 	Animator* animator;
 	BossController* bossController;
 
+	// animator controller
 	BossAnimatorController* bossAniController;
+
+	// child gameobject
+	BossFace* bossFace;
 
 	Boss()
 	{
@@ -50,6 +57,10 @@ public:
 		// color matrix test
 		spriteRenderer->renderMode = RenderMode::Lit_ColorTint;
 		spriteRenderer->SetGlowAmmount(100);
+
+		// boss face
+		bossFace =  SceneManager::Get().GetCurrentScene()->CreateObject<BossFace>();
+		bossFace->transform->SetParent(this->transform);
 	}
 };
 

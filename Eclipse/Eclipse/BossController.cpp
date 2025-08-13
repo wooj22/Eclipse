@@ -6,20 +6,33 @@
 #include "../Direct2D_EngineLib/Rigidbody.h"
 #include "../Direct2D_EngineLib/Time.h"
 #include "../Direct2D_EngineLib/Input.h"
-#include "Bullet.h"
 #include "../Direct2D_EngineLib/Camera.h"
+#include "../Direct2D_EngineLib/ResourceManager.h"
+#include "Bullet.h"
 #include "GameManager.h"
 #include "PlayerFSM.h"
 
 /*-----------------  component life cycle  ----------------*/
 void BossController::Awake()
 {
+	// component
 	tr = gameObject->transform;
 	sr = gameObject->GetComponent<SpriteRenderer>();
 	rb = gameObject->GetComponent<Rigidbody>();
 	collider = gameObject->GetComponent<CircleCollider>();
 
+	bossFace = GameObject::Find("BossFace")->GetComponent<SpriteRenderer>();
 	playerTr = GameObject::Find("Player")->GetComponent<Transform>();
+
+	// resource
+	auto texture1 = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Boss/Boss_Idle.png");
+	attackFace = ResourceManager::Get().CreateSprite(texture1, "BossIdleFace");
+
+	auto texture2 = ResourceManager::Get().CreateTexture2D("../Resource/Woo/Boss/Boss_Fight.png");
+	attackFace = ResourceManager::Get().CreateSprite(texture2, "BossAttackFace");
+
+	// face set
+	bossFace->sprite = idleFace;
 }
 
 void BossController::Start()
