@@ -1,6 +1,8 @@
 #pragma once
-#include "../Direct2D_EngineLib/Singleton.h"
+// #include "../Direct2D_EngineLib/Singleton.h"
 #include "../Direct2D_EngineLib/AudioSystem.h"
+#include "../Direct2D_EngineLib/Script.h"
+
 #include <algorithm>
 
 template<typename T>
@@ -11,7 +13,7 @@ T Clamp(T value, T minVal, T maxVal)
     return value;
 }
 
-class SoundManager : public Singleton<SoundManager>
+class SoundManager : public Script
 {
 private:
     float masterVolume = 1.0f;
