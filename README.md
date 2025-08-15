@@ -7,19 +7,15 @@
 - **빌드 환경**: Visual Studio  
 
 
----
-
-## 📽 소개 영상
-[![Eclipse 소개 영상](https://img.youtube.com/vi/iwEdFb4ASW8/0.jpg)](https://www.youtube.com/watch?v=iwEdFb4ASW8)
-
----
-
 ## 👥 팀 구성
 
-| 역할 | 인원 ||
-|------|------|------|
+| 역할 | 인원 |
+|------|------|
 | 기획 | 2명 |
 | 엔진 프로그래밍 | 1명 |
 | 클라이언트 프로그래밍 | 3명 |
 | 아트 | 2명 |
 
+
+## 📽 소개 영상
+[![Eclipse 소개 영상](https://img.youtube.com/vi/iwEdFb4ASW8/0.jpg)](https://www.youtube.com/watch?v=iwEdFb4ASW8)
