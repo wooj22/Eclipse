@@ -23,6 +23,8 @@
 #include "LandingAnimatorController.h"
 #include "HonController.h"
 
+#include "../Direct2D_EngineLib/ObjectTable.h"
+
 
 
 // 컴포넌트 활성화 시점

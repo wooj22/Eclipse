@@ -1,10 +1,12 @@
 #include "NPCInteraction.h"
 #include "PlayUI.h"
 #include "GameManager.h"
+#include "../Direct2D_EngineLib/ObjectTable.h"
 
 void NPCInteraction::OnTriggerStay(ICollider* other, const ContactInfo& contact)
 {
-	if (!GameManager::Get().isWave && !GameManager::Get().isQuest &&  other->gameObject->name == "Player" && !interactionImage->IsActive() && !GameManager::Get().g_playUI->ChatActiveCheck())
+	if (!GameManager::Get().isWave && !GameManager::Get().isQuest &&  other->gameObject->name == "Player" && 
+		ObjectTable::Get().IsValid(other->gameObject) && !interactionImage->IsActive() && !GameManager::Get().g_playUI->ChatActiveCheck())
 		interactionImage->SetActive(true);
 }
 
